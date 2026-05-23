@@ -329,6 +329,35 @@ body {
 }
 
 /*
+ * Onda logo — premium wave variants.
+ *
+ * Two of the three variants (Spectrum, Mercury) share `logo-draw-on`: a
+ * stroke-dashoffset 100 → 0 sweep that draws the wave path left-to-right
+ * with HOUSE_EASE over 0.9s. The third (Ink) replaces the draw-on with an
+ * SVG filter animation — the line materializes from a Gaussian blur and
+ * sharpens into focus, driven by SMIL inside the component itself.
+ *
+ * Each variant's gradient drift is also handled inline with SMIL on the
+ * <linearGradient>'s x1/x2, so all the per-variant motion lives in the
+ * component file. This stylesheet only owns the shared draw-on keyframe.
+ */
+@keyframes logo-draw-on {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.logo-draw-on {
+  animation: logo-draw-on 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-draw-on {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/*
  * Onda search palette — native <dialog>-based ⌘K modal. We use the platform
  * dialog so focus-trap, Esc-to-close, and inert background come for free; the
  * styling below positions it dead-centre and replaces the default browser

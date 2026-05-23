@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 14" width="368" height="56" fill="none">
+  <title>Onda</title>
+  <defs>
+    <linearGradient id="onda-logo-base" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="0">
+      <stop offset="0%" stop-color="#F2F2F4"/>
+      <stop offset="25%" stop-color="#E89AAB"/>
+      <stop offset="50%" stop-color="#D96B82"/>
+      <stop offset="75%" stop-color="#E89AAB"/>
+      <stop offset="100%" stop-color="#F2F2F4"/>
+    </linearGradient>
+    <linearGradient id="onda-logo-shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark: identical to onda-mark.svg, positioned at 0..48 with vertical
+       padding of 1 unit (peaks/troughs at y=2/y=11). -->
+  <g transform="translate(0, 1)">
+    <path
+      d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+      stroke="url(#onda-logo-base)"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+      stroke="url(#onda-logo-shine)"
+      stroke-width="1.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      style="mix-blend-mode: screen"
+    />
+  </g>
+
+  <!-- Wordmark: "Onda" in Clash Display when available; falls back through
+       a cascade ending in system-ui so the logo still reads well on hosts
+       that don't have the brand font installed (e.g. raw README viewers). -->
+  <text
+    x="56"
+    y="7"
+    dominant-baseline="central"
+    font-family="'Clash Display', 'Manrope', 'Plus Jakarta Sans', system-ui, sans-serif"
+    font-size="10"
+    font-weight="600"
+    letter-spacing="-0.15"
+    fill="#F2F2F4"
+  >Onda</text>
+</svg>

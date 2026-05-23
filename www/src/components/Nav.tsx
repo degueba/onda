@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { listComponents } from '@/lib/registry';
 import { SearchPalette, type SearchItem } from './SearchPalette';
+import { BrandLogo } from './logo/BrandLogo';
 
 /**
  * Top nav — server component. Loads the catalog at build time and hands the
@@ -24,9 +25,16 @@ export function Nav() {
       <div className="max-w-150 mx-auto px-3 sm:px-4 h-8 flex items-center justify-between gap-3">
         <Link
           href="/"
-          className="font-display text-2xl font-semibold tracking-tight text-onda-text hover:opacity-80 transition-opacity"
+          className="hover:opacity-80 transition-opacity"
+          aria-label="Onda — home"
         >
-          Onda
+          {/* Mark + wordmark. animate=false so the mark sits static once a
+              visitor has landed — the entry animation reads as a "this just
+              loaded" moment and shouldn't replay on every nav. The first
+              page paint (home / catalog) gets a fresh animation; subsequent
+              client-side route changes preserve the BrandLogo, so the wave
+              stays settled. */}
+          <BrandLogo height={20} animate={false} />
         </Link>
         <div className="flex items-center gap-2 sm:gap-3 text-sm">
           <SearchPalette items={searchItems} />

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <title>Onda</title>
+  <defs>
+    <!-- Square-favicon gradient: same five-stop recipe as the main mark
+         but mapped across the 24-unit width. accent-rose stays in the
+         middle where the eye lands first at small sizes. -->
+    <linearGradient id="favicon-base" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="24" y2="0">
+      <stop offset="0%" stop-color="#F2F2F4"/>
+      <stop offset="25%" stop-color="#E89AAB"/>
+      <stop offset="50%" stop-color="#D96B82"/>
+      <stop offset="75%" stop-color="#E89AAB"/>
+      <stop offset="100%" stop-color="#F2F2F4"/>
+    </linearGradient>
+  </defs>
+  <!-- Single peak-trough cycle in a square viewBox. The 1.5-cycle main
+       mark wouldn't read at 16×16; this single cycle keeps the brand
+       silhouette while staying legible down to tab-favicon size. Stroke
+       width 3.5 is fat enough that the rose color carries even when the
+       SVG is rendered into a 16-pixel raster.
+       No mix-blend-mode highlight here — at favicon scale it'd read as
+       noise, not depth. -->
+  <path
+    d="M 2 12 C 6 4, 10 4, 12 12 C 14 20, 18 20, 22 12"
+    stroke="url(#favicon-base)"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

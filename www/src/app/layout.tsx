@@ -55,9 +55,12 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-  },
+  // Icons are picked up automatically from the app-router file conventions:
+  //   app/icon.svg       → <link rel="icon" type="image/svg+xml" ...>
+  //   app/apple-icon.tsx → <link rel="apple-touch-icon" ...> (PNG 180×180)
+  // No explicit override needed — leaving this block out lets Next's
+  // metadata system inject the discovered files. If we later add light/dark
+  // SVG variants, those go here too.
 };
 
 // Viewport / theme-color split out per Next 15's metadata API. Dark color

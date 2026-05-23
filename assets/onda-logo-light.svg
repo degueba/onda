@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 14" width="368" height="56" fill="none">
+  <title>Onda</title>
+  <defs>
+    <linearGradient id="onda-logo-base-light" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="0">
+      <stop offset="0%" stop-color="#08080A"/>
+      <stop offset="25%" stop-color="#E89AAB"/>
+      <stop offset="50%" stop-color="#D96B82"/>
+      <stop offset="75%" stop-color="#E89AAB"/>
+      <stop offset="100%" stop-color="#08080A"/>
+    </linearGradient>
+    <linearGradient id="onda-logo-shine-light" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(0, 1)">
+    <path
+      d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+      stroke="url(#onda-logo-base-light)"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+      stroke="url(#onda-logo-shine-light)"
+      stroke-width="1.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      style="mix-blend-mode: multiply"
+    />
+  </g>
+
+  <text
+    x="56"
+    y="7"
+    dominant-baseline="central"
+    font-family="'Clash Display', 'Manrope', 'Plus Jakarta Sans', system-ui, sans-serif"
+    font-size="10"
+    font-weight="600"
+    letter-spacing="-0.15"
+    fill="#08080A"
+  >Onda</text>
+</svg>

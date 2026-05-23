@@ -8,536 +8,304 @@
       "type": "registry:component",
       "title": "BlurReveal",
       "description": "A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "fade-in",
       "type": "registry:component",
       "title": "FadeIn",
       "description": "A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "slide-in",
       "type": "registry:component",
       "title": "SlideIn",
       "description": "A direction-parameterized translate-and-fade entrance — text slides into place from up, down, left, or right on the house spring. No overshoot, calm 16px travel.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "scale-in",
       "type": "registry:component",
       "title": "ScaleIn",
       "description": "A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "rotate-in",
       "type": "registry:component",
       "title": "RotateIn",
       "description": "A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "mask-reveal",
       "type": "registry:component",
       "title": "MaskReveal",
       "description": "Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "word-stagger",
       "type": "registry:component",
       "title": "WordStagger",
       "description": "Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "typewriter",
       "type": "registry:component",
       "title": "Typewriter",
       "description": "Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "count-up",
       "type": "registry:component",
       "title": "CountUp",
       "description": "An animated number that counts from `from` to `to` on SPRING_SMOOTH while fading in. Tabular numerals keep digit widths fixed; locale-grouped (en-US) by default. Prefix and suffix support currency, units, and percentages.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "draw-on",
       "type": "registry:component",
       "title": "DrawOn",
       "description": "An SVG path that strokes itself in — the substrate for logos, icons, and signature flourishes. Powered by @remotion/paths's evolvePath, driven by SPRING_SMOOTH. No overshoot.",
-      "categories": [
-        "graphics"
-      ],
-      "dependencies": [
-        "remotion",
-        "@remotion/paths",
-        "zod",
-        "react"
-      ]
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "@remotion/paths", "zod", "react"]
     },
     {
       "name": "grain-overlay",
       "type": "registry:component",
       "title": "GrainOverlay",
       "description": "A subtle film-grain layer overlaid on the canvas — pure SVG fractal noise, no text, no motion. The first atmospheric Onda primitive: texture only, restrained at ~2-4% opacity per the design tokens. Deterministic and self-contained, no external assets.",
-      "categories": [
-        "atmosphere"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["atmosphere"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "stagger-group",
       "type": "registry:component",
       "title": "StaggerGroup",
       "description": "A composition primitive that reveals a list of items in sequence using the canonical Onda stagger (4 frames between siblings). The foundation pattern for animated lists, bullet build-ons, feature reveals, and any sequenced text reveal. Demonstrates the signature stagger fingerprint in its purest form.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "marquee",
       "type": "registry:component",
       "title": "Marquee",
       "description": "A seamless looping horizontal scroll — logo strips, ticker tape, 'as featured in' rows. Slow and restrained by design; atmospheric context, not a frantic ticker.",
-      "categories": [
-        "atmosphere"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["atmosphere"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "ken-burns",
       "type": "registry:component",
       "title": "KenBurns",
       "description": "Slow zoom-and-pan over a photo — the iconic documentary motion (named after Ken Burns, the filmmaker). Restrained 1.0 → 1.1 scale over 5 seconds by default; intentionally linear for a constant cinematic drift. The first Onda cinematic primitive.",
-      "categories": [
-        "cinematic"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["cinematic"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "callout",
       "type": "registry:component",
       "title": "Callout",
       "description": "A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.",
-      "categories": [
-        "graphics"
-      ],
-      "dependencies": [
-        "remotion",
-        "@remotion/paths",
-        "zod",
-        "react"
-      ]
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "@remotion/paths", "zod", "react"]
     },
     {
       "name": "underline",
       "type": "registry:component",
       "title": "Underline",
       "description": "Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.",
-      "categories": [
-        "graphics"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "captions",
       "type": "registry:component",
       "title": "Captions",
       "description": "Sequential word-by-word captions driven by a timed array. The active word lifts in --onda-text with a subtle SPRING_SMOOTH scale pulse; surrounding words sit dim in --onda-dim. The data primitive for kinetic transcripts and AI-generated voiceover.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "bar-chart",
       "type": "registry:component",
       "title": "BarChart",
       "description": "Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "lower-third",
       "type": "registry:component",
       "title": "LowerThird",
       "description": "Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "title-card",
       "type": "registry:component",
       "title": "TitleCard",
       "description": "Hero title-card scene block: a large headline reveals with a calm blur-and-rise, a subtitle cascades word-by-word beneath it, and an optional accent underline arrives last as quiet punctuation. Composes BlurReveal / Underline and WordStagger — no new motion of its own.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "stat-card",
       "type": "registry:component",
       "title": "StatCard",
       "description": "Flagship Onda data scene — a big counted-up number above a word-staggered label above an accent rule. Composes CountUp, WordStagger, and Underline so the cascade (number → label → rule) reads as one calm motion. The signature 'Onda data look' for hero stats, KPIs, milestones, and announcement frames.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "quote-card",
       "type": "registry:component",
-      "title": "QuoteCard",
+      "title": "Quote Card",
       "description": "A centered pull-quote scene block with attribution. The quote reveals word-by-word with a slower-than-canonical stagger so the line reads rather than cascades; after a settled beat a small accent-rose rule draws in beneath it, then the author and role fade in together. Built for testimonials, documentary citations, and editorial-feeling section breaks.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "end-card",
       "type": "registry:component",
       "title": "EndCard",
       "description": "Closing scene block: a hero CTA reveals with an optional accent underline, then a faint, staggered row of social handles or URLs fades in beneath it. Composes BlurReveal, Underline, and StaggerGroup so the motion fingerprint stays consistent with the rest of the catalog.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "logo-sting",
       "type": "registry:component",
       "title": "LogoSting",
       "description": "Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "@remotion/paths",
-        "zod",
-        "react"
-      ]
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "@remotion/paths", "zod", "react"]
     },
     {
       "name": "camera-shake",
       "type": "registry:component",
       "title": "CameraShake",
       "description": "Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.",
-      "categories": [
-        "cinematic"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["cinematic"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "gradient-shift",
       "type": "registry:component",
       "title": "GradientShift",
       "description": "A quiet, drifting two-color linear gradient background. The angle rotates at a constant degrees-per-frame — linear-by-design, no spring. Low-saturation defaults (--onda-surface to --onda-border) keep it atmospheric, never focal.",
-      "categories": [
-        "atmosphere"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "categories": ["atmosphere"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "word-rotate",
       "type": "registry:component",
       "title": "WordRotate",
-      "description": "Cycles through a list of phrases in place. Each phrase fades and lifts in via SPRING_SMOOTH, holds, then fades out as the next arrives — overlapping envelopes for a continuous swap.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "Cycles through a list of phrases in place. Each phrase rises and fades in on SPRING_SMOOTH, holds, then fades out as the next arrives. One focal element per moment.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "spotlight",
       "type": "registry:component",
       "title": "Spotlight",
-      "description": "Apple-stage radial light reveal — a soft circle of light grows from 0 to its target radius, centered at (x, y). Alpha-aware so it reveals content beneath.",
-      "categories": [
-        "cinematic"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.",
+      "categories": ["cinematic"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "highlight",
       "type": "registry:component",
       "title": "Highlight",
-      "description": "Marker-style background reveal that slides in behind text. Like Underline but full text-height — accent rose by default, one of the catalog's earned-color moments.",
-      "categories": [
-        "graphics"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "pie-reveal",
       "type": "registry:component",
       "title": "PieReveal",
-      "description": "An SVG arc that fills from 0 to its value percent on SPRING_SMOOTH. Track + accent stroke, optional centered value label. Single-arc by design — no multi-segment pies.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A single-arc SVG ring that fills from 0 to a target percent on SPRING_SMOOTH, with the value rendered in the center. One muted accent stroke against a quiet track — the Onda data primitive.",
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "progress-bar",
       "type": "registry:component",
       "title": "ProgressBar",
-      "description": "A track-and-fill progress bar that fills from 0 to its value percent on SPRING_SMOOTH. Tabular-num label keeps the right edge of the bar stable as it grows.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A pill-shaped bar that fills from 0 to `value`% on SPRING_SMOOTH. Solid dusty-rose accent on a neutral track, with an optional tabular `${value}%` label beside it. No overshoot.",
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "timeline",
       "type": "registry:component",
       "title": "Timeline",
-      "description": "A drawn horizontal line with staggered dots and labels — the journey ends at the dusty-rose accent moment (the final dot). Composes evolvePath + entryScale + entryFade.",
-      "categories": [
-        "data"
-      ],
-      "dependencies": [
-        "remotion",
-        "@remotion/paths",
-        "zod",
-        "react"
-      ]
+      "description": "A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.",
+      "categories": ["data"],
+      "dependencies": ["remotion", "@remotion/paths", "zod", "react"]
     },
     {
       "name": "icon-pop",
       "type": "registry:component",
       "title": "IconPop",
-      "description": "A small state icon — check, cross, dot, or star — that pops into place with SPRING_SMOOTH. The icon itself is the earned dusty-rose accent. Just scale + opacity, no extra flourish.",
-      "categories": [
-        "graphics"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "fade-out",
       "type": "registry:component",
       "title": "FadeOut",
-      "description": "Pure opacity exit — text fades from 1 to 0 starting at delay. Faster than entrances by design (DURATION.fast). No transform, no blur, no scale.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "The inverse of FadeIn: a pure opacity exit. Opacity travels from 1 to 0 on HOUSE_EASE, with no transform or blur. Slightly faster than entrances so the moment ends without lingering.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "slide-out",
       "type": "registry:component",
       "title": "SlideOut",
-      "description": "Direction-parameterized translate + fade exit. Mirrors SlideIn — text leaves in the chosen direction with calm 16px travel and opacity fade.",
-      "categories": [
-        "entrances"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "parallax",
       "type": "registry:component",
       "title": "Parallax",
-      "description": "Slow horizontal or vertical drift over an image — the lighter, no-zoom complement to KenBurns. Linear-by-design (joins Marquee/Typewriter/KenBurns).",
-      "categories": [
-        "cinematic"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.",
+      "categories": ["cinematic"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "vignette",
       "type": "registry:component",
       "title": "Vignette",
-      "description": "Static radial darkening at canvas edges — cinematic frame. Atmospheric overlay only; no motion, like GrainOverlay. pointer-events: none so it never intercepts input.",
-      "categories": [
-        "cinematic"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.",
+      "categories": ["cinematic"],
+      "dependencies": ["remotion", "zod", "react"]
     },
     {
       "name": "chapter-card",
       "type": "registry:component",
       "title": "ChapterCard",
-      "description": "A chapter title scene block — large numbered index (\"01\") fades in, the chapter title blurs into place, and an optional accent rule lands last. Composes FadeIn + BlurReveal + Underline.",
-      "categories": [
-        "scenes"
-      ],
-      "dependencies": [
-        "remotion",
-        "zod",
-        "react"
-      ]
+      "description": "Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.",
+      "categories": ["scenes"],
+      "dependencies": ["remotion", "zod", "react"]
     }
   ]
 }

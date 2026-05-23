@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 12" width="192" height="48" fill="none">
+  <title>Onda</title>
+  <defs>
+    <!-- Light-bg gradient — flanks invert from #F2F2F4 (text) to #08080A (bg)
+         so the wave reads dark-on-light. Accent rose stays the same: it
+         works against both surface colors and IS the brand color. -->
+    <linearGradient id="onda-base-light" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="0">
+      <stop offset="0%" stop-color="#08080A"/>
+      <stop offset="25%" stop-color="#E89AAB"/>
+      <stop offset="50%" stop-color="#D96B82"/>
+      <stop offset="75%" stop-color="#E89AAB"/>
+      <stop offset="100%" stop-color="#08080A"/>
+    </linearGradient>
+    <!-- Highlight inverts too: instead of a white top-edge ("lit from above
+         on dark"), we paint a soft black bottom-edge ("shadow cast below
+         on light"). Same lighting model, opposite surface. -->
+    <linearGradient id="onda-shine-light" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+    stroke="url(#onda-base-light)"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+    stroke="url(#onda-shine-light)"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    style="mix-blend-mode: multiply"
+  />
+</svg>

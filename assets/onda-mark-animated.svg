@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 12" width="240" height="60" fill="none">
+  <title>Onda</title>
+  <defs>
+    <linearGradient id="onda-base-anim" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="0">
+      <stop offset="0%" stop-color="#F2F2F4"/>
+      <stop offset="25%" stop-color="#E89AAB"/>
+      <stop offset="50%" stop-color="#D96B82"/>
+      <stop offset="75%" stop-color="#E89AAB"/>
+      <stop offset="100%" stop-color="#F2F2F4"/>
+      <!-- Slow horizontal drift on a 7-second loop. GitHub's SVG renderer
+           plays SMIL animations, so this animates inline in READMEs. -->
+      <animate attributeName="x1" values="0;-8.64;0" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="48;56.64;48" dur="7s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="onda-shine-anim" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+    stroke="url(#onda-base-anim)"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
+    stroke="url(#onda-shine-anim)"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    style="mix-blend-mode: screen"
+  />
+</svg>
