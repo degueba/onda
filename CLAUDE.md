@@ -2,7 +2,7 @@
 
 > Operational contract for every agent and contributor building Onda. Read fully before generating anything. If a request conflicts with these rules, the rules win. When in doubt, choose restraint.
 
-**See also:** [README.md](README.md) · [docs/](docs/) · [docs/techspecs/logging.md](docs/techspecs/logging.md)
+**See also:** [README.md](README.md) · [docs/](docs/) · [docs/techspecs/](docs/techspecs/)
 
 Onda is a Remotion-based motion graphics library: component source is copied into the user's project via our own thin CLI (`npx onda add <name>`), never imported as a black-box dependency. The differentiator is a **signature motion identity**: a consistent set of motion fingerprints, applied across ordinary components, that makes an Onda animation recognizable by feel. Full context: [docs/vision.md](docs/vision.md), [docs/design-philosophy.md](docs/design-philosophy.md), [docs/motion-language.md](docs/motion-language.md).
 

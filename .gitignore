@@ -9,6 +9,20 @@ build/
 .vscode/
 .idea/
 
+# TypeScript incremental build cache. Regenerated on every tsc run; should
+# never be in git history.
+*.tsbuildinfo
+
+# Local Claude Code state — per-developer permission allowlists, session
+# locks, scheduled-task pids. Personal to whoever is driving the project
+# from this checkout; not useful to anyone else and noisy in diffs.
+.claude/
+
+# Internal docs that aren't useful to outside contributors — running activity
+# logs, internal task queues. Their content lives here so the local maintainer
+# can keep working with them; git just doesn't track them.
+_private/
+
 # Generated at build time by www/scripts/sync-registry-to-public.mjs.
 # Source of truth: registry/r/ and registry/registry.json.
 www/public/r/

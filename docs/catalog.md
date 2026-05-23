@@ -5,7 +5,6 @@
 ## Totals
 
 - **Built: 38 components** (Entrances 12 · Data 6 · Graphics 5 · Atmosphere 3 · Cinematic 5 · Scenes 7)
-- **Queue: complete** — all 22 items from [cron-queue.md](cron-queue.md) shipped.
 
 ## What's built
 

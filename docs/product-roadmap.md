@@ -14,4 +14,4 @@ Prioritize the scene blocks for visual impact, but build them *from* the primiti
 
 ## Per-initiative work
 
-Active and historical execution plans live under [techspecs/](techspecs/). See [techspecs/logging.md](techspecs/logging.md) for the index.
+Active and historical execution plans live under [techspecs/](techspecs/). Each is a folder with a `design.md` (the decisions and shape of the change) and a `roadmap.md` (execution plan / milestones).
