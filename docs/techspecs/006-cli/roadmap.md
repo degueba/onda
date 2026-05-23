@@ -32,32 +32,34 @@ End-to-end install of a single component that has no `registryDependencies`. Tar
 - Unknown slug exits 1 with `onda add: failed to fetch one or more manifests:` followed by the path that was tried. ✅
 - Peer-dep block prints at the end: detected pm (`pnpm-lock.yaml` → `pnpm add`, `yarn.lock` → `yarn add`, `bun.lockb`/`bun.lock` → `bun add`, otherwise `npm install`); deps gathered from all manifests in the install. ✅
 
-## M3 — Lib helpers as registry items + transitive resolution — Not started
+## M3 — Lib helpers as registry items + transitive resolution — Done
 
 Author manifests for each `/lib` file, declare `registryDependencies` on every component that imports from them, walk the graph in the CLI.
 
 **Acceptance:**
 
-- New files under `registry/r/`: `lib-motion.json`, `lib-choreography.json`, `lib-easing.json`, `lib-text-timing.json`, `lib-random.json`, `lib-tokens.json`. Each is a single-file manifest (`type: "registry:lib"`) carrying the current `lib/<name>.ts` content.
-- Every existing `registry/r/<component>.json` declares the lib slugs its source actually imports under `registryDependencies`. Verified by a small script that greps each component's source for `from '\\.\\./\\.\\./\\.\\./lib/(\\w+)'` and asserts each match appears in the manifest. Script runs in CI later.
-- `onda add blur-reveal` (which imports `SPRING_SMOOTH` and `DURATION`) installs the component AND `./src/lib/onda/motion.ts` in one pass. Deduplication holds: `onda add blur-reveal fade-in` writes `motion.ts` once.
-- The dep walker detects and rejects cycles with a clear error message, even though the current catalog has none (defensive — easy to regress).
+- New files under `registry/r/`: `lib-motion.json`, `lib-choreography.json`, `lib-easing.json`. Each is a single-file `registry:lib` manifest carrying the current `lib/<name>.ts` content. ✅ (Three, not six — `text-timing`, `random`, `tokens` are unused by any component, so manifesting them now would ship dead code; add them when a component imports them.)
+- Every `registry/r/<component>.json` declares both lib slugs AND sibling-component slugs under `registryDependencies` — detection script (python, in-repo) greps the source for both `from '\\.\\./\\.\\./\\.\\./lib/<name>'` and `from '\\.\\./<slug>/<Pascal>'` patterns and writes the union. ✅
+- `onda add blur-reveal` installs the component AND `lib/onda/motion.ts` in one pass. ✅
+- `onda add chapter-card` installs the scene block, both lib helpers it transitively needs (motion + choreography + easing), AND the three primitives it composes (fade-in, blur-reveal, underline) — deduped, in topological order (lib-motion → blur-reveal → lib-easing → lib-choreography → fade-in → underline → chapter-card). ✅
+- Multi-slug install (`add title-card lower-third`) deduplicates overlapping deps — each lib file written once. ✅
+- Dep walker detects + rejects cycles with `circular registryDependencies: a → b → a` error (defensive; no cycles in the current catalog). ✅
 
-## M4 — Import-path rewriting — Not started
+## M4 — Import-path rewriting — Done
 
 Make installed files self-consistent. Without this, M3's installs typecheck-fail in the user's project because `from '../../../lib/motion'` doesn't resolve.
 
 **Acceptance:**
 
 - After install, every `.tsx`/`.ts` file's imports are rewritten:
-  - `from '../../../lib/<name>'` → `from '@/lib/onda/<name>'` when the user's `tsconfig.json` has `compilerOptions.paths["@/*"]` pointing at a source directory containing the install target; else a calculated relative path from the component file to the lib file.
-  - Sibling-component imports (when present in scene blocks): the analogous rewrite to `@/components/onda/<slug>/<Component>` or relative.
-- Tested in three configurations:
-  - Fresh Next.js project (has `src/` + `@/*` alias) → alias form.
-  - Fresh Vite project with `src/` and no `@/*` → relative form, computed correctly.
-  - Plain Node Remotion project, no `src/` → relative form, computed correctly.
-- In all three, `tsc --noEmit` on the installed tree exits 0 with the user's `tsconfig.json` untouched.
-- The rewrite is regex-based for v1 (per [design.md](design.md) open question); a comment in the source explains the assumption and what would force a parser switch.
+  - `from '../../../lib/<name>'` → `from '@/lib/onda/<name>'` when the alias mode applies, else a calculated relative path. ✅
+  - Sibling-component imports (scene blocks composing primitives): analogous rewrite to `@/components/onda/<slug>/<Component>` or relative. ✅
+- Tested in three configurations against a real install (`pnpm install` of react/remotion/zod/etc. into each sandbox), then `tsc --noEmit`:
+  - **Shape 1** — `src/` + `@/*` alias (Next.js / Vite scaffold) → alias form. ✅ tsc PASS
+  - **Shape 2** — `src/`, no alias (bare Vite shape) → relative form. ✅ tsc PASS
+  - **Shape 3** — flat layout, no `src/`, no alias (plain Node Remotion) → relative form. ✅ tsc PASS
+- The rewrite is regex-based per design.md; assumptions documented in `src/lib/rewrite-imports.ts`. ✅
+- Subtle non-obvious fix: the project-shape detector's JSONC stripper was a regex that ate `**/` inside the very common `"include": ["src/**/*"]` glob, hiding `paths["@/*"]` from detection. Replaced with a character-by-character tokenizer that respects string contexts. ✅
 
 ## M5 — `onda list` — Not started
 

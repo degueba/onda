@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-easing",
+  "type": "registry:lib",
+  "title": "House easing",
+  "description": "HOUSE_EASE — the canonical cubic-bezier for opacity and color fades across Onda. Curve: (0.16, 1, 0.3, 1). Used wherever spring would feel wrong (linear motion at the end, sharp start).",
+  "dependencies": [
+    "remotion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/easing.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/easing.ts",
+      "content": "// House easing curves.\n//\n// For physical motion (translate / scale / rotation) use the springs in\n// lib/motion.ts — SPRING_SMOOTH (default, no overshoot) and SPRING_SNAPPY\n// (faster but still overdamped). HOUSE_EASE below is the canonical curve\n// for opacity / color / non-physical transitions only.\n\nimport { Easing } from 'remotion';\n\n/**\n * The house easing curve — a restrained ease-out (`cubic-bezier(0.16, 1, 0.3, 1)`).\n *\n * Use for opacity / color fades and anything the eye tracks but that doesn't\n * move physically. Never raw linear for tracked motion.\n *\n * For physical motion (translate / scale / rotation), use the springs in\n * `lib/motion.ts` instead — `SPRING_SMOOTH` (default, no overshoot) or\n * `SPRING_SNAPPY` (faster but still overdamped).\n *\n * @example\n * interpolate(frame, [0, 18], [0, 1], {\n *   extrapolateLeft: 'clamp',\n *   extrapolateRight: 'clamp',\n *   easing: HOUSE_EASE,\n * });\n */\nexport const HOUSE_EASE = Easing.bezier(0.16, 1, 0.3, 1);\n"
+    }
+  ]
+}

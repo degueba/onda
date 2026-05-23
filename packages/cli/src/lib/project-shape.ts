@@ -69,14 +69,7 @@ function readPathsAlias(cwd: string): string | null {
     return null;
   }
 
-  // Strip // line comments and /* block comments */, plus trailing commas
-  // before } or ]. Same pragmatic approach the shadcn CLI uses. Not a real
-  // JSONC parser — good enough for the tsconfig.json shapes we see in
-  // practice (Next.js / Vite scaffolds, Remotion starter, hand-rolled).
-  const stripped = raw
-    .replace(/\/\/[^\n]*/g, '')
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/,(\s*[\]}])/g, '$1');
+  const stripped = stripJsonc(raw);
 
   let parsed: unknown;
   try {
@@ -98,4 +91,73 @@ function readPathsAlias(cwd: string): string | null {
 
   const first = atSlashStar[0];
   return typeof first === 'string' ? first : null;
+}
+
+// Strip JSONC features (line comments, block comments, trailing commas) from
+// the input so `JSON.parse` accepts it. Walks the source character-by-character
+// so we never confuse glob patterns inside JSON strings (the include array's
+// "src" + double-star + slash) with comment markers. The regex-based version
+// of this function broke on the very common Next.js / Vite "include" shape.
+//
+// Not a general JSONC parser — output retains string contents byte-for-byte;
+// only ECMA-flavored comments and trailing commas are removed.
+function stripJsonc(input: string): string {
+  let out = '';
+  let i = 0;
+  const n = input.length;
+
+  while (i < n) {
+    const ch = input[i];
+
+    // Inside a string: copy everything verbatim until the closing quote,
+    // honoring \" and \\ escapes. Comments and trailing commas inside
+    // strings are NOT special.
+    if (ch === '"') {
+      out += ch;
+      i++;
+      while (i < n) {
+        const c = input[i];
+        out += c;
+        i++;
+        if (c === '\\' && i < n) {
+          out += input[i];
+          i++;
+          continue;
+        }
+        if (c === '"') break;
+      }
+      continue;
+    }
+
+    // Line comment: skip to the next newline (keep the newline so line
+    // numbers stay stable for any error messages).
+    if (ch === '/' && input[i + 1] === '/') {
+      i += 2;
+      while (i < n && input[i] !== '\n') i++;
+      continue;
+    }
+
+    // Block comment: skip to the next `*/`. Don't preserve content.
+    if (ch === '/' && input[i + 1] === '*') {
+      i += 2;
+      while (i < n && !(input[i] === '*' && input[i + 1] === '/')) i++;
+      i += 2; // skip the closing */
+      continue;
+    }
+
+    // Trailing comma before `]` or `}`: drop the comma.
+    if (ch === ',') {
+      let j = i + 1;
+      while (j < n && /\s/.test(input[j])) j++;
+      if (j < n && (input[j] === ']' || input[j] === '}')) {
+        i++;
+        continue;
+      }
+    }
+
+    out += ch;
+    i++;
+  }
+
+  return out;
 }
