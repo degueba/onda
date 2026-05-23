@@ -22,6 +22,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: absoluteUrl('/docs'),
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: absoluteUrl('/compare'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ];
 
   const componentRoutes: MetadataRoute.Sitemap = listComponentSlugs().map(

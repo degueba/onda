@@ -36,6 +36,18 @@ export function Nav() {
           >
             Components
           </Link>
+          <Link
+            href="/docs"
+            className="text-onda-dim hover:text-onda-text transition-colors"
+          >
+            Docs
+          </Link>
+          <Link
+            href="/compare"
+            className="text-onda-dim hover:text-onda-text transition-colors"
+          >
+            Compare
+          </Link>
           <a
             href="https://github.com/botelhodeveloper/onda"
             target="_blank"
