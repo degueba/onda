@@ -1,0 +1,18 @@
+{
+  "name": "vignette",
+  "title": "Vignette",
+  "description": "A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.",
+  "category": "cinematic",
+  "tags": [
+    "overlay",
+    "vignette",
+    "cinematic",
+    "atmospheric",
+    "primitive"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,19 +1,34 @@
 import { z } from 'zod';
 
+/** Zod schema for `LogoSting` props. */
 export const logoStingSchema = z.object({
-  d: z.string().default('M 50 60 Q 100 20 150 60 T 250 60'),  // sample wave path — Onda the wave
+  /** SVG path `d` for the logo mark. The default is a sample wave. */
+  d: z.string().default('M 50 60 Q 100 20 150 60 T 250 60'),
+  /** The brand / product title beneath the mark. */
   title: z.string().default('Onda'),
-  delay: z.number().int().min(0).default(0),                  // frames before start
-  accent: z.boolean().default(true),                          // show the accent underline
-  viewBox: z.string().default('0 0 300 120'),                 // matches default d coord space
-  pathWidth: z.number().default(400),                         // rendered width of the SVG stroke
-  pathHeight: z.number().default(160),                        // rendered height of the SVG stroke
+  /** Frames before the stroke starts drawing. */
+  delay: z.number().int().min(0).default(0),
+  /** Show the accent rule beneath the title. */
+  accent: z.boolean().default(true),
+  /** SVG viewBox — must match the coordinate space of `d`. */
+  viewBox: z.string().default('0 0 300 120'),
+  /** Rendered width of the SVG stroke in px. */
+  pathWidth: z.number().default(400),
+  /** Rendered height of the SVG stroke in px. */
+  pathHeight: z.number().default(160),
+  /** Stroke width in path coordinate units. */
   strokeWidth: z.number().default(3),
-  stroke: z.string().default('#F2F2F4'),                      // --onda-text (logo stroke)
-  accentColor: z.string().default('#D96B82'),                 // --onda-accent (underline)
+  /** Logo stroke color. Defaults to `--onda-text`. */
+  stroke: z.string().default('#F2F2F4'),
+  /** Underline accent color. Defaults to `--onda-accent`. */
+  accentColor: z.string().default('#D96B82'),
+  /** Title font size in px. */
   titleFontSize: z.number().default(96),
-  color: z.string().default('#F2F2F4'),                       // --onda-text (title)
+  /** Title color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for `LogoSting`. */
 export type LogoStingProps = z.infer<typeof logoStingSchema>;

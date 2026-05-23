@@ -9,9 +9,14 @@ import { lowerThirdSchema } from './schema';
 export { lowerThirdSchema };
 export type LowerThirdProps = z.infer<typeof lowerThirdSchema>;
 
-// Scene block: composes SlideIn (name), FadeIn (role), and Underline (accent).
-// No motion is reimplemented here — all timing comes from the primitives.
-// The block's only job is positioning + offset choreography between them.
+/**
+ * Broadcast-style name + role bar that slides in from the corner with a
+ * single accent underline. A restrained scene block composed from `SlideIn`,
+ * `FadeIn`, and `Underline` — no chrome, no glow, one earned accent.
+ *
+ * @example
+ * <LowerThird name="Rodrigo" role="CEO, Onda" position="bottom-left" />
+ */
 export const LowerThird: React.FC<LowerThirdProps> = ({
   name,
   role,

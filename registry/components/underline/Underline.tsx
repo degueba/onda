@@ -4,22 +4,43 @@ import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
 
+/** Zod schema for {@link Underline} props. */
 export const underlineSchema = z.object({
+  /** Text to reveal. Pass `""` to render the rule alone. */
   text: z.string().default('underline this'),
-  delay: z.number().int().min(0).default(0),                    // frames before start
-  duration: z.number().int().min(1).default(DURATION.base),     // text reveal duration
-  lineDelay: z.number().int().min(0).default(8),                // frames after text appears before underline starts drawing
-  lineDuration: z.number().int().min(1).default(DURATION.fast), // underline draws fast — emphatic
-  color: z.string().default('#F2F2F4'),                         // --onda-text
-  accentColor: z.string().default('#D96B82'),                   // --onda-accent; the catalog's accent rose
-  lineThickness: z.number().default(3),                         // px stroke
-  lineOffset: z.number().default(6),                            // px gap between text baseline and the line
+  /** Frames before the text starts revealing. */
+  delay: z.number().int().min(0).default(0),
+  /** Text reveal duration in frames. */
+  duration: z.number().int().min(1).default(DURATION.base),
+  /** Frames to wait after the text appears before the line starts drawing. */
+  lineDelay: z.number().int().min(0).default(8),
+  /** Line draw duration. Fast on purpose — emphatic. */
+  lineDuration: z.number().int().min(1).default(DURATION.fast),
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Line color. Defaults to `--onda-accent` (`#D96B82`) — the earned rose. */
+  accentColor: z.string().default('#D96B82'),
+  /** Line thickness in px. */
+  lineThickness: z.number().default(3),
+  /** Pixel gap between text baseline and the line. */
+  lineOffset: z.number().default(6),
+  /** Pixels. */
   fontSize: z.number().default(64),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link Underline}. */
 export type UnderlineProps = z.infer<typeof underlineSchema>;
 
+/**
+ * Text that fades in, then an accent-rose underline draws beneath. Two-phase
+ * reveal: text first, accent second. One of the catalog's rare earned-color
+ * moments — reserved for emphasis.
+ *
+ * @example
+ * <Underline text="motion graphics" />
+ */
 export const Underline: React.FC<UnderlineProps> = ({
   text,
   delay,

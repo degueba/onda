@@ -6,20 +6,33 @@ import { FadeIn } from '../fade-in/FadeIn';
 import { MaskReveal } from '../mask-reveal/MaskReveal';
 import { DURATION, STAGGER } from '../../../lib/motion';
 
+/** Zod schema for {@link QuoteCard} props. */
 export const quoteCardSchema = z.object({
+  /** The pull-quote body. Cascaded word-by-word on a slower-than-canonical stagger. */
   quote: z.string().default('Motion is the difference between art and craft.'),
+  /** Attribution name. */
   author: z.string().default('Saul Bass'),
+  /** Attribution role / title. */
   role: z.string().default('Graphic Designer'),
+  /** Frames before the quote starts. */
   delay: z.number().int().min(0).default(0),
+  /** Show the accent divider between quote and attribution. */
   accent: z.boolean().default(true),
+  /** Quote font size in px. */
   quoteFontSize: z.number().default(56),
+  /** Author / role font size in px. */
   authorFontSize: z.number().default(22),
-  color: z.string().default('#F2F2F4'),        // --onda-text
-  authorColor: z.string().default('#8E8E98'),  // --onda-dim
-  accentColor: z.string().default('#D96B82'),  // --onda-accent
+  /** Quote color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Author / role color. Defaults to `--onda-dim`. */
+  authorColor: z.string().default('#8E8E98'),
+  /** Divider color. Defaults to `--onda-accent`. */
+  accentColor: z.string().default('#D96B82'),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link QuoteCard}. */
 export type QuoteCardProps = z.infer<typeof quoteCardSchema>;
 
 // Slower stagger between words than the canonical STAGGER (4 frames) — a quote
@@ -35,6 +48,17 @@ const QUOTE_STAGGER = STAGGER + 2; // 6 frames @ 30fps ≈ 0.20s — quiet, read
 const DIVIDER_WIDTH = 48; // px — small accent rule, never a full underline
 const DIVIDER_HEIGHT = 2; // px
 
+/**
+ * A centered pull-quote scene block with attribution. The quote reveals
+ * word-by-word with a slower-than-canonical stagger so the line **reads**
+ * rather than cascades; after a settled beat a small accent-rose rule draws
+ * in beneath it, then the author and role fade in together.
+ *
+ * Built for testimonials, documentary citations, and editorial section breaks.
+ *
+ * @example
+ * <QuoteCard quote="..." author="Saul Bass" role="Designer" />
+ */
 export const QuoteCard: React.FC<QuoteCardProps> = ({
   quote,
   author,

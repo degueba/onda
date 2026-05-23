@@ -1,0 +1,18 @@
+{
+  "name": "slide-out",
+  "title": "SlideOut",
+  "description": "A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "slide",
+    "exit",
+    "spring",
+    "direction"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

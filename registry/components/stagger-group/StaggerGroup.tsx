@@ -4,21 +4,33 @@ import { z } from 'zod';
 import { DURATION, STAGGER, staggerFrames } from '../../../lib/motion';
 import { entryFadeRise } from '../../../lib/choreography';
 
+/** Zod schema for {@link StaggerGroup} props. */
 export const staggerGroupSchema = z.object({
+  /** The items to reveal, in order. */
   items: z
     .array(z.string())
     .default(['Less is more', 'Calm is power', 'Motion has a feel', 'Made to be edited']),
-  delay: z.number().int().min(0).default(0),                // frames before the FIRST item starts
-  stagger: z.number().int().min(0).default(STAGGER),        // frames between siblings (canonical = 4)
-  duration: z.number().int().min(1).default(DURATION.base), // per-item reveal duration
+  /** Frames before the **first** item starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames between consecutive items. Canonical Onda stagger is `4`. */
+  stagger: z.number().int().min(0).default(STAGGER),
+  /** Per-item reveal duration. */
+  duration: z.number().int().min(1).default(DURATION.base),
+  /** Layout direction for the items. */
   direction: z.enum(['column', 'row']).default('column'),
-  gap: z.number().int().min(0).default(16),                 // px between items
+  /** Pixels between items. */
+  gap: z.number().int().min(0).default(16),
+  /** Cross-axis alignment. */
   align: z.enum(['start', 'center', 'end']).default('center'),
-  color: z.string().default('#F2F2F4'),                     // --onda-text
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels. */
   fontSize: z.number().default(48),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link StaggerGroup}. */
 export type StaggerGroupProps = z.infer<typeof staggerGroupSchema>;
 
 // Map align prop to the corresponding flexbox value. Kept inline + tiny so the
@@ -35,6 +47,14 @@ const ALIGN_TO_TEXT = {
   end: 'right',
 } as const;
 
+/**
+ * The composition primitive — reveals a list of items in sequence using the
+ * canonical Onda stagger (`4` frames between siblings). The foundation for
+ * animated lists and sequenced reveals.
+ *
+ * @example
+ * <StaggerGroup items={['One', 'Two', 'Three']} stagger={4} />
+ */
 export const StaggerGroup: React.FC<StaggerGroupProps> = ({
   items,
   delay,

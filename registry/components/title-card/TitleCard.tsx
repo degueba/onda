@@ -5,19 +5,31 @@ import { BlurReveal } from '../blur-reveal/BlurReveal';
 import { WordStagger } from '../word-stagger/WordStagger';
 import { Underline } from '../underline/Underline';
 
+/** Zod schema for {@link TitleCard} props. */
 export const titleCardSchema = z.object({
+  /** Hero headline. */
   title: z.string().default('Onda'),
+  /** Smaller phrase beneath the headline, cascaded word-by-word. */
   subtitle: z.string().default('premium motion graphics for Remotion'),
-  delay: z.number().int().min(0).default(0),     // frames before the title starts
-  accent: z.boolean().default(true),             // show the accent underline beneath the title
+  /** Frames before the title starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Show the accent underline beneath the title. */
+  accent: z.boolean().default(true),
+  /** Title font size in px. */
   titleFontSize: z.number().default(160),
+  /** Subtitle font size in px. */
   subtitleFontSize: z.number().default(32),
-  color: z.string().default('#F2F2F4'),          // --onda-text — title
-  subtitleColor: z.string().default('#8E8E98'),  // --onda-dim — subtitle
-  accentColor: z.string().default('#D96B82'),    // --onda-accent — the one earned-color moment
+  /** Title color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Subtitle color. Defaults to `--onda-dim`. */
+  subtitleColor: z.string().default('#8E8E98'),
+  /** Accent rule color. Defaults to `--onda-accent` — the earned-color moment. */
+  accentColor: z.string().default('#D96B82'),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link TitleCard}. */
 export type TitleCardProps = z.infer<typeof titleCardSchema>;
 
 // Internal sequencing constants — staggered offsets between the composed
@@ -26,6 +38,17 @@ export type TitleCardProps = z.infer<typeof titleCardSchema>;
 const SUBTITLE_OFFSET = 24; // frames after title start — title has landed
 const UNDERLINE_OFFSET = 40; // frames after title start — subtitle is reading
 
+/**
+ * Hero title-card scene block: a large headline reveals with a calm
+ * blur-and-rise, a subtitle cascades word-by-word beneath it, and an optional
+ * accent underline arrives last as quiet punctuation.
+ *
+ * Composes `BlurReveal` / `Underline` and `WordStagger` — no new motion of
+ * its own.
+ *
+ * @example
+ * <TitleCard title="Onda" subtitle="motion graphics for Remotion" />
+ */
 export const TitleCard: React.FC<TitleCardProps> = ({
   title,
   subtitle,

@@ -3,7 +3,9 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, STAGGER, SPRING_SMOOTH, staggerFrames } from '../../../lib/motion';
 
+/** Zod schema for {@link BarChart} props. */
 export const barChartSchema = z.object({
+  /** Bars to render. Order is preserved — top to bottom. */
   data: z
     .array(z.object({ label: z.string(), value: z.number() }))
     .default([
@@ -11,23 +13,45 @@ export const barChartSchema = z.object({
       { label: 'After Effects', value: 64 },
       { label: 'Lottie', value: 38 },
     ]),
-  max: z.number().default(100),                              // value mapped to full bar width
-  delay: z.number().int().min(0).default(0),                 // frames before the first bar starts
-  duration: z.number().int().min(1).default(DURATION.slow),  // bars want time — 24 frames
-  stagger: z.number().int().min(0).default(STAGGER),         // 4 frames between bars
+  /** Value mapped to a full-width bar. Bars cap at 100% of the track. */
+  max: z.number().default(100),
+  /** Frames before the **first** bar starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Per-bar grow duration. Bars want more time than text. */
+  duration: z.number().int().min(1).default(DURATION.slow),
+  /** Frames between consecutive bars. Canonical Onda stagger is `4`. */
+  stagger: z.number().int().min(0).default(STAGGER),
+  /** Bar height in px. */
   barHeight: z.number().default(32),
-  gap: z.number().default(16),                               // px between rows
-  accentColor: z.string().default('#D96B82'),                // --onda-accent (earned: largest only)
-  barColor: z.string().default('#8E8E98'),                   // --onda-dim
-  trackColor: z.string().default('#1C1C22'),                 // --onda-border
-  color: z.string().default('#F2F2F4'),                      // --onda-text (labels)
-  labelWidth: z.number().default(220),                       // px reserved for the label column
+  /** Pixel gap between rows. */
+  gap: z.number().default(16),
+  /** Color of the **largest** bar — the earned accent. Defaults to `--onda-accent`. */
+  accentColor: z.string().default('#D96B82'),
+  /** Color of non-largest bars. Defaults to `--onda-dim`. */
+  barColor: z.string().default('#8E8E98'),
+  /** Bar track color. Defaults to `--onda-border`. */
+  trackColor: z.string().default('#1C1C22'),
+  /** Label color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels reserved for the label column. */
+  labelWidth: z.number().default(220),
+  /** Pixels. */
   fontSize: z.number().default(24),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link BarChart}. */
 export type BarChartProps = z.infer<typeof barChartSchema>;
 
+/**
+ * Horizontal bars that grow from 0 to their value on `SPRING_SMOOTH`,
+ * staggered. Single-accent palette: the largest bar earns `--onda-accent`,
+ * every other bar sits in `--onda-dim`. Calm, no overshoot, one focal moment.
+ *
+ * @example
+ * <BarChart data={[{ label: 'Remotion', value: 92 }, { label: 'After Effects', value: 64 }]} />
+ */
 export const BarChart: React.FC<BarChartProps> = ({
   data, max, delay, duration, stagger, barHeight, gap,
   accentColor, barColor, trackColor, color, labelWidth, fontSize, fontFamily,
@@ -50,6 +74,11 @@ export const BarChart: React.FC<BarChartProps> = ({
         fontSize,
         fontFamily,
         fontWeight: 500,
+        // Without an explicit width the column shrinks to its label content
+        // and the `flex: 1` track collapses to zero. 80% of canvas gives the
+        // bars somewhere to grow into while leaving generous side margins.
+        width: '80%',
+        maxWidth: 1400,
       }}
     >
       {data.map((d, i) => {

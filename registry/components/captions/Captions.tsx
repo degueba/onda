@@ -3,7 +3,12 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { SPRING_SMOOTH } from '../../../lib/motion';
 
+/** Zod schema for {@link Captions} props. */
 export const captionsSchema = z.object({
+  /**
+   * The transcript timeline. Each entry is a word + its `[startMs, endMs)`
+   * window — the format every STT / transcript tool already speaks.
+   */
   captions: z
     .array(
       z.object({
@@ -17,16 +22,32 @@ export const captionsSchema = z.object({
       { text: 'kinetic', startMs: 1500, endMs: 3000 },
       { text: 'captions', startMs: 3000, endMs: 4500 },
     ]),
-  delay: z.number().int().min(0).default(0),       // frames before timeline starts
-  color: z.string().default('#8E8E98'),            // --onda-dim (inactive words)
-  accentColor: z.string().default('#F2F2F4'),      // --onda-text (active word)
+  /** Frames before the timeline starts (shifts every `startMs` by this). */
+  delay: z.number().int().min(0).default(0),
+  /** Inactive word color. Defaults to `--onda-dim`. */
+  color: z.string().default('#8E8E98'),
+  /** Active word color. Defaults to `--onda-text`. */
+  accentColor: z.string().default('#F2F2F4'),
+  /** Pixels. */
   fontSize: z.number().default(96),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight (e.g. 500, 600). */
   fontWeight: z.number().default(600),
 });
 
+/** Inferred props for {@link Captions}. */
 export type CaptionsProps = z.infer<typeof captionsSchema>;
 
+/**
+ * Sequential word-by-word captions driven by a timed array. The active word
+ * lifts in `--onda-text` with a subtle `SPRING_SMOOTH` scale pulse; surrounding
+ * words sit dim in `--onda-dim`. The data primitive for kinetic transcripts
+ * and AI-generated voiceover.
+ *
+ * @example
+ * <Captions captions={[{ text: 'Hi', startMs: 0, endMs: 500 }]} />
+ */
 export const Captions: React.FC<CaptionsProps> = ({
   captions,
   delay,

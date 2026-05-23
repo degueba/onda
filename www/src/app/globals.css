@@ -329,6 +329,56 @@ body {
 }
 
 /*
+ * Onda search palette — native <dialog>-based ⌘K modal. We use the platform
+ * dialog so focus-trap, Esc-to-close, and inert background come for free; the
+ * styling below positions it dead-centre and replaces the default browser
+ * chrome with a frosted dark backdrop. Inner card styling lives in the
+ * component's Tailwind classes.
+ */
+.onda-search-dialog {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  max-width: 100vw;
+  max-height: 100vh;
+  /* Center via fixed positioning rather than auto-margins so the dialog sits
+   * in the optical sweet spot (roughly upper third) instead of true center —
+   * matches the search-palette convention popularized by Spotlight / Linear. */
+  position: fixed;
+  top: 18vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.onda-search-dialog::backdrop {
+  background-color: rgba(8, 8, 10, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes onda-search-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.onda-search-dialog[open] {
+  animation: onda-search-in 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onda-search-dialog[open] {
+    animation: none;
+  }
+}
+
+/*
  * Prose — styles for MDX-rendered component READMEs.
  * Restrained on purpose: no accent sprinkled across headings, no big margins.
  */

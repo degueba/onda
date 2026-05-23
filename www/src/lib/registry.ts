@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const REGISTRY_ROOT = resolve(process.cwd(), '..', 'registry');
@@ -16,10 +16,26 @@ export type RegistryItem = RegistryItemMeta & {
   readme: string;
 };
 
+/**
+ * List the slugs of every component currently published to the catalog.
+ *
+ * A directory is considered published only when **both** its `<slug>.meta.json`
+ * and `README.md` exist — in-flight components missing either file are
+ * filtered out so the site can build at any point in the queue without
+ * crashing on a half-landed primitive. Once an author lands both files,
+ * the slug appears here automatically.
+ */
 export function listComponentSlugs(): string[] {
   const dir = resolve(REGISTRY_ROOT, 'components');
   return readdirSync(dir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
+    .filter((entry) => {
+      const compDir = resolve(dir, entry.name);
+      return (
+        existsSync(resolve(compDir, `${entry.name}.meta.json`)) &&
+        existsSync(resolve(compDir, 'README.md'))
+      );
+    })
     .map((entry) => entry.name)
     .sort();
 }

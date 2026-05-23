@@ -1,0 +1,18 @@
+{
+  "name": "progress-bar",
+  "title": "ProgressBar",
+  "description": "A pill-shaped bar that fills from 0 to `value`% on SPRING_SMOOTH. Solid dusty-rose accent on a neutral track, with an optional tabular `${value}%` label beside it. No overshoot.",
+  "category": "data",
+  "tags": [
+    "data",
+    "progress",
+    "bar",
+    "primitive",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

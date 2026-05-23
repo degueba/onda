@@ -1,0 +1,19 @@
+{
+  "name": "spotlight",
+  "title": "Spotlight",
+  "description": "A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.",
+  "category": "cinematic",
+  "tags": [
+    "primitive",
+    "cinematic",
+    "reveal",
+    "radial",
+    "light",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

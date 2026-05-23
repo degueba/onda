@@ -1,0 +1,111 @@
+import React from 'react';
+import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { z } from 'zod';
+import { SPRING_SMOOTH } from '../../../lib/motion';
+import { HOUSE_EASE } from '../../../lib/easing';
+
+/** Zod schema for {@link WordRotate} props — drives Remotion `defaultProps` validation. */
+export const wordRotateSchema = z.object({
+  /** Phrases cycled in place, in order. One is visible at a time. */
+  phrases: z.array(z.string()).default(['fast', 'beautiful', 'restrained']),
+  /** Frames before the first phrase begins to enter. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames each phrase holds at full opacity before the next arrives. */
+  holdDuration: z.number().int().min(1).default(30),
+  /** Frames for a single phrase to fade in (and, separately, fade out). */
+  transitionDuration: z.number().int().min(1).default(12),
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels. */
+  fontSize: z.number().default(96),
+  /** Onda display font. Never default to Inter / Arial / system. */
+  fontFamily: z.string().default('"Clash Display", sans-serif'),
+});
+
+/** Inferred props for {@link WordRotate}. */
+export type WordRotateProps = z.infer<typeof wordRotateSchema>;
+
+/**
+ * Cycles through phrases in place. Each phrase rises in on `SPRING_SMOOTH`,
+ * holds at full opacity, then fades down as the next arrives. One focal
+ * element per moment — phrases are stacked at the same center point but only
+ * one is visible at a time.
+ *
+ * @example
+ * <WordRotate phrases={['fast', 'beautiful', 'restrained']} />
+ */
+export const WordRotate: React.FC<WordRotateProps> = ({
+  phrases,
+  delay,
+  holdDuration,
+  transitionDuration,
+  color,
+  fontSize,
+  fontFamily,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  // Each phrase owns a window of (transitionDuration + holdDuration) frames.
+  // Inside its window: fade-in over `transitionDuration`, hold for
+  // `holdDuration`, fade-out over `transitionDuration` (overlapping the next
+  // phrase's fade-in — they share the slot, so the swap reads as one motion).
+  const slot = holdDuration + transitionDuration;
+
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      {phrases.map((phrase, i) => {
+        const phraseStart = delay + i * slot;
+        const local = frame - phraseStart;
+
+        // Rise on SPRING_SMOOTH — Onda's house spring, no overshoot.
+        const rise = spring({
+          frame: local,
+          fps,
+          config: SPRING_SMOOTH,
+          durationInFrames: transitionDuration,
+        });
+        const translateY = interpolate(rise, [0, 1], [12, 0], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        });
+
+        // Opacity: 0 → 1 over transitionDuration, hold at 1 for holdDuration,
+        // 1 → 0 over the next transitionDuration. HOUSE_EASE per CLAUDE.md §3.
+        const opacity = interpolate(
+          local,
+          [0, transitionDuration, transitionDuration + holdDuration, slot + transitionDuration],
+          [0, 1, 1, 0],
+          {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: HOUSE_EASE,
+          },
+        );
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: i === 0 ? 'relative' : 'absolute',
+              top: 0,
+              left: 0,
+              opacity,
+              transform: `translateY(${translateY}px)`,
+              color,
+              fontSize,
+              fontFamily,
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {phrase}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default WordRotate;

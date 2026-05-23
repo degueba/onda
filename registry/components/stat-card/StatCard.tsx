@@ -6,21 +6,35 @@ import { WordStagger } from '../word-stagger/WordStagger';
 import { Underline } from '../underline/Underline';
 import { DURATION, STAGGER } from '../../../lib/motion';
 
+/** Zod schema for {@link StatCard} props. */
 export const statCardSchema = z.object({
+  /** The headline number to count up to. */
   value: z.number().default(1247),
+  /** Qualifier beneath the number — cascaded word-by-word. */
   label: z.string().default('creators this week'),
+  /** Prepended to the number (e.g. `'$'`). */
   prefix: z.string().default(''),
+  /** Appended to the number (e.g. `'%'`). */
   suffix: z.string().default(''),
+  /** Frames before the count starts. */
   delay: z.number().int().min(0).default(0),
+  /** Show the accent rule beneath the label. */
   accent: z.boolean().default(true),
+  /** Number font size in px. */
   numberFontSize: z.number().default(200),
+  /** Label font size in px. */
   labelFontSize: z.number().default(28),
-  color: z.string().default('#F2F2F4'),          // --onda-text
-  labelColor: z.string().default('#8E8E98'),     // --onda-dim
-  accentColor: z.string().default('#D96B82'),    // --onda-accent
+  /** Number color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Label color. Defaults to `--onda-dim`. */
+  labelColor: z.string().default('#8E8E98'),
+  /** Accent rule color. Defaults to `--onda-accent`. */
+  accentColor: z.string().default('#D96B82'),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link StatCard}. */
 export type StatCardProps = z.infer<typeof statCardSchema>;
 
 // Scene block: composes CountUp (number), WordStagger (label), Underline
@@ -32,6 +46,15 @@ export type StatCardProps = z.infer<typeof statCardSchema>;
 // want more time than a text fade. The label starts a beat *before* the
 // count fully settles so the eye flows from number to label without a dead
 // pause. The underline is the final punctuation — it earns the accent rose.
+/**
+ * Flagship Onda data scene — a big counted-up number above a word-staggered
+ * label above an accent rule. Composes `CountUp`, `WordStagger`, and
+ * `Underline` so the cascade (number → label → rule) reads as one calm
+ * motion. The signature "Onda data look" for hero stats, KPIs, milestones.
+ *
+ * @example
+ * <StatCard value={1247} label="creators this week" />
+ */
 export const StatCard: React.FC<StatCardProps> = ({
   value,
   label,

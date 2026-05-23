@@ -1,0 +1,18 @@
+{
+  "name": "word-rotate",
+  "title": "WordRotate",
+  "description": "Cycles through a list of phrases in place. Each phrase rises and fades in on SPRING_SMOOTH, holds, then fades out as the next arrives. One focal element per moment.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "rotate",
+    "cycle",
+    "entrance",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

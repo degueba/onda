@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "parallax",
+  "type": "registry:component",
+  "title": "Parallax",
+  "description": "Slow horizontal or vertical drift over an image — the lighter, no-zoom complement to KenBurns. Linear-by-design (joins Marquee/Typewriter/KenBurns).",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/parallax/Parallax.tsx",
+      "type": "registry:component",
+      "target": "components/onda/parallax/Parallax.tsx",
+      "content": "import React from 'react';\nimport { AbsoluteFill, Img, useCurrentFrame, interpolate } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link Parallax} props. */\nexport const parallaxSchema = z.object({\n  /**\n   * Image URL. The default is a stable Picsum seed so the playground render\n   * is reproducible — supply your own `src` in real compositions.\n   */\n  src: z.string().default('https://picsum.photos/seed/onda-parallax/1920/1080'),\n  /** Frames before the drift starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames over which the drift completes. 180f ≈ 6s @ 30fps — parallax wants time. */\n  duration: z.number().int().min(1).default(180),\n  /** Drift direction. The image moves *toward* this edge as time advances. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /** Total drift distance in pixels across `duration`. Keep restrained. */\n  distance: z.number().default(40),\n});\n\n/** Inferred props for {@link Parallax}. */\nexport type ParallaxProps = z.infer<typeof parallaxSchema>;\n\n/**\n * Slow horizontal or vertical drift over an image — a lighter, no-zoom\n * complement to {@link KenBurns}. Used for backgrounds and b-roll where the\n * frame should feel alive without pulling focus.\n *\n * Intentionally **linear** (joins the linear-by-design club with KenBurns,\n * Marquee, Typewriter). At a 6-second scale a spring or ease would read as\n * the camera accelerating — wrong for parallax, which is steady throughout.\n *\n * @example\n * <Parallax src=\"/my-photo.jpg\" direction=\"left\" distance={40} />\n */\nexport const Parallax: React.FC<ParallaxProps> = ({\n  src, delay, duration, direction, distance,\n}) => {\n  const frame = useCurrentFrame();\n\n  // Linear by design — constant drift, no acceleration. See KenBurns for the\n  // same rationale at the same time scale.\n  const progress = interpolate(frame - delay, [0, duration], [0, 1], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n\n  const offset = progress * distance;\n\n  // Axis + sign per direction. Left/up are negative translations; right/down\n  // positive. The image rides scale(1.05) below so translation never reveals\n  // empty edges of the canvas.\n  const tx = direction === 'left' ? -offset : direction === 'right' ? offset : 0;\n  const ty = direction === 'up' ? -offset : direction === 'down' ? offset : 0;\n\n  // overflow: hidden is critical so the slightly-oversized image (scale 1.05)\n  // doesn't bleed beyond the canvas bounds.\n  return (\n    <AbsoluteFill style={{ overflow: 'hidden' }}>\n      <Img\n        src={src}\n        style={{\n          width: '100%',\n          height: '100%',\n          objectFit: 'cover',\n          transform: `translate(${tx}px, ${ty}px) scale(1.05)`,\n        }}\n      />\n    </AbsoluteFill>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/parallax/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/parallax/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { parallaxSchema, type ParallaxProps } from './Parallax';\n"
+    },
+    {
+      "path": "registry/components/parallax/parallax.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/parallax/parallax.meta.json",
+      "content": "{\n  \"name\": \"parallax\",\n  \"title\": \"Parallax\",\n  \"description\": \"Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"image\",\n    \"drift\",\n    \"parallax\",\n    \"cinematic\",\n    \"background\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/parallax/README.md",
+      "type": "registry:file",
+      "target": "components/onda/parallax/README.md",
+      "content": "# Parallax\n\nSlow horizontal or vertical drift over an image. A lighter, no-zoom complement to `KenBurns` — same constant cinematic feel, but used where the image is supposed to stay in the background and let other elements lead. Default: 40px drift over 6 seconds, leftward. The image rides a 1.05 scale so the translation never exposes the canvas edge.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `src` | `string` | `\"https://picsum.photos/seed/onda-parallax/1920/1080\"` | Image URL. The Picsum seed is for the playground only — supply your own `src` in real compositions. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the drift starts. |\n| `duration` | `integer ≥ 1` | `180` | Frames the drift takes (6s @ 30fps). Parallax wants time; shortening reads as a swipe. |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | The edge the image drifts *toward* as time advances. |\n| `distance` | `number` | `40` | Total drift in pixels across `duration`. Keep restrained — large values stop reading as parallax. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { Parallax, parallaxSchema } from './components/onda/parallax/Parallax';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"ParallaxBackdrop\"\n    component={Parallax}\n    durationInFrames={180}\n    fps={30}\n    width={1920}\n    height={1080}\n    schema={parallaxSchema}\n    defaultProps={{\n      src: 'https://picsum.photos/seed/onda-parallax/1920/1080',\n      delay: 0,\n      duration: 180,\n      direction: 'left',\n      distance: 40,\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- **Linear by design.** `Parallax` joins the linear-by-design club with `KenBurns`, `Marquee`, and `Typewriter`. At a 6-second scale a spring or ease would read as the camera accelerating or settling — wrong for parallax, which is steady throughout. Restraint here means *constant* motion, not *eased* motion.\n- **Restrained distance.** 40px over 6 seconds is a slow, ambient drift — the eye registers movement without feeling pushed. Going past ~120px starts to read as a pan or a swipe, not parallax.\n- **`scale(1.05)` is intentional.** The image is rendered slightly oversized so that any translation up to `distance` still fills the canvas. Without it, drifting left would expose the right edge.\n- **`<Img>` (not raw `<img>`).** The component uses Remotion's `<Img>`, which `delayRender`s until the image loads and auto-retries on failure. Safe for headless renders with network-sourced photos.\n- **`overflow: hidden` on the `AbsoluteFill`** is critical — without it, the scaled-and-translated image bleeds beyond the canvas bounds.\n- All `interpolate` calls clamp on both sides — the component is correct on frame 0 and on any frame past `delay + duration` (the image rests at the final offset).\n"
+    }
+  ]
+}

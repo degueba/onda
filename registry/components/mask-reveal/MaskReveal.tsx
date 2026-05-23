@@ -3,18 +3,34 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 
+/** Zod schema for {@link MaskReveal} props. */
 export const maskRevealSchema = z.object({
+  /** What to reveal. */
   text: z.string().default('Onda'),
-  delay: z.number().int().min(0).default(0),                // frames before start
-  duration: z.number().int().min(1).default(DURATION.base), // frames to fully reveal
+  /** Frames before the animation starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames for the mask to fully retreat. */
+  duration: z.number().int().min(1).default(DURATION.base),
+  /** The side the text appears to come *in* from (mirrors `SlideIn`). */
   direction: z.enum(['left', 'right', 'top', 'bottom']).default('left'),
-  color: z.string().default('#F2F2F4'),                     // --onda-text
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels. */
   fontSize: z.number().default(96),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link MaskReveal}. */
 export type MaskRevealProps = z.infer<typeof maskRevealSchema>;
 
+/**
+ * Reveals text from behind a retreating clip-path mask. Hard, pixel-sharp
+ * edge by design — no opacity fade. The moving edge IS the fingerprint.
+ *
+ * @example
+ * <MaskReveal text="Onda" direction="left" />
+ */
 export const MaskReveal: React.FC<MaskRevealProps> = ({
   text, delay, duration, direction, color, fontSize, fontFamily,
 }) => {

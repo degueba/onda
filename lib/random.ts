@@ -1,9 +1,19 @@
-// Seeded PRNG — the answer to CLAUDE.md §1's "no Math.random()" rule.
-// Given the same seed, returns the same sequence forever. Use this when a
-// component needs apparent randomness (particles, noise, jitter offsets)
-// without breaking determinism.
-//
-// Algorithm: mulberry32. Tiny, fast, statistically fine for visuals.
+/**
+ * Seeded PRNG — the answer to `CLAUDE.md §1`'s "no `Math.random()`" rule.
+ *
+ * Returns a function that yields the next pseudo-random number in `[0, 1)`.
+ * Given the same seed, the sequence is identical forever — safe for
+ * deterministic Remotion renders.
+ *
+ * Use when a component needs apparent randomness (particles, noise, jitter
+ * offsets) without breaking determinism.
+ *
+ * Algorithm: mulberry32. Tiny, fast, statistically fine for visuals.
+ *
+ * @example
+ * const rand = seededRandom(seed);
+ * const jitter = rand() * 4 - 2; // -2..+2 px
+ */
 export const seededRandom = (seed: number): (() => number) => {
   let state = seed | 0;
   return () => {

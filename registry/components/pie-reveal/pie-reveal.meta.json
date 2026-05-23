@@ -1,0 +1,20 @@
+{
+  "name": "pie-reveal",
+  "title": "PieReveal",
+  "description": "A single-arc SVG ring that fills from 0 to a target percent on SPRING_SMOOTH, with the value rendered in the center. One muted accent stroke against a quiet track — the Onda data primitive.",
+  "category": "data",
+  "tags": [
+    "data",
+    "chart",
+    "pie",
+    "ring",
+    "percent",
+    "reveal",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

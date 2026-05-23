@@ -3,17 +3,35 @@ import { useCurrentFrame, random } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 
+/** Zod schema for {@link CameraShake} props. */
 export const cameraShakeSchema = z.object({
+  /** What to wrap with the shake. Optional — a placeholder renders if omitted. */
   children: z.any().optional(),
-  delay: z.number().int().min(0).default(0),                 // frames before shake starts
-  duration: z.number().int().min(1).default(DURATION.slow),  // frames the shake lasts
-  intensity: z.number().default(4),                          // px max offset — restrained by default
-  seed: z.number().int().default(0),                         // seeded PRNG input
-  decay: z.boolean().default(true),                          // intensity falls off over duration
+  /** Frames before the shake starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames the shake lasts. Outside this window, offset is exactly 0. */
+  duration: z.number().int().min(1).default(DURATION.slow),
+  /** Maximum offset in px. Restrained by default — bump for impact moments. */
+  intensity: z.number().default(4),
+  /** PRNG seed — same seed always produces the same shake. */
+  seed: z.number().int().default(0),
+  /** Linearly decay intensity to 0 over `duration`. */
+  decay: z.boolean().default(true),
 });
 
+/** Inferred props for {@link CameraShake}. */
 export type CameraShakeProps = z.infer<typeof cameraShakeSchema>;
 
+/**
+ * Wraps children with a subtle, deterministic camera shake that decays to
+ * rest. Driven by Remotion's seeded `random()` — same seed always produces
+ * the same shake. No `Math.random` in the render path.
+ *
+ * @example
+ * <CameraShake intensity={4} duration={24}>
+ *   <MyScene />
+ * </CameraShake>
+ */
 export const CameraShake: React.FC<CameraShakeProps> = ({
   children,
   delay,

@@ -2,22 +2,41 @@ import React from 'react';
 import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 
+/** Zod schema for {@link Marquee} props. */
 export const marqueeSchema = z.object({
+  /** Items to scroll. The list is rendered three times for seamless wrap. */
   items: z.array(z.string()).default([
     'REMOTION',
     'TYPESCRIPT',
     'REACT',
   ]),
-  speed: z.number().default(30),                  // pixels per second — low, restrained pace
+  /** Scroll speed in pixels per second. Keep low for restraint. */
+  speed: z.number().default(30),
+  /** Scroll direction. */
   direction: z.enum(['left', 'right']).default('left'),
-  gap: z.number().int().min(0).default(64),       // px between items
-  color: z.string().default('#56565F'),           // --onda-faint (atmospheric, not headline)
+  /** Pixels between items. */
+  gap: z.number().int().min(0).default(64),
+  /** Text color. Defaults to `--onda-faint` — atmospheric, not headline. */
+  color: z.string().default('#56565F'),
+  /** Pixels. */
   fontSize: z.number().default(32),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link Marquee}. */
 export type MarqueeProps = z.infer<typeof marqueeSchema>;
 
+/**
+ * A seamless looping horizontal scroll — logo strips, ticker tape,
+ * "as featured in" rows. Slow and restrained on purpose.
+ *
+ * Intentionally **linear**: a marquee with spring acceleration would feel
+ * broken.
+ *
+ * @example
+ * <Marquee items={['REMOTION', 'TYPESCRIPT', 'REACT']} speed={30} />
+ */
 export const Marquee: React.FC<MarqueeProps> = ({
   items, speed, direction, gap, color, fontSize, fontFamily,
 }) => {

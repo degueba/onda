@@ -1,0 +1,19 @@
+{
+  "name": "chapter-card",
+  "title": "ChapterCard",
+  "description": "Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.",
+  "category": "scenes",
+  "tags": [
+    "scene",
+    "chapter",
+    "title",
+    "explainer",
+    "documentary",
+    "composition"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

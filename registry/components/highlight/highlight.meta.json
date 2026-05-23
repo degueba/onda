@@ -1,0 +1,18 @@
+{
+  "name": "highlight",
+  "title": "Highlight",
+  "description": "Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.",
+  "category": "graphics",
+  "tags": [
+    "highlight",
+    "emphasis",
+    "accent",
+    "marker",
+    "text"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

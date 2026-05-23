@@ -6,19 +6,31 @@ import { StaggerGroup } from '../stagger-group/StaggerGroup';
 import { Underline } from '../underline/Underline';
 import { DURATION, STAGGER } from '../../../lib/motion';
 
+/** Zod schema for {@link EndCard} props. */
 export const endCardSchema = z.object({
+  /** Hero CTA line. */
   cta: z.string().default('Made with Onda'),
+  /** Social handles or URLs displayed in a row beneath the CTA. */
   handles: z.array(z.string()).default(['@onda.dev', 'onda.dev/components']),
-  delay: z.number().int().min(0).default(0),                       // frames before the CTA starts
-  accent: z.boolean().default(true),                               // show the underline beneath CTA
+  /** Frames before the CTA starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Show the accent underline beneath the CTA. */
+  accent: z.boolean().default(true),
+  /** CTA font size in px. */
   ctaFontSize: z.number().default(96),
+  /** Handles row font size in px. */
   handlesFontSize: z.number().default(24),
-  color: z.string().default('#F2F2F4'),                            // --onda-text — CTA color
-  handlesColor: z.string().default('#56565F'),                     // --onda-faint — handles row
-  accentColor: z.string().default('#D96B82'),                      // --onda-accent — underline
+  /** CTA color. Defaults to `--onda-text`. */
+  color: z.string().default('#F2F2F4'),
+  /** Handles color. Defaults to `--onda-faint`. */
+  handlesColor: z.string().default('#56565F'),
+  /** Underline color. Defaults to `--onda-accent`. */
+  accentColor: z.string().default('#D96B82'),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link EndCard}. */
 export type EndCardProps = z.infer<typeof endCardSchema>;
 
 // Beat offsets — all derived from delay so the whole card is one composed
@@ -27,6 +39,16 @@ export type EndCardProps = z.infer<typeof endCardSchema>;
 const HANDLES_OFFSET = DURATION.base + 6;   // handles begin ~6 frames after the CTA finishes its rise
 const UNDERLINE_OFFSET = DURATION.base - 4; // underline starts drawing just as the CTA settles
 
+/**
+ * Closing scene block: a hero CTA reveals with an optional accent underline,
+ * then a faint, staggered row of social handles or URLs fades in beneath it.
+ *
+ * Composes `BlurReveal`, `Underline`, and `StaggerGroup` so the motion
+ * fingerprint stays consistent with the rest of the catalog.
+ *
+ * @example
+ * <EndCard cta="Made with Onda" handles={['@onda.dev']} />
+ */
 export const EndCard: React.FC<EndCardProps> = ({
   cta,
   handles,

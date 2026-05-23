@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-out",
+  "type": "registry:component",
+  "title": "SlideOut",
+  "description": "Direction-parameterized translate + fade exit. Mirrors SlideIn — text leaves in the chosen direction with calm 16px travel and opacity fade.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/slide-out/SlideOut.tsx",
+      "type": "registry:component",
+      "target": "components/onda/slide-out/SlideOut.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION, SPRING_SMOOTH } from '../../../lib/motion';\n\n/** Zod schema for {@link SlideOut} props. */\nexport const slideOutSchema = z.object({\n  /** What to slide out. */\n  text: z.string().default('Onda'),\n  /** Frames before the animation starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames to fully leave. Defaults to `DURATION.fast` — exits are quicker than entrances. */\n  duration: z.number().int().min(1).default(DURATION.fast),\n  /** The direction the text leaves *toward*. `'up'` means it rises out of frame. */\n  direction: z.enum(['up', 'down', 'left', 'right']).default('up'),\n  /** Travel distance in px. Keep within the Onda envelope of 12–24. */\n  distance: z.number().default(16),\n  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */\n  color: z.string().default('#F2F2F4'),\n  /** Pixels. */\n  fontSize: z.number().default(96),\n  /** Onda display font. */\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n});\n\n/** Inferred props for {@link SlideOut}. */\nexport type SlideOutProps = z.infer<typeof slideOutSchema>;\n\n/**\n * A direction-parameterized translate-and-fade exit — the mirror of `SlideIn`.\n * Text drifts off in the chosen direction while opacity fades to 0 on the\n * house spring. No overshoot; calm 16px travel.\n *\n * @example\n * <SlideOut text=\"Onda\" direction=\"up\" distance={16} />\n */\nexport const SlideOut: React.FC<SlideOutProps> = ({\n  text, delay, duration, direction, distance, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps } = useVideoConfig();\n  const local = Math.max(0, frame - delay);\n\n  // 0 → 1 over the exit window. At 0 the text is at rest; at 1 it's gone.\n  const progress = spring({\n    frame: local,\n    fps,\n    config: SPRING_SMOOTH,\n    durationInFrames: duration,\n  });\n\n  const opacity = interpolate(progress, [0, 1], [1, 0], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n\n  // Travel from 0 → direction * distance. `up`/`left` are negative axes.\n  const axis: 'x' | 'y' = (direction === 'left' || direction === 'right') ? 'x' : 'y';\n  const sign = (direction === 'up' || direction === 'left') ? -1 : 1;\n  const offset = interpolate(progress, [0, 1], [0, sign * distance], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n  const transform = axis === 'x' ? `translateX(${offset}px)` : `translateY(${offset}px)`;\n\n  return (\n    <div style={{\n      opacity,\n      transform,\n      color, fontSize, fontFamily, fontWeight: 600,\n    }}>\n      {text}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/slide-out/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/slide-out/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { slideOutSchema, type SlideOutProps } from './SlideOut';\n"
+    },
+    {
+      "path": "registry/components/slide-out/slide-out.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/slide-out/slide-out.meta.json",
+      "content": "{\n  \"name\": \"slide-out\",\n  \"title\": \"SlideOut\",\n  \"description\": \"A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"slide\",\n    \"exit\",\n    \"spring\",\n    \"direction\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/slide-out/README.md",
+      "type": "registry:file",
+      "target": "components/onda/slide-out/README.md",
+      "content": "# SlideOut\n\nA direction-parameterized translate-and-fade exit — the mirror of `SlideIn`. Text drifts toward `'up'`, `'down'`, `'left'`, or `'right'` on `SPRING_SMOOTH` while opacity fades from 1 to 0 — all without overshoot. Travel is a calm 16px by default: the eye feels the motion, it isn't dragged by it.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"Onda\"` | What to slide out. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |\n| `duration` | `integer ≥ 1` | `DURATION.fast` (10) | Target frames to fully leave. Exits are deliberately quicker than entrances. |\n| `direction` | `\"up\" \\| \"down\" \\| \"left\" \\| \"right\"` | `\"up\"` | Direction the text moves *toward* as it leaves. `\"up\"` rises out of frame. |\n| `distance` | `number` | `16` | Pixels of travel. Keep within 12–24 — Onda travel is deliberately small. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `96` | Pixels. |\n| `fontFamily` | `string` | `'\"Clash Display\", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { SlideOut, slideOutSchema } from './components/onda/slide-out/SlideOut';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyExit\"\n    component={SlideOut}\n    durationInFrames={30}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={slideOutSchema}\n    defaultProps={{\n      text: 'Hello',\n      delay: 0,\n      duration: 10,\n      direction: 'up',\n      distance: 16,\n      color: '#F2F2F4',\n      fontSize: 96,\n      fontFamily: '\"Clash Display\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- Spring is `SPRING_SMOOTH` from `lib/motion.ts` — the Onda house default. **No overshoot.** Don't reduce damping for a \"pop.\"\n- Duration defaults to `DURATION.fast` (10 frames ≈ 0.33s at 30fps). Exits are quicker than entrances by design.\n- Travel defaults to 16px — keep `distance` within the 12–24 band. Larger jumps break the signature.\n- `direction` names the *exit* direction: `'up'` rises out, `'down'` drops out, `'left'` drifts off-left, `'right'` drifts off-right. This is the inverse of `SlideIn`, whose `direction` names the settling direction.\n- All `interpolate` calls clamp at both ends — the component is correct on frame 0 (fully visible, at rest) and on any frame past `delay + duration` (fully gone).\n"
+    }
+  ]
+}

@@ -4,21 +4,40 @@ import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
 
+/** Zod schema for {@link CountUp} props. */
 export const countUpSchema = z.object({
-  from: z.number().default(0),                              // starting value
-  to: z.number().default(100),                              // ending value
-  delay: z.number().int().min(0).default(0),                // frames before start
-  duration: z.number().int().min(1).default(DURATION.slow), // counting wants more time than a text fade
-  decimals: z.number().int().min(0).default(0),             // fraction digits to render
-  prefix: z.string().default(''),                           // e.g. '$'
-  suffix: z.string().default(''),                           // e.g. '%'
-  color: z.string().default('#F2F2F4'),                     // --onda-text
-  fontSize: z.number().default(120),                        // counters are usually large
+  /** Starting value. */
+  from: z.number().default(0),
+  /** Ending value. */
+  to: z.number().default(100),
+  /** Frames before the count starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames to count from `from` to `to`. Numbers want more time than text. */
+  duration: z.number().int().min(1).default(DURATION.slow),
+  /** Fraction digits to render. */
+  decimals: z.number().int().min(0).default(0),
+  /** Prepended to the number (e.g. `'$'`). */
+  prefix: z.string().default(''),
+  /** Appended to the number (e.g. `'%'`). */
+  suffix: z.string().default(''),
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels. Counters are usually large. */
+  fontSize: z.number().default(120),
+  /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
 
+/** Inferred props for {@link CountUp}. */
 export type CountUpProps = z.infer<typeof countUpSchema>;
 
+/**
+ * An animated number that counts from `from` to `to` on `SPRING_SMOOTH`.
+ * Tabular nums, en-US grouping, deterministic across machines.
+ *
+ * @example
+ * <CountUp from={0} to={1247} prefix="$" suffix="+" />
+ */
 export const CountUp: React.FC<CountUpProps> = ({
   from, to, delay, duration, decimals, prefix, suffix, color, fontSize, fontFamily,
 }) => {

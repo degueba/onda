@@ -11,50 +11,90 @@
 // to acknowledge — so durations are deliberately longer than a typical
 // product-UI library would use.
 
-// Duration scale in frames at 30fps. At other framerates, scale via
-// Math.round(DURATION.x * fps / 30) at the call site.
+/**
+ * Duration scale in frames at 30fps. Reach for these tokens before hardcoding
+ * a frame count — the motion fingerprint depends on every component sharing
+ * the same timing vocabulary.
+ *
+ * At other framerates, scale via `Math.round(DURATION.x * fps / 30)` at the
+ * call site.
+ *
+ * - `instant` (6f / 0.20s) — micro shifts, near-imperceptible feedback
+ * - `fast`    (10f / 0.33s) — exits, small moves
+ * - `base`    (18f / 0.60s) — default entrance
+ * - `slow`    (24f / 0.80s) — large entrances, hero moves
+ * - `slower`  (30f / 1.00s) — full scene transitions
+ * - `hold`    (45f / 1.50s) — minimum settled hold (see `lib/text-timing.ts`)
+ */
 export const DURATION = {
-  instant: 6,   // 0.20s — micro shifts, near-imperceptible feedback
-  fast:    10,  // 0.33s — exits, small moves
-  base:    18,  // 0.60s — default entrance
-  slow:    24,  // 0.80s — large entrances, hero moves
-  slower:  30,  // 1.00s — full scene transitions
-  hold:    45,  // 1.50s — minimum settled hold (see lib/text-timing.ts)
+  instant: 6,
+  fast:    10,
+  base:    18,
+  slow:    24,
+  slower:  30,
+  hold:    45,
 } as const;
+
+/** Keys of {@link DURATION} — useful for typed props that pick a duration. */
 export type DurationToken = keyof typeof DURATION;
 
-// Canonical stagger between sibling elements (lists, words, grouped reveals).
-// One value, used everywhere. Never randomized, never per-component.
-export const STAGGER = 4; // frames @ 30fps ≈ 0.13s
+/**
+ * Canonical stagger between sibling elements (lists, words, grouped reveals).
+ * One value, used everywhere — never randomized, never per-component.
+ *
+ * `4` frames @ 30fps ≈ 0.13s.
+ */
+export const STAGGER = 4;
 
-// Hero-landing overshoot magnitude — a 3% scale bump that settles back to 1.
-// Reserved for the two-phase landing pattern (see heroReveal in
-// lib/choreography.ts). Per CLAUDE.md §3, any component using overshoot
-// outside that pattern must document why.
+/**
+ * Hero-landing overshoot magnitude — a 3% scale bump that settles back to 1.
+ *
+ * Reserved for the two-phase landing pattern (see {@link "./choreography".heroReveal}).
+ * Per `CLAUDE.md §3`, any component using overshoot outside that pattern must
+ * document why.
+ */
 export const OVERSHOOT = 0.03;
 
-// House spring — smooth, settled, no overshoot. The Onda fingerprint.
-// Heavily overdamped: damping/(2*sqrt(stiffness*mass)) = 10. The eye sees a
-// confident settle rather than a bounce. Pass directly:
-//   spring({ frame, fps, config: SPRING_SMOOTH })
+/**
+ * The house spring — smooth, settled, no overshoot. The Onda fingerprint.
+ *
+ * Heavily overdamped (damping ratio ≈ 10): the eye sees a confident settle
+ * rather than a bounce. Pass directly to Remotion's `spring`:
+ *
+ * @example
+ * spring({ frame, fps, config: SPRING_SMOOTH });
+ */
 export const SPRING_SMOOTH = {
   damping: 200,
   stiffness: 100,
   mass: 1,
 } as const;
 
-// Faster spring for elements that need to feel decisive (counters, value
-// swaps, cursor moves). Still heavily overdamped — faster rise, no overshoot.
-// Per CLAUDE.md §3, never reduce damping below critical to get a "pop": this
-// achieves snappiness via higher stiffness instead.
+/**
+ * Faster spring for elements that need to feel decisive (counters, value
+ * swaps, cursor moves). Still heavily overdamped — faster rise, no overshoot.
+ *
+ * Per `CLAUDE.md §3`, never reduce damping below critical to fake a "pop":
+ * this config achieves snappiness via higher stiffness instead.
+ */
 export const SPRING_SNAPPY = {
   damping: 120,
   stiffness: 180,
   mass: 1,
 } as const;
 
-// Stagger offset in frames for the i-th sibling in a grouped reveal. Single
-// canonical source so stagger is greppable and consistent.
+/**
+ * Stagger offset in frames for the i-th sibling in a grouped reveal. The
+ * single canonical helper — every list / word / sibling cascade in the
+ * catalog goes through here so stagger stays greppable and consistent.
+ *
+ * @param index     Zero-based sibling index.
+ * @param increment Frames between siblings. Defaults to {@link STAGGER} (4).
+ * @returns Frames to delay this sibling's reveal.
+ *
+ * @example
+ * const itemDelay = delay + staggerFrames(i);
+ */
 export const staggerFrames = (index: number, increment: number = STAGGER): number => {
   return Math.max(0, index) * increment;
 };

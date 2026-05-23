@@ -29,6 +29,18 @@ import { EndCard, endCardSchema } from '@onda/registry/components/end-card/EndCa
 import { LogoSting, logoStingSchema } from '@onda/registry/components/logo-sting/LogoSting';
 import { CameraShake, cameraShakeSchema } from '@onda/registry/components/camera-shake/CameraShake';
 import { GradientShift, gradientShiftSchema } from '@onda/registry/components/gradient-shift/GradientShift';
+import { WordRotate, wordRotateSchema } from '@onda/registry/components/word-rotate/WordRotate';
+import { Spotlight, spotlightSchema } from '@onda/registry/components/spotlight/Spotlight';
+import { Highlight, highlightSchema } from '@onda/registry/components/highlight/Highlight';
+import { PieReveal, pieRevealSchema } from '@onda/registry/components/pie-reveal/PieReveal';
+import { ProgressBar, progressBarSchema } from '@onda/registry/components/progress-bar/ProgressBar';
+import { Timeline, timelineSchema } from '@onda/registry/components/timeline/Timeline';
+import { IconPop, iconPopSchema } from '@onda/registry/components/icon-pop/IconPop';
+import { FadeOut, fadeOutSchema } from '@onda/registry/components/fade-out/FadeOut';
+import { SlideOut, slideOutSchema } from '@onda/registry/components/slide-out/SlideOut';
+import { Parallax, parallaxSchema } from '@onda/registry/components/parallax/Parallax';
+import { Vignette, vignetteSchema } from '@onda/registry/components/vignette/Vignette';
+import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapter-card/ChapterCard';
 import { ComponentPreview } from './ComponentPreview';
 import { TryItPopover } from './TryItPopover';
 
@@ -144,6 +156,54 @@ const REGISTRY: Record<
   'gradient-shift': {
     component: GradientShift as unknown as ComponentType<never>,
     schema: gradientShiftSchema,
+  },
+  'word-rotate': {
+    component: WordRotate as unknown as ComponentType<never>,
+    schema: wordRotateSchema,
+  },
+  'spotlight': {
+    component: Spotlight as unknown as ComponentType<never>,
+    schema: spotlightSchema,
+  },
+  'highlight': {
+    component: Highlight as unknown as ComponentType<never>,
+    schema: highlightSchema,
+  },
+  'pie-reveal': {
+    component: PieReveal as unknown as ComponentType<never>,
+    schema: pieRevealSchema,
+  },
+  'progress-bar': {
+    component: ProgressBar as unknown as ComponentType<never>,
+    schema: progressBarSchema,
+  },
+  'timeline': {
+    component: Timeline as unknown as ComponentType<never>,
+    schema: timelineSchema,
+  },
+  'icon-pop': {
+    component: IconPop as unknown as ComponentType<never>,
+    schema: iconPopSchema,
+  },
+  'fade-out': {
+    component: FadeOut as unknown as ComponentType<never>,
+    schema: fadeOutSchema,
+  },
+  'slide-out': {
+    component: SlideOut as unknown as ComponentType<never>,
+    schema: slideOutSchema,
+  },
+  'parallax': {
+    component: Parallax as unknown as ComponentType<never>,
+    schema: parallaxSchema,
+  },
+  'vignette': {
+    component: Vignette as unknown as ComponentType<never>,
+    schema: vignetteSchema,
+  },
+  'chapter-card': {
+    component: ChapterCard as unknown as ComponentType<never>,
+    schema: chapterCardSchema,
   },
 };
 

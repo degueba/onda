@@ -10,16 +10,20 @@ import { logoStingSchema } from './schema';
 export { logoStingSchema };
 export type LogoStingProps = z.infer<typeof logoStingSchema>;
 
-// Scene block: a silent, restrained branded reveal.
-//
-// Composition (in order, no flourish in between):
-//   1. DrawOn  — the logo stroke draws itself in (the "mark arrives")
-//   2. ScaleIn — the title settles into place beneath the stroke
-//   3. Underline — a single accent rule lands last, only if accent === true
-//
-// All motion lives in the three primitives; this file only choreographs the
-// offsets between them and lays them out vertically. No particles, no streaks,
-// no glitch, no spinning, no accelerating spring. Restraint IS the brand.
+/**
+ * Silent, restrained branded reveal. Composition order:
+ *
+ * 1. `DrawOn`    — the logo stroke draws itself in (the "mark arrives")
+ * 2. `ScaleIn`   — the title settles into place beneath the stroke
+ * 3. `Underline` — a single accent rule lands last, only when `accent === true`
+ *
+ * All motion lives in the three primitives; this file only choreographs the
+ * offsets between them. No particles, no streaks, no glitch, no spinning,
+ * no accelerating spring. Restraint IS the brand.
+ *
+ * @example
+ * <LogoSting d="M 50 60 Q 100 20 150 60 T 250 60" title="Onda" />
+ */
 export const LogoSting: React.FC<LogoStingProps> = ({
   d,
   title,

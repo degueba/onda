@@ -31,12 +31,25 @@ import {
 } from './motion';
 import { HOUSE_EASE } from './easing';
 
-type MotionStyle = {
+/**
+ * Style props returned by an entry/exit pattern — meant to be spread onto
+ * the element's `style` attribute alongside any visual props (color, etc).
+ */
+export type MotionStyle = {
   opacity: number;
   transform: string;
 };
 
-type PatternInput = {
+/**
+ * Common input shape every choreography helper accepts. Individual helpers
+ * may extend it with extra fields (direction, distance, etc.).
+ *
+ * - `frame` / `fps` come from `useCurrentFrame()` / `useVideoConfig()`.
+ * - `delay` and `durationInFrames` let callers stagger and re-time without
+ *   touching the helper internals.
+ * - `travelPx` is the translate distance for patterns that move.
+ */
+export type PatternInput = {
   frame: number;
   fps: number;
   delay?: number;
@@ -44,9 +57,16 @@ type PatternInput = {
   travelPx?: number;
 };
 
-// Pure opacity 0→1 driven by SPRING_SMOOTH. No translate, no scale. The
-// simplest possible reveal — use for elements where presence alone changes
-// (avatars, full-screen overlays) and where direction would feel arbitrary.
+/**
+ * Pure opacity 0 → 1 driven by {@link SPRING_SMOOTH}. No translate, no scale.
+ *
+ * The simplest possible reveal — use for elements where presence alone
+ * changes (avatars, full-screen overlays) and direction would feel arbitrary.
+ *
+ * @example
+ * const { opacity } = entryFade({ frame, fps, delay: 0, durationInFrames: 18 });
+ * return <div style={{ opacity }}>Hello</div>;
+ */
 export const entryFade = ({
   frame,
   fps,
@@ -67,13 +87,21 @@ export const entryFade = ({
   return { opacity };
 };
 
-// Direction-parameterized translate + fade on SPRING_SMOOTH. Generalization
-// of entryFadeRise to all four cardinal directions. Travel is bounded to the
-// 12–24px Onda envelope; default is 12px to match entryFadeRise's intent.
-//
-// `direction` names the SETTLING direction — 'up' means the element rises
-// INTO place (origin is below). 'left' means it slides leftward into place
-// (origin is to the right). This matches how a director would say it.
+/**
+ * Direction-parameterized translate + fade on {@link SPRING_SMOOTH}.
+ * Generalization of {@link entryFadeRise} to all four cardinal directions.
+ *
+ * `direction` names the *settling* direction — `'up'` means the element rises
+ * **into** place (origin is below). `'left'` means it slides leftward into
+ * place (origin is to the right). This matches how a director would say it.
+ *
+ * Travel is bounded to the 12–24px Onda envelope; default is 12px.
+ *
+ * @example
+ * const { opacity, transform } = entrySlide({
+ *   frame, fps, delay: 0, direction: 'up', distance: 12,
+ * });
+ */
 export const entrySlide = ({
   frame,
   fps,
@@ -114,10 +142,16 @@ export const entrySlide = ({
   };
 };
 
-// Opacity + scale from N→1 driven by SPRING_SMOOTH. Restrained on purpose:
-// default `from` is 0.9 (visible but calm). Values below ~0.85 cross into
-// dramatic-zoom territory and break the motion language; the schema-level
-// caller can constrain further if needed.
+/**
+ * Opacity + scale from N → 1 driven by {@link SPRING_SMOOTH}.
+ *
+ * Restrained on purpose: default `from` is `0.9` (visible but calm). Values
+ * below ~0.85 cross into dramatic-zoom territory and break the Onda motion
+ * language — schema callers should constrain when stricter limits matter.
+ *
+ * @example
+ * const { opacity, transform } = entryScale({ frame, fps, from: 0.9 });
+ */
 export const entryScale = ({
   frame,
   fps,
@@ -146,10 +180,17 @@ export const entryScale = ({
   };
 };
 
-// Default entrance. Translate up + fade in on SPRING_SMOOTH at base duration.
-// The workhorse — appropriate for ~80% of entering elements. Equivalent to
-// `entrySlide({ direction: 'up', distance: 12 })` but kept under its own
-// name as the most common entrance vocabulary item.
+/**
+ * The default entrance — translate up + fade in on {@link SPRING_SMOOTH} at
+ * `DURATION.base`. The workhorse, appropriate for ~80% of entering elements.
+ *
+ * Equivalent to `entrySlide({ direction: 'up', distance: 12 })` but kept
+ * under its own name as the most common entrance in the vocabulary.
+ *
+ * @example
+ * const { opacity, transform } = entryFadeRise({ frame, fps });
+ * return <div style={{ opacity, transform }}>{text}</div>;
+ */
 export const entryFadeRise = ({
   frame,
   fps,
@@ -175,8 +216,13 @@ export const entryFadeRise = ({
   return { opacity, transform: `translateY(${ty}px)` };
 };
 
-// Default exit. Translate down + fade out at fast duration (exits are ~30%
-// faster than entries — get out of the way faster than you came in).
+/**
+ * The default exit — translate down + fade out at `DURATION.fast`. Exits are
+ * ~30% faster than entries: get out of the way faster than you came in.
+ *
+ * Driven by {@link HOUSE_EASE} (not a spring) because there's no
+ * "settle" — the element is leaving.
+ */
 export const exitFadeFall = ({
   frame,
   delay = 0,
@@ -195,11 +241,16 @@ export const exitFadeFall = ({
   };
 };
 
-// Hero reveal — the two-phase landing pattern, candidate Onda signature.
-// Phase 1: SPRING_SMOOTH translate + fade over the full duration.
-// Phase 2: a 3% scale overshoot near the end that settles back to 1.0.
-// The two phases are perceived as one continuous landing. Reserve for at
-// most one element per scene.
+/**
+ * The two-phase hero landing — the candidate Onda signature pattern.
+ *
+ * - **Phase 1:** {@link SPRING_SMOOTH} translate + fade over the full duration.
+ * - **Phase 2:** a 3% scale overshoot ({@link OVERSHOOT}) near the end that
+ *   settles back to 1.0.
+ *
+ * The two phases are perceived as one continuous landing. Reserve for at
+ * most one element per scene.
+ */
 export const heroReveal = ({
   frame,
   fps,
@@ -240,10 +291,16 @@ export const heroReveal = ({
   };
 };
 
-// In-place state swap — for a value or label changing while its container
-// stays put. Crossfade with HOUSE_EASE; the one place §A.3 of the motion
-// language allows ease-in-out-like symmetry, because neither the outgoing
-// nor incoming value deserves emphasis.
+/**
+ * In-place state swap — for a value or label changing while its container
+ * stays put. Crossfade driven by {@link HOUSE_EASE}.
+ *
+ * The one place `motion-language.md §A.3` allows ease-in-out-like symmetry,
+ * because neither the outgoing nor the incoming value deserves emphasis.
+ *
+ * @returns `{ outOpacity, inOpacity }` — apply to the old and new values
+ *   respectively (both rendered, layered, so the swap stays in place).
+ */
 export const stateSwap = ({
   frame,
   delay = 0,

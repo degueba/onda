@@ -1,0 +1,18 @@
+{
+  "name": "icon-pop",
+  "title": "IconPop",
+  "description": "A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.",
+  "category": "graphics",
+  "tags": [
+    "icon",
+    "primitive",
+    "state",
+    "spring",
+    "entrance"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

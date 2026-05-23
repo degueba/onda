@@ -2,22 +2,44 @@ import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, interpolate } from 'remotion';
 import { z } from 'zod';
 
+/** Zod schema for {@link KenBurns} props. */
 export const kenBurnsSchema = z.object({
-  // Stable Picsum seed so the playground render is reproducible across
-  // machines. Users will supply their own `src` in real compositions.
+  /**
+   * Image URL. The default is a stable Picsum seed so the playground render
+   * is reproducible — supply your own `src` in real compositions.
+   */
   src: z.string().default('https://picsum.photos/seed/onda/1920/1080'),
-  delay: z.number().int().min(0).default(0),       // frames before start
-  duration: z.number().int().min(1).default(150),  // 5s @ 30fps — Ken Burns wants time
+  /** Frames before the drift starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames over which the zoom + pan completes. 150f ≈ 5s @ 30fps. */
+  duration: z.number().int().min(1).default(150),
+  /** Starting scale. */
   fromScale: z.number().default(1.0),
-  toScale: z.number().default(1.1),                // subtle zoom-in; keep restrained
-  fromX: z.number().min(0).max(1).default(0.5),    // transform-origin X (0=left, 1=right)
-  fromY: z.number().min(0).max(1).default(0.5),    // transform-origin Y (0=top, 1=bottom)
+  /** Ending scale. Keep the delta restrained (1.0 → 1.1). */
+  toScale: z.number().default(1.1),
+  /** Starting transform-origin X. `0` = left, `1` = right. */
+  fromX: z.number().min(0).max(1).default(0.5),
+  /** Starting transform-origin Y. `0` = top, `1` = bottom. */
+  fromY: z.number().min(0).max(1).default(0.5),
+  /** Ending transform-origin X. */
   toX: z.number().min(0).max(1).default(0.5),
+  /** Ending transform-origin Y. */
   toY: z.number().min(0).max(1).default(0.5),
 });
 
+/** Inferred props for {@link KenBurns}. */
 export type KenBurnsProps = z.infer<typeof kenBurnsSchema>;
 
+/**
+ * Slow zoom + pan over a photo — the iconic documentary motion. Restrained
+ * scale (1.0 → 1.1 default) over ~5 seconds.
+ *
+ * Intentionally **linear** for the constant slow-cinematic feel. Springs at
+ * this scale read as "the camera is accelerating" — wrong for Ken Burns.
+ *
+ * @example
+ * <KenBurns src="/my-photo.jpg" toScale={1.1} />
+ */
 export const KenBurns: React.FC<KenBurnsProps> = ({
   src, delay, duration, fromScale, toScale, fromX, fromY, toX, toY,
 }) => {

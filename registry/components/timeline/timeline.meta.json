@@ -1,0 +1,21 @@
+{
+  "name": "timeline",
+  "title": "Timeline",
+  "description": "A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.",
+  "category": "data",
+  "tags": [
+    "timeline",
+    "data",
+    "stagger",
+    "dots",
+    "draw",
+    "spring",
+    "primitive"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/paths",
+    "zod",
+    "react"
+  ]
+}

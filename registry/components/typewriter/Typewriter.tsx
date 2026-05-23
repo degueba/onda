@@ -3,19 +3,38 @@ import { useCurrentFrame, interpolate } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 
+/** Zod schema for {@link Typewriter} props. */
 export const typewriterSchema = z.object({
+  /** What to type out. */
   text: z.string().default('motion graphics'),
-  delay: z.number().int().min(0).default(0),                // frames before start
-  duration: z.number().int().min(1).default(DURATION.slow), // frames to fully type out
+  /** Frames before typing starts. */
+  delay: z.number().int().min(0).default(0),
+  /** Frames to type the full string. Linear pacing — chars-per-frame is constant. */
+  duration: z.number().int().min(1).default(DURATION.slow),
+  /** Show a blinking cursor at the leading edge. */
   cursor: z.boolean().default(true),
-  cursorColor: z.string().default('#D96B82'),               // --onda-accent
-  color: z.string().default('#F2F2F4'),                     // --onda-text
+  /** Cursor color. Defaults to `--onda-accent` (`#D96B82`). */
+  cursorColor: z.string().default('#D96B82'),
+  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
+  color: z.string().default('#F2F2F4'),
+  /** Pixels. */
   fontSize: z.number().default(64),
+  /** Body / technical font — Space Grotesk reads more "terminal" than Clash. */
   fontFamily: z.string().default('"Space Grotesk", sans-serif'),
 });
 
+/** Inferred props for {@link Typewriter}. */
 export type TypewriterProps = z.infer<typeof typewriterSchema>;
 
+/**
+ * Character-by-character text reveal with an optional accent-rose cursor.
+ *
+ * Intentionally **linear** — the one documented exception to the house spring
+ * rule, because typing has to feel constant-rate.
+ *
+ * @example
+ * <Typewriter text="motion graphics" cursor />
+ */
 export const Typewriter: React.FC<TypewriterProps> = ({
   text, delay, duration, cursor, cursorColor, color, fontSize, fontFamily,
 }) => {
