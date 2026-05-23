@@ -1,0 +1,66 @@
+# Run typecheck on every push and PR. Cheap signal that nothing is broken
+# at the type-system level before a maintainer looks. Catches the majority
+# of "I forgot to update this consumer" mistakes before they hit `main`.
+#
+# We deliberately don't run tests here — Onda has none yet (motion graphics
+# verification is largely visual, not unit-testable). When test coverage
+# lands, add `pnpm test` as a separate job.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel in-flight runs on the same PR when a new commit lands — keeps CI
+# minutes from piling up during rapid pushes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck (root)
+        run: pnpm typecheck
+
+      - name: Typecheck (www)
+        run: pnpm --filter @onda/www typecheck
+
+  build:
+    runs-on: ubuntu-latest
+    needs: typecheck
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs site
+        run: pnpm --filter @onda/www build

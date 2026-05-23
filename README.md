@@ -145,8 +145,10 @@ pnpm sync-registry  # Regenerate registry.json from component meta.json files
 
 ## Contributing
 
-Onda is an open library. The component contract is documented in [docs/component-reference.md](docs/component-reference.md), and the rules every new primitive must follow are in [CLAUDE.md](CLAUDE.md). One component per branch; obey the motion language.
+Bug fixes, new component proposals, and docs improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first; it sets the bar and points at the hard rules in [CLAUDE.md](CLAUDE.md). For security issues see [SECURITY.md](SECURITY.md). The community guidelines live in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## License
 
-[MIT](LICENSE).
+Code is [MIT](LICENSE). Use it, fork it, build commercial products with it — that's the point.
+
+The **Onda name, wordmark, and wave logo** are not covered by the MIT grant. You're welcome to mention Onda when describing your project ("built with Onda") but please don't use the brand as the identifier for a forked, modified, or competing distribution. If you're unsure whether your use is fine, open an issue and ask.
