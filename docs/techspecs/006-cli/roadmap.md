@@ -61,26 +61,30 @@ Make installed files self-consistent. Without this, M3's installs typecheck-fail
 - The rewrite is regex-based per design.md; assumptions documented in `src/lib/rewrite-imports.ts`. ✅
 - Subtle non-obvious fix: the project-shape detector's JSONC stripper was a regex that ate `**/` inside the very common `"include": ["src/**/*"]` glob, hiding `paths["@/*"]` from detection. Replaced with a character-by-character tokenizer that respects string contexts. ✅
 
-## M5 — `onda list` — Not started
+## M5 — `onda list` — Done
 
 Discovery without leaving the terminal. Important for the AI-agent use case.
 
 **Acceptance:**
 
-- `npx onda list` fetches the catalog (via `<registry>.json` or a `<registry>/index.json` — pick in implementation), groups by category, and prints with a header line per category and one component per line (`<slug>  —  <title>  —  <description>`).
-- `--category <name>` filters; unknown categories error helpfully (list valid ones).
-- `--json` emits a JSON array, one entry per component, schema-stable across versions. Documented in the README.
+- `npx onda list` fetches `<registry>/index.json` (M6 generates this from `registry/registry.json`), groups by category in the same order the site uses, and prints one component per line with the category as a header. ✅
+- Lib helpers (`lib-*`) are filtered out — the catalog is user-facing components only. ✅
+- `--category <name>` filters; unknown categories error with the list of known ones. ✅
+- `--json` emits a stable `{ name, title, description, category }` array. ✅
 
-## M6 — Site changes to host the registry + flip the install snippet — Not started
+## M6 — Site changes to host the registry + flip the install snippet — Done
 
 Wire the site so `https://onda.dev/r/<slug>.json` actually serves the manifests; flip the install snippet on every README and on the home/compare page from "this is what it'll look like" to "this works."
 
 **Acceptance:**
 
-- `/www/src/app/r/[slug]/route.ts` (or static export under `/www/public/r/`) serves each manifest as `application/json`. Local: `curl http://localhost:3000/r/blur-reveal.json` returns the manifest body. Prod parity is required.
-- `/www/src/app/r/index.json/route.ts` (or static) serves the catalog summary if M5 needs it.
-- Home-page install snippet and per-component `npx onda add <slug>` lines are unchanged in text but now real. (The text was always correct; this milestone is "the text is no longer aspirational.")
-- `/compare` page's "1 import" framing is reinforced with an "install in one command" line that links to the CLI docs page.
+- Approach: **static files** under `www/public/r/` rather than dynamic route handlers — small, many, cache-friendly via Vercel's CDN with zero per-request cost. ✅
+- New `www/scripts/sync-registry-to-public.mjs` wipes and rewrites `www/public/r/` from `registry/r/*.json` + `registry/registry.json` (as `r/index.json`). Wired as a `prebuild` and `predev` hook in `www/package.json` so both `pnpm --filter www dev` and `pnpm --filter www build` self-coordinate. ✅
+- `www/public/r/.gitignore` excludes the generated files; source of truth stays in `registry/r/`. ✅
+- After `pnpm --filter www build`: 41 per-slug manifests + `index.json` land in `www/public/r/`. ✅
+- `onda list --registry file://.../www/public/r` returns the full 38-component catalog. ✅
+- Home-page install snippet and per-component `npx onda add <slug>` lines unchanged in text but now real once Vercel deploys. ✅
+- `/compare` page's "1 import" framing — text unchanged, the underlying contract is now keepable. ✅
 
 ## M7 — Publish + smoke test — Not started
 

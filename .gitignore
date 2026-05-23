@@ -8,3 +8,7 @@ build/
 !.env.example
 .vscode/
 .idea/
+
+# Generated at build time by www/scripts/sync-registry-to-public.mjs.
+# Source of truth: registry/r/ and registry/registry.json.
+www/public/r/

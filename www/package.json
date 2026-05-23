@@ -5,7 +5,9 @@
   "description": "Onda — landing page and component docs surface.",
   "scripts": {
     "dev": "next dev",
+    "predev": "node scripts/sync-registry-to-public.mjs",
     "build": "next build",
+    "prebuild": "node scripts/sync-registry-to-public.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
