@@ -1,5 +1,4 @@
 {
-  "// note": "Onda is a pnpm workspace. The deployable site lives in www/, but it imports source from ../registry/* and ../lib/* via TS path aliases. Vercel's Root Directory setting sandboxes builds and forbids '..' — so Root Directory MUST stay at '.' (repo root) and this file drives the build by filtering into the www workspace. See docs/deploy.md.",
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "pnpm install --frozen-lockfile",
