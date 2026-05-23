@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scale-in",
+  "type": "registry:component",
+  "title": "ScaleIn",
+  "description": "A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/scale-in/ScaleIn.tsx",
+      "type": "registry:component",
+      "target": "components/onda/scale-in/ScaleIn.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\nimport { entryScale } from '../../../lib/choreography';\n\nexport const scaleInSchema = z.object({\n  text: z.string().default('Onda'),\n  delay: z.number().int().min(0).default(0),                // frames before start\n  duration: z.number().int().min(1).default(DURATION.base), // frames to settle\n  fromScale: z.number().default(0.9),                       // restrained but visible at preview scale\n  color: z.string().default('#F2F2F4'),                     // --onda-text\n  fontSize: z.number().default(96),\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n});\n\nexport type ScaleInProps = z.infer<typeof scaleInSchema>;\n\nexport const ScaleIn: React.FC<ScaleInProps> = ({\n  text, delay, duration, fromScale, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps } = useVideoConfig();\n\n  const { opacity, transform } = entryScale({\n    frame,\n    fps,\n    delay,\n    durationInFrames: duration,\n    from: fromScale,\n  });\n\n  return (\n    <div style={{\n      opacity,\n      transform,\n      color, fontSize, fontFamily, fontWeight: 600,\n    }}>\n      {text}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/scale-in/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/scale-in/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { scaleInSchema, type ScaleInProps } from './ScaleIn';\n"
+    },
+    {
+      "path": "registry/components/scale-in/scale-in.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/scale-in/scale-in.meta.json",
+      "content": "{\n  \"name\": \"scale-in\",\n  \"title\": \"ScaleIn\",\n  \"description\": \"A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"scale\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/scale-in/README.md",
+      "type": "registry:file",
+      "target": "components/onda/scale-in/README.md",
+      "content": "# ScaleIn\n\nA subtle scale-from-slightly-smaller-and-fade entrance. Opacity rises from 0 to 1 while scale settles from `0.90` to `1.0` on the house spring — no overshoot, no scale jumps. Restrained on purpose: the move is felt, never seen as a \"pop.\"\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"Onda\"` | What to reveal. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |\n| `duration` | `integer ≥ 1` | `DURATION.base` (18) | Target frames to settle. With `SPRING_SMOOTH` the visible motion lands in roughly this range. |\n| `fromScale` | `number` | `0.9` | Starting scale. Restrained by design — see Motion notes. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `96` | Pixels. |\n| `fontFamily` | `string` | `'\"Clash Display\", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { ScaleIn, scaleInSchema } from './components/onda/scale-in/ScaleIn';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyScaleIn\"\n    component={ScaleIn}\n    durationInFrames={60}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={scaleInSchema}\n    defaultProps={{\n      text: 'Hello',\n      delay: 0,\n      duration: 18,\n      fromScale: 0.9,\n      color: '#F2F2F4',\n      fontSize: 96,\n      fontFamily: '\"Clash Display\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- Uses `entryScale` from `lib/choreography.ts` — opacity + scale on `SPRING_SMOOTH`. **No overshoot.** Don't reduce damping for a \"pop.\"\n- Duration defaults to `DURATION.base` (18 frames ≈ 0.6s at 30fps).\n- `fromScale` defaults to `0.9` — restrained, but enough magnitude to read as a real scale entrance (not just a fade) at typical preview sizes. The safe zone is `[0.88, 0.96]`: above `0.96` the scale is invisible against the opacity fade and the component reads identically to `FadeIn`; below `0.85` it crosses into a dramatic zoom and breaks the calm rule. If you need a more dramatic landing, prefer a dedicated hero pattern (the `heroReveal` pattern in `lib/choreography.ts`).\n- All `interpolate` calls clamp at both ends — the component is correct on frame 0 and on any frame past `delay + duration`.\n"
+    }
+  ]
+}

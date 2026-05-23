@@ -1,0 +1,19 @@
+{
+  "name": "word-stagger",
+  "title": "WordStagger",
+  "description": "Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "stagger",
+    "reveal",
+    "entrance",
+    "spring",
+    "words"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

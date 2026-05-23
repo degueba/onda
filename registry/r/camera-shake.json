@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "camera-shake",
+  "type": "registry:component",
+  "title": "CameraShake",
+  "description": "Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/camera-shake/CameraShake.tsx",
+      "type": "registry:component",
+      "target": "components/onda/camera-shake/CameraShake.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, random } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\n\nexport const cameraShakeSchema = z.object({\n  children: z.any().optional(),\n  delay: z.number().int().min(0).default(0),                 // frames before shake starts\n  duration: z.number().int().min(1).default(DURATION.slow),  // frames the shake lasts\n  intensity: z.number().default(4),                          // px max offset — restrained by default\n  seed: z.number().int().default(0),                         // seeded PRNG input\n  decay: z.boolean().default(true),                          // intensity falls off over duration\n});\n\nexport type CameraShakeProps = z.infer<typeof cameraShakeSchema>;\n\nexport const CameraShake: React.FC<CameraShakeProps> = ({\n  children,\n  delay,\n  duration,\n  intensity,\n  seed,\n  decay,\n}) => {\n  const frame = useCurrentFrame();\n  const local = frame - delay;\n\n  // Only shake while inside [delay, delay + duration]. Before/after, offset is 0\n  // so wrapped content sits perfectly still — the shake is a contained event.\n  let x = 0;\n  let y = 0;\n\n  if (local >= 0 && local <= duration) {\n    const progress = duration > 0 ? local / duration : 1;\n    // Decay linearly so the shake settles by the end. Restraint over time.\n    const currentIntensity = decay ? intensity * (1 - progress) : intensity;\n\n    // Remotion's seeded `random()` is deterministic across threads — same seed +\n    // frame always yields the same offset. NEVER Math.random in a render.\n    x = (random(seed + frame * 2) - 0.5) * 2 * currentIntensity;\n    y = (random(seed + frame * 2 + 1) - 0.5) * 2 * currentIntensity;\n  }\n\n  return (\n    <div\n      style={{\n        transform: `translate(${x}px, ${y}px)`,\n        width: '100%',\n        height: '100%',\n      }}\n    >\n      {children ?? (\n        <div\n          style={{\n            width: '100%',\n            height: '100%',\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'center',\n            color: '#F2F2F4',\n            fontSize: 96,\n            fontFamily: '\"Clash Display\", sans-serif',\n            fontWeight: 600,\n          }}\n        >\n          shake me\n        </div>\n      )}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/camera-shake/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/camera-shake/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { cameraShakeSchema, type CameraShakeProps } from './CameraShake';\n"
+    },
+    {
+      "path": "registry/components/camera-shake/camera-shake.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/camera-shake/camera-shake.meta.json",
+      "content": "{\n  \"name\": \"camera-shake\",\n  \"title\": \"CameraShake\",\n  \"description\": \"Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"wrapper\",\n    \"shake\",\n    \"cinematic\",\n    \"deterministic\",\n    \"seeded\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/camera-shake/README.md",
+      "type": "registry:file",
+      "target": "components/onda/camera-shake/README.md",
+      "content": "# CameraShake\n\nA wrapper primitive that applies a subtle, decaying camera shake to its `children`. Offsets are derived from Remotion's seeded `random()` keyed off `seed + frame`, so the shake is fully deterministic — the same seed always produces the same motion across renders, threads, and machines. Defaults are deliberately restrained: 4px max offset with decay enabled, so the shake settles into stillness rather than rattling.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `children` | `React.ReactNode` | placeholder \"shake me\" text | Anything you want shaken — usually a scene, image, or text block. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the shake starts. |\n| `duration` | `integer ≥ 1` | `DURATION.slow` (24) | Frames the shake lasts. Outside this window the offset is zero. |\n| `intensity` | `number` | `4` | Max pixel offset on each axis. Keep ≤ 8 for Onda restraint; anything above 12 reads as a violent shake (off-brand). |\n| `seed` | `integer` | `0` | Seed for the deterministic PRNG. Bump it to get a different shake pattern with the same other props. |\n| `decay` | `boolean` | `true` | If true, intensity falls linearly from full → 0 across `duration`, so the shake settles. If false, it stays at full intensity for the whole window. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { CameraShake, cameraShakeSchema } from './components/onda/camera-shake/CameraShake';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyShake\"\n    component={CameraShake}\n    durationInFrames={60}\n    fps={30}\n    width={1920}\n    height={1080}\n    schema={cameraShakeSchema}\n    defaultProps={{\n      delay: 0,\n      duration: 24,\n      intensity: 4,\n      seed: 0,\n      decay: true,\n    }}\n  />\n);\n```\n\nCompose it around any subtree to give a moment of impact — a stat reveal landing, a logo sting settling, an explosion sound hit:\n\n```tsx\n<CameraShake delay={12} duration={20} intensity={4} decay seed={7}>\n  <StatCard value={1247} label=\"creators this week\" />\n</CameraShake>\n```\n\n## Motion notes\n\n- **Deterministic by construction.** Offsets come from Remotion's `random(seed + frame * 2)` and `random(seed + frame * 2 + 1)` — never `Math.random()`, never `Date.now()`, never state. Frame N renders identically regardless of frames 0…N-1.\n- **Decay on by default.** `currentIntensity = intensity * (1 - progress)` linearly settles the shake to rest by the end of `duration`. Restraint is the brand: motion that arrives, lands, and stops.\n- **Intensity ceiling is a brand guardrail.** Default 4px max offset; values above ~12px stop reading as a cinematic bump and start reading as a violent shake. Stay restrained.\n- **Outside the window the wrapper is still.** Before `delay` and after `delay + duration` the transform is `translate(0, 0)` exactly, so the shake is a contained event — content sits perfectly composed at rest.\n"
+    }
+  ]
+}

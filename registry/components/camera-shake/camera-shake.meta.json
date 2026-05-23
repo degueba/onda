@@ -1,0 +1,18 @@
+{
+  "name": "camera-shake",
+  "title": "CameraShake",
+  "description": "Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.",
+  "category": "cinematic",
+  "tags": [
+    "wrapper",
+    "shake",
+    "cinematic",
+    "deterministic",
+    "seeded"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "callout",
+  "title": "Callout",
+  "description": "A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.",
+  "category": "graphics",
+  "tags": [
+    "annotation",
+    "callout",
+    "label",
+    "arrow",
+    "tutorial"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/paths",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "slide-in",
+  "title": "SlideIn",
+  "description": "A direction-parameterized translate-and-fade entrance — text slides into place from up, down, left, or right on the house spring. No overshoot, calm 16px travel.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "slide",
+    "entrance",
+    "spring",
+    "direction"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

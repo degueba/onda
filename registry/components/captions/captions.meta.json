@@ -1,0 +1,19 @@
+{
+  "name": "captions",
+  "title": "Captions",
+  "description": "Sequential word-by-word captions driven by a timed array. The active word lifts in --onda-text with a subtle SPRING_SMOOTH scale pulse; surrounding words sit dim in --onda-dim. The data primitive for kinetic transcripts and AI-generated voiceover.",
+  "category": "data",
+  "tags": [
+    "text",
+    "captions",
+    "transcript",
+    "voiceover",
+    "data",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

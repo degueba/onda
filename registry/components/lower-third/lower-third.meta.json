@@ -1,0 +1,19 @@
+{
+  "name": "lower-third",
+  "title": "LowerThird",
+  "description": "Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.",
+  "category": "scenes",
+  "tags": [
+    "scene",
+    "lower-third",
+    "broadcast",
+    "name",
+    "role",
+    "composition"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "blur-reveal",
+  "type": "registry:component",
+  "title": "BlurReveal",
+  "description": "A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/blur-reveal/BlurReveal.tsx",
+      "type": "registry:component",
+      "target": "components/onda/blur-reveal/BlurReveal.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION, SPRING_SMOOTH } from '../../../lib/motion';\n\nexport const blurRevealSchema = z.object({\n  text: z.string().default('Onda'),\n  delay: z.number().int().min(0).default(0),                // frames before start\n  duration: z.number().int().min(1).default(DURATION.base), // frames to fully reveal\n  color: z.string().default('#F2F2F4'),                     // --onda-text\n  fontSize: z.number().default(96),\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n});\n\nexport type BlurRevealProps = z.infer<typeof blurRevealSchema>;\n\nexport const BlurReveal: React.FC<BlurRevealProps> = ({\n  text, delay, duration, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps } = useVideoConfig();\n  const local = Math.max(0, frame - delay);\n\n  const progress = spring({\n    frame: local,\n    fps,\n    config: SPRING_SMOOTH,\n    durationInFrames: duration,\n  });\n\n  const opacity = interpolate(progress, [0, 1], [0, 1], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n  const blur = interpolate(progress, [0, 1], [10, 0], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n  const translateY = interpolate(progress, [0, 1], [16, 0], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n\n  return (\n    <div style={{\n      opacity,\n      filter: `blur(${blur}px)`,\n      transform: `translateY(${translateY}px)`,\n      color, fontSize, fontFamily, fontWeight: 600,\n    }}>\n      {text}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/blur-reveal/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/blur-reveal/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { blurRevealSchema, type BlurRevealProps } from './BlurReveal';\n"
+    },
+    {
+      "path": "registry/components/blur-reveal/blur-reveal.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/blur-reveal/blur-reveal.meta.json",
+      "content": "{\n  \"name\": \"blur-reveal\",\n  \"title\": \"BlurReveal\",\n  \"description\": \"A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"blur\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/blur-reveal/README.md",
+      "type": "registry:file",
+      "target": "components/onda/blur-reveal/README.md",
+      "content": "# BlurReveal\n\nA calm, spring-driven text reveal. Opacity fades from 0 to 1, blur drops from 10px to 0, and the text rises 16px into its resting position — all settling without overshoot. The reference Onda primitive: every motion fingerprint in one component.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"Onda\"` | What to reveal. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |\n| `duration` | `integer ≥ 1` | `DURATION.base` (18) | Target frames to fully reveal. With `SPRING_SMOOTH` the visible motion settles in roughly this range. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `96` | Pixels. |\n| `fontFamily` | `string` | `'\"Clash Display\", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { BlurReveal, blurRevealSchema } from './components/onda/blur-reveal/BlurReveal';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyReveal\"\n    component={BlurReveal}\n    durationInFrames={60}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={blurRevealSchema}\n    defaultProps={{\n      text: 'Hello',\n      delay: 0,\n      duration: 18,\n      color: '#F2F2F4',\n      fontSize: 96,\n      fontFamily: '\"Clash Display\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- Spring is `SPRING_SMOOTH` from `lib/motion.ts` — the Onda house default. **No overshoot.** Don't reduce damping for a \"pop.\"\n- Duration defaults to `DURATION.base` (18 frames ≈ 0.6s at 30fps).\n- Travel is 16px (`SPACING[1]`) — small on purpose. The eye should feel the motion, not be dragged by it.\n- All `interpolate` calls clamp at both ends — the component is correct on frame 0 and on any frame past `delay + duration`.\n"
+    }
+  ]
+}

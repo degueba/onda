@@ -1,0 +1,19 @@
+{
+  "name": "typewriter",
+  "title": "Typewriter",
+  "description": "Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "reveal",
+    "entrance",
+    "typewriter",
+    "cursor",
+    "linear"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

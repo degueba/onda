@@ -1,0 +1,18 @@
+{
+  "name": "blur-reveal",
+  "title": "BlurReveal",
+  "description": "A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "reveal",
+    "entrance",
+    "spring",
+    "blur"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

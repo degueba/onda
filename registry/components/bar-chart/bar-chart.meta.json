@@ -1,0 +1,18 @@
+{
+  "name": "bar-chart",
+  "title": "BarChart",
+  "description": "Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.",
+  "category": "data",
+  "tags": [
+    "data",
+    "chart",
+    "bars",
+    "stagger",
+    "spring"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

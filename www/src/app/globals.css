@@ -1,0 +1,511 @@
+@import "tailwindcss";
+
+/*
+ * Onda design tokens.
+ * Canonical source: /lib/tokens.ts. The values below mirror it — divergence
+ * is a bug. When tokens.ts changes, update this block in the same commit.
+ */
+@theme {
+  --color-onda-bg: #08080A;
+  --color-onda-surface: #0E0E12;
+  --color-onda-surface-2: #121217;
+  --color-onda-border: #1C1C22;
+  --color-onda-border-lit: #26262E;
+  --color-onda-text: #F2F2F4;
+  --color-onda-dim: #8E8E98;
+  --color-onda-faint: #56565F;
+  --color-onda-accent: #D96B82;
+  --color-onda-accent-soft: #E89AAB;
+
+  --font-display: "Clash Display", sans-serif;
+  --font-body: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-space-grotesk), ui-monospace, monospace;
+
+  /* 8px base scale — p-1=8, p-2=16, p-3=24, p-4=32, p-6=48, p-8=64, p-10=80 */
+  --spacing: 0.5rem;
+}
+
+html {
+  background-color: var(--color-onda-bg);
+  color: var(--color-onda-text);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-onda-accent);
+  color: var(--color-onda-bg);
+}
+
+/*
+ * Page-level fade-and-rise — used to stagger landing sections in on first
+ * paint, so the site itself moves like an Onda component. Curve and travel
+ * mirror the motion language: HOUSE_EASE (0.16, 1, 0.3, 1), 12px rise,
+ * ~0.65s. Stagger between elements is ~100ms.
+ *
+ * Respects prefers-reduced-motion.
+ */
+@keyframes onda-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.onda-rise {
+  opacity: 0;
+  animation: onda-rise 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.onda-rise-1 { animation-delay: 40ms; }
+.onda-rise-2 { animation-delay: 140ms; }
+.onda-rise-3 { animation-delay: 240ms; }
+.onda-rise-4 { animation-delay: 340ms; }
+.onda-rise-5 { animation-delay: 440ms; }
+.onda-rise-6 { animation-delay: 540ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .onda-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Onda slider — custom <input type="range"> styling.
+ *
+ * 5px track. The visible track sits on --onda-bg (the popover's interior
+ * fills surface above it), so we need real contrast — the previous 2px on
+ * --onda-border-lit was nearly invisible against the surface. Bumped both
+ * thickness and base color so the bar reads at a glance.
+ *
+ * The track's filled portion (left of the thumb) is paintable per-instance
+ * via the `--onda-slider-fill` CSS custom property — set inline from the
+ * Slider component as `${percentValue}%`. We render the fill as a linear-
+ * gradient *background of the input itself*; the native track is made
+ * transparent so the gradient shows through. This is the cross-browser
+ * pattern for filled-range styling without JS-painted CSS variables in
+ * pseudo-elements (which Safari doesn't support).
+ *
+ * Thumb: 16px circle on --onda-text with a bg-colored ring. Brightens to
+ * --onda-accent and scales 1.15× on hover/focus.
+ */
+.onda-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.5rem;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  background: transparent;
+}
+
+/* Track sits directly on the pseudo-element. The fill is painted as a
+ * linear-gradient on the track itself, with the breakpoint driven by
+ * --onda-slider-fill set inline on the input (CSS custom properties inherit
+ * through to pseudo-elements). */
+.onda-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-onda-text) 0%,
+    var(--color-onda-text) var(--onda-slider-fill, 0%),
+    var(--color-onda-faint) var(--onda-slider-fill, 0%),
+    var(--color-onda-faint) 100%
+  );
+}
+
+/* Firefox: base track + native filled-portion selector. Easier than
+ * piecing a gradient together — Firefox just paints the progress for us. */
+.onda-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--color-onda-faint);
+}
+
+.onda-slider::-moz-range-progress {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--color-onda-text);
+}
+
+.onda-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-onda-text);
+  border: 2px solid var(--color-onda-bg);
+  margin-top: -5.5px; /* (16 - 5) / 2 — visually centers thumb over 5px track */
+  cursor: grab;
+  transition:
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 0 0 rgba(217, 107, 130, 0);
+}
+
+.onda-slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-onda-text);
+  border: 2px solid var(--color-onda-bg);
+  cursor: grab;
+  transition:
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 0 0 rgba(217, 107, 130, 0);
+}
+
+.onda-slider:hover::-webkit-slider-thumb,
+.onda-slider:focus-visible::-webkit-slider-thumb {
+  background: var(--color-onda-accent);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(217, 107, 130, 0.18);
+}
+
+.onda-slider:hover::-moz-range-thumb,
+.onda-slider:focus-visible::-moz-range-thumb {
+  background: var(--color-onda-accent);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(217, 107, 130, 0.18);
+}
+
+.onda-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+/*
+ * Onda color swatch — wraps <input type="color"> into a flush rounded chip.
+ */
+.onda-color-swatch {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-onda-border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  transition: border-color 0.15s ease-out;
+}
+
+.onda-color-swatch:hover {
+  border-color: var(--color-onda-border-lit);
+}
+
+.onda-color-swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.onda-color-swatch::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+.onda-color-swatch::-moz-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+/*
+ * Onda select — styled native <select>. Custom chevron via inline SVG bg, dark
+ * surface matching the other form controls. The opened dropdown is still
+ * OS-rendered (acceptable trade-off; revisit with Radix Select if needed).
+ */
+.onda-select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--color-onda-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238E8E98' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.625rem center;
+  border: 1px solid var(--color-onda-border);
+  border-radius: 0.375rem;
+  color: var(--color-onda-text);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease-out;
+}
+
+.onda-select:hover {
+  border-color: var(--color-onda-border-lit);
+}
+
+.onda-select:focus-visible {
+  border-color: color-mix(in oklab, var(--color-onda-text) 40%, transparent);
+}
+
+.onda-select option {
+  background: var(--color-onda-surface);
+  color: var(--color-onda-text);
+}
+
+/*
+ * Onda number input — hides native browser spinners so the typed input
+ * matches the rest of the form surface. Used alongside the slider so the
+ * spinners would compete visually; the slider IS the increment affordance.
+ */
+.onda-number-input::-webkit-outer-spin-button,
+.onda-number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.onda-number-input {
+  -moz-appearance: textfield;
+}
+
+/*
+ * Radix Popover surface — used by TryItPopover to host PropsControls.
+ * Dark glass card matching the rest of the Onda surface vocabulary, with a
+ * subtle scale + fade on open driven by HOUSE_EASE.
+ */
+.onda-popover-content {
+  background-color: color-mix(in oklab, var(--color-onda-surface) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-onda-border-lit);
+  border-radius: 1rem;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+  transform-origin: var(--radix-popover-content-transform-origin);
+  outline: none;
+}
+
+@keyframes onda-popover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes onda-popover-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
+}
+
+.onda-popover-content[data-state='open'] {
+  animation: onda-popover-in 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.onda-popover-content[data-state='closed'] {
+  animation: onda-popover-out 0.12s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onda-popover-content[data-state='open'],
+  .onda-popover-content[data-state='closed'] {
+    animation: none;
+  }
+}
+
+/*
+ * Prose — styles for MDX-rendered component READMEs.
+ * Restrained on purpose: no accent sprinkled across headings, no big margins.
+ */
+.prose-onda {
+  font-family: var(--font-body);
+  line-height: 1.65;
+  color: var(--color-onda-text);
+}
+
+.prose-onda h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 1rem;
+}
+
+.prose-onda h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin: 2.5rem 0 1rem;
+  border-top: 1px solid var(--color-onda-border);
+  padding-top: 2rem;
+}
+
+.prose-onda h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+  margin: 2rem 0 0.75rem;
+}
+
+.prose-onda p {
+  color: var(--color-onda-dim);
+  margin: 1rem 0;
+}
+
+.prose-onda a {
+  color: var(--color-onda-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-onda-border-lit);
+  text-underline-offset: 3px;
+}
+
+.prose-onda a:hover {
+  text-decoration-color: var(--color-onda-accent);
+}
+
+.prose-onda code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-onda-surface);
+  border: 1px solid var(--color-onda-border);
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  color: var(--color-onda-text);
+}
+
+.prose-onda pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: var(--color-onda-surface);
+  border: 1px solid var(--color-onda-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+.prose-onda pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose-onda ul,
+.prose-onda ol {
+  color: var(--color-onda-dim);
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-onda li {
+  margin: 0.375rem 0;
+}
+
+.prose-onda li::marker {
+  color: var(--color-onda-faint);
+}
+
+.prose-onda table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9375rem;
+  table-layout: fixed;
+}
+
+/* Component prop tables follow Name | Type | Default | Notes — give the
+ * Default column more room and let Notes take the remainder. With
+ * table-layout: fixed, only the first row's widths are read; we set them
+ * on the header cells so columns are predictable across components.
+ * Name + Type stay compact; Default holds values like
+ * '"Clash Display", sans-serif' without fragmenting; Notes flows.
+ */
+.prose-onda table th:nth-child(1) { width: 16%; }
+.prose-onda table th:nth-child(2) { width: 14%; }
+.prose-onda table th:nth-child(3) { width: 26%; }
+.prose-onda table th:nth-child(4) { width: 44%; }
+
+.prose-onda th,
+.prose-onda td {
+  text-align: left;
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--color-onda-border);
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.prose-onda th {
+  font-weight: 500;
+  color: var(--color-onda-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  border-bottom-color: var(--color-onda-border-lit);
+}
+
+.prose-onda td {
+  color: var(--color-onda-dim);
+}
+
+.prose-onda td:first-child {
+  color: var(--color-onda-text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/*
+ * Inline <code> inside table cells: drop the chip styling. Prop tables wrap
+ * every name / type / default value in backticks, and chip-style pills don't
+ * wrap cleanly inside narrow columns — they overflow or fragment mid-value.
+ * Inside a table we just want monospace + a faint tint, so the table stays
+ * a clean grid. The rose-soft tint on non-first columns gives values a
+ * subtle accent without going full chip.
+ */
+.prose-onda th code,
+.prose-onda td code {
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875em;
+  white-space: normal;
+}
+
+.prose-onda td:first-child code {
+  color: var(--color-onda-text);
+}
+
+.prose-onda td:not(:first-child) code {
+  color: var(--color-onda-accent-soft);
+}
+
+.prose-onda strong {
+  color: var(--color-onda-text);
+  font-weight: 600;
+}
+
+.prose-onda hr {
+  border: none;
+  border-top: 1px solid var(--color-onda-border);
+  margin: 2rem 0;
+}

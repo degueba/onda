@@ -1,0 +1,18 @@
+{
+  "name": "underline",
+  "title": "Underline",
+  "description": "Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.",
+  "category": "graphics",
+  "tags": [
+    "underline",
+    "emphasis",
+    "accent",
+    "draw",
+    "text"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

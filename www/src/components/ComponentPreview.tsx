@@ -1,0 +1,232 @@
+'use client';
+
+import { Player, type PlayerRef } from '@remotion/player';
+import { AbsoluteFill } from 'remotion';
+import { Pause, Play } from '@phosphor-icons/react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+} from 'react';
+
+type Props<T extends Record<string, unknown>> = {
+  component: ComponentType<T>;
+  inputProps: T;
+  durationInFrames?: number;
+  fps?: number;
+  compositionWidth?: number;
+  compositionHeight?: number;
+  autoPlay?: boolean;
+  loop?: boolean;
+  className?: string;
+};
+
+// Renders a Remotion component on the Onda canvas with a custom play / pause
+// overlay. The overlay is always visible when paused and fades out while
+// playing — it returns on hover so the affordance is never more than a
+// mouse-move away.
+export function ComponentPreview<T extends Record<string, unknown>>({
+  component: Component,
+  inputProps,
+  durationInFrames = 90,
+  fps = 30,
+  compositionWidth = 1920,
+  compositionHeight = 1080,
+  autoPlay = true,
+  loop = true,
+  className,
+}: Props<T>) {
+  // Memoize so <Player /> sees a stable component identity across renders —
+  // otherwise it tears down and re-mounts on every parent re-render and
+  // playback never starts.
+  const Wrapped = useMemo(() => {
+    const WrappedComponent = (props: T) => (
+      <AbsoluteFill
+        style={{
+          backgroundColor: '#08080A',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Component {...props} />
+      </AbsoluteFill>
+    );
+    return WrappedComponent;
+  }, [Component]);
+
+  const playerRef = useRef<PlayerRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [currentFrame, setCurrentFrame] = useState(0);
+
+  // Mirror Player's play/pause state and current frame into React so the
+  // overlay and time readout can react.
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => setIsPlaying(false);
+    const onFrameUpdate = (e: { detail: { frame: number } }) => {
+      setCurrentFrame(e.detail.frame);
+    };
+    player.addEventListener('play', onPlay);
+    player.addEventListener('pause', onPause);
+    player.addEventListener('ended', onEnded);
+    player.addEventListener('frameupdate', onFrameUpdate);
+    return () => {
+      player.removeEventListener('play', onPlay);
+      player.removeEventListener('pause', onPause);
+      player.removeEventListener('ended', onEnded);
+      player.removeEventListener('frameupdate', onFrameUpdate);
+    };
+  }, []);
+
+  // Autoplay strategy: <Player autoPlay> + numberOfSharedAudioTags=0 is not
+  // enough on a fresh page load — modern browsers block media play() with no
+  // prior user gesture. We layer three attempts:
+  //   1. immediate (covers already-permitted contexts)
+  //   2. a few delayed retries (covers ref-not-ready / player-not-ready)
+  //   3. a one-shot "play on first interaction" fallback that catches the
+  //      first mousemove / pointerdown / keydown — typically within a
+  //      second of the user landing.
+  useEffect(() => {
+    if (!autoPlay) return;
+    let cancelled = false;
+
+    const tryPlay = () => {
+      if (cancelled) return;
+      const player = playerRef.current;
+      if (!player || player.isPlaying()) return;
+      player.play();
+    };
+
+    tryPlay();
+    const timeoutIds = [50, 200, 500, 1000].map((ms) =>
+      window.setTimeout(tryPlay, ms),
+    );
+
+    const onInteract = () => {
+      tryPlay();
+      cleanupListeners();
+    };
+    const cleanupListeners = () => {
+      window.removeEventListener('pointerdown', onInteract);
+      window.removeEventListener('pointermove', onInteract);
+      window.removeEventListener('keydown', onInteract);
+      window.removeEventListener('touchstart', onInteract);
+    };
+    window.addEventListener('pointerdown', onInteract, { once: true });
+    window.addEventListener('pointermove', onInteract, { once: true });
+    window.addEventListener('keydown', onInteract, { once: true });
+    window.addEventListener('touchstart', onInteract, { once: true });
+
+    return () => {
+      cancelled = true;
+      timeoutIds.forEach(window.clearTimeout);
+      cleanupListeners();
+    };
+  }, [autoPlay, Wrapped]);
+
+  const toggle = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    if (player.isPlaying()) player.pause();
+    else player.play();
+  }, []);
+
+  const showOverlay = !isPlaying || isHovering;
+
+  // Time readout — seconds with one decimal. All Onda previews are short
+  // loops (< 60s), so MM:SS would be mostly leading zeroes. Tabular numerals
+  // keep the width steady as the digit ticks.
+  const currentSec = (currentFrame / fps).toFixed(1);
+  const totalSec = (durationInFrames / fps).toFixed(1);
+
+  return (
+    <div
+      className={`relative w-full h-full ${className ?? ''}`}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <Player
+        ref={playerRef}
+        component={Wrapped}
+        inputProps={inputProps}
+        durationInFrames={durationInFrames}
+        fps={fps}
+        compositionWidth={compositionWidth}
+        compositionHeight={compositionHeight}
+        autoPlay={autoPlay}
+        loop={loop}
+        controls={false}
+        clickToPlay={false}
+        // Disable Remotion's preloaded shared audio elements. Browsers treat
+        // those as autoplay-restricted media and block Player.play() on
+        // mount, even though Onda compositions have no audio. Without this,
+        // the Hero (and any auto-playing preview) silently fails to start.
+        numberOfSharedAudioTags={0}
+        acknowledgeRemotionLicense
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      />
+
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
+        className={`
+          absolute inset-0 grid place-items-center
+          transition-opacity duration-300 ease-out
+          focus:outline-none
+          ${showOverlay ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+        `}
+      >
+        <span
+          className="
+            grid place-items-center
+            h-9 w-9 rounded-full
+            bg-onda-surface/70 backdrop-blur-md
+            border border-onda-border-lit
+            text-onda-text
+            shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
+            transition-all duration-200 ease-out
+            hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
+            active:scale-95
+          "
+        >
+          {isPlaying ? (
+            <Pause size={16} weight="fill" />
+          ) : (
+            // The triangle's visual mass is on the left — nudge right 1px so
+            // it reads as optically centered.
+            <Play size={16} weight="fill" className="translate-x-px" />
+          )}
+        </span>
+      </button>
+
+      {/* Time readout. Sits in the bottom-right corner, restrained so it
+          never competes with the content. Current frame in onda-text,
+          slash in onda-faint (barely there), total in onda-dim — the eye
+          lands on the moving digit, treats the rest as scaffold. Fades
+          to 60% opacity while playing without hover, full otherwise. */}
+      <div
+        className={`
+          absolute bottom-3 right-3 pointer-events-none
+          px-2 py-1 rounded-md
+          bg-onda-bg/60 backdrop-blur-md
+          border border-onda-border
+          font-mono text-[11px] tabular-nums leading-none
+          transition-opacity duration-300 ease-out
+          ${isPlaying && !isHovering ? 'opacity-60' : 'opacity-100'}
+        `}
+      >
+        <span className="text-onda-text">{currentSec}</span>
+        <span className="text-onda-faint mx-1">/</span>
+        <span className="text-onda-dim">{totalSec}s</span>
+      </div>
+    </div>
+  );
+}

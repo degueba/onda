@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rotate-in",
+  "type": "registry:component",
+  "title": "RotateIn",
+  "description": "A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/rotate-in/RotateIn.tsx",
+      "type": "registry:component",
+      "target": "components/onda/rotate-in/RotateIn.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION, SPRING_SMOOTH } from '../../../lib/motion';\n\nexport const rotateInSchema = z.object({\n  text: z.string().default('Onda'),\n  delay: z.number().int().min(0).default(0),                // frames before start\n  duration: z.number().int().min(1).default(DURATION.base), // frames to fully reveal\n  fromAngle: z.number().default(-8),                        // degrees — safe zone [-12, +12]\n  color: z.string().default('#F2F2F4'),                     // --onda-text\n  fontSize: z.number().default(96),\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n});\n\nexport type RotateInProps = z.infer<typeof rotateInSchema>;\n\nexport const RotateIn: React.FC<RotateInProps> = ({\n  text, delay, duration, fromAngle, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps } = useVideoConfig();\n  const local = Math.max(0, frame - delay);\n\n  // spring-driven angle settle + opacity fade. No overshoot; small angle;\n  // calm landing. Inline for now — candidate for an `entryRotate` helper in\n  // lib/choreography.ts once a second component needs the same pattern.\n  const progress = spring({\n    frame: local,\n    fps,\n    config: SPRING_SMOOTH,\n    durationInFrames: duration,\n  });\n\n  const opacity = interpolate(progress, [0, 1], [0, 1], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n  const rotate = interpolate(progress, [0, 1], [fromAngle, 0], {\n    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',\n  });\n\n  return (\n    <div style={{\n      opacity,\n      transform: `rotate(${rotate}deg)`,\n      transformOrigin: 'center',\n      color, fontSize, fontFamily, fontWeight: 600,\n    }}>\n      {text}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/rotate-in/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/rotate-in/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { rotateInSchema, type RotateInProps } from './RotateIn';\n"
+    },
+    {
+      "path": "registry/components/rotate-in/rotate-in.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/rotate-in/rotate-in.meta.json",
+      "content": "{\n  \"name\": \"rotate-in\",\n  \"title\": \"RotateIn\",\n  \"description\": \"A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"rotate\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/rotate-in/README.md",
+      "type": "registry:file",
+      "target": "components/onda/rotate-in/README.md",
+      "content": "# RotateIn\n\nA calm, spring-driven text rotation. The text settles from a slight starting angle (default `-8°`) to `0°` while opacity fades from 0 to 1 — landing without overshoot. A small-angle entrance that adds character without theatrics.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"Onda\"` | What to reveal. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |\n| `duration` | `integer ≥ 1` | `DURATION.base` (18) | Target frames to fully settle. With `SPRING_SMOOTH` the visible motion lands in roughly this range. |\n| `fromAngle` | `number` | `-8` | Starting angle in degrees. Safe zone is `[-12, +12]`; beyond that the move reads as theatrical / off-brand. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `96` | Pixels. |\n| `fontFamily` | `string` | `'\"Clash Display\", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { RotateIn, rotateInSchema } from './components/onda/rotate-in/RotateIn';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyRotate\"\n    component={RotateIn}\n    durationInFrames={60}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={rotateInSchema}\n    defaultProps={{\n      text: 'Hello',\n      delay: 0,\n      duration: 18,\n      fromAngle: -8,\n      color: '#F2F2F4',\n      fontSize: 96,\n      fontFamily: '\"Clash Display\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- Spring is `SPRING_SMOOTH` from `lib/motion.ts` — the Onda house default. **No overshoot.** Don't reduce damping for a \"pop.\"\n- Duration defaults to `DURATION.base` (18 frames ≈ 0.6s at 30fps).\n- **`fromAngle` safe zone is `[-12, +12]` degrees.** The default `-8°` is enough to feel — the eye registers the settle — without reading as a deliberate tilt. Anything outside that range crosses into theatrical / gimmicky territory and breaks the Onda restraint. The schema does not hard-clamp the value (callers may need a touch more for a specific layout), but treat the safe zone as the design guidance.\n- `transformOrigin: 'center'` is set explicitly. It is the default for `<div>`, but stating it inline makes the pivot point unambiguous — the rotation reads as a settle around the text's center, not around a corner.\n- All `interpolate` calls clamp at both ends — the component is correct on frame 0 and on any frame past `delay + duration`.\n- Inline motion for now; this primitive is the candidate for extracting an `entryRotate` helper into `lib/choreography.ts` once a second component needs the same pattern.\n"
+    }
+  ]
+}

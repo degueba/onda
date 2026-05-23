@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fade-in",
+  "type": "registry:component",
+  "title": "FadeIn",
+  "description": "A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/fade-in/FadeIn.tsx",
+      "type": "registry:component",
+      "target": "components/onda/fade-in/FadeIn.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\nimport { entryFade } from '../../../lib/choreography';\n\nexport const fadeInSchema = z.object({\n  text: z.string().default('Onda'),\n  delay: z.number().int().min(0).default(0),                // frames before start\n  duration: z.number().int().min(1).default(DURATION.base), // frames to fully reveal\n  color: z.string().default('#F2F2F4'),                     // --onda-text\n  fontSize: z.number().default(96),\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n});\n\nexport type FadeInProps = z.infer<typeof fadeInSchema>;\n\nexport const FadeIn: React.FC<FadeInProps> = ({\n  text, delay, duration, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps } = useVideoConfig();\n\n  const { opacity } = entryFade({ frame, fps, delay, durationInFrames: duration });\n\n  return (\n    <div style={{\n      opacity,\n      color, fontSize, fontFamily, fontWeight: 600,\n    }}>\n      {text}\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/fade-in/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/fade-in/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { fadeInSchema, type FadeInProps } from './FadeIn';\n"
+    },
+    {
+      "path": "registry/components/fade-in/fade-in.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/fade-in/fade-in.meta.json",
+      "content": "{\n  \"name\": \"fade-in\",\n  \"title\": \"FadeIn\",\n  \"description\": \"A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"fade\",\n    \"opacity\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/fade-in/README.md",
+      "type": "registry:file",
+      "target": "components/onda/fade-in/README.md",
+      "content": "# FadeIn\n\nA pure opacity fade for text. No translate, no scale, no blur — just opacity easing from 0 to 1 with the Onda house curve. The simplest possible reveal in the catalog, for moments where any other motion would say too much.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"Onda\"` | What to reveal. |\n| `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |\n| `duration` | `integer ≥ 1` | `DURATION.base` (18) | Frames to fully reach opacity 1. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `96` | Pixels. |\n| `fontFamily` | `string` | `'\"Clash Display\", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { FadeIn, fadeInSchema } from './components/onda/fade-in/FadeIn';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyFade\"\n    component={FadeIn}\n    durationInFrames={60}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={fadeInSchema}\n    defaultProps={{\n      text: 'Hello',\n      delay: 0,\n      duration: 18,\n      color: '#F2F2F4',\n      fontSize: 96,\n      fontFamily: '\"Clash Display\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- Opacity is driven by `entryFade` from `lib/choreography.ts`, which uses `SPRING_SMOOTH` to drive opacity 0→1. Never raw linear for tracked motion.\n- Duration defaults to `DURATION.base` (18 frames ≈ 0.6s at 30fps).\n- No translate, no scale, no blur — intentionally. When the surrounding scene already carries motion, a pure fade is the right restraint.\n- `entryFade` clamps at both ends — the component is correct on frame 0 and on any frame past `delay + duration`.\n"
+    }
+  ]
+}

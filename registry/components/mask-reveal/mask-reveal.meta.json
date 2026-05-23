@@ -1,0 +1,19 @@
+{
+  "name": "mask-reveal",
+  "title": "MaskReveal",
+  "description": "Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "reveal",
+    "entrance",
+    "spring",
+    "mask",
+    "clip-path"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

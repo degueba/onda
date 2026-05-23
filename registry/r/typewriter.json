@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typewriter",
+  "type": "registry:component",
+  "title": "Typewriter",
+  "description": "Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/typewriter/Typewriter.tsx",
+      "type": "registry:component",
+      "target": "components/onda/typewriter/Typewriter.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, interpolate } from 'remotion';\nimport { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\n\nexport const typewriterSchema = z.object({\n  text: z.string().default('motion graphics'),\n  delay: z.number().int().min(0).default(0),                // frames before start\n  duration: z.number().int().min(1).default(DURATION.slow), // frames to fully type out\n  cursor: z.boolean().default(true),\n  cursorColor: z.string().default('#D96B82'),               // --onda-accent\n  color: z.string().default('#F2F2F4'),                     // --onda-text\n  fontSize: z.number().default(64),\n  fontFamily: z.string().default('\"Space Grotesk\", sans-serif'),\n});\n\nexport type TypewriterProps = z.infer<typeof typewriterSchema>;\n\nexport const Typewriter: React.FC<TypewriterProps> = ({\n  text, delay, duration, cursor, cursorColor, color, fontSize, fontFamily,\n}) => {\n  const frame = useCurrentFrame();\n  const local = Math.max(0, frame - delay);\n\n  // Linear progress is deliberate here. Typing has its own rhythm; a spring\n  // would make chars-per-frame uneven (fast in the middle, crawling at the\n  // ends) and break the constant-rate feel of real typing. This is the one\n  // place in the Onda catalog where we intentionally use linear pacing.\n  const progress = interpolate(local, [0, duration], [0, 1], {\n    extrapolateLeft: 'clamp',\n    extrapolateRight: 'clamp',\n  });\n\n  const charsToShow = Math.floor(progress * text.length);\n  const revealed = text.slice(0, charsToShow);\n\n  // Deterministic cursor blink — derived purely from the current frame so it\n  // is correct on any single frame with no knowledge of prior frames. Toggles\n  // every 15 frames (0.5s at 30fps).\n  const cursorVisible = Math.floor(frame / 15) % 2 === 0;\n  const showCursor = cursor && progress < 1;\n  const cursorOpacity = showCursor && cursorVisible ? 1 : 0;\n\n  return (\n    <div style={{\n      color,\n      fontSize,\n      fontFamily,\n      fontWeight: 500,\n    }}>\n      {revealed}\n      <span style={{ color: cursorColor, opacity: cursorOpacity }}>|</span>\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/typewriter/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/typewriter/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume props validation without pulling\n// in the component itself.\nexport { typewriterSchema, type TypewriterProps } from './Typewriter';\n"
+    },
+    {
+      "path": "registry/components/typewriter/typewriter.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/typewriter/typewriter.meta.json",
+      "content": "{\n  \"name\": \"typewriter\",\n  \"title\": \"Typewriter\",\n  \"description\": \"Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"typewriter\",\n    \"cursor\",\n    \"linear\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/typewriter/README.md",
+      "type": "registry:file",
+      "target": "components/onda/typewriter/README.md",
+      "content": "# Typewriter\n\nA character-by-character text reveal with an optional blinking cursor in the Onda accent. Characters appear at a constant rate over `duration` frames, then the cursor — drawn in dusty rose so it earns one of the rare accent usages in the catalog — disappears once the line is fully typed. Body-font default (Space Grotesk) reads more \"typed\" than the display face.\n\n## Props\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"motion graphics\"` | What to type out. Multi-character so the reveal is visibly progressive. |\n| `delay` | `integer ≥ 0` | `0` | Frames before typing starts. |\n| `duration` | `integer ≥ 1` | `DURATION.slow` (24) | Target frames to fully type the string. Gives the eye time to follow. |\n| `cursor` | `boolean` | `true` | Whether to render the blinking cursor while typing. |\n| `cursorColor` | `string` | `\"#D96B82\"` | `--onda-accent`. The cursor is one of the few earned accent uses in the catalog. |\n| `color` | `string` | `\"#F2F2F4\"` | Text color — defaults to `--onda-text`. |\n| `fontSize` | `number` | `64` | Pixels. |\n| `fontFamily` | `string` | `'\"Space Grotesk\", sans-serif'` | The Onda body font — reads more \"typed\" than Clash Display. Never default to monospace system fonts. |\n\n## Usage\n\n```tsx\nimport { Composition } from 'remotion';\nimport { Typewriter, typewriterSchema } from './components/onda/typewriter/Typewriter';\n\nexport const Root: React.FC = () => (\n  <Composition\n    id=\"MyTypewriter\"\n    component={Typewriter}\n    durationInFrames={90}\n    fps={30}\n    width={1080}\n    height={1920}\n    schema={typewriterSchema}\n    defaultProps={{\n      text: 'motion graphics',\n      delay: 0,\n      duration: 24,\n      cursor: true,\n      cursorColor: '#D96B82',\n      color: '#F2F2F4',\n      fontSize: 64,\n      fontFamily: '\"Space Grotesk\", sans-serif',\n    }}\n  />\n);\n```\n\n## Motion notes\n\n- **Linear by design — the one intentional exception in the Onda catalog.** Every other primitive uses `SPRING_SMOOTH` because springs feel premium. Typing is the opposite: a spring on `charsToShow` would land characters fast in the middle of the curve and slowly at the ends, breaking the constant-rate feel that makes typing read as typing. So `progress` here is a plain clamped `interpolate` from `[0, duration]` to `[0, 1]`, and `charsToShow = Math.floor(progress * text.length)`.\n- **Accent cursor color.** The cursor renders in `--onda-accent` (#D96B82). Color is earned in Onda, never sprinkled — a single dusty-rose bar moving across a neutral line is exactly the kind of restrained accent moment the brand calls for.\n- **Deterministic blink.** `cursorVisible = Math.floor(frame / 15) % 2 === 0` toggles every 15 frames (0.5s at 30fps). It is a pure function of `frame` — no `setInterval`, no state — so any frame renders correctly in isolation, which is the Remotion contract.\n- **Cursor lifecycle.** The cursor `<span>` is always rendered (so the trailing layout is stable and the element can be styled by tooling), but its opacity drops to `0` once `progress >= 1` or when `cursor` is false. While typing, opacity toggles between `1` and `0` on the blink cadence.\n- All `interpolate` calls clamp at both ends — the component is correct on frame 0 and on any frame past `delay + duration`.\n"
+    }
+  ]
+}

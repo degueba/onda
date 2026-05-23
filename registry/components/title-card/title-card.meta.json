@@ -1,0 +1,18 @@
+{
+  "name": "title-card",
+  "title": "TitleCard",
+  "description": "Hero title-card scene block: a large headline reveals with a calm blur-and-rise, a subtitle cascades word-by-word beneath it, and an optional accent underline arrives last as quiet punctuation. Composes BlurReveal / Underline and WordStagger — no new motion of its own.",
+  "category": "scenes",
+  "tags": [
+    "scene",
+    "title",
+    "hero",
+    "headline",
+    "composition"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

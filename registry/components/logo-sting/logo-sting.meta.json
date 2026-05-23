@@ -1,0 +1,20 @@
+{
+  "name": "logo-sting",
+  "title": "LogoSting",
+  "description": "Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.",
+  "category": "scenes",
+  "tags": [
+    "scene",
+    "logo",
+    "sting",
+    "branded",
+    "reveal",
+    "composition"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/paths",
+    "zod",
+    "react"
+  ]
+}
