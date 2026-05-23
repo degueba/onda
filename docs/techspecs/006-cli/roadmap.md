@@ -16,18 +16,21 @@ Stand up `packages/cli/` as a workspace child, declare `onda` as the published n
 - `pnpm --filter onda typecheck` passes with the workspace's strict TS settings. ✅
 - Root `pnpm typecheck` and `pnpm --filter www typecheck` both still pass after the workspace surgery. ✅
 
-## M2 — `onda add` happy path (no deps, default layout) — Not started
+## M2 — `onda add` happy path (no deps, default layout) — Done
 
 End-to-end install of a single component that has no `registryDependencies`. Targets the simplest case first to lock the file-write + path-resolution logic before adding the dep walker.
 
 **Acceptance:**
 
-- Pick a component that doesn't import from `/lib` (or temporarily build one for the test); ship one manifest at `https://onda.dev/r/<slug>.json` (or a `--registry file://…` path for local testing).
-- `npx onda add <slug>` in a fresh directory creates `./components/onda/<slug>/{<Component>.tsx, schema.ts, <slug>.meta.json, README.md}` with the manifest's `content` written verbatim.
-- In a project with a `src/` directory at the cwd, the same invocation writes to `./src/components/onda/<slug>/…`.
-- Re-running the same command without `--force` exits non-zero and prints the conflict summary; `--force` overwrites.
-- `--dry-run` writes nothing and prints the planned file list.
-- Peer-dep block prints at the end: a single `# Install peer dependencies:` header followed by one install line for the user's detected package manager (default `npm`, infer from a lockfile if present — `pnpm-lock.yaml` → `pnpm add …`, `yarn.lock` → `yarn add …`).
+- Tested with `--registry file:///…/registry/r` against the in-repo manifests since `https://onda.dev/r/` doesn't serve yet (lands in M6). ✅
+- `node …/onda.js add blur-reveal` in a fresh directory creates `./components/onda/blur-reveal/{BlurReveal.tsx, schema.ts, blur-reveal.meta.json, README.md}` with the manifest's `content` written verbatim. ✅
+- In a project with a `src/` directory at cwd, the same invocation writes to `./src/components/onda/blur-reveal/…`. ✅
+- Re-running with a hand-modified file in place exits 1 and prints exactly one conflict line citing the modified file. ✅
+- `--force` overwrites the conflicting file; other files report "unchanged" (idempotent — same content on disk). ✅
+- `--dry-run` prints "would write …" lines and writes zero files. ✅
+- Multi-slug invocation (`add fade-in slide-in`) installs both, grouped by slug in the summary. ✅
+- Unknown slug exits 1 with `onda add: failed to fetch one or more manifests:` followed by the path that was tried. ✅
+- Peer-dep block prints at the end: detected pm (`pnpm-lock.yaml` → `pnpm add`, `yarn.lock` → `yarn add`, `bun.lockb`/`bun.lock` → `bun add`, otherwise `npm install`); deps gathered from all manifests in the install. ✅
 
 ## M3 — Lib helpers as registry items + transitive resolution — Not started
 
