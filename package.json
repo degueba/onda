@@ -1,5 +1,5 @@
 {
-  "name": "onda",
+  "name": "onda-monorepo",
   "version": "0.0.0",
   "private": true,
   "description": "Premium motion graphics components for Remotion — installed as source, owned by you.",
@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "remotion studio",
     "render": "remotion render",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync-registry": "node scripts/sync-registry.mjs"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

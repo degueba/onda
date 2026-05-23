@@ -10,7 +10,7 @@ export const SITE = {
   description:
     'Premium motion graphics components for Remotion — installed as source, owned by you. A signature motion identity baked in: calm springs, restrained stagger, one focal move per moment.',
   twitter: '@onda_dev', // placeholder — update when the handle exists
-  github: 'https://github.com/botelhodeveloper/onda',
+  github: 'https://github.com/degueba/onda',
   keywords: [
     'remotion',
     'motion graphics',

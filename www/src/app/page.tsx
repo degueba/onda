@@ -83,8 +83,14 @@ export default function HomePage() {
           >
             Browse components →
           </Link>
+          <Link
+            href="/docs"
+            className="px-4 py-2 rounded-lg border border-onda-border-lit text-onda-text font-medium hover:bg-onda-surface transition-colors"
+          >
+            Read the guide
+          </Link>
           <a
-            href="https://github.com/botelhodeveloper/onda"
+            href="https://github.com/degueba/onda"
             target="_blank"
             rel="noreferrer"
             className="px-4 py-2 rounded-lg border border-onda-border-lit text-onda-text font-medium hover:bg-onda-surface transition-colors"

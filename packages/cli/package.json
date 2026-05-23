@@ -1,0 +1,40 @@
+{
+  "name": "onda",
+  "version": "0.1.0",
+  "description": "Install Onda motion-graphics components into your Remotion project. `npx onda add <slug>`.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/onda.js",
+  "bin": {
+    "onda": "./dist/onda.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://onda.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/degueba/onda.git",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "remotion",
+    "motion-graphics",
+    "cli",
+    "registry",
+    "components"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}

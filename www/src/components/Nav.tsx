@@ -49,7 +49,7 @@ export function Nav() {
             Compare
           </Link>
           <a
-            href="https://github.com/botelhodeveloper/onda"
+            href="https://github.com/degueba/onda"
             target="_blank"
             rel="noreferrer"
             className="text-onda-dim hover:text-onda-text transition-colors"

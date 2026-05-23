@@ -16,12 +16,12 @@ export function Footer() {
         </p>
         <p>
           <a
-            href="https://github.com/botelhodeveloper/onda"
+            href="https://github.com/degueba/onda"
             target="_blank"
             rel="noreferrer"
             className="hover:text-onda-dim transition-colors"
           >
-            github.com/botelhodeveloper/onda
+            github.com/degueba/onda
           </a>
         </p>
       </div>

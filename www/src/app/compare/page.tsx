@@ -593,7 +593,7 @@ export default function ComparePage() {
               Browse components →
             </Link>
             <a
-              href="https://github.com/botelhodeveloper/onda"
+              href="https://github.com/degueba/onda"
               target="_blank"
               rel="noreferrer"
               className="px-4 py-2 rounded-lg border border-onda-border-lit text-onda-text font-medium hover:bg-onda-surface transition-colors"
