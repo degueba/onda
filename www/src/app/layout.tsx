@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Space_Grotesk } from 'next/font/google';
+import { Space_Grotesk, Caveat } from 'next/font/google';
 import { SITE, absoluteUrl } from '@/lib/seo';
 import './globals.css';
 
@@ -7,6 +7,16 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+// Caveat — flowing handwriting font. Used by the WavePen hero experiment
+// where the wave appears to "write" phrases on screen. Restricted to the
+// weights we actually use to keep the font bundle small.
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-caveat',
   display: 'swap',
 });
 
@@ -98,7 +108,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={spaceGrotesk.variable}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${caveat.variable}`}>
       <head>
         {/* Clash Display via Fontshare CDN. Migrate to next/font/local when
             self-hosted .woff2 files land under /public/fonts. */}
