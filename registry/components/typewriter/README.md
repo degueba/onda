@@ -12,7 +12,8 @@ A character-by-character text reveal with an optional blinking cursor in the Ond
 | `cursor` | `boolean` | `true` | Whether to render the blinking cursor while typing. |
 | `cursorColor` | `string` | `"#D96B82"` | `--onda-accent`. The cursor is one of the few earned accent uses in the catalog. |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
-| `fontSize` | `number` | `64` | Pixels. |
+| `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Space Grotesk", sans-serif'` | The Onda body font — reads more "typed" than Clash Display. Never default to monospace system fonts. |
 
 ## Usage

@@ -19,10 +19,6 @@ export const spotlightSchema = z.object({
   color: z.string().default('#F2F2F4'),
   /** Gradient softness — % of the radius given over to the fade-to-transparent tail. */
   softness: z.number().min(0).max(100).default(60),
-  /** Canvas width in pixels — used to map the % radius into a pixel value. */
-  canvasWidth: z.number().int().min(1).default(1920),
-  /** Canvas height in pixels — used to map the % radius into a pixel value. */
-  canvasHeight: z.number().int().min(1).default(1080),
 });
 
 /** Inferred props for {@link Spotlight}. */
@@ -40,10 +36,10 @@ export type SpotlightProps = z.infer<typeof spotlightSchema>;
  * <Spotlight x={0.5} y={0.5} radius={40} />
  */
 export const Spotlight: React.FC<SpotlightProps> = ({
-  x, y, radius, delay, duration, color, softness, canvasWidth, canvasHeight,
+  x, y, radius, delay, duration, color, softness,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
   const local = Math.max(0, frame - delay);
 
   const progress = spring({
@@ -60,7 +56,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({
 
   // Map the % radius into pixels against the canvas's smaller dimension so the
   // spotlight reads the same regardless of aspect ratio.
-  const minDimension = Math.min(canvasWidth, canvasHeight);
+  const minDimension = Math.min(width, height);
   const radiusPx = (currentRadius / 100) * minDimension;
 
   // Inside the lit disc, hold the colour for the first (100 - softness)% of the

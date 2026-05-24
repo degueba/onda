@@ -22,8 +22,6 @@ A label-and-arrow annotation that points at a specific spot on the canvas. The b
 | `arrowWidth` | `number` | `2` | Arrow stroke width in px. |
 | `fontSize` | `number` | `20` | Label font size in px. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
-| `canvasWidth` | `integer ≥ 1` | `1920` | Canvas width — required to convert the 0–1 `x` into pixels. |
-| `canvasHeight` | `integer ≥ 1` | `1080` | Canvas height — required to convert the 0–1 `y` into pixels. |
 
 ## Usage
 
@@ -57,8 +55,6 @@ export const Root: React.FC = () => (
       arrowWidth: 2,
       fontSize: 20,
       fontFamily: '"Clash Display", sans-serif',
-      canvasWidth: 1920,
-      canvasHeight: 1080,
     }}
   />
 );
@@ -68,7 +64,7 @@ export const Root: React.FC = () => (
 
 - **Two-phase reveal.** The bubble lands first (scale 0.9 → 1 + fade in via `entryScale` + `entryFade` from `lib/choreography.ts`, both running on `SPRING_SMOOTH`). After a `lineDelay` beat (default 6 frames ≈ 0.2s at 30fps), the arrow strokes on from the bubble toward the anchor using `evolvePath` from `@remotion/paths`. Sequencing one move at a time — bubble, beat, arrow — is the Onda restraint signature; the eye is never asked to track two things at once.
 - **0–1 coord system.** `x` and `y` are normalized fractions of the canvas (0 = left/top, 1 = right/bottom). This keeps callouts resolution-independent and trivially repositionable.
-- **`canvasWidth` / `canvasHeight` are required.** The component renders inside an `<AbsoluteFill>` and has no other way to know the composition size at render time. Pass the same numbers you use in `<Composition width=... height=... />`; defaulting them keeps the zero-config case crisp at 1920×1080.
+- **Canvas dimensions come from `useVideoConfig()`.** No need to pass them as props — the component reads `width` / `height` from the composition automatically.
 - **Bubble centering is transform-based.** The bubble is positioned at its target center and then `translate(-50%, -50%)` centers it on that point — no measurement required.
 - **Spring is `SPRING_SMOOTH`** for both phases. No overshoot, no bounce. All `interpolate` calls inside the helpers and `evolvePath` outputs clamp at both ends.
 - **No arrowhead.** A clean line is more on-brand than a decorative arrow tip.

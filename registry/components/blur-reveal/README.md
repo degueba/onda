@@ -10,8 +10,10 @@ A calm, spring-driven text reveal. Opacity fades from 0 to 1, blur drops from 10
 | `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |
 | `duration` | `integer ≥ 1` | `DURATION.base` (18) | Target frames to fully reveal. With `SPRING_SMOOTH` the visible motion settles in roughly this range. |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
-| `fontSize` | `number` | `96` | Pixels. |
+| `fontSize` | `number` | `96` | Pixels. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension; the same role reads at the same visual weight on horizontal, vertical, or square. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the text sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

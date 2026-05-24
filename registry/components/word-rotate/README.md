@@ -11,7 +11,8 @@ Cycles through a list of phrases in place. Each phrase rises 12px and fades in o
 | `holdDuration` | `integer ≥ 1` | `30` | Frames each phrase holds at full opacity. |
 | `transitionDuration` | `integer ≥ 1` | `12` | Frames to fade a phrase in (and, separately, out). |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
-| `fontSize` | `number` | `96` | Pixels. |
+| `fontSize` | `number` | `96` | Pixels. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
 
 ## Usage

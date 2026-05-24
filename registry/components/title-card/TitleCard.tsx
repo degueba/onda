@@ -1,6 +1,7 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
 import { z } from 'zod';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
+import { useVideoConfig } from 'remotion';
 import { BlurReveal } from '../blur-reveal/BlurReveal';
 import { WordStagger } from '../word-stagger/WordStagger';
 import { Underline } from '../underline/Underline';
@@ -15,10 +16,14 @@ export const titleCardSchema = z.object({
   delay: z.number().int().min(0).default(0),
   /** Show the accent underline beneath the title. */
   accent: z.boolean().default(true),
-  /** Title font size in px. */
+  /** Title font size in px. Wins over `titleSize` if both are passed. */
   titleFontSize: z.number().default(160),
-  /** Subtitle font size in px. */
+  /** Semantic role for the title — resolves to canvas-aware pixels. `titleFontSize` wins when both are passed. */
+  titleSize: sizeRoleSchema.optional(),
+  /** Subtitle font size in px. Wins over `subtitleSize` if both are passed. */
   subtitleFontSize: z.number().default(32),
+  /** Semantic role for the subtitle — resolves to canvas-aware pixels. `subtitleFontSize` wins when both are passed. */
+  subtitleSize: sizeRoleSchema.optional(),
   /** Title color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Subtitle color. Defaults to `--onda-dim`. */
@@ -27,6 +32,8 @@ export const titleCardSchema = z.object({
   accentColor: z.string().default('#D96B82'),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Defaults to centered. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link TitleCard}. */
@@ -55,60 +62,68 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   delay,
   accent,
   titleFontSize,
+  titleSize,
   subtitleFontSize,
+  subtitleSize,
   color,
   subtitleColor,
   accentColor,
   fontFamily,
+  placement,
 }) => {
+  const { width, height } = useVideoConfig();
+  const resolvedTitleFontSize = titleSize ? resolveSize(titleSize, { width, height }) : titleFontSize;
+  const resolvedSubtitleFontSize = subtitleSize ? resolveSize(subtitleSize, { width, height }) : subtitleFontSize;
   return (
-    <AbsoluteFill
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 32,
-      }}
-    >
-      {accent ? (
-        // When the accent underline is enabled, the title is rendered by
-        // Underline (which owns both the text fade and the rule). The
-        // primitive's defaults already match Onda's blur-reveal feel via the
-        // shared SPRING_SMOOTH / entryFade — no need to re-blur on top.
-        <Underline
-          text={title}
-          delay={delay}
-          duration={18}
-          lineDelay={UNDERLINE_OFFSET}
-          lineDuration={10}
-          color={color}
-          accentColor={accentColor}
-          lineThickness={4}
-          lineOffset={12}
-          fontSize={titleFontSize}
-          fontFamily={fontFamily}
-        />
-      ) : (
-        <BlurReveal
-          text={title}
-          delay={delay}
-          duration={18}
-          color={color}
-          fontSize={titleFontSize}
-          fontFamily={fontFamily}
-        />
-      )}
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: 32,
+        }}
+      >
+        {accent ? (
+          // When the accent underline is enabled, the title is rendered by
+          // Underline (which owns both the text fade and the rule). The
+          // primitive's defaults already match Onda's blur-reveal feel via the
+          // shared SPRING_SMOOTH / entryFade — no need to re-blur on top.
+          <Underline
+            text={title}
+            delay={delay}
+            duration={18}
+            lineDelay={UNDERLINE_OFFSET}
+            lineDuration={10}
+            color={color}
+            accentColor={accentColor}
+            lineThickness={4}
+            lineOffset={12}
+            fontSize={resolvedTitleFontSize}
+            fontFamily={fontFamily}
+          />
+        ) : (
+          <BlurReveal
+            text={title}
+            delay={delay}
+            duration={18}
+            color={color}
+            fontSize={resolvedTitleFontSize}
+            fontFamily={fontFamily}
+          />
+        )}
 
-      <WordStagger
-        text={subtitle}
-        delay={delay + SUBTITLE_OFFSET}
-        duration={18}
-        stagger={4}
-        justify="center"
-        color={subtitleColor}
-        fontSize={subtitleFontSize}
-        fontFamily={fontFamily}
-      />
-    </AbsoluteFill>
+        <WordStagger
+          text={subtitle}
+          delay={delay + SUBTITLE_OFFSET}
+          duration={18}
+          stagger={4}
+          justify="center"
+          color={subtitleColor}
+          fontSize={resolvedSubtitleFontSize}
+          fontFamily={fontFamily}
+        />
+      </div>
+    </PlacementBox>
   );
 };

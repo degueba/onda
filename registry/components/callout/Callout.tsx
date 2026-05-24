@@ -9,9 +9,9 @@ import { entryFade, entryScale } from '../../../lib/choreography';
 export const calloutSchema = z.object({
   /** Bubble label. */
   label: z.string().default('Look here'),
-  /** Anchor point X as a `0..1` fraction of `canvasWidth`. */
+  /** Anchor point X as a `0..1` fraction of the canvas width. */
   x: z.number().min(0).max(1).default(0.5),
-  /** Anchor point Y as a `0..1` fraction of `canvasHeight`. */
+  /** Anchor point Y as a `0..1` fraction of the canvas height. */
   y: z.number().min(0).max(1).default(0.5),
   /** Which quadrant the bubble sits in relative to the anchor. */
   position: z
@@ -41,10 +41,6 @@ export const calloutSchema = z.object({
   fontSize: z.number().default(20),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
-  /** Canvas width in px — must match your composition. */
-  canvasWidth: z.number().int().min(1).default(1920),
-  /** Canvas height in px — must match your composition. */
-  canvasHeight: z.number().int().min(1).default(1080),
 });
 
 /** Inferred props for {@link Callout}. */
@@ -75,11 +71,9 @@ export const Callout: React.FC<CalloutProps> = ({
   arrowWidth,
   fontSize,
   fontFamily,
-  canvasWidth,
-  canvasHeight,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
 
   // Bubble reveal — combine the canonical helpers. entryScale provides the
   // scale transform (0.9 → 1); entryFade provides the matching opacity. Both
@@ -98,8 +92,8 @@ export const Callout: React.FC<CalloutProps> = ({
   });
 
   // Anchor in pixel space.
-  const anchorX = x * canvasWidth;
-  const anchorY = y * canvasHeight;
+  const anchorX = x * width;
+  const anchorY = y * height;
 
   // Bubble offset from anchor based on quadrant.
   const offsetX =
@@ -123,9 +117,9 @@ export const Callout: React.FC<CalloutProps> = ({
   return (
     <AbsoluteFill>
       <svg
-        width={canvasWidth}
-        height={canvasHeight}
-        viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
         style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'visible' }}
       >
         <path
