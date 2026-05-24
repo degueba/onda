@@ -1,7 +1,8 @@
 import React from 'react';
-import { useCurrentFrame, interpolate } from 'remotion';
+import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
+import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link Typewriter} props. */
 export const typewriterSchema = z.object({
@@ -17,8 +18,10 @@ export const typewriterSchema = z.object({
   cursorColor: z.string().default('#D96B82'),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
   color: z.string().default('#F2F2F4'),
-  /** Pixels. */
+  /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(64),
+  /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
+  size: sizeRoleSchema.optional(),
   /** Body / technical font — Space Grotesk reads more "terminal" than Clash. */
   fontFamily: z.string().default('"Space Grotesk", sans-serif'),
 });
@@ -36,9 +39,11 @@ export type TypewriterProps = z.infer<typeof typewriterSchema>;
  * <Typewriter text="motion graphics" cursor />
  */
 export const Typewriter: React.FC<TypewriterProps> = ({
-  text, delay, duration, cursor, cursorColor, color, fontSize, fontFamily,
+  text, delay, duration, cursor, cursorColor, color, fontSize, size, fontFamily,
 }) => {
   const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;
   const local = Math.max(0, frame - delay);
 
   // Linear progress is deliberate here. Typing has its own rhythm; a spring
@@ -63,7 +68,7 @@ export const Typewriter: React.FC<TypewriterProps> = ({
   return (
     <div style={{
       color,
-      fontSize,
+      fontSize: resolvedFontSize,
       fontFamily,
       fontWeight: 500,
     }}>

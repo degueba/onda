@@ -45,3 +45,40 @@ export {
   type ColorToken,
   type FontToken,
 } from './tokens';
+
+export {
+  ANCHORS,
+  PLACEMENT_REGIONS,
+  SIZE_ROLES,
+  PlacementBox,
+  resolvePlacement,
+  resolveSize,
+  anchorSchema,
+  placementCoordsSchema,
+  placementRegionSchema,
+  placementSchema,
+  sizeRoleSchema,
+  type Anchor,
+  type Placement,
+  type PlacementCoords,
+  type PlacementRegion,
+  type PlacementBoxProps,
+  type SizeRole,
+} from './canvas';
+
+export { parseTime, toFrames } from './timing';
+
+export {
+  entrySchema,
+  trackSchema,
+  compositionSchema,
+  type Entry,
+  type Track,
+  type Composition,
+} from './composition';
+
+export {
+  CompositionRenderer,
+  type ComponentRegistry,
+  type CompositionRendererProps,
+} from './composition-renderer';

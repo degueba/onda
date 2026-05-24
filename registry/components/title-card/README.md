@@ -10,12 +10,15 @@ The hero title-card scene block: a large headline reveals with a calm blur-and-r
 | `subtitle` | `string` | `"premium motion graphics for Remotion"` | Reads beneath the title; cascades word-by-word. |
 | `delay` | `integer ≥ 0` | `0` | Frames before the title starts. The subtitle and underline derive their delays from this. |
 | `accent` | `boolean` | `true` | When true, the title carries an underline in `--onda-accent` that draws in after the subtitle. |
-| `titleFontSize` | `number` | `160` | Pixels. |
-| `subtitleFontSize` | `number` | `32` | Pixels. |
+| `titleFontSize` | `number` | `160` | Pixels. Wins over `titleSize` if both are passed. |
+| `titleSize` | `SizeRole?` | – | Semantic role for the title — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels. `titleFontSize` wins when both are passed. |
+| `subtitleFontSize` | `number` | `32` | Pixels. Wins over `subtitleSize` if both are passed. |
+| `subtitleSize` | `SizeRole?` | – | Semantic role for the subtitle. `subtitleFontSize` wins when both are passed. |
 | `color` | `string` | `"#F2F2F4"` | Title text — defaults to `--onda-text`. |
 | `subtitleColor` | `string` | `"#8E8E98"` | Subtitle text — defaults to `--onda-dim`. |
 | `accentColor` | `string` | `"#D96B82"` | Underline color — `--onda-accent`. The one earned-color moment per CLAUDE.md §3. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the card sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

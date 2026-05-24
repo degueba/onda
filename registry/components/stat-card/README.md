@@ -12,12 +12,15 @@ The flagship Onda data scene — a big counted-up number, a word-staggered quali
 | `suffix` | `string` | `""` | Rendered after the number, e.g. `"%"` or `"k"`. |
 | `delay` | `integer ≥ 0` | `0` | Frames before the scene begins. |
 | `accent` | `boolean` | `true` | Whether the dusty-rose accent rule renders beneath the label. |
-| `numberFontSize` | `number` | `200` | Pixels. The number is the hero — large by default. |
-| `labelFontSize` | `number` | `28` | Pixels. The label sits quietly under the number. |
+| `numberFontSize` | `number` | `200` | Pixels. The number is the hero — large by default. Wins over `numberSize` if both are passed. |
+| `numberSize` | `SizeRole?` | – | Semantic role for the number — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. |
+| `labelFontSize` | `number` | `28` | Pixels. The label sits quietly under the number. Wins over `labelSize` if both are passed. |
+| `labelSize` | `SizeRole?` | – | Semantic role for the label. `labelFontSize` wins when both are passed. |
 | `color` | `string` | `"#F2F2F4"` | Number color — defaults to `--onda-text`. |
 | `labelColor` | `string` | `"#8E8E98"` | Label color — defaults to `--onda-dim`. |
 | `accentColor` | `string` | `"#D96B82"` | Accent rule color — defaults to `--onda-accent`. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the stat sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

@@ -1,51 +1,155 @@
+<div align="center">
+
 # `ondajs`
 
-> Install Onda motion-graphics components into your Remotion project.
+**The official CLI for [Onda](https://onda.video) — premium motion-graphics components for [Remotion](https://remotion.dev).**
+
+[![npm version](https://img.shields.io/npm/v/ondajs.svg?style=flat-square&color=D96B82)](https://www.npmjs.com/package/ondajs)
+[![npm downloads](https://img.shields.io/npm/dm/ondajs.svg?style=flat-square&color=D96B82)](https://www.npmjs.com/package/ondajs)
+[![License: MIT](https://img.shields.io/badge/license-MIT-D96B82.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Built for Remotion](https://img.shields.io/badge/built%20for-Remotion-D96B82.svg?style=flat-square)](https://remotion.dev)
+
+</div>
 
 ```bash
 npx ondajs add blur-reveal
 ```
 
-This is the official CLI for the [Onda](https://onda.video) component library —
-a thin tool that fetches Onda's [shadcn-format registry](https://onda.video/r)
-and writes component source into your project. You own the files; edit them
-freely. No project init, no config files, no lock-in.
+Components are written as **source you own** into your project — not imported as a black-box dependency. Edit them, version them, fork them. The motion identity (calm spring fingerprint, restrained accent, signature typography) comes baked into every install.
 
-## Usage
+---
 
-```
-onda <command> [options]
-```
+## What you get
 
-Run `ondajs --help` for the full command and flag reference.
+- **40+ Remotion components** — entrances, scene blocks, data primitives, cinematic effects, media (`ImageReveal`, `VideoClip`), and more.
+- **One placement vocabulary across the catalog** — every positionable component takes a `placement` prop (region shorthand or fractional coordinates) that works on any canvas dimension.
+- **Canvas-aware sizing** — semantic typography roles (`'hero' | 'heading' | 'body' …`) that read at the same visual weight on horizontal, vertical, and square compositions.
+- **Agent-friendly by design** — every component ships with a Zod schema. The library also ships `<CompositionRenderer>` + a `Composition` payload type, so an AI agent (or any brief-driven runtime) can emit `{ component, props }` payloads and render them with one prop.
+- **No black box, no lock-in** — `ondajs add` writes plain `.tsx` files into your `components/onda/` folder. The CLI also maintains an `index.ts` barrel exporting `ondaRegistry` so you can drop it straight into `<CompositionRenderer registry={ondaRegistry}>`.
 
-### `onda add <slug...>`
+---
 
-Install one or more components by slug. Resolves shared `lib/` helpers
-transitively and writes them too, so the installed code is self-consistent.
+## Install components
 
 ```bash
+# Single component
 npx ondajs add blur-reveal
+
+# Multiple at once — transitive deps (lib helpers + composed primitives) are deduped
 npx ondajs add title-card stat-card lower-third
+
+# Custom install path
+npx ondajs add fade-in --components-out ./components/animations
+
+# See the plan without writing
+npx ondajs add quote-card --dry-run
+
+# Skip the auto-generated barrel
+npx ondajs add bar-chart --no-barrel
 ```
 
-### `ondajs list`
+What it actually does:
 
-Print the catalog grouped by category.
+1. Resolves the full transitive set (a scene block like `TitleCard` pulls in its lib helpers + composed primitives in one pass).
+2. Detects conflicts before writing — never silently overwrites a file with different content.
+3. Rewrites import paths so the installed code points at your project's `lib/onda/` and `components/onda/`.
+4. Updates `components/onda/index.ts` with `ondaRegistry` — the lookup map `<CompositionRenderer>` consumes.
+5. Prints the peer-dep install line for any new Remotion packages.
+
+---
+
+## Browse the catalog
 
 ```bash
-npx ondajs list
-npx ondajs list --category scenes
-npx ondajs list --json    # machine-readable
+npx ondajs list                       # grouped by category
+npx ondajs list --category scenes     # filter
+npx ondajs list --json                # machine-readable
 ```
 
-## Status
+Or visit [onda.video/components](https://onda.video/components) for the live previews.
 
-CLI scaffold (M1) — `--help` and `--version` work; `add` and `list` stub out
-and return a "coming soon" message. See
-[techspec 006](https://github.com/degueba/onda/tree/main/docs/techspecs/006-cli)
-for the full plan and milestone status.
+---
 
-## License
+## Use what you installed
 
-MIT.
+Drop installed components into any Remotion composition:
+
+```tsx
+import { Composition } from 'remotion';
+import { BlurReveal, blurRevealSchema } from './components/onda/blur-reveal/BlurReveal';
+
+<Composition
+  id="hero"
+  component={BlurReveal}
+  durationInFrames={60} fps={30} width={1080} height={1920}
+  schema={blurRevealSchema}
+  defaultProps={{ text: 'Hello', placement: 'upper-third', size: 'hero' }}
+/>
+```
+
+### Render multi-component scenes from a payload
+
+For agent-driven runtimes or anywhere you want to render a timeline composition from a JSON payload, install the bundled renderer too:
+
+```bash
+npx ondajs add lib-composition-renderer
+```
+
+That pulls in `<CompositionRenderer>` plus its `Composition` payload type (lives at `lib/onda/composition-renderer.tsx`):
+
+```tsx
+import { Composition } from 'remotion';
+import { CompositionRenderer } from './lib/onda/composition-renderer';
+import type { Composition as Comp } from './lib/onda/composition';
+import { ondaRegistry } from './components/onda';   // auto-generated by ondajs add
+
+const payload: Comp = {
+  fps: 30, width: 1080, height: 1920,
+  tracks: [{
+    entries: [
+      { at: '0:00', for: '0:02', component: 'TitleCard', props: { title: 'Onda' } },
+      { at: '0:02', for: '0:03', component: 'StatCard',  props: { value: 1247 } },
+    ],
+  }],
+};
+
+<Composition
+  id="scene"
+  component={CompositionRenderer}
+  durationInFrames={150} fps={30} width={1080} height={1920}
+  defaultProps={{ composition: payload, registry: ondaRegistry }}
+/>
+```
+
+Time strings (`"0:02"`, `"30s"`, `"500ms"`) resolve to frames internally — agents never compute frame math. Unknown components and invalid props render visible error placeholders, not silent crashes.
+
+---
+
+## Learn more
+
+- **[onda.video](https://onda.video)** — landing, catalog, docs
+- **[onda.video/docs](https://onda.video/docs)** — getting started
+- **[Composing with Onda](https://github.com/degueba/onda/blob/main/docs/composing-with-onda.md)** — agent-facing reference: payload shape, placement / size vocabulary, full component index
+- **[GitHub](https://github.com/degueba/onda)** — source, issues, techspecs
+
+---
+
+## CLI reference
+
+Run `npx ondajs --help` for the full command and flag listing.
+
+| Command | What |
+|---|---|
+| `ondajs add <slug...>` | Install components by slug (with transitive deps) |
+| `ondajs list` | Print the catalog grouped by category |
+| `ondajs --help` | Full reference |
+| `ondajs --version` | Print the CLI version |
+
+---
+
+<div align="center">
+
+**Built for developers and AI agents.**
+[MIT](LICENSE) · [Report a bug](https://github.com/degueba/onda/issues) · [Contribute](https://github.com/degueba/onda)
+
+</div>

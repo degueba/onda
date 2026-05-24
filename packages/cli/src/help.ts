@@ -29,6 +29,11 @@ GLOBAL OPTIONS
   --registry <url>          Registry base URL. Default: https://onda.video/r.
   --force                   Overwrite existing files. Without this, conflicts abort.
   --dry-run                 Print the plan; write nothing.
+  --no-barrel               Skip generating the components/onda/index.ts barrel
+                            (and the .ondajs-installed.json sidecar that tracks it).
+                            By default, every \`add\` keeps a barrel up to date so
+                            consumers can \`import { ondaRegistry } from './components/onda'\`
+                            and pass it straight to <CompositionRenderer registry={...}>.
 
 \`list\` OPTIONS
   --category <name>         Filter to one category (entrances, data, graphics,

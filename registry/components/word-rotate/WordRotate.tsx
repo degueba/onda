@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { SPRING_SMOOTH } from '../../../lib/motion';
 import { HOUSE_EASE } from '../../../lib/easing';
+import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link WordRotate} props — drives Remotion `defaultProps` validation. */
 export const wordRotateSchema = z.object({
@@ -16,8 +17,10 @@ export const wordRotateSchema = z.object({
   transitionDuration: z.number().int().min(1).default(12),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
   color: z.string().default('#F2F2F4'),
-  /** Pixels. */
+  /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(96),
+  /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
+  size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
@@ -41,10 +44,12 @@ export const WordRotate: React.FC<WordRotateProps> = ({
   transitionDuration,
   color,
   fontSize,
+  size,
   fontFamily,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;
 
   // Each phrase owns a window of (transitionDuration + holdDuration) frames.
   // Inside its window: fade-in over `transitionDuration`, hold for
@@ -93,7 +98,7 @@ export const WordRotate: React.FC<WordRotateProps> = ({
               opacity,
               transform: `translateY(${translateY}px)`,
               color,
-              fontSize,
+              fontSize: resolvedFontSize,
               fontFamily,
               fontWeight: 600,
               letterSpacing: '-0.02em',

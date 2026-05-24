@@ -11,8 +11,10 @@ Multi-word text where each word fades and rises in sequence. Words are split on 
 | `duration` | `integer ≥ 1` | `DURATION.base` (18) | Per-word reveal duration. |
 | `stagger` | `integer ≥ 0` | `STAGGER` (4) | Frames between successive words. The canonical Onda value — change only with intent. |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
-| `fontSize` | `number` | `64` | Pixels. Smaller than `BlurReveal`'s 96 because multi-word lines occupy more horizontal space. |
+| `fontSize` | `number` | `64` | Pixels. Smaller than `BlurReveal`'s 96 because multi-word lines occupy more horizontal space. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the phrase sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

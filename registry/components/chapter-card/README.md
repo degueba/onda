@@ -13,9 +13,12 @@ A chapter-title scene block for explainer and documentary videos. A small number
 | `numberColor` | `string` | `"#D96B82"` | Number color when `accent` is `true`. Defaults to `--onda-accent` — the one earned-color moment on the card. |
 | `color` | `string` | `"#F2F2F4"` | Chapter title color. Defaults to `--onda-text`. |
 | `subtitleColor` | `string` | `"#8E8E98"` | Number color when `accent` is `false`. Defaults to `--onda-dim`, so the number reads as quiet metadata. |
-| `numberFontSize` | `number` | `32` | Pixels. The number sits above the title and is intentionally smaller — it's the eyebrow, not the headline. |
-| `titleFontSize` | `number` | `96` | Pixels. The title is the focal element on the card. |
+| `numberFontSize` | `number` | `32` | Pixels. The number sits above the title and is intentionally smaller — it's the eyebrow, not the headline. Wins over `numberSize` if both are passed. |
+| `numberSize` | `SizeRole?` | – | Semantic role for the number — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. |
+| `titleFontSize` | `number` | `96` | Pixels. The title is the focal element on the card. Wins over `titleSize` if both are passed. |
+| `titleSize` | `SizeRole?` | – | Semantic role for the title. `titleFontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font, applied to both number and title for tonal consistency. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the chapter card sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

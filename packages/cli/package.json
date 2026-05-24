@@ -1,8 +1,12 @@
 {
   "name": "ondajs",
   "version": "0.2.0",
-  "description": "Install Onda motion-graphics components into your Remotion project. `npx onda add <slug>`.",
+  "description": "Install Onda motion-graphics components into your Remotion project. Source you own, motion identity built in, agent-friendly contract.",
   "license": "MIT",
+  "author": {
+    "name": "Rodrigo Botelho",
+    "url": "https://github.com/degueba"
+  },
   "type": "module",
   "main": "./dist/onda.js",
   "bin": {
@@ -21,12 +25,23 @@
     "url": "https://github.com/degueba/onda.git",
     "directory": "packages/cli"
   },
+  "bugs": {
+    "url": "https://github.com/degueba/onda/issues"
+  },
   "keywords": [
     "remotion",
     "motion-graphics",
+    "video",
+    "react",
+    "typescript",
     "cli",
     "registry",
-    "components"
+    "components",
+    "shadcn",
+    "ai",
+    "agent",
+    "animation",
+    "onda"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",

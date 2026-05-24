@@ -10,12 +10,15 @@ The closing scene block. A hero call-to-action reveals with the canonical Onda b
 | `handles` | `string[]` | `['@onda.video', 'onda.video/components']` | Social handles, URLs, or any short contact strings. Rendered as a horizontal staggered row. |
 | `delay` | `integer >= 0` | `0` | Frames before the CTA starts. The whole card is sequenced relative to this. |
 | `accent` | `boolean` | `true` | When `true`, the CTA renders through `Underline` so the accent-rose line draws beneath it. When `false`, the CTA renders through `BlurReveal` alone. |
-| `ctaFontSize` | `number` | `96` | Pixels — the CTA is the focal element. |
-| `handlesFontSize` | `number` | `24` | Pixels — the handles row is supporting metadata, not headline. |
+| `ctaFontSize` | `number` | `96` | Pixels — the CTA is the focal element. Wins over `ctaSize` if both are passed. |
+| `ctaSize` | `SizeRole?` | – | Semantic role for the CTA — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels. `ctaFontSize` wins when both are passed. |
+| `handlesFontSize` | `number` | `24` | Pixels — the handles row is supporting metadata, not headline. Wins over `handlesSize` if both are passed. |
+| `handlesSize` | `SizeRole?` | – | Semantic role for the handles row. `handlesFontSize` wins when both are passed. |
 | `color` | `string` | `"#F2F2F4"` | CTA color — defaults to `--onda-text`. |
 | `handlesColor` | `string` | `"#56565F"` | Handles color — defaults to `--onda-faint` so the row reads as a quiet caption. |
 | `accentColor` | `string` | `"#D96B82"` | Underline color — defaults to `--onda-accent`. The one earned color moment on the card. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font, applied to both CTA and handles for tonal consistency. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the end card sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

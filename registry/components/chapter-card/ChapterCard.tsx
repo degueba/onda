@@ -1,10 +1,11 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { FadeIn } from '../fade-in/FadeIn';
 import { BlurReveal } from '../blur-reveal/BlurReveal';
 import { Underline } from '../underline/Underline';
 import { DURATION } from '../../../lib/motion';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link ChapterCard} props. */
 export const chapterCardSchema = z.object({
@@ -22,12 +23,18 @@ export const chapterCardSchema = z.object({
   color: z.string().default('#F2F2F4'),
   /** Number color when `accent` is `false`. Defaults to `--onda-dim` so the number reads as quiet metadata. */
   subtitleColor: z.string().default('#8E8E98'),
-  /** Number font size in px — smaller than the title, sitting above it. */
+  /** Number font size in px — smaller than the title, sitting above it. Wins over `numberSize` if both are passed. */
   numberFontSize: z.number().default(32),
-  /** Chapter title font size in px — the focal element on the card. */
+  /** Semantic role for the number — resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. */
+  numberSize: sizeRoleSchema.optional(),
+  /** Chapter title font size in px — the focal element on the card. Wins over `titleSize` if both are passed. */
   titleFontSize: z.number().default(96),
+  /** Semantic role for the title — resolves to canvas-aware pixels. `titleFontSize` wins when both are passed. */
+  titleSize: sizeRoleSchema.optional(),
   /** Onda display font. Applied to both number and title for tonal consistency. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link ChapterCard}. */
@@ -61,61 +68,69 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
   color,
   subtitleColor,
   numberFontSize,
+  numberSize,
   titleFontSize,
+  titleSize,
   fontFamily,
+  placement,
 }) => {
+  const { width, height } = useVideoConfig();
+  const resolvedNumberFontSize = numberSize ? resolveSize(numberSize, { width, height }) : numberFontSize;
+  const resolvedTitleFontSize = titleSize ? resolveSize(titleSize, { width, height }) : titleFontSize;
   return (
-    <AbsoluteFill
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 24,
-      }}
-    >
-      {/* Numbered eyebrow — pure fade so the title (the next beat) owns the
-          rise. When accent is on, the number takes the rose; otherwise it
-          falls back to the dim metadata color. */}
-      <FadeIn
-        text={number}
-        delay={delay}
-        duration={DURATION.base}
-        color={accent ? numberColor : subtitleColor}
-        fontSize={numberFontSize}
-        fontFamily={fontFamily}
-      />
-
-      {/* Chapter title — the focal element. BlurReveal's spring-driven rise +
-          blur falloff is the canonical Onda entrance for headline text. */}
-      <BlurReveal
-        text={chapter}
-        delay={delay + TITLE_OFFSET}
-        duration={DURATION.base}
-        color={color}
-        fontSize={titleFontSize}
-        fontFamily={fontFamily}
-      />
-
-      {/* Accent underline — only when accent is on, so the rose stays earned
-          (one accent moment per scene). Empty text on the Underline primitive
-          means only the rule draws — the BlurReveal above already owns the
-          typography. */}
-      {accent ? (
-        <Underline
-          text=""
-          delay={delay + UNDERLINE_OFFSET}
-          duration={1}
-          lineDelay={0}
-          lineDuration={DURATION.fast}
-          color={color}
-          accentColor={numberColor}
-          lineThickness={3}
-          lineOffset={0}
-          fontSize={titleFontSize}
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: 24,
+        }}
+      >
+        {/* Numbered eyebrow — pure fade so the title (the next beat) owns the
+            rise. When accent is on, the number takes the rose; otherwise it
+            falls back to the dim metadata color. */}
+        <FadeIn
+          text={number}
+          delay={delay}
+          duration={DURATION.base}
+          color={accent ? numberColor : subtitleColor}
+          fontSize={resolvedNumberFontSize}
           fontFamily={fontFamily}
         />
-      ) : null}
-    </AbsoluteFill>
+
+        {/* Chapter title — the focal element. BlurReveal's spring-driven rise +
+            blur falloff is the canonical Onda entrance for headline text. */}
+        <BlurReveal
+          text={chapter}
+          delay={delay + TITLE_OFFSET}
+          duration={DURATION.base}
+          color={color}
+          fontSize={resolvedTitleFontSize}
+          fontFamily={fontFamily}
+        />
+
+        {/* Accent underline — only when accent is on, so the rose stays earned
+            (one accent moment per scene). Empty text on the Underline primitive
+            means only the rule draws — the BlurReveal above already owns the
+            typography. */}
+        {accent ? (
+          <Underline
+            text=""
+            delay={delay + UNDERLINE_OFFSET}
+            duration={1}
+            lineDelay={0}
+            lineDuration={DURATION.fast}
+            color={color}
+            accentColor={numberColor}
+            lineThickness={3}
+            lineOffset={0}
+            fontSize={resolvedTitleFontSize}
+            fontFamily={fontFamily}
+          />
+        ) : null}
+      </div>
+    </PlacementBox>
   );
 };
 

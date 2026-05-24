@@ -1,10 +1,11 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { CountUp } from '../count-up/CountUp';
 import { WordStagger } from '../word-stagger/WordStagger';
 import { Underline } from '../underline/Underline';
 import { DURATION, STAGGER } from '../../../lib/motion';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link StatCard} props. */
 export const statCardSchema = z.object({
@@ -20,10 +21,14 @@ export const statCardSchema = z.object({
   delay: z.number().int().min(0).default(0),
   /** Show the accent rule beneath the label. */
   accent: z.boolean().default(true),
-  /** Number font size in px. */
+  /** Number font size in px. Wins over `numberSize` if both are passed. */
   numberFontSize: z.number().default(200),
-  /** Label font size in px. */
+  /** Semantic role for the number — resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. */
+  numberSize: sizeRoleSchema.optional(),
+  /** Label font size in px. Wins over `labelSize` if both are passed. */
   labelFontSize: z.number().default(28),
+  /** Semantic role for the label — resolves to canvas-aware pixels. `labelFontSize` wins when both are passed. */
+  labelSize: sizeRoleSchema.optional(),
   /** Number color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Label color. Defaults to `--onda-dim`. */
@@ -32,6 +37,8 @@ export const statCardSchema = z.object({
   accentColor: z.string().default('#D96B82'),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link StatCard}. */
@@ -63,12 +70,18 @@ export const StatCard: React.FC<StatCardProps> = ({
   delay,
   accent,
   numberFontSize,
+  numberSize,
   labelFontSize,
+  labelSize,
   color,
   labelColor,
   accentColor,
   fontFamily,
+  placement,
 }) => {
+  const { width, height } = useVideoConfig();
+  const resolvedNumberFontSize = numberSize ? resolveSize(numberSize, { width, height }) : numberFontSize;
+  const resolvedLabelFontSize = labelSize ? resolveSize(labelSize, { width, height }) : labelFontSize;
   // Sequence offsets, all derived from canonical motion tokens — no hardcoded
   // frame counts. The cascade follows: number → label → rule.
   const numberDuration = DURATION.slow;                                 // 24f
@@ -76,58 +89,61 @@ export const StatCard: React.FC<StatCardProps> = ({
   const underlineDelay = labelDelay + DURATION.base + STAGGER * 2;      // rule trails the label
 
   return (
-    <AbsoluteFill
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 24,
-      }}
-    >
-      {/* The headline number — counts up from 0 to value on SPRING_SMOOTH. */}
-      <CountUp
-        from={0}
-        to={value}
-        delay={delay}
-        duration={numberDuration}
-        decimals={0}
-        prefix={prefix}
-        suffix={suffix}
-        color={color}
-        fontSize={numberFontSize}
-        fontFamily={fontFamily}
-      />
-
-      {/* The qualifier — words cascade in after the number has settled. */}
-      <WordStagger
-        text={label}
-        delay={labelDelay}
-        duration={DURATION.base}
-        stagger={STAGGER}
-        color={labelColor}
-        fontSize={labelFontSize}
-        fontFamily={fontFamily}
-      />
-
-      {/* The accent rule — earned punctuation, draws last. Only when accent.
-          Underline is text-aware: we pass the label as its sizing text but
-          render the glyphs transparent so what the eye sees is the rule
-          alone, proportioned to the label above it. */}
-      {accent ? (
-        <Underline
-          text={label}
-          delay={underlineDelay}
-          duration={1}
-          lineDelay={0}
-          lineDuration={DURATION.fast}
-          color="transparent"
-          accentColor={accentColor}
-          lineThickness={3}
-          lineOffset={0}
-          fontSize={labelFontSize}
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: 24,
+        }}
+      >
+        {/* The headline number — counts up from 0 to value on SPRING_SMOOTH. */}
+        <CountUp
+          from={0}
+          to={value}
+          delay={delay}
+          duration={numberDuration}
+          decimals={0}
+          prefix={prefix}
+          suffix={suffix}
+          color={color}
+          fontSize={resolvedNumberFontSize}
           fontFamily={fontFamily}
         />
-      ) : null}
-    </AbsoluteFill>
+
+        {/* The qualifier — words cascade in after the number has settled. */}
+        <WordStagger
+          text={label}
+          delay={labelDelay}
+          duration={DURATION.base}
+          stagger={STAGGER}
+          justify="center"
+          color={labelColor}
+          fontSize={resolvedLabelFontSize}
+          fontFamily={fontFamily}
+        />
+
+        {/* The accent rule — earned punctuation, draws last. Only when accent.
+            Underline is text-aware: we pass the label as its sizing text but
+            render the glyphs transparent so what the eye sees is the rule
+            alone, proportioned to the label above it. */}
+        {accent ? (
+          <Underline
+            text={label}
+            delay={underlineDelay}
+            duration={1}
+            lineDelay={0}
+            lineDuration={DURATION.fast}
+            color="transparent"
+            accentColor={accentColor}
+            lineThickness={3}
+            lineOffset={0}
+            fontSize={resolvedLabelFontSize}
+            fontFamily={fontFamily}
+          />
+        ) : null}
+      </div>
+    </PlacementBox>
   );
 };

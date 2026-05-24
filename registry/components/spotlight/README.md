@@ -13,8 +13,6 @@ A radial light reveal: a soft circle of light grows from 0 to its target `radius
 | `duration` | `integer ≥ 1` | `DURATION.slow` (24) | Frames until the spotlight reaches full radius. |
 | `color` | `string` | `"#F2F2F4"` | Light colour — defaults to `--onda-text`. |
 | `softness` | `number` (0–100) | `60` | % of the radius given to the fade-to-transparent tail. 0 = hard disc, 100 = pure centre-to-edge fade. |
-| `canvasWidth` | `integer ≥ 1` | `1920` | Canvas width in pixels. Used to map the % radius into pixels. |
-| `canvasHeight` | `integer ≥ 1` | `1080` | Canvas height in pixels. Used to map the % radius into pixels. |
 
 ## Usage
 
@@ -53,8 +51,6 @@ export const Root: React.FC = () => (
       duration: 24,
       color: '#F2F2F4',
       softness: 60,
-      canvasWidth: 1920,
-      canvasHeight: 1080,
     }}
   />
 );
@@ -64,6 +60,6 @@ export const Root: React.FC = () => (
 
 - Spring is `SPRING_SMOOTH` from `lib/motion.ts` — the Onda house default. **No overshoot.** The disc grows once and settles.
 - Duration defaults to `DURATION.slow` (24 frames ≈ 0.8s at 30fps) — a hero-paced reveal, but still calm.
-- The `radius` and `softness` are expressed as percentages so the spotlight reads the same on a 1080p frame as on a 4K master. `canvasWidth` / `canvasHeight` map them into pixels at render time.
+- The `radius` and `softness` are expressed as percentages so the spotlight reads the same on a 1080p frame as on a 4K master. Canvas dimensions come from `useVideoConfig()` — no need to pass them as props.
 - `interpolate` clamps at both ends — the component is correct on frame 0 (fully dark) and on any frame past `delay + duration` (settled at `radius`).
 - Restraint rule: this is a **static reveal**, not a roaming light. If you need movement, drive `x` / `y` from a parent `<Sequence>` deliberately — don't add a sweep here.

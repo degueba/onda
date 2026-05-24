@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link Highlight} props. */
 export const highlightSchema = z.object({
@@ -20,12 +21,16 @@ export const highlightSchema = z.object({
   color: z.string().default('#F2F2F4'),
   /** Highlight bar color. Defaults to `--onda-accent` (`#D96B82`) — the earned rose. */
   accentColor: z.string().default('#D96B82'),
-  /** Pixels. */
+  /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(64),
+  /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
+  size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
   /** Pixels past the text edges that the highlight bar extends. */
   paddingX: z.number().default(8),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Highlight}. */
@@ -49,11 +54,14 @@ export const Highlight: React.FC<HighlightProps> = ({
   color,
   accentColor,
   fontSize,
+  size,
   fontFamily,
   paddingX,
+  placement,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;
 
   // Phase 1: text fade — opacity 0 → 1 on SPRING_SMOOTH.
   const { opacity } = entryFade({
@@ -76,32 +84,34 @@ export const Highlight: React.FC<HighlightProps> = ({
   });
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: -paddingX,
-          right: -paddingX,
-          width: `calc(${barWidth}% + ${paddingX * 2}px)`,
-          backgroundColor: accentColor,
-          zIndex: 0,
-        }}
-      />
-      <span
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          opacity,
-          color,
-          fontSize,
-          fontFamily,
-          fontWeight: 600,
-        }}
-      >
-        {text}
-      </span>
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: -paddingX,
+            right: -paddingX,
+            width: `calc(${barWidth}% + ${paddingX * 2}px)`,
+            backgroundColor: accentColor,
+            zIndex: 0,
+          }}
+        />
+        <span
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            opacity,
+            color,
+            fontSize: resolvedFontSize,
+            fontFamily,
+            fontWeight: 600,
+          }}
+        >
+          {text}
+        </span>
+      </div>
+    </PlacementBox>
   );
 };

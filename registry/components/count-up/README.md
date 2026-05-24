@@ -14,8 +14,10 @@ An animated number that counts from `from` to `to` over `duration` while fading 
 | `prefix` | `string` | `""` | Rendered before the number, e.g. `"$"`. |
 | `suffix` | `string` | `""` | Rendered after the number, e.g. `"%"`. |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
-| `fontSize` | `number` | `120` | Pixels. Counters are usually large. |
+| `fontSize` | `number` | `120` | Pixels. Counters are usually large. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the number sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

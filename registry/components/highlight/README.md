@@ -13,9 +13,11 @@ Text that fades in calmly, then a marker-style accent-rose bar slides in behind 
 | `lineDuration` | `integer ≥ 1` | `DURATION.fast` (10) | Frames for the highlight bar to reach full width. Fast on purpose — emphatic. |
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
 | `accentColor` | `string` | `"#D96B82"` | Highlight bar color — defaults to `--onda-accent` (the catalog's signature rose). |
-| `fontSize` | `number` | `64` | Pixels. |
+| `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
 | `paddingX` | `number` | `8` | Pixels the highlight bar extends past each text edge. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the highlight sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

@@ -1,36 +1,48 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
 import { z } from 'zod';
 import { SlideIn } from '../slide-in/SlideIn';
 import { FadeIn } from '../fade-in/FadeIn';
 import { Underline } from '../underline/Underline';
+import { useVideoConfig } from 'remotion';
+import { PlacementBox, resolvePlacement, resolveSize } from '../../../lib/canvas';
 import { lowerThirdSchema } from './schema';
 
 export { lowerThirdSchema };
 export type LowerThirdProps = z.infer<typeof lowerThirdSchema>;
 
 /**
- * Broadcast-style name + role bar that slides in from the corner with a
- * single accent underline. A restrained scene block composed from `SlideIn`,
+ * Broadcast-style name + role bar that slides in from a corner with a single
+ * accent underline. A restrained scene block composed from `SlideIn`,
  * `FadeIn`, and `Underline` — no chrome, no glow, one earned accent.
  *
+ * The slide direction and inner alignment derive from `placement` — a bar
+ * placed on the right slides in from the right and aligns flush right.
+ *
  * @example
- * <LowerThird name="Rodrigo" role="CEO, Onda" position="bottom-left" />
+ * <LowerThird name="Rodrigo" role="CEO, Onda" placement="bottom-right" />
  */
 export const LowerThird: React.FC<LowerThirdProps> = ({
   name,
   role,
-  position,
+  placement,
   delay,
   accent,
   color,
   roleColor,
   accentColor,
   fontSize,
+  nameSize,
   roleFontSize,
+  roleSize,
   fontFamily,
 }) => {
-  const isLeft = position === 'bottom-left';
+  const { width, height } = useVideoConfig();
+  const resolvedNameFontSize = nameSize ? resolveSize(nameSize, { width, height }) : fontSize;
+  const resolvedRoleFontSize = roleSize ? resolveSize(roleSize, { width, height }) : roleFontSize;
+  // Derive the visual side from the resolved placement's x coordinate. A bar
+  // on the left half slides in from the left and aligns flush-left; on the
+  // right half it mirrors. Anchor-flush via PlacementBox handles the rest.
+  const isLeft = resolvePlacement(placement).x < 0.5;
 
   // Choreography offsets — frames *after* the name's delay.
   // Role follows the name by 4 frames (the canonical Onda stagger).
@@ -38,23 +50,14 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
   const ROLE_OFFSET = 4;
   const UNDERLINE_OFFSET = 8;
 
-  // SlideIn direction: from 'bottom-left' the name slides in from the left;
-  // from 'bottom-right' it slides in from the right. Subtle horizontal travel
-  // reinforces which corner the bar belongs to.
+  // SlideIn direction matches the side the bar sits on — subtle horizontal
+  // travel reinforces which corner the bar belongs to.
   const slideDirection = isLeft ? 'left' : 'right';
 
   return (
-    <AbsoluteFill>
-      {/* Position the lower-third 32px from the bottom and 32px from the
-          chosen horizontal edge. Padding sits inside the bar so the name and
-          role have breathing room without a visible chrome surface. */}
+    <PlacementBox placement={placement}>
       <div
         style={{
-          position: 'absolute',
-          bottom: 32,
-          left: isLeft ? 32 : undefined,
-          right: isLeft ? undefined : 32,
-          padding: '16px 24px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: isLeft ? 'flex-start' : 'flex-end',
@@ -68,7 +71,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
           delay={delay}
           direction={slideDirection}
           color={color}
-          fontSize={fontSize}
+          fontSize={resolvedNameFontSize}
           fontFamily={fontFamily}
           distance={16}
           duration={18}
@@ -79,7 +82,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
           text={role}
           delay={delay + ROLE_OFFSET}
           color={roleColor}
-          fontSize={roleFontSize}
+          fontSize={resolvedRoleFontSize}
           fontFamily={fontFamily}
           duration={18}
         />
@@ -100,7 +103,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
               delay={delay + UNDERLINE_OFFSET}
               color={color}
               accentColor={accentColor}
-              fontSize={fontSize}
+              fontSize={resolvedNameFontSize}
               fontFamily={fontFamily}
               duration={1}
               lineDelay={0}
@@ -111,7 +114,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
           </div>
         ) : null}
       </div>
-    </AbsoluteFill>
+    </PlacementBox>
   );
 };
 

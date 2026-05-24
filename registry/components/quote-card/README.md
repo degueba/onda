@@ -11,12 +11,15 @@ A centered pull-quote scene block with attribution. The quote reveals word-by-wo
 | `role` | `string` | `"Graphic Designer"` | Attributed role, rendered dim beneath the author. |
 | `delay` | `integer ≥ 0` | `0` | Frames before the quote starts revealing. The divider and attribution beats chain off this. |
 | `accent` | `boolean` | `true` | When `true`, the accent-rose divider draws between quote and attribution. When `false`, the divider is skipped and the parent gap keeps the layout breathing. |
-| `quoteFontSize` | `number` | `56` | Quote font size in px. |
-| `authorFontSize` | `number` | `22` | Attribution font size in px. Author and role share the same size; the role earns its hierarchy via dim color, not size. |
+| `quoteFontSize` | `number` | `56` | Quote font size in px. Wins over `quoteSize` if both are passed. |
+| `quoteSize` | `SizeRole?` | – | Semantic role for the quote — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels. `quoteFontSize` wins when both are passed. |
+| `authorFontSize` | `number` | `22` | Attribution font size in px. Author and role share the same size; the role earns its hierarchy via dim color, not size. Wins over `authorSize` if both are passed. |
+| `authorSize` | `SizeRole?` | – | Semantic role for the attribution. `authorFontSize` wins when both are passed. |
 | `color` | `string` | `"#F2F2F4"` | Quote + author text color (`--onda-text`). |
 | `authorColor` | `string` | `"#8E8E98"` | Role text color (`--onda-dim`). |
 | `accentColor` | `string` | `"#D96B82"` | Divider rule color (`--onda-accent` — this scene's one earned accent moment). |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement` | `'center'` | Where on the canvas the quote sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

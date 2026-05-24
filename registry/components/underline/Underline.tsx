@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
+import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link Underline} props. */
 export const underlineSchema = z.object({
@@ -24,8 +25,10 @@ export const underlineSchema = z.object({
   lineThickness: z.number().default(3),
   /** Pixel gap between text baseline and the line. */
   lineOffset: z.number().default(6),
-  /** Pixels. */
+  /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(64),
+  /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
+  size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
@@ -52,10 +55,12 @@ export const Underline: React.FC<UnderlineProps> = ({
   lineThickness,
   lineOffset,
   fontSize,
+  size,
   fontFamily,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;
 
   // Phase 1: text fade — opacity 0 → 1 on SPRING_SMOOTH.
   const { opacity } = entryFade({
@@ -83,7 +88,7 @@ export const Underline: React.FC<UnderlineProps> = ({
         style={{
           opacity,
           color,
-          fontSize,
+          fontSize: resolvedFontSize,
           fontFamily,
           fontWeight: 600,
         }}

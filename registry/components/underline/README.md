@@ -15,7 +15,8 @@ Text that fades in calmly, then has an accent-rose underline draw beneath it aft
 | `accentColor` | `string` | `"#D96B82"` | Underline color — defaults to `--onda-accent` (the catalog's signature rose). |
 | `lineThickness` | `number` | `3` | Underline stroke in px. |
 | `lineOffset` | `number` | `6` | Gap in px between the text baseline and the line. |
-| `fontSize` | `number` | `64` | Pixels. |
+| `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
 
 ## Usage

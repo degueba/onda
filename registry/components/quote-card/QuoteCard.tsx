@@ -1,10 +1,11 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { WordStagger } from '../word-stagger/WordStagger';
 import { FadeIn } from '../fade-in/FadeIn';
 import { MaskReveal } from '../mask-reveal/MaskReveal';
 import { DURATION, STAGGER } from '../../../lib/motion';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link QuoteCard} props. */
 export const quoteCardSchema = z.object({
@@ -18,10 +19,14 @@ export const quoteCardSchema = z.object({
   delay: z.number().int().min(0).default(0),
   /** Show the accent divider between quote and attribution. */
   accent: z.boolean().default(true),
-  /** Quote font size in px. */
+  /** Quote font size in px. Wins over `quoteSize` if both are passed. */
   quoteFontSize: z.number().default(56),
-  /** Author / role font size in px. */
+  /** Semantic role for the quote — resolves to canvas-aware pixels. `quoteFontSize` wins when both are passed. */
+  quoteSize: sizeRoleSchema.optional(),
+  /** Author / role font size in px. Wins over `authorSize` if both are passed. */
   authorFontSize: z.number().default(22),
+  /** Semantic role for the author / role — resolves to canvas-aware pixels. `authorFontSize` wins when both are passed. */
+  authorSize: sizeRoleSchema.optional(),
   /** Quote color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Author / role color. Defaults to `--onda-dim`. */
@@ -30,6 +35,8 @@ export const quoteCardSchema = z.object({
   accentColor: z.string().default('#D96B82'),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link QuoteCard}. */
@@ -66,12 +73,18 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
   delay,
   accent,
   quoteFontSize,
+  quoteSize,
   authorFontSize,
+  authorSize,
   color,
   authorColor,
   accentColor,
   fontFamily,
+  placement,
 }) => {
+  const { width, height } = useVideoConfig();
+  const resolvedQuoteFontSize = quoteSize ? resolveSize(quoteSize, { width, height }) : quoteFontSize;
+  const resolvedAuthorFontSize = authorSize ? resolveSize(authorSize, { width, height }) : authorFontSize;
   // Sequencing — each beat earns its moment, no two things move together.
   //   t=0                quote words begin staggering in (slower than canonical)
   //   t=quoteEnd + 8     divider mask-reveals (only if accent)
@@ -91,21 +104,14 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
   const attributionDelay = dividerDelay + dividerDuration + 4;
 
   return (
-    <AbsoluteFill
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        padding: '0 10%', // ~10% safe margins per CLAUDE.md spacing rule
-      }}
-    >
+    <PlacementBox placement={placement}>
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 32,
-          maxWidth: '40%', // ~40% canvas wide for a pull-quote feel
+          maxWidth: '40vw', // ~40% canvas wide for a pull-quote feel
           textAlign: 'center',
         }}
       >
@@ -124,8 +130,9 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             delay={delay}
             duration={DURATION.base}
             stagger={QUOTE_STAGGER}
+            justify="center"
             color={color}
-            fontSize={quoteFontSize}
+            fontSize={resolvedQuoteFontSize}
             fontFamily={fontFamily}
           />
         </div>
@@ -174,7 +181,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             delay={attributionDelay}
             duration={DURATION.base}
             color={color}
-            fontSize={authorFontSize}
+            fontSize={resolvedAuthorFontSize}
             fontFamily={fontFamily}
           />
           <FadeIn
@@ -182,12 +189,12 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             delay={attributionDelay}
             duration={DURATION.base}
             color={authorColor}
-            fontSize={authorFontSize}
+            fontSize={resolvedAuthorFontSize}
             fontFamily={fontFamily}
           />
         </div>
       </div>
-    </AbsoluteFill>
+    </PlacementBox>
   );
 };
 
