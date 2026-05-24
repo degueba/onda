@@ -44,8 +44,25 @@ import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapte
 import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
 import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
 import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
-import { AudioVisualizer, audioVisualizerSchema } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
+import { AudioVisualizer, audioVisualizerSchema, type AudioVisualizerProps } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
 import { ComponentPreview } from './ComponentPreview';
+
+// Composite preview for `audio-visualizer` — by design the component
+// itself does NOT play audio (see techspec 011), so a bare preview shows
+// bars dancing to silence and reads as broken. We pair it with a parallel
+// AudioClip pointing at the same `src` so the user hears + sees the same
+// stream. The TryIt sliders still bind to the visualizer's schema, so
+// every interactive control affects the visualization; the AudioClip just
+// rides along on whatever src the visualizer is using.
+function AudioVisualizerWithPlayback(props: AudioVisualizerProps) {
+  const clipProps = audioClipSchema.parse({ src: props.src, volume: 0.6 });
+  return (
+    <>
+      <AudioClip {...clipProps} />
+      <AudioVisualizer {...props} />
+    </>
+  );
+}
 import { TryItPopover } from './TryItPopover';
 
 // Slug → live React component + Zod schema. Lives in a client-only module so
@@ -235,7 +252,10 @@ const REGISTRY: Record<
     defaultPropsOverride: { src: '/sample-audio.wav' },
   },
   'audio-visualizer': {
-    component: AudioVisualizer as unknown as ComponentType<never>,
+    // Composite — visualizer + parallel AudioClip so the preview is
+    // audible. Schema is still the visualizer's so TryIt controls only
+    // the visualization knobs.
+    component: AudioVisualizerWithPlayback as unknown as ComponentType<never>,
     schema: audioVisualizerSchema,
     defaultPropsOverride: { src: '/sample-audio.wav' },
   },

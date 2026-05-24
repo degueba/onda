@@ -4,6 +4,7 @@ import {
   useAudioData,
   visualizeAudio,
   visualizeAudioWaveform,
+  createSmoothSvgPath,
 } from '@remotion/media-utils';
 import { z } from 'zod';
 import { PlacementBox, placementSchema } from '../../../lib/canvas';
@@ -48,8 +49,10 @@ export const audioVisualizerSchema = z.object({
   barGap: z.number().min(0).default(4),
   /** Border radius for bars in px (only `variant: 'bars'`). */
   barRadius: z.number().min(0).default(2),
-  /** Stroke width for the waveform line (only `variant: 'waveform'`). */
-  waveformStrokeWidth: z.number().min(0.5).default(2),
+  /** Stroke width for the waveform outline (only `variant: 'waveform'`). */
+  waveformStrokeWidth: z.number().min(0).default(0),
+  /** Fill opacity for the waveform body (only `variant: 'waveform'`). `1` = solid fill, `0` = stroke only. */
+  waveformFillOpacity: z.number().min(0).max(1).default(1),
 });
 
 /** Inferred props for {@link AudioVisualizer}. */
@@ -72,7 +75,8 @@ export type AudioVisualizerProps = z.infer<typeof audioVisualizerSchema>;
  */
 export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   src, variant, numberOfSamples, smoothing, optimizeFor, color,
-  placement, width, height, barGap, barRadius, waveformStrokeWidth,
+  placement, width, height, barGap, barRadius,
+  waveformStrokeWidth, waveformFillOpacity,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -127,21 +131,44 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   }
 
   // variant === 'waveform'
+  // `visualizeAudioWaveform` returns AMPLITUDE MAGNITUDES (0..1) — one
+  // non-negative number per sample, NOT signed PCM. The right rendering is
+  // a mirror waveform: each sample's amplitude extends symmetrically above
+  // and below a centerline (Ableton / SoundCloud / DAW style). We use
+  // `createSmoothSvgPath` so the outline is smooth Bezier curves rather
+  // than jagged straight segments.
   const samples = visualizeAudioWaveform({
     fps, frame, audioData, numberOfSamples,
     windowInSeconds: 1 / fps,
   });
 
-  // Map samples into an SVG polyline path centered vertically.
   const w = width ?? 640;
-  const points = samples
-    .map((v, i) => {
-      const x = (i / Math.max(1, samples.length - 1)) * w;
-      // Samples are 0..1 amplitudes; map to ±(height/2) around the centerline.
-      const y = height / 2 - (v - 0.5) * height;
-      return `${x.toFixed(2)},${y.toFixed(2)}`;
-    })
-    .join(' ');
+  const halfH = height / 2;
+  const denom = Math.max(1, samples.length - 1);
+
+  // Top half: each sample's amplitude drawn upward from the centerline.
+  const topPoints = samples.map((v, i) => ({
+    x: (i / denom) * w,
+    y: halfH - v * halfH,
+  }));
+  // Bottom half: mirror — same x, opposite direction. Traverse right-to-
+  // left so when concatenated to the top path it forms a closed shape we
+  // can fill.
+  const bottomPoints = [...samples].reverse().map((v, i) => ({
+    x: ((samples.length - 1 - i) / denom) * w,
+    y: halfH + v * halfH,
+  }));
+
+  // Smooth Bezier paths for both halves via Remotion's helper.
+  const topPath = createSmoothSvgPath({ points: topPoints });
+  const bottomPath = createSmoothSvgPath({ points: bottomPoints });
+
+  // Combined closed path — top half, then jump to bottom half right-to-
+  // left, then Z to close. Filled gives the solid waveform body.
+  // `bottomPath` starts with `M ...` from Remotion's helper; we strip it
+  // so we draw a continuous shape instead of two disjoint paths.
+  const bottomBody = bottomPath.replace(/^M[^ ]+ [^ ]+ ?/, 'L ');
+  const closedPath = `${topPath} ${bottomBody} Z`;
 
   return (
     <PlacementBox placement={placement}>
@@ -151,12 +178,12 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
         viewBox={`0 0 ${w} ${height}`}
         style={{ display: 'block' }}
       >
-        <polyline
-          points={points}
-          fill="none"
-          stroke={color}
+        <path
+          d={closedPath}
+          fill={color}
+          fillOpacity={waveformFillOpacity}
+          stroke={waveformStrokeWidth > 0 ? color : 'none'}
           strokeWidth={waveformStrokeWidth}
-          strokeLinecap="round"
           strokeLinejoin="round"
         />
       </svg>

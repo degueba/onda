@@ -177,10 +177,18 @@ function FieldControl({
 }) {
   if (type === 'ZodNumber') {
     const hint = NUMERIC_HINTS[name];
+    // Optional fields with no schema default arrive as `undefined`.
+    // `Number(undefined)` is NaN — passing NaN to <input value={...}>
+    // triggers a React warning AND renders a broken slider. Coerce to
+    // the hint's min (or 0) so the field is editable from the moment it
+    // mounts.
+    const fallback = hint ? hint.min : 0;
+    const numeric = value === undefined || value === null ? fallback : Number(value);
+    const safe = Number.isFinite(numeric) ? numeric : fallback;
     if (hint) {
-      return <Slider value={Number(value)} onChange={onChange} {...hint} />;
+      return <Slider value={safe} onChange={onChange} {...hint} />;
     }
-    return <NumberInput value={Number(value)} onChange={onChange} />;
+    return <NumberInput value={safe} onChange={onChange} />;
   }
 
   if (type === 'ZodEnum') {
