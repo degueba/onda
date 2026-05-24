@@ -41,6 +41,10 @@ import { SlideOut, slideOutSchema } from '@onda/registry/components/slide-out/Sl
 import { Parallax, parallaxSchema } from '@onda/registry/components/parallax/Parallax';
 import { Vignette, vignetteSchema } from '@onda/registry/components/vignette/Vignette';
 import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapter-card/ChapterCard';
+import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
+import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
+import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
+import { AudioVisualizer, audioVisualizerSchema } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
 import { ComponentPreview } from './ComponentPreview';
 import { TryItPopover } from './TryItPopover';
 
@@ -204,6 +208,22 @@ const REGISTRY: Record<
   'chapter-card': {
     component: ChapterCard as unknown as ComponentType<never>,
     schema: chapterCardSchema,
+  },
+  'image-reveal': {
+    component: ImageReveal as unknown as ComponentType<never>,
+    schema: imageRevealSchema,
+  },
+  'video-clip': {
+    component: VideoClip as unknown as ComponentType<never>,
+    schema: videoClipSchema,
+  },
+  'audio-clip': {
+    component: AudioClip as unknown as ComponentType<never>,
+    schema: audioClipSchema,
+  },
+  'audio-visualizer': {
+    component: AudioVisualizer as unknown as ComponentType<never>,
+    schema: audioVisualizerSchema,
   },
 };
 

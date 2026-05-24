@@ -3,7 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { entryScale } from '../../../lib/choreography';
-import { PlacementBox, placementSchema } from '../../../lib/canvas';
+import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
 
 /** Zod schema for {@link IconPop} props. */
 export const iconPopSchema = z.object({
@@ -13,8 +13,10 @@ export const iconPopSchema = z.object({
   delay: z.number().int().min(0).default(0),
   /** Frames to settle. */
   duration: z.number().int().min(1).default(DURATION.base),
-  /** Icon size in pixels (square). */
-  size: z.number().default(96),
+  /** Icon size in pixels (square). Wins over `size` if both are passed. */
+  iconSize: z.number().default(96),
+  /** Semantic size role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `iconSize`'s default when passed alone; `iconSize` wins when both are passed. */
+  size: sizeRoleSchema.optional(),
   /** Icon color. Defaults to `--onda-accent` (`#D96B82`) — accent earned. */
   color: z.string().default('#D96B82'),
   /** Stroke width for outline icons (check, cross). Ignored by filled icons. */
@@ -54,10 +56,11 @@ const ICONS: Record<
  * <IconPop icon="check" />
  */
 export const IconPop: React.FC<IconPopProps> = ({
-  icon, delay, duration, size, color, strokeWidth, placement,
+  icon, delay, duration, iconSize, size, color, strokeWidth, placement,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const resolvedSize = size ? resolveSize(size, { width, height }) : iconSize;
 
   const { opacity, transform } = entryScale({
     frame,
@@ -72,8 +75,8 @@ export const IconPop: React.FC<IconPopProps> = ({
   return (
     <PlacementBox placement={placement}>
       <svg
-        width={size}
-        height={size}
+        width={resolvedSize}
+        height={resolvedSize}
         viewBox="0 0 24 24"
         style={{ opacity, transform }}
         fill={filled ? color : 'none'}

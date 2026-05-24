@@ -54,6 +54,10 @@ import {
   endCardSchema,
 } from '@onda/registry/components/end-card/EndCard';
 import {
+  AudioVisualizer,
+  audioVisualizerSchema,
+} from '@onda/registry/components/audio-visualizer/AudioVisualizer';
+import {
   GradientShift,
   gradientShiftSchema,
 } from '@onda/registry/components/gradient-shift/GradientShift';
@@ -192,6 +196,22 @@ const BEATS: Beat[] = [
     label: 'BarChart',
     hold: 90,
     render: () => <BarChart {...barChartSchema.parse({ placement: 'center' })} />,
+  },
+  {
+    slug: 'audio-visualizer',
+    label: 'AudioVisualizer',
+    hold: 90,
+    render: () => (
+      <AudioVisualizer
+        {...audioVisualizerSchema.parse({
+          variant: 'bars',
+          numberOfSamples: 64,
+          placement: 'center',
+          width: 720,
+          height: 160,
+        })}
+      />
+    ),
   },
   {
     slug: 'underline',

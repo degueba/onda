@@ -20,10 +20,22 @@ export const titleCardSchema = z.object({
   titleFontSize: z.number().default(160),
   /** Semantic role for the title — resolves to canvas-aware pixels. `titleFontSize` wins when both are passed. */
   titleSize: sizeRoleSchema.optional(),
+  /** Font weight for the title. */
+  titleFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the title (e.g. `'-0.02em'`). */
+  titleLetterSpacing: z.string().optional(),
+  /** Unitless line height for the title. */
+  titleLineHeight: z.number().optional(),
   /** Subtitle font size in px. Wins over `subtitleSize` if both are passed. */
   subtitleFontSize: z.number().default(32),
   /** Semantic role for the subtitle — resolves to canvas-aware pixels. `subtitleFontSize` wins when both are passed. */
   subtitleSize: sizeRoleSchema.optional(),
+  /** Font weight for the subtitle. */
+  subtitleFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the subtitle (e.g. `'0.06em'`). */
+  subtitleLetterSpacing: z.string().optional(),
+  /** Unitless line height for the subtitle. */
+  subtitleLineHeight: z.number().optional(),
   /** Title color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Subtitle color. Defaults to `--onda-dim`. */
@@ -63,8 +75,14 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   accent,
   titleFontSize,
   titleSize,
+  titleFontWeight,
+  titleLetterSpacing,
+  titleLineHeight,
   subtitleFontSize,
   subtitleSize,
+  subtitleFontWeight,
+  subtitleLetterSpacing,
+  subtitleLineHeight,
   color,
   subtitleColor,
   accentColor,
@@ -101,6 +119,9 @@ export const TitleCard: React.FC<TitleCardProps> = ({
             lineOffset={12}
             fontSize={resolvedTitleFontSize}
             fontFamily={fontFamily}
+            fontWeight={titleFontWeight}
+            letterSpacing={titleLetterSpacing}
+            lineHeight={titleLineHeight}
           />
         ) : (
           <BlurReveal
@@ -110,6 +131,9 @@ export const TitleCard: React.FC<TitleCardProps> = ({
             color={color}
             fontSize={resolvedTitleFontSize}
             fontFamily={fontFamily}
+            fontWeight={titleFontWeight}
+            letterSpacing={titleLetterSpacing}
+            lineHeight={titleLineHeight}
           />
         )}
 
@@ -122,6 +146,9 @@ export const TitleCard: React.FC<TitleCardProps> = ({
           color={subtitleColor}
           fontSize={resolvedSubtitleFontSize}
           fontFamily={fontFamily}
+          fontWeight={subtitleFontWeight}
+          letterSpacing={subtitleLetterSpacing}
+          lineHeight={subtitleLineHeight}
         />
       </div>
     </PlacementBox>

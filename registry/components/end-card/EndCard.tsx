@@ -21,10 +21,22 @@ export const endCardSchema = z.object({
   ctaFontSize: z.number().default(96),
   /** Semantic role for the CTA — resolves to canvas-aware pixels. `ctaFontSize` wins when both are passed. */
   ctaSize: sizeRoleSchema.optional(),
+  /** Font weight for the CTA. */
+  ctaFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the CTA (e.g. `'-0.02em'`). */
+  ctaLetterSpacing: z.string().optional(),
+  /** Unitless line height for the CTA. */
+  ctaLineHeight: z.number().optional(),
   /** Handles row font size in px. Wins over `handlesSize` if both are passed. */
   handlesFontSize: z.number().default(24),
   /** Semantic role for the handles row — resolves to canvas-aware pixels. `handlesFontSize` wins when both are passed. */
   handlesSize: sizeRoleSchema.optional(),
+  /** Font weight for the handles row. */
+  handlesFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the handles row (e.g. `'0.06em'`). */
+  handlesLetterSpacing: z.string().optional(),
+  /** Unitless line height for the handles row. */
+  handlesLineHeight: z.number().optional(),
   /** CTA color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Handles color. Defaults to `--onda-faint`. */
@@ -63,8 +75,14 @@ export const EndCard: React.FC<EndCardProps> = ({
   accent,
   ctaFontSize,
   ctaSize,
+  ctaFontWeight,
+  ctaLetterSpacing,
+  ctaLineHeight,
   handlesFontSize,
   handlesSize,
+  handlesFontWeight,
+  handlesLetterSpacing,
+  handlesLineHeight,
   color,
   handlesColor,
   accentColor,
@@ -101,6 +119,9 @@ export const EndCard: React.FC<EndCardProps> = ({
             accentColor={accentColor}
             fontSize={resolvedCtaFontSize}
             fontFamily={fontFamily}
+            fontWeight={ctaFontWeight}
+            letterSpacing={ctaLetterSpacing}
+            lineHeight={ctaLineHeight}
             lineThickness={3}
             lineOffset={6}
           />
@@ -112,6 +133,9 @@ export const EndCard: React.FC<EndCardProps> = ({
             color={color}
             fontSize={resolvedCtaFontSize}
             fontFamily={fontFamily}
+            fontWeight={ctaFontWeight}
+            letterSpacing={ctaLetterSpacing}
+            lineHeight={ctaLineHeight}
           />
         )}
 
@@ -130,6 +154,9 @@ export const EndCard: React.FC<EndCardProps> = ({
           color={handlesColor}
           fontSize={resolvedHandlesFontSize}
           fontFamily={fontFamily}
+          fontWeight={handlesFontWeight}
+          letterSpacing={handlesLetterSpacing}
+          lineHeight={handlesLineHeight}
         />
       </div>
     </PlacementBox>

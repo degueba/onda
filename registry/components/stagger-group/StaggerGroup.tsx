@@ -29,6 +29,12 @@ export const staggerGroupSchema = z.object({
   fontSize: z.number().default(48),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1` for tight display copy. */
+  lineHeight: z.number().optional(),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });
@@ -69,6 +75,9 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
   color,
   fontSize,
   fontFamily,
+  fontWeight = 600,
+  letterSpacing = 'normal',
+  lineHeight = 1.1,
   placement,
 }) => {
   const frame = useCurrentFrame();
@@ -87,7 +96,9 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
         color,
         fontSize,
         fontFamily,
-        fontWeight: 600,
+        fontWeight,
+        letterSpacing,
+        lineHeight,
       }}
     >
       {items.map((item, i) => {

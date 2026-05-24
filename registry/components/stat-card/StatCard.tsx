@@ -25,10 +25,22 @@ export const statCardSchema = z.object({
   numberFontSize: z.number().default(200),
   /** Semantic role for the number — resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. */
   numberSize: sizeRoleSchema.optional(),
+  /** Font weight for the number. */
+  numberFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the number (e.g. `'-0.02em'`). */
+  numberLetterSpacing: z.string().optional(),
+  /** Unitless line height for the number. */
+  numberLineHeight: z.number().optional(),
   /** Label font size in px. Wins over `labelSize` if both are passed. */
   labelFontSize: z.number().default(28),
   /** Semantic role for the label — resolves to canvas-aware pixels. `labelFontSize` wins when both are passed. */
   labelSize: sizeRoleSchema.optional(),
+  /** Font weight for the label. */
+  labelFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the label (e.g. `'0.06em'`). */
+  labelLetterSpacing: z.string().optional(),
+  /** Unitless line height for the label. */
+  labelLineHeight: z.number().optional(),
   /** Number color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Label color. Defaults to `--onda-dim`. */
@@ -71,8 +83,14 @@ export const StatCard: React.FC<StatCardProps> = ({
   accent,
   numberFontSize,
   numberSize,
+  numberFontWeight,
+  numberLetterSpacing,
+  numberLineHeight,
   labelFontSize,
   labelSize,
+  labelFontWeight,
+  labelLetterSpacing,
+  labelLineHeight,
   color,
   labelColor,
   accentColor,
@@ -110,6 +128,9 @@ export const StatCard: React.FC<StatCardProps> = ({
           color={color}
           fontSize={resolvedNumberFontSize}
           fontFamily={fontFamily}
+          fontWeight={numberFontWeight}
+          letterSpacing={numberLetterSpacing}
+          lineHeight={numberLineHeight}
         />
 
         {/* The qualifier — words cascade in after the number has settled. */}
@@ -122,6 +143,9 @@ export const StatCard: React.FC<StatCardProps> = ({
           color={labelColor}
           fontSize={resolvedLabelFontSize}
           fontFamily={fontFamily}
+          fontWeight={labelFontWeight}
+          letterSpacing={labelLetterSpacing}
+          lineHeight={labelLineHeight}
         />
 
         {/* The accent rule — earned punctuation, draws last. Only when accent.

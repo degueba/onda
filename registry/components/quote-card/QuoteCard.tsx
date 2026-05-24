@@ -23,10 +23,22 @@ export const quoteCardSchema = z.object({
   quoteFontSize: z.number().default(56),
   /** Semantic role for the quote — resolves to canvas-aware pixels. `quoteFontSize` wins when both are passed. */
   quoteSize: sizeRoleSchema.optional(),
+  /** Font weight for the quote. */
+  quoteFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the quote (e.g. `'-0.02em'`). */
+  quoteLetterSpacing: z.string().optional(),
+  /** Unitless line height for the quote. */
+  quoteLineHeight: z.number().optional(),
   /** Author / role font size in px. Wins over `authorSize` if both are passed. */
   authorFontSize: z.number().default(22),
   /** Semantic role for the author / role — resolves to canvas-aware pixels. `authorFontSize` wins when both are passed. */
   authorSize: sizeRoleSchema.optional(),
+  /** Font weight for the author and role lines (they share styling). */
+  authorFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the author and role lines (e.g. `'0.06em'`). */
+  authorLetterSpacing: z.string().optional(),
+  /** Unitless line height for the author and role lines. */
+  authorLineHeight: z.number().optional(),
   /** Quote color. Defaults to `--onda-text`. */
   color: z.string().default('#F2F2F4'),
   /** Author / role color. Defaults to `--onda-dim`. */
@@ -74,8 +86,14 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
   accent,
   quoteFontSize,
   quoteSize,
+  quoteFontWeight,
+  quoteLetterSpacing,
+  quoteLineHeight,
   authorFontSize,
   authorSize,
+  authorFontWeight,
+  authorLetterSpacing,
+  authorLineHeight,
   color,
   authorColor,
   accentColor,
@@ -134,6 +152,9 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             color={color}
             fontSize={resolvedQuoteFontSize}
             fontFamily={fontFamily}
+            fontWeight={quoteFontWeight}
+            letterSpacing={quoteLetterSpacing}
+            lineHeight={quoteLineHeight}
           />
         </div>
 
@@ -183,6 +204,9 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             color={color}
             fontSize={resolvedAuthorFontSize}
             fontFamily={fontFamily}
+            fontWeight={authorFontWeight}
+            letterSpacing={authorLetterSpacing}
+            lineHeight={authorLineHeight}
           />
           <FadeIn
             text={role}
@@ -191,6 +215,9 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             color={authorColor}
             fontSize={resolvedAuthorFontSize}
             fontFamily={fontFamily}
+            fontWeight={authorFontWeight}
+            letterSpacing={authorLetterSpacing}
+            lineHeight={authorLineHeight}
           />
         </div>
       </div>

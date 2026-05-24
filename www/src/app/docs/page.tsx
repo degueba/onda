@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
 import { CopyButton } from '@/components/CopyButton';
 import { SITE, absoluteUrl } from '@/lib/seo';
 
@@ -97,11 +95,8 @@ function StepHeader({ n, title }: { n: number; title: string }) {
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav />
-
-      <main className="flex-1 w-full max-w-125 mx-auto px-3 sm:px-4 py-8 sm:py-10">
-        <header className="mb-8 sm:mb-10">
+    <>
+      <header className="mb-8 sm:mb-10">
           <p className="text-xs uppercase tracking-[0.16em] text-onda-faint mb-2">
             Guide
           </p>
@@ -272,24 +267,28 @@ export default function DocsPage() {
               </Link>
             </li>
             <li>
-              <a
-                href={`${SITE.github}/blob/main/docs/motion-language.md`}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/docs/motion-language"
                 className="text-onda-text hover:text-onda-accent transition-colors"
               >
                 Read the motion language →
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href={`${SITE.github}/blob/main/docs/design-philosophy.md`}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/docs/design-philosophy"
                 className="text-onda-text hover:text-onda-accent transition-colors"
               >
                 Read the design philosophy →
-              </a>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/docs/composing-with-onda"
+                className="text-onda-text hover:text-onda-accent transition-colors"
+              >
+                Composing with Onda (for AI agents) →
+              </Link>
             </li>
             <li>
               <a
@@ -303,9 +302,6 @@ export default function DocsPage() {
             </li>
           </ul>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+    </>
   );
 }
