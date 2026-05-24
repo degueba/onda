@@ -45,3 +45,23 @@ export {
   type ColorToken,
   type FontToken,
 } from './tokens';
+
+export {
+  ANCHORS,
+  PLACEMENT_REGIONS,
+  SIZE_ROLES,
+  PlacementBox,
+  resolvePlacement,
+  resolveSize,
+  anchorSchema,
+  placementCoordsSchema,
+  placementRegionSchema,
+  placementSchema,
+  sizeRoleSchema,
+  type Anchor,
+  type Placement,
+  type PlacementCoords,
+  type PlacementRegion,
+  type PlacementBoxProps,
+  type SizeRole,
+} from './canvas';
