@@ -44,7 +44,7 @@ import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapte
 import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
 import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
 import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
-import { AudioVisualizer, audioVisualizerSchema, type AudioVisualizerProps } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
+import { AudioVisualizer, audioVisualizerSchema, audioVisualizerPresets, type AudioVisualizerProps } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
 import { ComponentPreview } from './ComponentPreview';
 
 // Composite preview for `audio-visualizer` — by design the component
@@ -76,12 +76,20 @@ import { TryItPopover } from './TryItPopover';
 // schema default points at a public sample URL that fails CORS in the
 // browser — we serve a self-hosted /sample-audio.wav instead so the
 // preview "just works" without network round-trips or licensing concerns.
+//
+// `presets` is a curated set of named visual personalities exported by the
+// component itself. When present, the TryIt popover renders them as a
+// chip row above the slider controls — one click swaps to a "known good"
+// configuration so users see what's possible without manually wiring every
+// prop. Other components can opt in by exporting their own preset map and
+// adding it here.
 const REGISTRY: Record<
   string,
   {
     component: ComponentType<never>;
     schema: ZodTypeAny;
     defaultPropsOverride?: Record<string, unknown>;
+    presets?: Record<string, Record<string, unknown>>;
   }
 > = {
   'blur-reveal': {
@@ -258,6 +266,7 @@ const REGISTRY: Record<
     component: AudioVisualizerWithPlayback as unknown as ComponentType<never>,
     schema: audioVisualizerSchema,
     defaultPropsOverride: { src: '/sample-audio.wav' },
+    presets: audioVisualizerPresets as unknown as Record<string, Record<string, unknown>>,
   },
 };
 
@@ -306,6 +315,7 @@ export function LivePreview({
           schema={entry.schema}
           values={values}
           defaults={defaults}
+          presets={entry.presets}
           onChange={setValues}
         />
       )}

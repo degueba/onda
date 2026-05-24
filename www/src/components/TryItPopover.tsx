@@ -9,13 +9,17 @@ type Props = {
   schema: ZodTypeAny;
   values: Record<string, unknown>;
   defaults: Record<string, unknown>;
+  /** Curated "known good" preset configurations. Rendered as a chip row
+   *  at the top of the popover. Each preset is a `Partial<Props>` merged
+   *  into the current values when clicked. */
+  presets?: Record<string, Record<string, unknown>>;
   onChange: (next: Record<string, unknown>) => void;
 };
 
 // "Try it" trigger + popover. Anchored absolutely to the bottom-right of the
 // preview card. Click → opens a floating panel with the schema-driven knobs;
 // preview stays visible underneath / behind it.
-export function TryItPopover({ schema, values, defaults, onChange }: Props) {
+export function TryItPopover({ schema, values, defaults, presets, onChange }: Props) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -67,6 +71,7 @@ export function TryItPopover({ schema, values, defaults, onChange }: Props) {
               schema={schema}
               values={values}
               defaults={defaults}
+              presets={presets}
               onChange={onChange}
               bare
             />

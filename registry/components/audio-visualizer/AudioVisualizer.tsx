@@ -135,6 +135,82 @@ export const audioVisualizerSchema = z.object({
 /** Inferred props for {@link AudioVisualizer}. */
 export type AudioVisualizerProps = z.infer<typeof audioVisualizerSchema>;
 
+/**
+ * Curated "known good" preset configurations — named visual personalities
+ * that show off what's possible without forcing the consumer to wade
+ * through every prop. Each preset is a `Partial<AudioVisualizerProps>` you
+ * spread onto the component: `<AudioVisualizer {...audioVisualizerPresets.aurora} />`.
+ *
+ * Exported as first-class data (not preview-only metadata) so:
+ *   - the docs site renders them as a chip row in the live preview's TryIt panel
+ *   - agents picking a preset by name is simpler than guessing prop combos
+ *   - downstream consumers (Studio, brief renderers) can offer the same set
+ *
+ * Restraint: every color in every preset is from Onda's token palette
+ * (`accent` `#D96B82`, `accentSoft` `#E89AAB`, `text` `#F2F2F4`,
+ * `dim` `#8E8E98`). Custom palettes are the caller's job.
+ */
+export const audioVisualizerPresets = {
+  /** Onda defaults — rose two-tone bars. */
+  default: {},
+  /** Spotify-style: chunky bars, single accent, middle-aligned. */
+  spotify: {
+    variant: 'bars',
+    barWidth: 12,
+    barGap: 8,
+    barAlign: 'middle',
+    color: '#D96B82',
+  },
+  /** SoundCloud-style: dense thin bars, two-tone gradient. */
+  soundcloud: {
+    variant: 'bars',
+    barWidth: 2,
+    barGap: 1,
+    barAlign: 'middle',
+    color: ['#D96B82', '#E89AAB'],
+  },
+  /** Bottom-anchored equalizer bars — classic DJ look. */
+  equalizer: {
+    variant: 'bars',
+    barWidth: 6,
+    barGap: 4,
+    barAlign: 'bottom',
+  },
+  /** Aurora hills — three-tone layered fills, mirrored. */
+  aurora: {
+    variant: 'hills',
+    hillsCopies: 3,
+    hillsFillOpacity: 0.4,
+    color: ['#D96B82', '#E89AAB', '#F2F2F4'],
+  },
+  /** Voice ribbon — four stacked wave lines, two-tone, slow drift. */
+  voiceRibbon: {
+    variant: 'wave',
+    waveLines: 4,
+    waveLineGap: 18,
+    waveScrollSpeed: -100,
+    color: ['#D96B82', '#E89AAB'],
+  },
+  /** Sunburst — radial bars growing OUTWARD from the inner ring. */
+  sunburst: {
+    variant: 'radial',
+    radialBarOrigin: 'outer',
+    radialBarWidth: 6,
+    radialBarGap: 4,
+    color: '#D96B82',
+  },
+  /** Neon ring — radial bars growing INWARD with a generous inner radius. */
+  neonRing: {
+    variant: 'radial',
+    radialBarOrigin: 'inner',
+    radialInnerRadius: 120,
+    radialBarWidth: 4,
+    color: ['#D96B82', '#E89AAB'],
+  },
+} as const satisfies Record<string, Partial<AudioVisualizerProps>>;
+
+export type AudioVisualizerPreset = keyof typeof audioVisualizerPresets;
+
 // Drop-shadow string used when `glow` is on. Tuned for a soft accent halo.
 const GLOW_FILTER = 'drop-shadow(0 0 6px currentColor)';
 

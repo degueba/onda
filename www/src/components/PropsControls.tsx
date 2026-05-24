@@ -8,6 +8,9 @@ type PropsControlsProps = {
   schema: ZodTypeAny;
   values: Record<string, unknown>;
   defaults: Record<string, unknown>;
+  /** Curated named configurations. Rendered as a chip row above the
+   *  sliders — one click applies the preset by merging it into values. */
+  presets?: Record<string, Record<string, unknown>>;
   onChange: (next: Record<string, unknown>) => void;
   /** Skip the outer card styling and enter animation — use when the parent
    * (e.g. a popover) already provides a surface. */
@@ -56,6 +59,33 @@ const STRING_OPTIONS: Record<string, { label: string; value: string }[]> = {
   ],
 };
 
+// Format a preset's camelCase / kebab-case key as a human-readable label.
+// `voiceRibbon` → "Voice ribbon"; `neon-ring` → "Neon ring".
+function presetLabel(key: string): string {
+  const spaced = key
+    .replace(/[-_]/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase();
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
+// Deep-equality helper for spotting which preset is currently active.
+// Handles primitives, arrays, and plain objects — enough for the prop
+// types schemas declare. Not a general deepEqual.
+function deepEqual(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((v, i) => deepEqual(v, b[i]));
+  }
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const ak = Object.keys(a);
+    const bk = Object.keys(b);
+    if (ak.length !== bk.length) return false;
+    return ak.every((k) => deepEqual((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]));
+  }
+  return false;
+}
+
 // Walk through ZodDefault / ZodOptional / ZodNullable wrappers to find the
 // real type underneath. Zod stores wrapped types under `_def.innerType`.
 function unwrap(field: ZodTypeAny): { type: string; field: ZodTypeAny } {
@@ -74,10 +104,22 @@ export function PropsControls({
   schema,
   values,
   defaults,
+  presets,
   onChange,
   bare = false,
 }: PropsControlsProps) {
   const reset = useCallback(() => onChange(defaults), [defaults, onChange]);
+
+  // Apply a preset by merging its partial props onto the SCHEMA DEFAULTS
+  // (not the current `values`). Important: if a previous preset set
+  // `waveLines: 4` and the new preset doesn't mention `waveLines`, the
+  // new preset's "intended" look would inherit `waveLines: 4` from the
+  // stale current state — wrong. Re-deriving from defaults guarantees
+  // each preset renders in isolation.
+  const applyPreset = useCallback(
+    (preset: Record<string, unknown>) => onChange({ ...defaults, ...preset }),
+    [defaults, onChange],
+  );
 
   if (!(schema instanceof z.ZodObject)) return null;
   const shape = schema.shape as Record<string, ZodTypeAny>;
@@ -88,6 +130,15 @@ export function PropsControls({
   const wrapperClass = bare
     ? 'p-3 sm:p-4'
     : 'onda-rise bg-onda-surface/60 backdrop-blur-sm border border-onda-border rounded-2xl p-3 sm:p-4';
+
+  // Detect the active preset by deep-equality of its prop subset against
+  // current values. Used to highlight the active chip. A preset is "active"
+  // if every prop it sets matches the current value.
+  const activePreset = presets
+    ? Object.entries(presets).find(([, preset]) =>
+        Object.entries(preset).every(([k, v]) => deepEqual(values[k], v)),
+      )?.[0]
+    : undefined;
 
   return (
     <div className={wrapperClass}>
@@ -104,6 +155,33 @@ export function PropsControls({
           Reset
         </button>
       </div>
+
+      {presets && Object.keys(presets).length > 0 && (
+        <div className="mb-3 pb-3 border-b border-onda-border">
+          <div className="text-[10px] uppercase tracking-[0.16em] text-onda-faint mb-1.5">
+            Presets
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {Object.entries(presets).map(([name, preset]) => {
+              const isActive = activePreset === name;
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => applyPreset(preset)}
+                  className={
+                    isActive
+                      ? 'text-[10px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-md border bg-onda-accent/15 border-onda-accent/50 text-onda-text transition-colors'
+                      : 'text-[10px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-md border bg-onda-bg/40 border-onda-border text-onda-dim hover:text-onda-text hover:border-onda-border-lit transition-colors'
+                  }
+                >
+                  {presetLabel(name)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         {Object.entries(shape).map(([name, field]) => {
