@@ -8,7 +8,9 @@ Load this page (or a near-verbatim slice of it) into agent context when generati
 
 ## Payload shape
 
-Standard call form:
+Two recommended shapes — pick based on whether the scene has one component or many.
+
+### Single-component payload
 
 ```ts
 type Payload = {
@@ -17,20 +19,32 @@ type Payload = {
 };
 ```
 
-The canvas envelope (composition-level, set by the caller):
+### Timeline-shape payload (recommended for multi-component scenes)
 
 ```ts
-type CanvasEnvelope = {
-  width: number;            // px, e.g. 1920 (horizontal), 1080 (vertical), 1080 (square)
-  height: number;           // px
-  fps: number;              // typically 30
-  durationInFrames: number; // composition length
+type Composition = {
+  fps: number;                    // typically 30
+  width: number;                  // px, e.g. 1920 (horizontal), 1080 (vertical)
+  height: number;                 // px
+  tracks: Track[];                // parallel layers, rendered in order
+};
+
+type Track = {
+  id?: string;
+  entries: Entry[];               // sequential beats within this track
+};
+
+type Entry = {
+  at: string | number;            // when this beat starts — "0:04" | "30s" | 4 (seconds) | 90 (raw seconds when number)
+  for: string | number;           // duration — same time spec as `at`
+  component: string;              // PascalCase Onda component name
+  props: Record<string, unknown>;
 };
 ```
 
-Every Onda component is a pure function of `useCurrentFrame()` and `useVideoConfig()` — frame N is deterministic given the props and the canvas. The agent's job is to pick the right component, fill the props, and let Remotion render.
+The canvas envelope sits at the composition root (`fps` / `width` / `height`); each track is a parallel layer (think After Effects layers), and each entry is a beat on that track with explicit start time and duration. Beats within a track are sequential; tracks overlap in time.
 
-Compose multiple components in one scene by wrapping them in `<AbsoluteFill>` and giving each a `placement` (see below).
+Every Onda component is a pure function of `useCurrentFrame()` and `useVideoConfig()` — frame N is deterministic given the props and the canvas. The agent's job is to pick the right components, fill the props, and let Remotion render.
 
 ---
 
@@ -233,27 +247,122 @@ Components below don't accept `placement` or `size` for principled reasons. Use 
 
 ---
 
-## Multi-component scenes
+## Timeline composition — use Remotion's primitives
 
-To compose multiple components in one scene, the caller wraps them in `<AbsoluteFill>`:
+Onda doesn't ship its own scene / track / beat primitives. Remotion's existing primitives cover every composition pattern an agent needs; Onda's value-add is the *components* on top, not the rendering substrate.
+
+Use these Remotion primitives directly:
+
+| Pattern | Remotion primitive |
+| --- | --- |
+| Composition root | `<Composition>` (set fps / width / height / durationInFrames) |
+| Time-slice a child | `<Sequence from={frames} durationInFrames={frames}>` |
+| Sequential children without manual frame math | `<Series>` + `<Series.Sequence durationInFrames={frames}>` |
+| Sequential children **with crossfades** | `<TransitionSeries>` from `@remotion/transitions` |
+| Parallel layers | Multiple children of `<AbsoluteFill>` |
+| Repeat children | `<Loop>` |
+| Freeze a child at a specific frame | `<Freeze frame={n}>` |
+| Image media | `<Img src={url}>` |
+| Video media | `<OffthreadVideo src={url}>` (preferred) or `<Video>` |
+| Audio media | `<Audio src={url}>` |
+
+For agent-friendly time specs, use Onda's one timing helper: `toFrames(spec, fps)` from `lib/timing.ts`. Accepts `"M:SS"`, `"Ns"`, `"Nms"`, `"Nf"`, or a raw seconds number.
+
+### Single-track sequential scene
+
+A title lands, then a stat, then a lower-third — one after another on a single track:
 
 ```tsx
+import { Series, AbsoluteFill } from 'remotion';
+import { toFrames } from '@/lib/timing';
+
+// composition-level: fps is set on the parent <Composition>
+const { fps } = useVideoConfig();
+
 <AbsoluteFill>
-  <TitleCard title="Stats that matter" placement="top" />
-  <StatCard value={1247} label="creators this week" placement="center" />
-  <LowerThird name="Rodrigo" placement="bottom-right" />
+  <Series>
+    <Series.Sequence durationInFrames={toFrames('0:02', fps)}>
+      <TitleCard title="Setup" placement="center" />
+    </Series.Sequence>
+    <Series.Sequence durationInFrames={toFrames('0:03', fps)}>
+      <StatCard value={1247} label="creators this week" placement="center" />
+    </Series.Sequence>
+    <Series.Sequence durationInFrames={toFrames('0:02', fps)}>
+      <LowerThird name="Rodrigo" placement="bottom-right" />
+    </Series.Sequence>
+  </Series>
 </AbsoluteFill>
 ```
 
-Each component handles its own placement; they don't compete for layout. Sequence beats with `<Sequence>` when you want one component to enter after another:
+### Multi-track overlapping scene
+
+A persistent gradient background while typography beats pass over it — two parallel tracks:
 
 ```tsx
 <AbsoluteFill>
-  <Sequence from={0} durationInFrames={60}>
+  {/* Track 1: persistent background */}
+  <GradientShift from="#0E0E12" to="#1C1C22" />
+
+  {/* Track 2: sequential typography over it */}
+  <Series>
+    <Series.Sequence durationInFrames={toFrames('0:02', fps)}>
+      <TitleCard title="Setup" placement="upper-third" />
+    </Series.Sequence>
+    <Series.Sequence durationInFrames={toFrames('0:03', fps)}>
+      <StatCard value={1247} placement="center" />
+    </Series.Sequence>
+  </Series>
+</AbsoluteFill>
+```
+
+### Sequential beats with crossfades
+
+When the agent wants soft transitions between beats instead of hard cuts, use `<TransitionSeries>` from `@remotion/transitions` (separate Remotion package; install via `npm i @remotion/transitions`):
+
+```tsx
+import { TransitionSeries, linearTiming } from '@remotion/transitions';
+import { fade } from '@remotion/transitions/fade';
+
+<TransitionSeries>
+  <TransitionSeries.Sequence durationInFrames={toFrames('0:02', fps)}>
     <TitleCard title="Setup" placement="center" />
-  </Sequence>
-  <Sequence from={60} durationInFrames={90}>
+  </TransitionSeries.Sequence>
+  <TransitionSeries.Transition presentation={fade()} timing={linearTiming({ durationInFrames: toFrames('0:00.5', fps) })} />
+  <TransitionSeries.Sequence durationInFrames={toFrames('0:03', fps)}>
     <StatCard value={1247} placement="center" />
-  </Sequence>
-</AbsoluteFill>
+  </TransitionSeries.Sequence>
+</TransitionSeries>
 ```
+
+### Mapping a timeline payload to JSX
+
+A renderer that consumes the timeline-shape payload above translates each entry like this:
+
+```tsx
+function renderEntry(entry: Entry, fps: number) {
+  const Component = REGISTRY[entry.component]; // your component registry
+  return (
+    <Sequence
+      key={entry.at}
+      from={toFrames(entry.at, fps)}
+      durationInFrames={toFrames(entry.for, fps)}
+    >
+      <Component {...entry.props} />
+    </Sequence>
+  );
+}
+
+function renderComposition(comp: Composition) {
+  return (
+    <AbsoluteFill>
+      {comp.tracks.map((track, i) => (
+        <AbsoluteFill key={track.id ?? i}>
+          {track.entries.map((entry) => renderEntry(entry, comp.fps))}
+        </AbsoluteFill>
+      ))}
+    </AbsoluteFill>
+  );
+}
+```
+
+This is the canonical mapping. Each track gets its own `<AbsoluteFill>` (parallel layering); each entry within a track becomes a `<Sequence>` shifted to its `at` time. No Onda-specific composition primitives needed — Remotion's primitives plus `toFrames` cover the whole shape.
