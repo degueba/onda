@@ -1,0 +1,46 @@
+# Fires when release-please's Release PR gets merged and a new GitHub
+# Release is published. Builds the CLI and `npm publish`-es from
+# packages/cli using the NPM_TOKEN repo secret (a Granular Access Token
+# with "Bypass 2FA" enabled — npm requires that for non-interactive
+# publishes).
+#
+# Single-package today: ALL releases trigger a publish. When a second
+# publishable package lands (e.g. a future Studio SDK), gate this by tag
+# pattern — the if: line is already structured to extend.
+
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-ondajs:
+    runs-on: ubuntu-latest
+    # release-please tags releases as `ondajs-vX.Y.Z` when configured in
+    # component mode (see release-please-config.json). This guard means an
+    # accidental hand-created release with a different tag pattern won't
+    # cause a phantom publish.
+    if: startsWith(github.event.release.tag_name, 'ondajs-v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          # Configures ~/.npmrc with `registry=https://registry.npmjs.org/`
+          # AND an authToken placeholder that uses NODE_AUTH_TOKEN from env.
+          registry-url: https://registry.npmjs.org/
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter ondajs build
+
+      - run: npm publish --access public
+        working-directory: packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

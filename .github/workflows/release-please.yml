@@ -1,0 +1,29 @@
+# Opens (or keeps refreshed) a single Release PR whenever new commits land
+# on main. The PR bumps the version in packages/cli/package.json, regenerates
+# CHANGELOG.md from Conventional Commits since the last tag, and updates
+# .release-please-manifest.json. Merging that PR creates a GitHub Release +
+# git tag `ondajs-vX.Y.Z` — which fires `publish.yml`.
+
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+# release-please needs to write to the repo (open PRs, update files, push
+# tags). The default GITHUB_TOKEN gets these scopes via these permissions.
+# Nothing here grants write access to *contributors* — the token is per-run
+# and limited to this workflow's scope.
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

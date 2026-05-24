@@ -1,0 +1,52 @@
+# Enforces Conventional Commits at the place release-please actually reads:
+# the PR title (which becomes the squash-merge commit on main). Skipping
+# husky/commitlint locally is intentional — that layer is bypassable with
+# --no-verify and adds friction for forkers. PR-title linting works for
+# every contributor regardless of their local setup.
+#
+# Allowed types are deliberately tight (the same set release-please knows
+# how to map onto major / minor / patch + changelog sections):
+#   feat, fix, perf, revert        → user-visible behavior changes
+#   docs, style, refactor, test    → internal changes
+#   build, ci, chore               → tooling
+#
+# The check FAILS the PR until the title is fixed. Edit the title in the
+# PR's GitHub UI, the action re-runs automatically.
+
+name: lint-pr
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  conventional-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            perf
+            revert
+            docs
+            style
+            refactor
+            test
+            build
+            ci
+            chore
+          # Don't require a scope — but if one is given, enforce kebab-case
+          # so we can grep / group later (e.g. `feat(cli):`, `fix(www):`).
+          requireScope: false
+          subjectPattern: ^[^A-Z].+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            shouldn't start with an uppercase character (write `feat: add foo`,
+            not `feat: Add foo`).
