@@ -1,0 +1,19 @@
+{
+  "name": "audio-visualizer",
+  "title": "AudioVisualizer",
+  "description": "Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).",
+  "category": "media",
+  "tags": [
+    "audio",
+    "visualization",
+    "waveform",
+    "bars",
+    "fft"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/media-utils",
+    "zod",
+    "react"
+  ]
+}
