@@ -18,6 +18,10 @@ Text that fades in calmly, then has an accent-rose underline draw beneath it aft
 | `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
 | `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `fontWeight` | `number` | `600` | Font weight. |
+| `letterSpacing` | `string` | `"normal"` | CSS letter-spacing (e.g. `"-0.02em"`, `"0.06em"`). |
+| `lineHeight` | `number` | `1.1` | Unitless line height. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 
 ## Usage
 

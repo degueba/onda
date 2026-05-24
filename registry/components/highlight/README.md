@@ -16,6 +16,10 @@ Text that fades in calmly, then a marker-style accent-rose bar slides in behind 
 | `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
 | `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `fontWeight` | `number` | `600` | Font weight. |
+| `letterSpacing` | `string` | `"normal"` | CSS letter-spacing (e.g. `"-0.02em"`, `"0.06em"`). |
+| `lineHeight` | `number` | `1.1` | Unitless line height. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 | `paddingX` | `number` | `8` | Pixels the highlight bar extends past each text edge. |
 | `placement` | `Placement` | `'center'` | Where on the canvas the highlight sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 

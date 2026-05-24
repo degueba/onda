@@ -31,6 +31,12 @@ export const wordStaggerSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1` for tight display copy. */
+  lineHeight: z.number().optional(),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });
@@ -46,7 +52,8 @@ export type WordStaggerProps = z.infer<typeof wordStaggerSchema>;
  * <WordStagger text="motion that moves you" stagger={4} />
  */
 export const WordStagger: React.FC<WordStaggerProps> = ({
-  text, delay, duration, stagger, justify, color, fontSize, size, fontFamily, placement,
+  text, delay, duration, stagger, justify, color, fontSize, size, fontFamily,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -71,7 +78,9 @@ export const WordStagger: React.FC<WordStaggerProps> = ({
           color,
           fontSize: resolvedFontSize,
           fontFamily,
-          fontWeight: 600,
+          fontWeight,
+          letterSpacing,
+          lineHeight,
         }}
       >
         {words.map((word, i) => {

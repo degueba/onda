@@ -19,6 +19,14 @@ export const maskRevealSchema = z.object({
   fontSize: z.number().default(96),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1` for tight display copy. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link MaskReveal}. */
@@ -33,6 +41,7 @@ export type MaskRevealProps = z.infer<typeof maskRevealSchema>;
  */
 export const MaskReveal: React.FC<MaskRevealProps> = ({
   text, delay, duration, direction, color, fontSize, fontFamily,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -80,7 +89,8 @@ export const MaskReveal: React.FC<MaskRevealProps> = ({
     <div style={{
       clipPath,
       WebkitClipPath: clipPath,
-      color, fontSize, fontFamily, fontWeight: 600,
+      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+      textAlign: align,
     }}>
       {text}
     </div>
