@@ -160,23 +160,22 @@ export function SearchPalette({ items }: { items: SearchItem[] }) {
         onClick={open}
         aria-label="Search components"
         className="
-          inline-flex items-center gap-2
-          h-7 px-2 rounded-md
+          inline-flex items-center gap-1.5
+          h-6 px-1.5 rounded-md
           bg-onda-surface border border-onda-border
           text-onda-faint hover:text-onda-text hover:border-onda-border-lit
           transition-colors
-          text-xs
+          text-[11px]
         "
       >
-        <MagnifyingGlass size={12} weight="bold" />
+        <MagnifyingGlass size={11} weight="bold" />
         <span className="hidden sm:inline">Search</span>
         <kbd
           className="
             hidden sm:inline-flex items-center
-            font-mono text-[10px] text-onda-faint
+            font-mono text-[9px] text-onda-faint
             border border-onda-border rounded
             px-1 py-0
-            ml-1
           "
         >
           ⌘K
