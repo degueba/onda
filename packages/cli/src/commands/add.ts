@@ -8,6 +8,7 @@ import {
   detectPackageManager,
   formatInstallCommand,
 } from '../lib/pkg-manager.js';
+import { updateBarrel, formatBarrelOutcome } from '../lib/barrel.js';
 
 // `onda add <slug...>` — install one or more components into the user's
 // project.
@@ -38,6 +39,7 @@ type AddOptions = {
   registry: string;
   force: boolean;
   dryRun: boolean;
+  noBarrel: boolean;
 };
 
 type QueuedFile = {
@@ -155,6 +157,25 @@ export async function runAdd(args: string[]): Promise<void> {
   // Step 5 — print a per-file summary, then the peer-dep block.
   printPlanSummary(queue, outcomes, opts);
 
+  // Step 6 — update the barrel + sidecar so consumers can `import { ondaRegistry }`
+  // and pass it directly to `<CompositionRenderer registry={...}>`. Skipped by
+  // --no-barrel; refuses to clobber a foreign (non-CLI-managed) barrel.
+  if (!opts.noBarrel) {
+    const componentSlugs = resolved
+      .filter(({ manifest }) => manifest.type === 'registry:component')
+      .map(({ manifest }) => manifest.name);
+
+    const barrelOutcome = updateBarrel(componentsOut, componentSlugs, {
+      dryRun: opts.dryRun,
+      cwd,
+    });
+    const line = formatBarrelOutcome(barrelOutcome, cwd, opts.dryRun);
+    if (line) {
+      process.stdout.write('\n');
+      process.stdout.write(line + '\n');
+    }
+  }
+
   if (peerDeps.size > 0) {
     const pm = detectPackageManager(cwd);
     const sorted = [...peerDeps].sort();
@@ -185,6 +206,7 @@ function parseAddArgs(args: string[]): AddOptions {
     registry: stringFlag(parsed.flags, 'registry', DEFAULT_REGISTRY),
     force: boolFlag(parsed.flags, 'force'),
     dryRun: boolFlag(parsed.flags, 'dry-run'),
+    noBarrel: boolFlag(parsed.flags, 'no-barrel'),
   };
 }
 
