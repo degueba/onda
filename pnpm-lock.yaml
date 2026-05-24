@@ -15,6 +15,9 @@ importers:
       '@remotion/cli':
         specifier: ^4.0.0
         version: 4.0.465(@swc/helpers@0.5.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@remotion/media-utils':
+        specifier: ^4.0.465
+        version: 4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@remotion/paths':
         specifier: ^4.0.0
         version: 4.0.465

@@ -210,7 +210,7 @@ Broadcast-style name + role bar that slides in from a corner with an accent unde
 
 These components render user-uploaded or hosted media. `src` is passed through verbatim — Onda doesn't host; the caller provides whatever URL their asset store serves.
 
-**Critical rule for agents:** when you need to render a user-supplied photo or video clip, **always reach for `ImageReveal` or `VideoClip` first**. Bare `<Img>` / `<OffthreadVideo>` work, but they don't carry the Onda motion identity — a scene that uses them sits visually outside the rest of the composition. `KenBurns` and `Parallax` exist for *specific sustained motions* (continuous zoom-pan / drift), not for general-purpose photo or video display.
+**Critical rule for agents:** when you need to render a user-supplied photo, video clip, or audio file, **always reach for `ImageReveal` / `VideoClip` / `AudioClip` first**. Bare `<Img>` / `<OffthreadVideo>` / `<Html5Audio>` work, but they don't carry the Onda contract — manual frame math, no consistent fade semantics, no agent-friendly time-string trim. `KenBurns` and `Parallax` exist for *specific sustained motions* (continuous zoom-pan / drift), not for general-purpose photo display.
 
 #### Picking the right media component
 
@@ -222,6 +222,9 @@ These components render user-uploaded or hosted media. `src` is passed through v
 | Play a trimmed video clip with Onda fade-in/out | **`VideoClip`** | Bare `<OffthreadVideo>` (no fingerprint, manual frame math) |
 | Loop a video as a background plate | **`VideoClip`** with `loop`, `muted`, `fade={false}` | Bare `<OffthreadVideo loop>` |
 | Crossfade between two video beats | **`VideoClip`** inside `<TransitionSeries>` with `fade={false}` per clip | `VideoClip` with default fade (would double-fade against the transition) |
+| Play a voiceover, music bed, or SFX | **`AudioClip`** | Bare `<Html5Audio>` (no fade envelope, no time-string trim, no dB) |
+| Loop a music bed | **`AudioClip`** with `loop`, `endAt`, lower `volume`, larger `fadeDuration` | Bare `<Html5Audio loop>` |
+| Show animated bars or a waveform | **`AudioVisualizer`** + parallel `AudioClip` | `AudioVisualizer` alone (it doesn't play audio) |
 
 The categories are complementary, not redundant: `ImageReveal` owns *entrances*, `KenBurns` / `Parallax` own *sustained motion across a held image*. Forcing the wrong one is the most common mistake — Ken Burns-ing every photo because it's the only image component the agent remembered makes every scene feel like a documentary slideshow.
 
@@ -239,6 +242,23 @@ A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, an
 - **Loop disables fade-out** — there's no defined end to fade against. For a fading-out looping background, wrap in `<TransitionSeries>` or a parent opacity envelope.
 - **Inside `<TransitionSeries>`, set `fade={false}`** so the transition primitive owns the crossfade instead of double-fading.
 
+#### `AudioClip`
+The workhorse audio primitive. A single audio file with agent-friendly trim, an opt-in fade envelope (default: 2-frame click-guard, ~67ms — imperceptible, prevents codec pops), optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>` (current official recommendation). Used for music beds, voiceover, and SFX equally — the use cases differ in *patterns* (loop, fade duration, sequencing density), not in component.
+- `placement`: no (audio is invisible — pair with `AudioVisualizer` for a visible element) · `size`: n/a
+- Key props: `src`, `startAt`, `endAt`, `volume` (0..1) or `gainDb`, `fade`, `fadeDuration`, `loop`, `muted`, `playbackRate`.
+- **`loop` requires `endAt`** (loop interval is `endAt - startAt`). Looping disables fade-out — no defined end frame.
+- **Volume is delivered as a callback** internally (`volume={(clipFrame) => …}`) so the fade envelope + dB conversion live in one place and Remotion can draw the curve in Studio.
+- **dB and amplitude both exposed.** Sound designers think in dB; agents pick 0..1. When both are set, `gainDb` wins. Conversion: `amplitude = 10 ** (dB / 20)`.
+- **No `delay`** on the component itself — sequencing is handled by the parent `<Sequence from={…}>` (the same pattern as every other primitive in the timeline-payload model). For Composition payloads, the `at` field on the Entry places the audio at the right composition frame.
+
+#### `AudioVisualizer`
+An animated visualization of an audio file — bars (frequency-domain via FFT) or a waveform (time-domain). **Does not play audio.** Pair with a parallel `AudioClip` pointing at the same `src` for audible playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).
+- `placement`: yes · `size`: n/a (use `width` / `height`)
+- Key props: `src`, `variant` (`'bars' | 'waveform'`), `numberOfSamples` (power of two), `smoothing`, `optimizeFor` (`'accuracy' | 'speed'`), `color`, `placement`, `width`, `height`.
+- **Cache rule:** multiple visualizers on the same `src` share one decode. Call `useAudioData(src)` inside the component, not via props (passing data via props bypasses the cache).
+- **Power-of-two `numberOfSamples`** validated by Zod. 32 is the perceptual sweet spot; >128 should pair with `optimizeFor: 'speed'`.
+- **For audio > 5 minutes**, a future `AudioVisualizerWindowed` will wrap `useWindowedAudioData` (avoids loading the whole file). Not shipped in v1.
+
 #### `KenBurns`, `Parallax`
 Pre-existing specialized image-with-motion components. **Their job is sustained motion, not entrance** — the photo is present from frame 0 (no fade-in), then the "camera" moves continuously and linearly.
 - `KenBurns` — slow zoom + pan over a photo, default 1.0 → 1.1 scale over ~5s. The iconic documentary motion. Intentionally linear (springs at this scale read as camera acceleration).
@@ -248,7 +268,6 @@ Pre-existing specialized image-with-motion components. **Their job is sustained 
 #### What these media components don't do
 
 Agents should NOT expect these primitives to:
-- **Render audio.** No audio primitives exist yet — uploaded audio assets can't be rendered with an Onda visualization (separate spec when audio support lands).
 - **Compose media + caption automatically.** No `MediaCard` exists; compose `ImageReveal` + `WordStagger` / `FadeIn` manually if a caption is needed.
 - **Manage uploads, storage, signed URLs, or expiry.** `src` is a verbatim URL — the caller handles the asset's lifecycle.
 - **Apply sustained motion (zoom, pan, drift) over an `ImageReveal`.** Use `KenBurns` or `Parallax` for that. (A future spec may refactor those into wrappers that compose with `ImageReveal` for "image enters AND camera drifts" — not shipped yet.)
@@ -281,6 +300,69 @@ import { toFrames } from '@/lib/timing';
 Notice the split: `KenBurns` is the *background plate* (sustained motion, held throughout); `ImageReveal` and `VideoClip` are the *foreground beats* (each enters with the Onda fingerprint and gives way to the next).
 
 The placement pattern: media that should fill the canvas (background plates, hero photos) is dropped in **without** `placement`; media that should be inset (cards, picture-in-picture, foreground beats) gets `placement` plus explicit `width` / `height`.
+
+### Audio composition patterns
+
+Audio sits alongside visual primitives in the same `<Sequence>` timeline — `AudioClip` plays, `AudioVisualizer` shows. The patterns differ by *use case*, not by component.
+
+**Music bed (looping, low volume, audible fade)**
+```tsx
+<AudioClip src="/bed.mp3" loop startAt={0} endAt="0:30" volume={0.4} fadeDuration={45} />
+```
+
+**Voiceover (one clip per line, default click-guard fade is enough)**
+```tsx
+<Series>
+  <Series.Sequence durationInFrames={toFrames('0:04', fps)}>
+    <AudioClip src="/vo-1.mp3" startAt="0:00" endAt="0:04" />
+  </Series.Sequence>
+  <Series.Sequence durationInFrames={toFrames('0:03', fps)}>
+    <AudioClip src="/vo-2.mp3" startAt="0:00" endAt="0:03" />
+  </Series.Sequence>
+</Series>
+```
+
+**Music ducks under VO (volume callback on the bed)**
+```tsx
+// The bed is one AudioClip; its volume drops while VO plays.
+<AudioClip
+  src="/bed.mp3"
+  loop
+  startAt={0}
+  endAt="0:30"
+  gainDb={-6}                    /* base level: -6 dB ≈ 0.5 amplitude */
+/>
+{/* Author the duck at composition time by overlapping a louder voiceover
+    AudioClip inside the same Sequence — Web Audio sums both streams.
+    Or wrap the bed in a Sequence that pauses during VO. */}
+<Sequence from={toFrames('0:02', fps)} durationInFrames={toFrames('0:06', fps)}>
+  <AudioClip src="/voiceover.mp3" startAt={0} endAt="0:06" volume={1} />
+</Sequence>
+```
+
+**SFX sliced from a sprite-sheet file (one decode, many slices)**
+```tsx
+{/* sfx-library.wav contains many effects at known time offsets. */}
+<Sequence from={toFrames('0:01', fps)} durationInFrames={toFrames('250ms', fps)}>
+  <AudioClip src="/sfx-library.wav" startAt="0:01.250" endAt="0:01.500" />
+</Sequence>
+<Sequence from={toFrames('0:02', fps)} durationInFrames={toFrames('300ms', fps)}>
+  <AudioClip src="/sfx-library.wav" startAt="0:04.100" endAt="0:04.400" />
+</Sequence>
+```
+
+**Visible bars + audible music (same `src`)**
+```tsx
+{/* useAudioData caches by src — both components share one decode. */}
+<AudioClip src="/music.mp3" startAt={0} endAt="0:08" volume={0.6} />
+<AudioVisualizer src="/music.mp3" variant="bars" placement="bottom" width={960} height={120} />
+```
+
+**Format hints (apply to any audio `src`)**
+- **WAV** for transients < 500ms (clicks, pops, button taps). Zero decode overhead, no leading silence.
+- **AAC in MP4** for everything else (beds, VO, longer SFX). Hardware-decoded on most devices, no leading-silence padding.
+- **Avoid MP3** when AAC is available — ~50ms of encoder-injected silence at the start, audible on percussive SFX.
+- **OGG/Vorbis** lacks reliable Safari/iOS support — avoid for cross-browser libraries.
 
 ### Annotation (positioning via dedicated coords, not `placement`)
 
