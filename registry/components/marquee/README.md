@@ -13,6 +13,7 @@ A seamless looping horizontal scroll — logo strips, ticker tape, "as featured 
 | `color` | `string` | `"#56565F"` | Defaults to `--onda-faint`. Marquees should not shout — use secondary text, not headline. |
 | `fontSize` | `number` | `32` | Pixels. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

@@ -16,6 +16,7 @@ Sequential word-by-word captions driven by a timed array. Each caption has a `st
 | `letterSpacing` | `string` | `"normal"` | CSS letter-spacing. |
 | `lineHeight` | `number` | `1.15` | Unitless line height. |
 | `align` | `"left" \| "center" \| "right"` | `"center"` | Caption block alignment. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

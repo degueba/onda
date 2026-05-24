@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { entryScale } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link IconPop} props. */
 export const iconPopSchema = z.object({
@@ -18,6 +19,8 @@ export const iconPopSchema = z.object({
   color: z.string().default('#D96B82'),
   /** Stroke width for outline icons (check, cross). Ignored by filled icons. */
   strokeWidth: z.number().default(3),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link IconPop}. */
@@ -51,7 +54,7 @@ const ICONS: Record<
  * <IconPop icon="check" />
  */
 export const IconPop: React.FC<IconPopProps> = ({
-  icon, delay, duration, size, color, strokeWidth,
+  icon, delay, duration, size, color, strokeWidth, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -67,18 +70,20 @@ export const IconPop: React.FC<IconPopProps> = ({
   const { d, filled } = ICONS[icon];
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      style={{ opacity, transform }}
-      fill={filled ? color : 'none'}
-      stroke={filled ? 'none' : color}
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d={d} />
-    </svg>
+    <PlacementBox placement={placement}>
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        style={{ opacity, transform }}
+        fill={filled ? color : 'none'}
+        stroke={filled ? 'none' : color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d={d} />
+      </svg>
+    </PlacementBox>
   );
 };

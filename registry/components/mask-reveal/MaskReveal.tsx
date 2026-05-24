@@ -2,6 +2,7 @@ import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link MaskReveal} props. */
 export const maskRevealSchema = z.object({
@@ -27,6 +28,8 @@ export const maskRevealSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link MaskReveal}. */
@@ -41,7 +44,7 @@ export type MaskRevealProps = z.infer<typeof maskRevealSchema>;
  */
 export const MaskReveal: React.FC<MaskRevealProps> = ({
   text, delay, duration, direction, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -86,13 +89,15 @@ export const MaskReveal: React.FC<MaskRevealProps> = ({
   }
 
   return (
-    <div style={{
-      clipPath,
-      WebkitClipPath: clipPath,
-      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
-      textAlign: align,
-    }}>
-      {text}
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        clipPath,
+        WebkitClipPath: clipPath,
+        color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
+      }}>
+        {text}
+      </div>
+    </PlacementBox>
   );
 };

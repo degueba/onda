@@ -12,6 +12,7 @@ A small state icon — `check`, `cross`, `dot`, or `star` — that pops into pla
 | `size` | `number` | `96` | Width and height in pixels (square). |
 | `color` | `string` | `"#D96B82"` | Icon color — defaults to `--onda-accent`. |
 | `strokeWidth` | `number` | `3` | Stroke width for outline icons. Ignored by `dot` and `star`. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

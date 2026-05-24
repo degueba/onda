@@ -3,6 +3,7 @@ import { useCurrentFrame, interpolate } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { HOUSE_EASE } from '../../../lib/easing';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link FadeOut} props — drives Remotion `defaultProps` validation. */
 export const fadeOutSchema = z.object({
@@ -26,6 +27,8 @@ export const fadeOutSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link FadeOut}. */
@@ -46,7 +49,7 @@ export type FadeOutProps = z.infer<typeof fadeOutSchema>;
  */
 export const FadeOut: React.FC<FadeOutProps> = ({
   text, delay, duration, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const local = Math.max(0, frame - delay);
@@ -58,13 +61,15 @@ export const FadeOut: React.FC<FadeOutProps> = ({
   });
 
   return (
-    <div style={{
-      opacity,
-      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
-      textAlign: align,
-    }}>
-      {text}
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        opacity,
+        color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
+      }}>
+        {text}
+      </div>
+    </PlacementBox>
   );
 };
 

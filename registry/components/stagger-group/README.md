@@ -16,6 +16,7 @@ A composition primitive that reveals a list of items in sequence using the canon
 | `color` | `string` | `'#F2F2F4'` | Text color — defaults to `--onda-text`. |
 | `fontSize` | `number` | `48` | Pixels. Smaller than `BlurReveal` because lists already feel large. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

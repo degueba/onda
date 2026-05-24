@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for `LogoSting` props. */
 export const logoStingSchema = z.object({
@@ -28,6 +29,8 @@ export const logoStingSchema = z.object({
   color: z.string().default('#F2F2F4'),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for `LogoSting`. */

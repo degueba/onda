@@ -1,6 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, interpolate } from 'remotion';
 import { z } from 'zod';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link KenBurns} props. */
 export const kenBurnsSchema = z.object({
@@ -25,6 +26,8 @@ export const kenBurnsSchema = z.object({
   toX: z.number().min(0).max(1).default(0.5),
   /** Ending transform-origin Y. */
   toY: z.number().min(0).max(1).default(0.5),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link KenBurns}. */
@@ -41,7 +44,7 @@ export type KenBurnsProps = z.infer<typeof kenBurnsSchema>;
  * <KenBurns src="/my-photo.jpg" toScale={1.1} />
  */
 export const KenBurns: React.FC<KenBurnsProps> = ({
-  src, delay, duration, fromScale, toScale, fromX, fromY, toX, toY,
+  src, delay, duration, fromScale, toScale, fromX, fromY, toX, toY, placement,
 }) => {
   const frame = useCurrentFrame();
 
@@ -62,20 +65,26 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
 
+  const fillCanvas = placement === undefined;
+
+  const img = (
+    <Img
+      src={src}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transform: `scale(${scale})`,
+        transformOrigin: `${originX * 100}% ${originY * 100}%`,
+      }}
+    />
+  );
+
   // overflow: hidden is critical so the zoomed image doesn't bleed beyond
   // the canvas — without it, scale > 1 paints outside the composition.
-  return (
-    <AbsoluteFill style={{ overflow: 'hidden' }}>
-      <Img
-        src={src}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${scale})`,
-          transformOrigin: `${originX * 100}% ${originY * 100}%`,
-        }}
-      />
-    </AbsoluteFill>
-  );
+  if (fillCanvas) {
+    return <AbsoluteFill style={{ overflow: 'hidden' }}>{img}</AbsoluteFill>;
+  }
+
+  return <PlacementBox placement={placement}>{img}</PlacementBox>;
 };

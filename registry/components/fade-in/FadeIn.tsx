@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link FadeIn} props — drives Remotion `defaultProps` validation. */
 export const fadeInSchema = z.object({
@@ -26,6 +27,8 @@ export const fadeInSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link FadeIn}. */
@@ -43,7 +46,7 @@ export type FadeInProps = z.infer<typeof fadeInSchema>;
  */
 export const FadeIn: React.FC<FadeInProps> = ({
   text, delay, duration, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -51,12 +54,14 @@ export const FadeIn: React.FC<FadeInProps> = ({
   const { opacity } = entryFade({ frame, fps, delay, durationInFrames: duration });
 
   return (
-    <div style={{
-      opacity,
-      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
-      textAlign: align,
-    }}>
-      {text}
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        opacity,
+        color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
+      }}>
+        {text}
+      </div>
+    </PlacementBox>
   );
 };

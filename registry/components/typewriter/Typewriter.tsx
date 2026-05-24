@@ -2,7 +2,7 @@ import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
-import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
+import { sizeRoleSchema, resolveSize, PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link Typewriter} props. */
 export const typewriterSchema = z.object({
@@ -32,6 +32,8 @@ export const typewriterSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Typewriter}. */
@@ -48,7 +50,7 @@ export type TypewriterProps = z.infer<typeof typewriterSchema>;
  */
 export const Typewriter: React.FC<TypewriterProps> = ({
   text, delay, duration, cursor, cursorColor, color, fontSize, size, fontFamily,
-  fontWeight = 500, letterSpacing = 'normal', lineHeight = 1.4, align = 'left',
+  fontWeight = 500, letterSpacing = 'normal', lineHeight = 1.4, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
@@ -75,17 +77,19 @@ export const Typewriter: React.FC<TypewriterProps> = ({
   const cursorOpacity = showCursor && cursorVisible ? 1 : 0;
 
   return (
-    <div style={{
-      color,
-      fontSize: resolvedFontSize,
-      fontFamily,
-      fontWeight,
-      letterSpacing,
-      lineHeight,
-      textAlign: align,
-    }}>
-      {revealed}
-      <span style={{ color: cursorColor, opacity: cursorOpacity }}>|</span>
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        color,
+        fontSize: resolvedFontSize,
+        fontFamily,
+        fontWeight,
+        letterSpacing,
+        lineHeight,
+        textAlign: align,
+      }}>
+        {revealed}
+        <span style={{ color: cursorColor, opacity: cursorOpacity }}>|</span>
+      </div>
+    </PlacementBox>
   );
 };

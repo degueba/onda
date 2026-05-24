@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link Marquee} props. */
 export const marqueeSchema = z.object({
@@ -22,6 +23,8 @@ export const marqueeSchema = z.object({
   fontSize: z.number().default(32),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Marquee}. */
@@ -38,7 +41,7 @@ export type MarqueeProps = z.infer<typeof marqueeSchema>;
  * <Marquee items={['REMOTION', 'TYPESCRIPT', 'REACT']} speed={30} />
  */
 export const Marquee: React.FC<MarqueeProps> = ({
-  items, speed, direction, gap, color, fontSize, fontFamily,
+  items, speed, direction, gap, color, fontSize, fontFamily, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -71,7 +74,9 @@ export const Marquee: React.FC<MarqueeProps> = ({
   // viewport regardless of where the wrapped offset lands.
   const tripled = [...items, ...items, ...items];
 
-  return (
+  const fillCanvas = placement === undefined;
+
+  const inner = (
     <div
       style={{
         width: '100%',
@@ -106,4 +111,10 @@ export const Marquee: React.FC<MarqueeProps> = ({
       </div>
     </div>
   );
+
+  if (fillCanvas) {
+    return inner;
+  }
+
+  return <PlacementBox placement={placement}>{inner}</PlacementBox>;
 };

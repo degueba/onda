@@ -20,6 +20,7 @@ Horizontal bars that grow from 0 to their `value` on `SPRING_SMOOTH`, entering w
 | `labelWidth` | `number` | `220` | px reserved for the label column. |
 | `fontSize` | `number` | `24` | Label font size. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

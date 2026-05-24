@@ -2,6 +2,7 @@ import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, STAGGER, SPRING_SMOOTH, staggerFrames } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link BarChart} props. */
 export const barChartSchema = z.object({
@@ -39,6 +40,8 @@ export const barChartSchema = z.object({
   fontSize: z.number().default(24),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link BarChart}. */
@@ -54,7 +57,7 @@ export type BarChartProps = z.infer<typeof barChartSchema>;
  */
 export const BarChart: React.FC<BarChartProps> = ({
   data, max, delay, duration, stagger, barHeight, gap,
-  accentColor, barColor, trackColor, color, labelWidth, fontSize, fontFamily,
+  accentColor, barColor, trackColor, color, labelWidth, fontSize, fontFamily, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -65,23 +68,24 @@ export const BarChart: React.FC<BarChartProps> = ({
   const maxValue = data.reduce((m, d) => (d.value > m ? d.value : m), -Infinity);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap,
-        color,
-        fontSize,
-        fontFamily,
-        fontWeight: 500,
-        // Without an explicit width the column shrinks to its label content
-        // and the `flex: 1` track collapses to zero. 80% of canvas gives the
-        // bars somewhere to grow into while leaving generous side margins.
-        width: '80%',
-        maxWidth: 1400,
-      }}
-    >
-      {data.map((d, i) => {
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap,
+          color,
+          fontSize,
+          fontFamily,
+          fontWeight: 500,
+          // Without an explicit width the column shrinks to its label content
+          // and the `flex: 1` track collapses to zero. 80% of canvas gives the
+          // bars somewhere to grow into while leaving generous side margins.
+          width: '80%',
+          maxWidth: 1400,
+        }}
+      >
+        {data.map((d, i) => {
         const barDelay = delay + staggerFrames(i, stagger);
         const local = Math.max(0, frame - barDelay);
 
@@ -154,6 +158,7 @@ export const BarChart: React.FC<BarChartProps> = ({
           </div>
         );
       })}
-    </div>
+      </div>
+    </PlacementBox>
   );
 };

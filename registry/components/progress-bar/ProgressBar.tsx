@@ -2,6 +2,7 @@ import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link ProgressBar} props. */
 export const progressBarSchema = z.object({
@@ -27,6 +28,8 @@ export const progressBarSchema = z.object({
   fontSize: z.number().default(28),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link ProgressBar}. */
@@ -42,7 +45,7 @@ export type ProgressBarProps = z.infer<typeof progressBarSchema>;
  */
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value, delay, duration, height, radius,
-  trackColor, accentColor, showValue, color, fontSize, fontFamily,
+  trackColor, accentColor, showValue, color, fontSize, fontFamily, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -66,6 +69,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   });
 
   return (
+    <PlacementBox placement={placement}>
     <div
       style={{
         display: 'flex',
@@ -120,5 +124,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
       ) : null}
     </div>
+    </PlacementBox>
   );
 };

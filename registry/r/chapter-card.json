@@ -3,7 +3,7 @@
   "name": "chapter-card",
   "type": "registry:component",
   "title": "ChapterCard",
-  "description": "A chapter title scene block — large numbered index (\"01\") fades in, the chapter title blurs into place, and an optional accent rule lands last. Composes FadeIn + BlurReveal + Underline.",
+  "description": "Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.",
   "dependencies": [
     "remotion",
     "zod",

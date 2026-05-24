@@ -1,6 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, interpolate } from 'remotion';
 import { z } from 'zod';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link Parallax} props. */
 export const parallaxSchema = z.object({
@@ -17,6 +18,8 @@ export const parallaxSchema = z.object({
   direction: z.enum(['left', 'right', 'up', 'down']).default('left'),
   /** Total drift distance in pixels across `duration`. Keep restrained. */
   distance: z.number().default(40),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Parallax}. */
@@ -35,7 +38,7 @@ export type ParallaxProps = z.infer<typeof parallaxSchema>;
  * <Parallax src="/my-photo.jpg" direction="left" distance={40} />
  */
 export const Parallax: React.FC<ParallaxProps> = ({
-  src, delay, duration, direction, distance,
+  src, delay, duration, direction, distance, placement,
 }) => {
   const frame = useCurrentFrame();
 
@@ -53,19 +56,25 @@ export const Parallax: React.FC<ParallaxProps> = ({
   const tx = direction === 'left' ? -offset : direction === 'right' ? offset : 0;
   const ty = direction === 'up' ? -offset : direction === 'down' ? offset : 0;
 
+  const fillCanvas = placement === undefined;
+
+  const img = (
+    <Img
+      src={src}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transform: `translate(${tx}px, ${ty}px) scale(1.05)`,
+      }}
+    />
+  );
+
   // overflow: hidden is critical so the slightly-oversized image (scale 1.05)
   // doesn't bleed beyond the canvas bounds.
-  return (
-    <AbsoluteFill style={{ overflow: 'hidden' }}>
-      <Img
-        src={src}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `translate(${tx}px, ${ty}px) scale(1.05)`,
-        }}
-      />
-    </AbsoluteFill>
-  );
+  if (fillCanvas) {
+    return <AbsoluteFill style={{ overflow: 'hidden' }}>{img}</AbsoluteFill>;
+  }
+
+  return <PlacementBox placement={placement}>{img}</PlacementBox>;
 };

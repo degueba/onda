@@ -15,6 +15,7 @@ Slow zoom-and-pan over a photo — the iconic documentary motion named after fil
 | `fromY` | `number ∈ [0, 1]` | `0.5` | Transform-origin Y at frame 0. `0` = top edge, `1` = bottom edge. |
 | `toX` | `number ∈ [0, 1]` | `0.5` | Transform-origin X at frame `duration`. |
 | `toY` | `number ∈ [0, 1]` | `0.5` | Transform-origin Y at frame `duration`. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

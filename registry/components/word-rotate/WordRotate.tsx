@@ -3,7 +3,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { SPRING_SMOOTH } from '../../../lib/motion';
 import { HOUSE_EASE } from '../../../lib/easing';
-import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
+import { sizeRoleSchema, resolveSize, PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link WordRotate} props — drives Remotion `defaultProps` validation. */
 export const wordRotateSchema = z.object({
@@ -31,6 +31,8 @@ export const wordRotateSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link WordRotate}. */
@@ -58,6 +60,7 @@ export const WordRotate: React.FC<WordRotateProps> = ({
   letterSpacing,
   lineHeight,
   align = 'left',
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -70,60 +73,62 @@ export const WordRotate: React.FC<WordRotateProps> = ({
   const slot = holdDuration + transitionDuration;
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      {phrases.map((phrase, i) => {
-        const phraseStart = delay + i * slot;
-        const local = frame - phraseStart;
+    <PlacementBox placement={placement}>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        {phrases.map((phrase, i) => {
+          const phraseStart = delay + i * slot;
+          const local = frame - phraseStart;
 
-        // Rise on SPRING_SMOOTH — Onda's house spring, no overshoot.
-        const rise = spring({
-          frame: local,
-          fps,
-          config: SPRING_SMOOTH,
-          durationInFrames: transitionDuration,
-        });
-        const translateY = interpolate(rise, [0, 1], [12, 0], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        });
-
-        // Opacity: 0 → 1 over transitionDuration, hold at 1 for holdDuration,
-        // 1 → 0 over the next transitionDuration. HOUSE_EASE per CLAUDE.md §3.
-        const opacity = interpolate(
-          local,
-          [0, transitionDuration, transitionDuration + holdDuration, slot + transitionDuration],
-          [0, 1, 1, 0],
-          {
+          // Rise on SPRING_SMOOTH — Onda's house spring, no overshoot.
+          const rise = spring({
+            frame: local,
+            fps,
+            config: SPRING_SMOOTH,
+            durationInFrames: transitionDuration,
+          });
+          const translateY = interpolate(rise, [0, 1], [12, 0], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
-            easing: HOUSE_EASE,
-          },
-        );
+          });
 
-        return (
-          <div
-            key={i}
-            style={{
-              position: i === 0 ? 'relative' : 'absolute',
-              top: 0,
-              left: 0,
-              opacity,
-              transform: `translateY(${translateY}px)`,
-              color,
-              fontSize: resolvedFontSize,
-              fontFamily,
-              fontWeight,
-              letterSpacing,
-              lineHeight,
-              textAlign: align,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {phrase}
-          </div>
-        );
-      })}
-    </div>
+          // Opacity: 0 → 1 over transitionDuration, hold at 1 for holdDuration,
+          // 1 → 0 over the next transitionDuration. HOUSE_EASE per CLAUDE.md §3.
+          const opacity = interpolate(
+            local,
+            [0, transitionDuration, transitionDuration + holdDuration, slot + transitionDuration],
+            [0, 1, 1, 0],
+            {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+              easing: HOUSE_EASE,
+            },
+          );
+
+          return (
+            <div
+              key={i}
+              style={{
+                position: i === 0 ? 'relative' : 'absolute',
+                top: 0,
+                left: 0,
+                opacity,
+                transform: `translateY(${translateY}px)`,
+                color,
+                fontSize: resolvedFontSize,
+                fontFamily,
+                fontWeight,
+                letterSpacing,
+                lineHeight,
+                textAlign: align,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {phrase}
+            </div>
+          );
+        })}
+      </div>
+    </PlacementBox>
   );
 };
 

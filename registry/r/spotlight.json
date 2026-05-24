@@ -3,7 +3,7 @@
   "name": "spotlight",
   "type": "registry:component",
   "title": "Spotlight",
-  "description": "Apple-stage radial light reveal — a soft circle of light grows from 0 to its target radius, centered at (x, y). Alpha-aware so it reveals content beneath.",
+  "description": "A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.",
   "dependencies": [
     "remotion",
     "zod",

@@ -3,7 +3,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
-import { sizeRoleSchema, resolveSize } from '../../../lib/canvas';
+import { sizeRoleSchema, resolveSize, PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link Underline} props. */
 export const underlineSchema = z.object({
@@ -39,6 +39,8 @@ export const underlineSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Underline}. */
@@ -69,6 +71,7 @@ export const Underline: React.FC<UnderlineProps> = ({
   letterSpacing,
   lineHeight,
   align,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -95,32 +98,34 @@ export const Underline: React.FC<UnderlineProps> = ({
   });
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <span
-        style={{
-          opacity,
-          color,
-          fontSize: resolvedFontSize,
-          fontFamily,
-          fontWeight,
-          letterSpacing,
-          lineHeight,
-          textAlign: align,
-        }}
-      >
-        {text}
-      </span>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: -(lineOffset + lineThickness),
-          height: lineThickness,
-          width: `${lineWidth}%`,
-          backgroundColor: accentColor,
-          borderRadius: lineThickness / 2,
-        }}
-      />
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <span
+          style={{
+            opacity,
+            color,
+            fontSize: resolvedFontSize,
+            fontFamily,
+            fontWeight,
+            letterSpacing,
+            lineHeight,
+            textAlign: align,
+          }}
+        >
+          {text}
+        </span>
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: -(lineOffset + lineThickness),
+            height: lineThickness,
+            width: `${lineWidth}%`,
+            backgroundColor: accentColor,
+            borderRadius: lineThickness / 2,
+          }}
+        />
+      </div>
+    </PlacementBox>
   );
 };

@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION, STAGGER, staggerFrames } from '../../../lib/motion';
 import { entryFadeRise } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link StaggerGroup} props. */
 export const staggerGroupSchema = z.object({
@@ -28,6 +29,8 @@ export const staggerGroupSchema = z.object({
   fontSize: z.number().default(48),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link StaggerGroup}. */
@@ -66,11 +69,13 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
   color,
   fontSize,
   fontFamily,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   return (
+    <PlacementBox placement={placement}>
     <div
       style={{
         display: 'flex',
@@ -109,5 +114,6 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
         );
       })}
     </div>
+    </PlacementBox>
   );
 };
