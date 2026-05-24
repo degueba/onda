@@ -322,6 +322,22 @@
       "description": "A video clip with agent-friendly trim (`startAt` / `endAt` accept `\"0:04\"` / `\"30s\"`), Onda's entrance and exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` for accurate seek and no audio drift. Fills the canvas by default; pass `placement` to position as a sub-canvas element.",
       "categories": ["media"],
       "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "audio-clip",
+      "type": "registry:component",
+      "title": "AudioClip",
+      "description": "The workhorse audio primitive — a single file with agent-friendly trim (`startAt` / `endAt` accept `\"0:04\"` / `\"30s\"`), opt-in fade envelope, optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>`. Use for music beds, voiceover, and SFX equally.",
+      "categories": ["media"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "audio-visualizer",
+      "type": "registry:component",
+      "title": "AudioVisualizer",
+      "description": "Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).",
+      "categories": ["media"],
+      "dependencies": ["remotion", "@remotion/media-utils", "zod", "react"]
     }
   ]
 }
