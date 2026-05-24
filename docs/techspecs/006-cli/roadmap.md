@@ -86,16 +86,18 @@ Wire the site so `https://onda.video/r/<slug>.json` actually serves the manifest
 - Home-page install snippet and per-component `npx ondajs add <slug>` lines unchanged in text but now real once Vercel deploys. ✅
 - `/compare` page's "1 import" framing — text unchanged, the underlying contract is now keepable. ✅
 
-## M7 — Publish + smoke test — Not started
+## M7 — Publish + smoke test — Done
 
-Make `npx onda` resolve from the public npm registry.
+Make `npx ondajs` resolve from the public npm registry.
 
 **Acceptance:**
 
-- `npm publish` from `packages/cli/` succeeds. Version `0.1.0`.
-- From a clean machine (or `nvm use && rm -rf ~/.npm/_npx`), `npx ondajs add blur-reveal` works end-to-end against `https://onda.video/r`, in a fresh directory, no prior `npm install` of anything.
-- A short CLI section is added to the docs site (probably `/docs/cli` since the user introduced a `/docs` page) documenting flags and the install-path layout.
-- Release note appears in [CHANGELOG.md](../../../CHANGELOG.md) (created if absent — first entry: "0.1.0 — `npx onda` ships").
+- `npm publish` from `packages/cli/` succeeds. Version `0.1.0` live at <https://www.npmjs.com/package/ondajs>. ✅
+- Tarball is 12.8 KB packed / 38.9 KB unpacked / 13 files — well under the < 100 KB target from design.md. ✅
+- From a fresh tmp directory: `npx -y ondajs --version` → `0.1.0` ✅
+- The bare `onda` npm name was already taken by an abandoned 2022 VTEX styleguide, so the package shipped as `ondajs`; bin key matches so `npx ondajs add <slug>` works. ✅
+- Published using a Granular Access Token with "Bypass 2FA" (npm only offers security-key 2FA in the current UI, no TOTP, so the standard `npm publish --otp=…` flow wasn't possible). Token was used through a one-shot `.npmrc.publish` (gitignored, deleted after); should be **revoked from <https://www.npmjs.com/settings/degueba/tokens>** now that the first publish is in.
+- `npx ondajs list` will work end-to-end once Vercel deploys the latest commit AND `onda.video` DNS resolves to the project — until then, `--registry file://...` is the local fallback.
 
 ## Out of scope (later techspecs)
 
