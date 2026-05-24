@@ -31,3 +31,8 @@ www/public/r/
 .npmrc.publish
 .npmrc.local
 .npmrc-*
+
+# npm 2FA recovery codes — must never be committed. Move them to your
+# password manager and delete the file from the repo dir entirely.
+npm_recovery_codes*
+recovery_codes*
