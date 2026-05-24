@@ -24,6 +24,11 @@ import {
   BlurReveal,
   blurRevealSchema,
 } from '@onda/registry/components/blur-reveal/BlurReveal';
+import { CameraShake } from '@onda/registry/components/camera-shake/CameraShake';
+import {
+  StaggerGroup,
+  staggerGroupSchema,
+} from '@onda/registry/components/stagger-group/StaggerGroup';
 import {
   QuoteCard,
   quoteCardSchema,
@@ -46,41 +51,39 @@ import {
 } from '@onda/registry/components/vignette/Vignette';
 import { WAVE_PATH, WAVE_VIEWBOX } from './logo/WavePath';
 
-// Landing hero — 24-second reel, five beats, every one a registered Onda
+// Landing hero — 30-second reel, six beats, every one a registered Onda
 // primitive or scene block. Layered top-to-bottom:
 //
-//   GradientShift bg     ← always drifting, dusty-rose warm dark
-//   Scene Sequences      ← the five beats, each in a SceneTransition
+//   GradientShift bg     ← always drifting, warm-dark, rose-tinged
+//   Scene Sequences      ← six beats, each in a SceneTransition envelope
 //   GrainOverlay         ← atmospheric texture
 //   Vignette             ← cinematic frame
 //
-// The persistent gradient + grain + vignette layers give the reel
-// continuous motion AND ambient color even while individual scenes are
-// at their "settled" state. Without them the brief stillness between
-// each scene's spring entry and the crossfade-out read as dead air.
+// One earned departure from the global crossfade: the BlurReveal inside
+// InstallToRender is wrapped in a 12-frame CameraShake — a tiny WOW
+// thud at THE wow moment, intentional emphasis rather than effect-as-noise.
 //
 // Beats (30fps, FADE = 36, overlap 36f between adjacent):
-//   1   0   → 144     4.8s   LogoSting (BRAND wave path, accent rose)
-//   2   108 → 258     5.0s   StatCard (38 components)
-//   3   222 → 402     6.0s   InstallToRender — npx ondajs → BlurReveal in accent
-//   4   366 → 522     5.2s   QuoteCard (Saul Bass)
-//   5   486 → 720     7.8s   EndCard ("Made with Onda" + onda.video)
-//   total  720f = 24s
+//   1   0   → 150     5.0s   LogoSting (brand wave, accent rose)
+//   2   114 → 270     5.2s   StatCard (38 components)
+//   3   234 → 444     7.0s   InstallToRender + CameraShake at the reveal
+//   4   408 → 558     5.0s   StaggerGroup of 6 categories (range demo)
+//   5   522 → 672     5.0s   QuoteCard (Saul Bass)
+//   6   636 → 900     8.8s   EndCard (final hold)
+//   total  900f = 30s. HERO_DURATION_FRAMES exported for HeroPlayer.
 
 const FADE = 36;
-export const HERO_DURATION_FRAMES = 720;
+export const HERO_DURATION_FRAMES = 900;
 
 const BEATS = [
-  { from: 0, duration: 144 },
-  { from: 108, duration: 150 },
-  { from: 222, duration: 180 },
-  { from: 366, duration: 156 },
-  { from: 486, duration: 234 },
+  { from: 0, duration: 150 },
+  { from: 114, duration: 156 },
+  { from: 234, duration: 210 }, // longer — wow beat needs to breathe
+  { from: 408, duration: 150 },
+  { from: 522, duration: 150 },
+  { from: 636, duration: 264 },
 ];
 
-// Brand wave — the same path the BrandLogo renders in the nav and the
-// site favicon. Using the canonical asset here means the LogoSting beat
-// opens with THE Onda mark, not a generic placeholder.
 const logoProps = logoStingSchema.parse({
   title: 'Onda',
   d: WAVE_PATH,
@@ -88,7 +91,7 @@ const logoProps = logoStingSchema.parse({
   pathWidth: 480,
   pathHeight: 120,
   strokeWidth: 3,
-  stroke: '#D96B82', // accent rose — color the wave itself
+  stroke: '#D96B82',
   accent: true,
 });
 
@@ -98,27 +101,34 @@ const statProps = statCardSchema.parse({
   accent: true,
 });
 
-// Faux-terminal install line. Linear pacing is part of Typewriter's
-// contract; duration here is total frames to type the whole string.
 const installProps = typewriterSchema.parse({
   text: 'npx ondajs add blur-reveal',
   delay: 6,
-  duration: 36, // ~1.2s to type 26 chars — brisk, readable
+  duration: 36,
   cursor: true,
   color: '#F2F2F4',
   fontSize: 36,
   fontFamily: '"Space Grotesk", ui-monospace, monospace',
 });
 
-// The reveal that lands AFTER the typed command — and in accent rose,
-// not white, so the wow beat earns its color. Delay math: 6f offset +
-// 36f typing + ~18f beat-of-silence = ~60.
 const revealProps = blurRevealSchema.parse({
   text: 'Onda',
   delay: 60,
   duration: 22,
   fontSize: 200,
   color: '#D96B82',
+});
+
+// The six Onda categories, cascading in via the canonical 4-frame stagger.
+// Tells the breadth story without saying "look how broad we are." Centered
+// column so it reads as a manifesto, not a comma-separated list.
+const categoriesProps = staggerGroupSchema.parse({
+  items: ['Entrances', 'Data', 'Graphics', 'Atmosphere', 'Cinematic', 'Scenes'],
+  direction: 'column',
+  align: 'center',
+  gap: 12,
+  fontSize: 56,
+  color: '#F2F2F4',
 });
 
 const quoteProps = quoteCardSchema.parse({ accent: true });
@@ -129,11 +139,6 @@ const endProps = endCardSchema.parse({
   accent: true,
 });
 
-// Warm-dark drifting gradient — sits at the very bottom of the layer
-// stack and rotates 0.25°/frame so there's ALWAYS motion in the frame
-// even at peak-stillness moments of individual scenes. The colors
-// stay deep (mostly black) with a hint of rose so the accent earned
-// inside each scene still reads as the focal color.
 const gradientProps = gradientShiftSchema.parse({
   from: '#08080A',
   to: '#1A0E12',
@@ -141,8 +146,6 @@ const gradientProps = gradientShiftSchema.parse({
   speed: 0.25,
 });
 
-// Subtle grain — keeps the dark areas from going flat. Stays well
-// below the cap that would start reading as noise on its own.
 const grainProps = grainOverlaySchema.parse({
   opacity: 0.05,
   baseFrequency: 0.9,
@@ -152,15 +155,10 @@ const grainProps = grainOverlaySchema.parse({
 const vignetteProps = vignetteSchema.parse({ intensity: 0.7 });
 
 /**
- * Each beat's enter / exit envelope. Three things ramp together:
- *
- *   opacity   0 → 1 → 1 → 0          standard crossfade
- *   scale     1.03 → 1 → 1 → 0.97    pull-in on entry, push-back on exit
- *   blur      6px → 0 → 0 → 6px      focus on entry, soft-out on exit
- *
- * Apple-keynote dissolve. The scale + blur deltas are deliberately tiny
- * so the transition reads as "two scenes blending" rather than "a
- * transition effect" announcing itself.
+ * Each beat's enter / exit envelope. Opacity + scale + blur ramp together,
+ * Apple-keynote-feel dissolve. See v3 commit message for the rationale on
+ * delta sizes (kept tiny so it reads as "two scenes blending," not as a
+ * transition effect announcing itself).
  */
 function SceneTransition({
   children,
@@ -207,8 +205,9 @@ function SceneTransition({
 /**
  * Beat 3 — the WOW. A faux terminal types the install command, then on
  * completion the BlurReveal it would install plays beneath in accent
- * rose. The reel literally demonstrates the lib's promise in six
- * seconds.
+ * rose, wrapped in a brief CameraShake. The shake is intentional
+ * emphasis at the WOW moment — used once in the reel, not a recurring
+ * effect, so it reads as punctuation rather than gimmick.
  */
 function InstallToRender() {
   return (
@@ -249,7 +248,20 @@ function InstallToRender() {
         <Typewriter {...installProps} />
       </div>
 
-      <BlurReveal {...revealProps} />
+      {/* The reveal — shaken at the exact frame the BlurReveal lands.
+          The shake is delay-synced to the BlurReveal's reveal start
+          (frame 60 of the beat) so the "thud" happens with the focus,
+          not before or after. 12 frames is short enough to read as
+          impact, not as instability. */}
+      <CameraShake
+        delay={60}
+        duration={12}
+        intensity={3}
+        seed={7}
+        decay
+      >
+        <BlurReveal {...revealProps} />
+      </CameraShake>
     </AbsoluteFill>
   );
 }
@@ -257,11 +269,10 @@ function InstallToRender() {
 export const HeroComposition: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* Layer 1 — persistent warm-dark drift. Always moving, always
-          slightly colored. Renders for the full 720 frames. */}
+      {/* Layer 1 — persistent warm-dark drift. Always moving. */}
       <GradientShift {...gradientProps} />
 
-      {/* Layer 2 — the five beats, each in its own Sequence + transition. */}
+      {/* Layer 2 — the six beats. */}
       <Sequence from={BEATS[0].from} durationInFrames={BEATS[0].duration}>
         <SceneTransition durationInFrames={BEATS[0].duration}>
           <LogoSting {...logoProps} />
@@ -280,24 +291,37 @@ export const HeroComposition: React.FC = () => {
         </SceneTransition>
       </Sequence>
 
+      {/* New beat — the six categories cascading in. Shows breadth in
+          motion; pairs with beat 2's "38 components" by answering "of what?" */}
       <Sequence from={BEATS[3].from} durationInFrames={BEATS[3].duration}>
         <SceneTransition durationInFrames={BEATS[3].duration}>
-          <QuoteCard {...quoteProps} />
+          <AbsoluteFill
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <StaggerGroup {...categoriesProps} />
+          </AbsoluteFill>
         </SceneTransition>
       </Sequence>
 
       <Sequence from={BEATS[4].from} durationInFrames={BEATS[4].duration}>
         <SceneTransition durationInFrames={BEATS[4].duration}>
+          <QuoteCard {...quoteProps} />
+        </SceneTransition>
+      </Sequence>
+
+      <Sequence from={BEATS[5].from} durationInFrames={BEATS[5].duration}>
+        <SceneTransition durationInFrames={BEATS[5].duration}>
           <EndCard {...endProps} />
         </SceneTransition>
       </Sequence>
 
-      {/* Layer 3 — subtle grain on top of scenes. Keeps the flat areas
-          alive. */}
+      {/* Layer 3 — subtle grain. */}
       <GrainOverlay {...grainProps} />
 
-      {/* Layer 4 — cinematic edge frame. Top of the stack so it darkens
-          everything below at the corners. */}
+      {/* Layer 4 — cinematic edge frame. */}
       <Vignette {...vignetteProps} />
     </AbsoluteFill>
   );
