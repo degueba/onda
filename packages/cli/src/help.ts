@@ -1,4 +1,4 @@
-// The help text printed by `onda --help` and on argv errors.
+// The help text printed by `ondajs --help` and on argv errors.
 // Kept as a single tagged-template constant so the layout is obvious at a
 // glance and easy to keep in sync with the implemented surface.
 //
@@ -6,10 +6,10 @@
 // the same edit — the help text is the source of truth users see first; the
 // README is the secondary surface.
 
-export const HELP_TEXT = `onda — install Onda motion-graphics components into your Remotion project.
+export const HELP_TEXT = `ondajs — install Onda motion-graphics components into your Remotion project.
 
 USAGE
-  onda <command> [options]
+  ondajs <command> [options]
 
 COMMANDS
   add <slug...>     Install one or more components by slug.
@@ -37,11 +37,11 @@ GLOBAL OPTIONS
   --json                    Emit JSON instead of human-readable text.
 
 EXAMPLES
-  npx onda add blur-reveal
-  npx onda add title-card stat-card lower-third
-  npx onda add fade-in --components-out ./components/animations
-  npx onda list --category scenes
-  npx onda list --json
+  npx ondajs add blur-reveal
+  npx ondajs add title-card stat-card lower-third
+  npx ondajs add fade-in --components-out ./components/animations
+  npx ondajs list --category scenes
+  npx ondajs list --json
 
 DOCS
   https://onda.video/docs

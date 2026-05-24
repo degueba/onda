@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Entry point for the `onda` binary. TypeScript preserves the shebang on
+// Entry point for the `ondajs` binary. TypeScript preserves the shebang on
 // the first line so the compiled dist/onda.js runs directly under Node
 // once npm sets the executable bit via the package.json `bin` field.
 //

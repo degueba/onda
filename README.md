@@ -23,7 +23,7 @@
 ---
 
 ```bash
-npx onda add fade-in
+npx ondajs add fade-in
 ```
 
 > [!NOTE]
@@ -53,7 +53,7 @@ npx create-video@latest my-video
 **2.** Add a component from the Onda catalog:
 
 ```bash
-npx onda add fade-in
+npx ondajs add fade-in
 ```
 
 **3.** Use it in your `<Composition>`:

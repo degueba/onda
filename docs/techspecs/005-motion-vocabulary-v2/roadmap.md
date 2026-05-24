@@ -54,4 +54,4 @@ After the agent batch returns, regenerate `r/fade-in.json`, `r/slide-in.json`, `
 - `BlurReveal`, `WordStagger`, `DrawOn` refactors (see design.md §"Refactor existing primitives" for why).
 - Exit helpers (`exitSlide`, `exitScale`) — no demand yet.
 - A unified `MotionStyle` return type.
-- The CLI (`npx onda add`) — explicitly postponed by user direction.
+- The CLI (`npx ondajs add`) — explicitly postponed by user direction.

@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parseArgs, stringFlag, boolFlag } from '../lib/argv.js';
 
-// `onda list` — print the catalog grouped by category.
+// `ondajs list` — print the catalog grouped by category.
 //
 // Fetches `<registry>/index.json` (which the docs site serves as a static
 // copy of `registry/registry.json`). The shadcn-format registry-item

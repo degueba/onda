@@ -86,7 +86,7 @@ export default async function ComponentPage({
   if (!KNOWN_SLUGS.has(slug)) notFound();
 
   const item = getComponent(slug);
-  const installLine = `npx onda add ${slug}`;
+  const installLine = `npx ondajs add ${slug}`;
   const url = absoluteUrl(`/components/${slug}`);
 
   // JSON-LD: SoftwareSourceCode is the right schema.org type for a

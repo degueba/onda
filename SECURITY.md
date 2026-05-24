@@ -13,7 +13,7 @@ You'll be able to share details with the maintainers in a private thread, and we
 
 Onda is a **library of components installed as source** into the user's project. Once installed, the code is owned by the consumer. The relevant attack surfaces for us are:
 
-- **The `onda` CLI** (`packages/cli/`) — anything that lets a malicious registry, a malicious slug, or a crafted manifest write outside the chosen install paths, exfiltrate user-project files, or execute arbitrary code at install time.
+- **The `ondajs` CLI** (`packages/cli/`) — anything that lets a malicious registry, a malicious slug, or a crafted manifest write outside the chosen install paths, exfiltrate user-project files, or execute arbitrary code at install time.
 - **The shipped component source** (`registry/components/` and `lib/`) — any pattern that could be exploited when the source runs inside a consumer's Remotion composition. Note: components are deterministic, accept only typed props, and render to pixels — the attack surface here is genuinely small.
 - **The docs site** (`www/`) — XSS, content-injection, or SSR issues that would affect onda.video visitors.
 

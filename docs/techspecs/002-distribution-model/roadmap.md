@@ -8,7 +8,7 @@ Replace shadcn-as-vehicle framing with our own across the existing docs surface,
 
 **Acceptance:**
 
-- `README.md` install line is `npx onda add <name>` (no `@onda/` namespace, no `shadcn`). ✅
+- `README.md` install line is `npx ondajs add <name>` (no `@onda/` namespace, no `shadcn`). ✅
 - `README.md` tagline does not contain "shadcn for video" or similar. ✅
 - `docs/vision.md` positioning sentence does not reference shadcn as our vehicle; the distribution model paragraph links to this techspec. ✅
 - `docs/tech-stack.md` distribution section reflects: our CLI as primary, shadcn registry JSON shape as the on-disk format (compatibility bonus), website as copy-paste registry. ✅

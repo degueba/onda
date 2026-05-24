@@ -29,7 +29,7 @@ The repo is a pnpm workspace. The site (`www/`) imports from `../registry/*` and
 ## Vercel project setup
 
 1. Vercel dashboard → **Add New → Project**.
-2. **Import Git Repository** → pick the `onda` repo.
+2. **Import Git Repository** → pick the `ondajs` repo.
 3. On the configuration screen:
    - **Framework Preset**: leave on `Next.js` (auto-detected from `vercel.json`).
    - **Root Directory**: leave as `./` (the repo root). Do **not** set it to `www`. If you do, the build will fail with `Module not found` errors against `@onda/registry/*` and `@onda/lib/*`.

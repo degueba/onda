@@ -259,7 +259,7 @@ Substrate for a future `<AudioVisualizer>` / `<WaveformBars>` scene block. Not v
 Build `registry/lib/fonts.ts` as a single source of truth:
 
 ```ts
-// registry/lib/fonts.ts — copied into the user's project by `npx onda add`
+// registry/lib/fonts.ts — copied into the user's project by `npx ondajs add`
 import { loadFont as loadSpaceGrotesk } from '@remotion/google-fonts/SpaceGrotesk';
 import { loadFont as loadLocalFont } from '@remotion/fonts';
 import { staticFile } from 'remotion';

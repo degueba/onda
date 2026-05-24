@@ -16,7 +16,7 @@ The vehicle is wrong for our audience. Remotion users are not predominantly shad
 **Adopt the format. Ship our own CLI. Treat the docs site as a first-class registry surface.**
 
 1. **Adopt the shadcn registry JSON format** as our on-disk serialization (`registry.json` + per-component JSON under `/r/<name>.json`). It's a well-designed spec; reinventing it adds no value.
-2. **Build a thin `npx onda` CLI** as the primary install path: `npx onda add <name>`. No project init. No `components.json`. Defaults to copying into `./components/onda/<name>/` (auto-detects `src/` and prefers `src/components/onda/<name>/` if present).
+2. **Build a thin `npx onda` CLI** as the primary install path: `npx ondajs add <name>`. No project init. No `components.json`. Defaults to copying into `./components/onda/<name>/` (auto-detects `src/` and prefers `src/components/onda/<name>/` if present).
 3. **Make the docs site a first-class registry surface.** Every component page has a copy-to-clipboard button on its source, and a stable `https://onda.video/r/<name>.json` URL for scripted / curl access.
 4. **Shadcn-CLI compatibility is a bonus, not a requirement.** Because we follow their JSON format, users who *already* have shadcn set up can pull from us. We don't advertise it as the primary path or build for it.
 5. **Drop the "shadcn for video" tagline.** Reposition as "code-first motion graphics for Remotion — installed as source, owned by you."
@@ -40,7 +40,7 @@ Hence: adopt format, replace CLI, keep compatibility as a side benefit.
 
 ## Goals
 
-1. Users can install any component with a single `npx onda add <name>`, no prior setup.
+1. Users can install any component with a single `npx ondajs add <name>`, no prior setup.
 2. Users can copy any component's source from the docs site with one click.
 3. The registry JSON is machine-readable by the shadcn CLI as a compatibility bonus.
 4. Onda's brand and positioning don't reference shadcn.
@@ -55,7 +55,7 @@ Hence: adopt format, replace CLI, keep compatibility as a side benefit.
 
 ## Shape of the CLI (forward reference for the implementation techspec)
 
-`npx onda add <name> [--out <path>] [--registry <url>]`
+`npx ondajs add <name> [--out <path>] [--registry <url>]`
 
 - Defaults:
   - `--out` → `./src/components/onda/<name>/` if a `src/` directory exists at the call site, else `./components/onda/<name>/`.

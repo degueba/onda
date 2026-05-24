@@ -51,7 +51,7 @@ export async function runAdd(args: string[]): Promise<void> {
   const opts = parseAddArgs(args);
 
   if (opts.slugs.length === 0) {
-    process.stderr.write('onda add: missing component slug\n');
+    process.stderr.write('ondajs add: missing component slug\n');
     process.stderr.write('  usage: onda add <slug...>\n');
     process.exit(1);
   }

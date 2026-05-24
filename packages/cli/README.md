@@ -1,9 +1,9 @@
-# `onda`
+# `ondajs`
 
 > Install Onda motion-graphics components into your Remotion project.
 
 ```bash
-npx onda add blur-reveal
+npx ondajs add blur-reveal
 ```
 
 This is the official CLI for the [Onda](https://onda.video) component library —
@@ -17,7 +17,7 @@ freely. No project init, no config files, no lock-in.
 onda <command> [options]
 ```
 
-Run `onda --help` for the full command and flag reference.
+Run `ondajs --help` for the full command and flag reference.
 
 ### `onda add <slug...>`
 
@@ -25,18 +25,18 @@ Install one or more components by slug. Resolves shared `lib/` helpers
 transitively and writes them too, so the installed code is self-consistent.
 
 ```bash
-npx onda add blur-reveal
-npx onda add title-card stat-card lower-third
+npx ondajs add blur-reveal
+npx ondajs add title-card stat-card lower-third
 ```
 
-### `onda list`
+### `ondajs list`
 
 Print the catalog grouped by category.
 
 ```bash
-npx onda list
-npx onda list --category scenes
-npx onda list --json    # machine-readable
+npx ondajs list
+npx ondajs list --category scenes
+npx ondajs list --json    # machine-readable
 ```
 
 ## Status

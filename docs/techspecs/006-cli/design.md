@@ -1,8 +1,8 @@
-# Techspec 006 — `npx onda` CLI
+# Techspec 006 — `npx ondajs` CLI
 
 ## Problem
 
-[Techspec 002](../002-distribution-model/design.md) committed Onda to its own CLI as the primary install path — `npx onda add <name>`. Every surface since has been written *as if* it exists: the home page's install snippet, every component README's "Install" section, the `/compare` page's "1 import" framing. None of it is real. A copy-the-source-from-the-website fallback works but undersells the product and reads as half-built.
+[Techspec 002](../002-distribution-model/design.md) committed Onda to its own CLI as the primary install path — `npx ondajs add <name>`. Every surface since has been written *as if* it exists: the home page's install snippet, every component README's "Install" section, the `/compare` page's "1 import" framing. None of it is real. A copy-the-source-from-the-website fallback works but undersells the product and reads as half-built.
 
 We now have 38 components across 6 categories, a shadcn-format registry (`registry.json` + per-slug `registry/r/<slug>.json` manifests), and a public docs surface. The CLI is the unfulfilled load-bearing piece.
 
@@ -10,7 +10,7 @@ A second pressure: components in this repo import from a shared `/lib` (`SPRING_
 
 ## Decision
 
-**Ship `onda` as a small published npm package with one binary, `bin/onda`. `npx onda add <slug>` fetches the registry manifest, walks transitive dependencies, copies files to the user's project, and rewrites import paths so the installed code is self-consistent.**
+**Ship `onda` as a small published npm package with one binary, `bin/onda`. `npx ondajs add <slug>` fetches the registry manifest, walks transitive dependencies, copies files to the user's project, and rewrites import paths so the installed code is self-consistent.**
 
 Concretely:
 
@@ -18,8 +18,8 @@ Concretely:
 
 2. **Three commands for v1:**
    - `onda add <slug…>` — install one or more components. Multi-slug support is the v1 convenience that turns "add ten" from ten invocations into one.
-   - `onda list` — print the catalog grouped by category; an integrated discovery surface so users don't have to leave the terminal.
-   - `onda --help` / `onda --version` — table-stakes.
+   - `ondajs list` — print the catalog grouped by category; an integrated discovery surface so users don't have to leave the terminal.
+   - `ondajs --help` / `ondajs --version` — table-stakes.
 
 3. **Registry source.** Default `--registry https://onda.video/r` (already shipping under `/www/public/r/` once we wire it; today `registry/r/*.json` are file-only). The CLI fetches `<registry>/<slug>.json` per the shadcn registry-item schema and validates with Zod before touching disk.
 
@@ -45,7 +45,7 @@ Concretely:
 
 | Concern | Cost of GitHub-only | Cost of npm publish |
 | --- | --- | --- |
-| `npx onda add blur-reveal` | Doesn't work; `npx` resolves bare names against the npm registry | One-time publish |
+| `npx ondajs add blur-reveal` | Doesn't work; `npx` resolves bare names against the npm registry | One-time publish |
 | Install speed | Clones the whole repo on every `npx` | Fetches just the CLI package |
 | Versioning | Whatever main is | Real semver; can `@latest` |
 | The home page's snippet matches reality | No (or it lies) | Yes |
@@ -76,11 +76,11 @@ The CLI does the work so users don't have to.
 
 ## Goals
 
-1. `npx onda add blur-reveal` works in a fresh Next.js / Vite / plain-Node Remotion project and produces a buildable component tree with all transitive lib helpers, without the user editing tsconfig or running any other command first.
-2. `npx onda add title-card stat-card lower-third` installs three scene blocks plus every primitive they compose, deduped, in one pass.
+1. `npx ondajs add blur-reveal` works in a fresh Next.js / Vite / plain-Node Remotion project and produces a buildable component tree with all transitive lib helpers, without the user editing tsconfig or running any other command first.
+2. `npx ondajs add title-card stat-card lower-third` installs three scene blocks plus every primitive they compose, deduped, in one pass.
 3. The installed files typecheck under the user's `tsconfig.json`.
 4. The CLI is small (< 100 KB published), boots fast (< 500 ms for a no-network help), and has no runtime deps beyond what's necessary for arg parsing, HTTP, and Zod.
-5. Every Onda surface that today says "npx onda add …" tells the truth.
+5. Every Onda surface that today says "npx ondajs add …" tells the truth.
 
 ## Non-goals
 
@@ -96,13 +96,13 @@ The CLI does the work so users don't have to.
 ## Shape of the CLI
 
 ```
-npx onda add <slug…>     [--components-out <path>] [--lib-out <path>]
+npx ondajs add <slug…>     [--components-out <path>] [--lib-out <path>]
                          [--registry <url>] [--force] [--dry-run]
                          [--no-color]
-npx onda list            [--registry <url>] [--category <name>]
+npx ondajs list            [--registry <url>] [--category <name>]
                          [--json] [--no-color]
-npx onda --version
-npx onda --help
+npx ondajs --version
+npx ondajs --help
 ```
 
 ### `add` flow

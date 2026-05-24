@@ -6,7 +6,7 @@ import { Hero } from '@/components/Hero';
 import { CopyButton } from '@/components/CopyButton';
 import { SITE, absoluteUrl } from '@/lib/seo';
 
-const INSTALL_LINE = 'npx onda add blur-reveal';
+const INSTALL_LINE = 'npx ondajs add blur-reveal';
 
 // Home page wants the brand name as its full title (no template suffix),
 // so we set `title` to a literal string rather than letting the layout

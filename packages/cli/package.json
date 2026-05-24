@@ -1,12 +1,12 @@
 {
-  "name": "onda",
+  "name": "ondajs",
   "version": "0.1.0",
   "description": "Install Onda motion-graphics components into your Remotion project. `npx onda add <slug>`.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/onda.js",
   "bin": {
-    "onda": "./dist/onda.js"
+    "ondajs": "./dist/onda.js"
   },
   "files": [
     "dist",

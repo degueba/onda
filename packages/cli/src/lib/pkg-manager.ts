@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 // Detect which package manager the user's project is using, by lockfile
 // presence. We print the matching `<pm> add <peer-deps>` line at the end
-// of `onda add` so the user can copy-paste — we deliberately never invoke
+// of `ondajs add` so the user can copy-paste — we deliberately never invoke
 // the package manager ourselves.
 //
 // Resolution order is "most-recently-popular first":

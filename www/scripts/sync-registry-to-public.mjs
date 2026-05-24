@@ -52,7 +52,7 @@ for (const file of slugFiles) {
   copied++;
 }
 
-// 2. Emit /r/index.json — a catalog the `onda list` CLI fetches.
+// 2. Emit /r/index.json — a catalog the `ondajs list` CLI fetches.
 //    It's a verbatim copy of registry/registry.json today; if/when we want
 //    a slimmer catalog payload, this is where it lives.
 const registry = readFileSync(SRC_REGISTRY, 'utf8');

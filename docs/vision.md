@@ -2,7 +2,7 @@
 
 ## What Onda is
 
-Onda is an open-source library of **production-ready motion graphics components for [Remotion](https://remotion.dev)**. People run `npx onda add <name>` and the component **source is copied into their own project**, theirs to own and edit. Onda is **not** an npm dependency imported as a black box.
+Onda is an open-source library of **production-ready motion graphics components for [Remotion](https://remotion.dev)**. People run `npx ondajs add <name>` and the component **source is copied into their own project**, theirs to own and edit. Onda is **not** an npm dependency imported as a black box.
 
 **Positioning:** the curated, best-in-class, code-first motion graphics library for developers and AI coding agents.
 

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 const REMOTION_CREATE = 'npx create-video@latest my-video';
-const INSTALL_LINE = 'npx onda add fade-in';
+const INSTALL_LINE = 'npx ondajs add fade-in';
 
 const COMPOSITION_SNIPPET = `import { Composition } from 'remotion';
 import { FadeIn, fadeInSchema } from './components/onda/fade-in/FadeIn';

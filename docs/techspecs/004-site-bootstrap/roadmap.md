@@ -35,7 +35,7 @@ Build `/`. Hero with signature motion, install line, why-Onda, links into docs.
 
 - `/www/src/app/page.tsx` renders the landing. ✅
 - Hero uses `@remotion/player` (via `ComponentPreview` → `LivePreview`, dynamic-loaded with `ssr: false`) to play a `BlurReveal` of the word "Onda" at fontSize 240, delay 8, duration 22 — autoplay, loop, no controls. ✅
-- Install snippet visible: `npx onda add blur-reveal` with a `CopyButton`. ✅
+- Install snippet visible: `npx ondajs add blur-reveal` with a `CopyButton`. ✅
 - Why-Onda paragraph adapted from [docs/vision.md](../../vision.md), with the dusty rose accent on the words "signature motion identity" — the section's one accent. ✅
 - CTA row: "Browse components →" (filled, white-on-dark) and "GitHub" (outline). ✅
 - Generous negative space respected; 8px-aligned widths (`max-w-150` for the hero canvas, `max-w-80` for prose, `max-w-65` for the install snippet) — all derived from the spacing scale. ✅
@@ -48,7 +48,7 @@ Build `/`. Hero with signature motion, install line, why-Onda, links into docs.
 
 - `/www/src/lib/registry.ts` reads `/registry/registry.json`, per-component `meta.json`, and `README.md` at request time using Node `fs`. ✅
 - `/www/src/app/components/page.tsx` renders an auto-generated grid (one card per registry item; one card today). ✅
-- `/www/src/app/components/[slug]/page.tsx` renders the component page: title + description from the catalog, live preview via `LivePreviewSection` (client island, dynamic-loaded), `npx onda add <slug>` install snippet, README rendered as MDX with custom `.prose-onda` styles for the dark canvas. ✅
+- `/www/src/app/components/[slug]/page.tsx` renders the component page: title + description from the catalog, live preview via `LivePreviewSection` (client island, dynamic-loaded), `npx ondajs add <slug>` install snippet, README rendered as MDX with custom `.prose-onda` styles for the dark canvas. ✅
 - `/components/blur-reveal` is the concrete first page and proves the template. ✅
 - New components added under `/registry/components/<slug>/` appear in `/components` and at `/components/<slug>` without code edits — registry is the source of truth (✅ pattern, ⏳ untested with a second component since 003 ships only one).
 - **The `[slug]` route is `force-dynamic`**, not statically prerendered. Static prerender hit a React-copy mismatch (Next.js 15.5 + React 18.3 + Player + MDXRemote interaction). Server-render-on-demand sidesteps it; performance is a non-issue at this catalog size. Revisit when bumping to React 19 (an own techspec).

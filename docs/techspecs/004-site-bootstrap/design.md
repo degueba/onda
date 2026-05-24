@@ -39,7 +39,7 @@ A custom site costs us prebuilt nav / sidebar / TOC and a search story. Those ar
 
 1. `pnpm --filter www dev` opens a Next.js dev server with a working landing page and a working `/components/blur-reveal` page.
 2. The landing page demonstrates the Onda identity end-to-end: dark canvas, Clash Display + Space Grotesk, dusty rose accent used sparingly, a signature motion in the hero, generous negative space.
-3. The component docs page renders `BlurReveal` live and scrubbable via `@remotion/player`, with prop documentation pulled from the registry, the install snippet (`npx onda add blur-reveal`), and the README rendered as MDX.
+3. The component docs page renders `BlurReveal` live and scrubbable via `@remotion/player`, with prop documentation pulled from the registry, the install snippet (`npx ondajs add blur-reveal`), and the README rendered as MDX.
 4. `/lib/tokens.ts` is exposed to the site as CSS variables — the site uses the same canonical tokens as the components. Divergence between site styling and `lib/tokens.ts` is a bug.
 5. The repo becomes a pnpm workspace; `/www` is a workspace child. The root continues to be the library; `/www` is the site.
 6. No duplication of component metadata between `/registry` and `/www` — the site reads from the registry.

@@ -16,7 +16,7 @@ Stand up `packages/cli/` as a workspace child, declare `onda` as the published n
 - `pnpm --filter onda typecheck` passes with the workspace's strict TS settings. ✅
 - Root `pnpm typecheck` and `pnpm --filter www typecheck` both still pass after the workspace surgery. ✅
 
-## M2 — `onda add` happy path (no deps, default layout) — Done
+## M2 — `ondajs add` happy path (no deps, default layout) — Done
 
 End-to-end install of a single component that has no `registryDependencies`. Targets the simplest case first to lock the file-write + path-resolution logic before adding the dep walker.
 
@@ -61,13 +61,13 @@ Make installed files self-consistent. Without this, M3's installs typecheck-fail
 - The rewrite is regex-based per design.md; assumptions documented in `src/lib/rewrite-imports.ts`. ✅
 - Subtle non-obvious fix: the project-shape detector's JSONC stripper was a regex that ate `**/` inside the very common `"include": ["src/**/*"]` glob, hiding `paths["@/*"]` from detection. Replaced with a character-by-character tokenizer that respects string contexts. ✅
 
-## M5 — `onda list` — Done
+## M5 — `ondajs list` — Done
 
 Discovery without leaving the terminal. Important for the AI-agent use case.
 
 **Acceptance:**
 
-- `npx onda list` fetches `<registry>/index.json` (M6 generates this from `registry/registry.json`), groups by category in the same order the site uses, and prints one component per line with the category as a header. ✅
+- `npx ondajs list` fetches `<registry>/index.json` (M6 generates this from `registry/registry.json`), groups by category in the same order the site uses, and prints one component per line with the category as a header. ✅
 - Lib helpers (`lib-*`) are filtered out — the catalog is user-facing components only. ✅
 - `--category <name>` filters; unknown categories error with the list of known ones. ✅
 - `--json` emits a stable `{ name, title, description, category }` array. ✅
@@ -83,7 +83,7 @@ Wire the site so `https://onda.video/r/<slug>.json` actually serves the manifest
 - `www/public/r/.gitignore` excludes the generated files; source of truth stays in `registry/r/`. ✅
 - After `pnpm --filter www build`: 41 per-slug manifests + `index.json` land in `www/public/r/`. ✅
 - `onda list --registry file://.../www/public/r` returns the full 38-component catalog. ✅
-- Home-page install snippet and per-component `npx onda add <slug>` lines unchanged in text but now real once Vercel deploys. ✅
+- Home-page install snippet and per-component `npx ondajs add <slug>` lines unchanged in text but now real once Vercel deploys. ✅
 - `/compare` page's "1 import" framing — text unchanged, the underlying contract is now keepable. ✅
 
 ## M7 — Publish + smoke test — Not started
@@ -93,7 +93,7 @@ Make `npx onda` resolve from the public npm registry.
 **Acceptance:**
 
 - `npm publish` from `packages/cli/` succeeds. Version `0.1.0`.
-- From a clean machine (or `nvm use && rm -rf ~/.npm/_npx`), `npx onda add blur-reveal` works end-to-end against `https://onda.video/r`, in a fresh directory, no prior `npm install` of anything.
+- From a clean machine (or `nvm use && rm -rf ~/.npm/_npx`), `npx ondajs add blur-reveal` works end-to-end against `https://onda.video/r`, in a fresh directory, no prior `npm install` of anything.
 - A short CLI section is added to the docs site (probably `/docs/cli` since the user introduced a `/docs` page) documenting flags and the install-path layout.
 - Release note appears in [CHANGELOG.md](../../../CHANGELOG.md) (created if absent — first entry: "0.1.0 — `npx onda` ships").
 
