@@ -206,6 +206,50 @@ Broadcast-style name + role bar that slides in from a corner with an accent unde
 - `placement`: yes · `size`: per-element (`nameSize`, `roleSize`)
 - Key props: `name`, `role`, `delay`, `accent`, `placement` (default `'bottom-left'`), `fontSize` | `nameSize`, `roleFontSize` | `roleSize`, `color`, `roleColor`, `accentColor`.
 
+### Media (consume external `src` URLs)
+
+These components render user-uploaded or hosted media (images and video) with Onda's motion fingerprint applied. `src` is passed through verbatim — Onda doesn't host; the caller (Studio, brief renderer, etc.) provides whatever URL their asset store serves.
+
+#### `ImageReveal`
+An image that enters with one of Onda's signature motion fingerprints — `'blur'` (BlurReveal's fingerprint applied to images), `'fade'` (opacity only), or `'scale'` (subtle 0.95 → 1, no overshoot). All variants drive on `SPRING_SMOOTH`.
+- `placement`: yes (defaults to canvas-fill — pass `placement` to position as a sub-canvas element) · `size`: n/a (use `width` / `height` for dimensions)
+- Key props: `src`, `alt`, `delay`, `duration`, `motion` (`'blur' | 'fade' | 'scale'`), `fit` (`'cover' | 'contain'`), `placement`, `width`, `height`, `borderRadius`.
+
+#### `VideoClip`
+A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` (preferred over `<Video>` for non-realtime renders — better seek accuracy, no audio drift). `startAt` / `endAt` accept the time-string vocabulary (`"0:04"`, `"30s"`, `"500ms"`, raw seconds).
+- `placement`: yes (defaults to canvas-fill) · `size`: n/a
+- Key props: `src`, `delay`, `startAt`, `endAt`, `fade` (boolean), `fadeDuration`, `muted`, `volume`, `loop`, `fit`, `placement`, `width`, `height`, `borderRadius`.
+- Loop disables fade-out (there's no defined end to fade against). Inside a `<TransitionSeries>`, set `fade={false}` and let the transition primitive handle fades.
+
+#### `KenBurns`, `Parallax`
+Pre-existing specialized image-with-motion components. `KenBurns` does the iconic slow zoom-and-pan over a photo (intentionally linear for constant cinematic drift). `Parallax` does a steady horizontal/vertical drift (no zoom). Reach for these when you want their specific motion fingerprint; reach for `ImageReveal` for a general-purpose image entrance.
+
+### Media composition pattern
+
+A scene with a background photo (Ken Burns drift) and a foreground video clip sequenced over it:
+
+```tsx
+import { Series, AbsoluteFill } from 'remotion';
+import { toFrames } from '@/lib/timing';
+
+<AbsoluteFill>
+  {/* Background — Ken Burns over a static photo */}
+  <KenBurns src="/backdrop.jpg" toScale={1.08} />
+
+  {/* Foreground — sequential clips with Onda fade fingerprint */}
+  <Series>
+    <Series.Sequence durationInFrames={toFrames('0:03', fps)}>
+      <ImageReveal src="/intro.jpg" motion="blur" placement="center" width={720} height={480} borderRadius={12} />
+    </Series.Sequence>
+    <Series.Sequence durationInFrames={toFrames('0:05', fps)}>
+      <VideoClip src="/feature.mp4" startAt="0:02" endAt="0:07" placement="center" width={720} height={480} borderRadius={12} />
+    </Series.Sequence>
+  </Series>
+</AbsoluteFill>
+```
+
+The pattern: media that should fill the canvas (background plates, hero photos) is dropped in without `placement`; media that should be inset (cards, picture-in-picture) gets `placement` plus explicit `width` / `height`.
+
 ### Annotation (positioning via dedicated coords, not `placement`)
 
 #### `Callout`

@@ -2,7 +2,9 @@
 
 Execution plan for [design.md](design.md). Update statuses as work lands.
 
-## M1 — Ship `ImageReveal`
+## M1 — Ship `ImageReveal` — Done
+
+Shipped at `registry/components/image-reveal/` with the spec'd schema, three `motion` variants (`'blur'` inlines BlurReveal's math; `'fade'` composes `entryFade`; `'scale'` composes `entryScale` with `from: 0.95`). Default behavior fills the canvas (mirrors `KenBurns` / `Parallax`); `placement` switches to sub-canvas positioning via `PlacementBox`. Registry manifest generated; `registry.json` synced. Typecheck clean.
 
 New component at `registry/components/image-reveal/`. Pattern-matches the existing component contract (CLAUDE.md §4).
 
@@ -30,7 +32,9 @@ registry/components/image-reveal/
 - `registry/r/image-reveal.json` generated via the existing one-shot regen pattern.
 - `pnpm typecheck` passes.
 
-## M2 — Ship `VideoClip`
+## M2 — Ship `VideoClip` — Done
+
+Shipped at `registry/components/video-clip/` with all spec'd props. Wraps `<OffthreadVideo>`; `startAt` / `endAt` resolve via `toFrames()` (accepts `"0:04"` / `"30s"` / raw seconds / `"90f"`); `loop` wraps in Remotion's `<Loop>` (with fade-out auto-disabled since looping has no defined end); `fade` envelope handled inline via `interpolate`. Registry manifest generated; `registry.json` synced. Typecheck clean.
 
 New component at `registry/components/video-clip/`. Same shape as M1.
 
@@ -48,7 +52,9 @@ New component at `registry/components/video-clip/`. Same shape as M1.
 - Both new components registered in `registry.json` + manifests generated.
 - `pnpm typecheck` passes.
 
-## M3 — Update `docs/composing-with-onda.md` to cover media
+## M3 — Update `docs/composing-with-onda.md` to cover media — Done
+
+Added a "Media" subsection under the component index covering `ImageReveal` and `VideoClip` (full prop summaries with placement / size notes), plus a brief callout for `KenBurns` / `Parallax` as the pre-existing specialized image-with-motion alternatives. Added a "Media composition pattern" worked example showing background photo (`KenBurns`) + sequential foreground beats (`ImageReveal` + `VideoClip`) inside a `<Series>`.
 
 Append a "Media composition" section near the typography sections; surface the two new components in the component index.
 
@@ -59,7 +65,11 @@ Append a "Media composition" section near the typography sections; surface the t
 - Component index gains entries for `ImageReveal` and `VideoClip` under a new "Media" category.
 - Brief mention of `KenBurns` / `Parallax` as specialized image-with-motion alternatives (they pre-date 010, no migration).
 
-## M4 — Verify with a real composition
+## M4 — Verify with a real composition — Deferred (visual check)
+
+Requires running the Remotion studio (`pnpm dev`) and visually scrubbing through compositions that exercise both new components together. Code-level acceptance (typecheck, schema validation, manifest generation) all clean; the visual smoke test is the remaining gate before the next catalog release.
+
+
 
 Build a small test composition that exercises both components together — `ImageReveal` for a static photo, `VideoClip` with trim and fade for a clip — proves the integration end-to-end before declaring 010 done.
 
