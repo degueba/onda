@@ -10,7 +10,8 @@
     "render": "remotion render",
     "typecheck": "tsc --noEmit",
     "sync-registry": "node scripts/sync-registry.mjs",
-    "sync-manifests": "node scripts/sync-manifests.mjs"
+    "sync-manifests": "node scripts/sync-manifests.mjs",
+    "sample-audio": "node scripts/generate-sample-audio.mjs"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

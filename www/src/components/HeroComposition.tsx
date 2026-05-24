@@ -54,6 +54,10 @@ import {
   endCardSchema,
 } from '@onda/registry/components/end-card/EndCard';
 import {
+  AudioVisualizer,
+  audioVisualizerSchema,
+} from '@onda/registry/components/audio-visualizer/AudioVisualizer';
+import {
   GradientShift,
   gradientShiftSchema,
 } from '@onda/registry/components/gradient-shift/GradientShift';
@@ -193,10 +197,26 @@ const BEATS: Beat[] = [
     hold: 90,
     render: () => <BarChart {...barChartSchema.parse({ placement: 'center' })} />,
   },
-  // AudioVisualizer omitted from the reel until we ship a CORS-safe sample
-  // audio file in www/public/ — `useAudioData()` throws when the remote
-  // default URL fails cross-origin decode. Component still has its own
-  // /components/audio-visualizer page once the sample lands.
+  {
+    slug: 'audio-visualizer',
+    label: 'AudioVisualizer',
+    hold: 90,
+    render: () => (
+      <AudioVisualizer
+        {...audioVisualizerSchema.parse({
+          // Self-hosted WAV — see scripts/generate-sample-audio.mjs.
+          // Schema default is a public remote URL meant for end users
+          // with their own assets; that fails CORS in the browser.
+          src: '/sample-audio.wav',
+          variant: 'bars',
+          numberOfSamples: 64,
+          placement: 'center',
+          width: 720,
+          height: 160,
+        })}
+      />
+    ),
+  },
   {
     slug: 'underline',
     label: 'Underline',

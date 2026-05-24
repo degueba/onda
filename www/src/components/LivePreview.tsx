@@ -43,11 +43,8 @@ import { Vignette, vignetteSchema } from '@onda/registry/components/vignette/Vig
 import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapter-card/ChapterCard';
 import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
 import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
-// AudioClip / AudioVisualizer intentionally NOT in the registry yet —
-// AudioClip is invisible (silent preview is pointless), and
-// AudioVisualizer's `useAudioData()` throws on CORS failures from the
-// remote sample URL. Re-add both once we ship a self-hosted sample audio
-// file in www/public/ (follow-up).
+import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
+import { AudioVisualizer, audioVisualizerSchema } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
 import { ComponentPreview } from './ComponentPreview';
 import { TryItPopover } from './TryItPopover';
 
@@ -56,9 +53,19 @@ import { TryItPopover } from './TryItPopover';
 //
 // One entry per registered component. When the catalog grows past ~5, a
 // codegen script (own techspec) can replace this hand-maintained map.
+//
+// `defaultPropsOverride` lets a per-slug entry override what the component's
+// schema would default to. Used mostly by audio components, where the
+// schema default points at a public sample URL that fails CORS in the
+// browser — we serve a self-hosted /sample-audio.wav instead so the
+// preview "just works" without network round-trips or licensing concerns.
 const REGISTRY: Record<
   string,
-  { component: ComponentType<never>; schema: ZodTypeAny }
+  {
+    component: ComponentType<never>;
+    schema: ZodTypeAny;
+    defaultPropsOverride?: Record<string, unknown>;
+  }
 > = {
   'blur-reveal': {
     component: BlurReveal as unknown as ComponentType<never>,
@@ -220,6 +227,18 @@ const REGISTRY: Record<
     component: VideoClip as unknown as ComponentType<never>,
     schema: videoClipSchema,
   },
+  'audio-clip': {
+    component: AudioClip as unknown as ComponentType<never>,
+    schema: audioClipSchema,
+    // Self-hosted sample; the schema's default src is a remote URL meant
+    // for end users with their own assets — that fails CORS in-browser.
+    defaultPropsOverride: { src: '/sample-audio.wav' },
+  },
+  'audio-visualizer': {
+    component: AudioVisualizer as unknown as ComponentType<never>,
+    schema: audioVisualizerSchema,
+    defaultPropsOverride: { src: '/sample-audio.wav' },
+  },
 };
 
 type LivePreviewProps = {
@@ -238,13 +257,14 @@ export function LivePreview({
 }: LivePreviewProps) {
   const entry = REGISTRY[slug];
 
-  // Schema-derived defaults + any per-mount overrides. Memoized so the values
+  // Schema-derived defaults + per-slug registry override + per-mount
+  // override. Layered so the most specific source wins. Memoized so the
   // useState initializer sees a stable reference and the controls' Reset
-  // button can return to a known good state.
+  // button returns to a known good state.
   const defaults = useMemo(() => {
     if (!entry) return {} as Record<string, unknown>;
     const base = entry.schema.parse({}) as Record<string, unknown>;
-    return { ...base, ...propsOverride };
+    return { ...base, ...(entry.defaultPropsOverride ?? {}), ...propsOverride };
   }, [entry, propsOverride]);
 
   const [values, setValues] = useState<Record<string, unknown>>(defaults);
