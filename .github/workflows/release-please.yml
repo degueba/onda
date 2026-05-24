@@ -36,15 +36,20 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # Only fires on the run that actually created a release (i.e. the merge
-      # of the release PR). All other release-please runs — the ones that
-      # just refresh the open release PR — skip this step because
-      # `releases_created` is `false`.
+      # Only fires on the run that actually created a release for packages/cli.
+      # release-please runs in monorepo / component mode (per
+      # release-please-config.json), so per-package outputs are exposed as
+      # `<path>--<output>` — `tag_name` at the top level is empty in this mode.
+      # `--repo` is required because this job doesn't `actions/checkout`, so
+      # `gh` would otherwise try to infer the repo from a non-existent .git.
       - name: Trigger publish workflow on new release
-        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        if: ${{ steps.release.outputs['packages/cli--release_created'] == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${{ steps.release.outputs.tag_name }}"
+          tag="${{ steps.release.outputs['packages/cli--tag_name'] }}"
           echo "release-please created $tag — dispatching publish.yml"
-          gh workflow run publish.yml --ref main --field tag="$tag"
+          gh workflow run publish.yml \
+            --repo ${{ github.repository }} \
+            --ref main \
+            --field tag="$tag"
