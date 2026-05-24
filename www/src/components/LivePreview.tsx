@@ -43,8 +43,11 @@ import { Vignette, vignetteSchema } from '@onda/registry/components/vignette/Vig
 import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapter-card/ChapterCard';
 import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
 import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
-import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
-import { AudioVisualizer, audioVisualizerSchema } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
+// AudioClip / AudioVisualizer intentionally NOT in the registry yet —
+// AudioClip is invisible (silent preview is pointless), and
+// AudioVisualizer's `useAudioData()` throws on CORS failures from the
+// remote sample URL. Re-add both once we ship a self-hosted sample audio
+// file in www/public/ (follow-up).
 import { ComponentPreview } from './ComponentPreview';
 import { TryItPopover } from './TryItPopover';
 
@@ -216,14 +219,6 @@ const REGISTRY: Record<
   'video-clip': {
     component: VideoClip as unknown as ComponentType<never>,
     schema: videoClipSchema,
-  },
-  'audio-clip': {
-    component: AudioClip as unknown as ComponentType<never>,
-    schema: audioClipSchema,
-  },
-  'audio-visualizer': {
-    component: AudioVisualizer as unknown as ComponentType<never>,
-    schema: audioVisualizerSchema,
   },
 };
 
