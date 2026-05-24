@@ -3,6 +3,7 @@
 import { ArrowCounterClockwise, Plus, X } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { z, type ZodTypeAny } from 'zod';
+import { PLACEMENT_REGIONS } from '@onda/lib/canvas';
 
 type PropsControlsProps = {
   schema: ZodTypeAny;
@@ -376,12 +377,20 @@ function FieldControl({
     return <Toggle value={Boolean(value)} onChange={onChange} />;
   }
 
-  // ZodUnion handling — we only support the specific shape that shows up
-  // in the catalog today: `string | string[]` for multi-color props.
-  // Render as a single text field where the user types `a` for one
-  // color or `a,b,c` for an array; we parse on change.
-  if (type === 'ZodUnion' && COLOR_PROP_NAMES.has(name)) {
-    return <MultiColorField value={value} onChange={onChange} />;
+  // ZodUnion handling — the catalog uses unions for three distinct
+  // shapes that each want their own input:
+  //   - `string | string[]` (color) → swatch + comma-list text input
+  //   - placement union (region | coords) → region dropdown
+  //   - `string | number` primitive (time specs like '0:04', or
+  //     hillsSeed) → text input, parse numeric on change
+  if (type === 'ZodUnion') {
+    if (COLOR_PROP_NAMES.has(name)) {
+      return <MultiColorField value={value} onChange={onChange} />;
+    }
+    if (name === 'placement') {
+      return <PlacementField value={value} onChange={onChange} />;
+    }
+    return <PrimitiveUnionField value={value} onChange={onChange} />;
   }
 
   return (
@@ -723,6 +732,85 @@ function Toggle({
         }`}
       />
     </button>
+  );
+}
+
+// ─── PlacementField (PlacementRegion | PlacementCoords) ─────────────
+
+function PlacementField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | undefined) => void;
+}) {
+  // The catalog's placement schema is `region-string | {x, y, anchor}`.
+  // The TryIt UX covers the common case — region picker via a select.
+  // Custom coords are still possible via code; if the current value is
+  // already an object, we show a hint so the user knows what they're
+  // looking at, with a one-click "convert to region" affordance.
+  const isCustomCoords = value !== null && typeof value === 'object';
+  const currentRegion = typeof value === 'string' ? value : '';
+
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      <select
+        value={currentRegion}
+        onChange={(e) => onChange(e.target.value || undefined)}
+        className="bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs text-onda-text w-full focus:outline-none focus:border-onda-text/40 cursor-pointer"
+      >
+        <option value="">— none (default) —</option>
+        {PLACEMENT_REGIONS.map((r) => (
+          <option key={r} value={r}>{r}</option>
+        ))}
+      </select>
+      {isCustomCoords && (
+        <div className="text-[10px] text-onda-faint italic">
+          custom {JSON.stringify(value)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── PrimitiveUnionField (string | number) ───────────────────────────
+
+function PrimitiveUnionField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | number) => void;
+}) {
+  // Text input that parses to a number when the value is all-numeric,
+  // and stays a string otherwise. Covers `timeSpec` ('0:04' OR raw
+  // seconds) and `hillsSeed` (number OR string).
+  const text =
+    value === undefined || value === null ? '' : String(value);
+
+  return (
+    <input
+      type="text"
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value;
+        if (raw === '') {
+          // Emit empty string — the renderer or schema decides what to do
+          // (most schemas treat empty as default).
+          onChange('');
+          return;
+        }
+        // Pure-numeric → emit as number; mixed/colon → emit as string.
+        const n = Number(raw);
+        if (Number.isFinite(n) && /^[\d.-]+$/.test(raw)) {
+          onChange(n);
+        } else {
+          onChange(raw);
+        }
+      }}
+      placeholder='"0:04" or 4'
+      className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-full text-right focus:outline-none focus:border-onda-text/40"
+    />
   );
 }
 

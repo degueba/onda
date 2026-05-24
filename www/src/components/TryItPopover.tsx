@@ -16,9 +16,16 @@ type Props = {
   onChange: (next: Record<string, unknown>) => void;
 };
 
-// "Try it" trigger + popover. Anchored absolutely to the bottom-right of the
-// preview card. Click → opens a floating panel with the schema-driven knobs;
-// preview stays visible underneath / behind it.
+// "Try it" trigger + side drawer. Anchored to the right edge of the
+// preview card so the drawer opens BESIDE the preview (not over it) —
+// users can scrub controls and watch the visualization change at the
+// same time. The drawer does NOT trap focus or close on outside click,
+// so interactions with the rest of the page (or another preview) stay
+// live while it's open.
+//
+// On narrow viewports where there's no room to the right, Radix flips
+// the drawer below the trigger automatically (collisionPadding +
+// avoidCollisions defaults).
 export function TryItPopover({ schema, values, defaults, presets, onChange }: Props) {
   return (
     <Popover.Root>
@@ -49,11 +56,19 @@ export function TryItPopover({ schema, values, defaults, presets, onChange }: Pr
 
       <Popover.Portal>
         <Popover.Content
-          side="bottom"
-          align="end"
-          sideOffset={10}
+          // `side="right"` opens the drawer to the right of the preview.
+          // `align="start"` aligns the drawer's top edge with the trigger.
+          // Combined: drawer appears beside the preview, top edges aligned —
+          // no overlap with the preview area itself.
+          side="right"
+          align="start"
+          sideOffset={12}
           collisionPadding={16}
-          avoidCollisions={false}
+          // Don't auto-close when the user clicks the preview (so they can
+          // scrub the slider and immediately interact with the canvas).
+          // Don't trap focus — the rest of the page stays usable.
+          onPointerDownOutside={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
           className="onda-popover-content z-50 w-56 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
         >
           <div className="relative">
