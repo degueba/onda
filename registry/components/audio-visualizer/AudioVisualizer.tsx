@@ -104,6 +104,11 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const audioData = useAudioData(src);
+  // `useId()` must be called unconditionally on every render — hoisted
+  // above the early returns and variant branches so the hook order is
+  // stable when audioData loads or `variant` toggles. The id is only
+  // consumed in the waveform branch's SVG `<linearGradient>`.
+  const gradientId = React.useId();
 
   // `useAudioData` is async — null while loading. Render an empty placeholder
   // at the right dimensions so layout doesn't jump on load. The placeholder
@@ -205,10 +210,6 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   const bottomPath = createSmoothSvgPath({ points: bottomPoints });
   const bottomBody = bottomPath.replace(/^M[^ ]+ [^ ]+ ?/, 'L ');
   const closedPath = `${topPath} ${bottomBody} Z`;
-
-  // Stable but unique gradient id per render — multiple visualizers on the
-  // same page don't fight over a shared `#waveformGradient` symbol.
-  const gradientId = React.useId();
 
   return (
     <PlacementBox placement={placement}>
