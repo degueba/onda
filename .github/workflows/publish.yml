@@ -1,35 +1,51 @@
-# Fires when release-please's Release PR gets merged and a new GitHub
-# Release is published. Builds the CLI and `npm publish`-es from
-# packages/cli using the NPM_TOKEN repo secret (a Granular Access Token
-# with "Bypass 2FA" enabled — npm requires that for non-interactive
-# publishes).
+# Publishes ondajs to npm. Triggered two ways:
+#
+#   1. `release: published` — the standard webhook. Fires when a release is
+#      created by a real user / PAT. Will NOT fire when release-please uses
+#      the default GITHUB_TOKEN (GitHub anti-loop safeguard).
+#
+#   2. `workflow_dispatch` — the explicit trigger. release-please.yml
+#      dispatches this after every release it actually creates (and you can
+#      also fire it manually from the Actions tab if anything goes sideways).
+#      Takes a `tag` input so it knows which version to publish.
 #
 # Single-package today: ALL releases trigger a publish. When a second
-# publishable package lands (e.g. a future Studio SDK), gate this by tag
-# pattern — the if: line is already structured to extend.
+# publishable package lands (e.g. a future Studio SDK), gate by tag pattern —
+# the `if:` line is structured to extend.
 
 name: publish
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (e.g. ondajs-v0.3.0)'
+        required: true
+        type: string
 
 jobs:
   publish-ondajs:
     runs-on: ubuntu-latest
-    # release-please tags releases as `ondajs-vX.Y.Z` when configured in
-    # component mode (see release-please-config.json). This guard means an
-    # accidental hand-created release with a different tag pattern won't
-    # cause a phantom publish.
-    if: startsWith(github.event.release.tag_name, 'ondajs-v')
+    # release-please tags releases as `ondajs-vX.Y.Z`. This guard means an
+    # accidental hand-created release (or a wrong `tag` input on manual
+    # dispatch) with a different tag pattern won't cause a phantom publish.
+    if: |
+      (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'ondajs-v')) ||
+      (github.event_name == 'workflow_dispatch' && startsWith(inputs.tag, 'ondajs-v'))
     steps:
+      # Check out the exact tag's commit, not whatever main currently points
+      # at. Critical for `workflow_dispatch` — by the time we dispatch from
+      # release-please.yml, main may already have moved past the release SHA.
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
 
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+        # `version:` omitted — defers to `packageManager` in root package.json.
+
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           # Configures ~/.npmrc with `registry=https://registry.npmjs.org/`

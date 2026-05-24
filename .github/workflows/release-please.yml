@@ -3,6 +3,14 @@
 # CHANGELOG.md from Conventional Commits since the last tag, and updates
 # .release-please-manifest.json. Merging that PR creates a GitHub Release +
 # git tag `ondajs-vX.Y.Z` — which fires `publish.yml`.
+#
+# IMPORTANT — why we explicitly dispatch `publish.yml` below: events created
+# by the default GITHUB_TOKEN (like `release: published`) do NOT trigger
+# downstream workflows. This is GitHub's anti-loop safeguard. The carve-out
+# is `workflow_dispatch` / `repository_dispatch` — those DO trigger from
+# GITHUB_TOKEN. So we use `gh workflow run` to explicitly kick publish
+# whenever release-please actually creates a release (`releases_created`
+# output is `true` only on the merge of the release PR, not on every push).
 
 name: release-please
 
@@ -11,19 +19,32 @@ on:
     branches: [main]
 
 # release-please needs to write to the repo (open PRs, update files, push
-# tags). The default GITHUB_TOKEN gets these scopes via these permissions.
-# Nothing here grants write access to *contributors* — the token is per-run
-# and limited to this workflow's scope.
+# tags). `actions: write` is added so the final step can dispatch publish.yml.
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - id: release
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # Only fires on the run that actually created a release (i.e. the merge
+      # of the release PR). All other release-please runs — the ones that
+      # just refresh the open release PR — skip this step because
+      # `releases_created` is `false`.
+      - name: Trigger publish workflow on new release
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.release.outputs.tag_name }}"
+          echo "release-please created $tag — dispatching publish.yml"
+          gh workflow run publish.yml --ref main --field tag="$tag"
