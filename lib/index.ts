@@ -82,3 +82,22 @@ export {
   type ComponentRegistry,
   type CompositionRendererProps,
 } from './composition-renderer';
+
+export {
+  compositionJsonSchema,
+  entryJsonSchema,
+} from './composition-json-schema';
+
+export {
+  CANVAS_PRESETS,
+  resolveCanvas,
+  type CanvasPreset,
+} from './canvas-presets';
+
+export {
+  summarizeRegistry,
+  summarizeRegistryAsMarkdown,
+  type RegistrySummary,
+  type RegistryComponentSummary,
+  type RegistryPropSummary,
+} from './registry-summary';
