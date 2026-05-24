@@ -9,7 +9,11 @@
     "zod",
     "react"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-motion",
+    "lib-timing"
+  ],
   "files": [
     {
       "path": "registry/components/video-clip/VideoClip.tsx",

@@ -37,6 +37,7 @@
   ],
   "registryDependencies": [
     "fade-in",
+    "lib-canvas",
     "slide-in",
     "underline"
   ]

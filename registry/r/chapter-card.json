@@ -38,6 +38,7 @@
   "registryDependencies": [
     "blur-reveal",
     "fade-in",
+    "lib-canvas",
     "lib-motion",
     "underline"
   ]

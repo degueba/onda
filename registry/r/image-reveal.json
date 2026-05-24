@@ -9,7 +9,11 @@
     "zod",
     "react"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-choreography",
+    "lib-motion"
+  ],
   "files": [
     {
       "path": "registry/components/image-reveal/ImageReveal.tsx",

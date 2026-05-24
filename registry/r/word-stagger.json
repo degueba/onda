@@ -36,6 +36,7 @@
     }
   ],
   "registryDependencies": [
+    "lib-canvas",
     "lib-choreography",
     "lib-motion"
   ]

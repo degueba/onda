@@ -37,6 +37,7 @@
   ],
   "registryDependencies": [
     "count-up",
+    "lib-canvas",
     "lib-motion",
     "underline",
     "word-stagger"

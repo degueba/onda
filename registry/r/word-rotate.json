@@ -36,6 +36,7 @@
     }
   ],
   "registryDependencies": [
+    "lib-canvas",
     "lib-easing",
     "lib-motion"
   ]

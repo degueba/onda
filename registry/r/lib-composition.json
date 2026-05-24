@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-composition",
+  "type": "registry:lib",
+  "title": "Composition payload schema",
+  "description": "Timeline-shape composition types and Zod schemas — `Composition`, `Track`, `Entry`. The on-the-wire payload format an agent or brief renderer emits, validated with one `.parse()` call.",
+  "dependencies": [
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/composition.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/composition.ts",
+      "content": "// Timeline-shape composition payload — the on-the-wire shape an agent emits.\n// See `docs/composing-with-onda.md` for examples and `composition-renderer.tsx`\n// for the canonical renderer.\n\nimport { z } from 'zod';\n\nconst timeSpecSchema = z.union([z.string(), z.number()]);\n\n/**\n * `for` is intentionally a property name (reads as `{ at: '0:02', for: '0:04' }`).\n * JS permits it as a property — only restricted as a variable / parameter name.\n * Destructure with `const { at, for: dur } = entry`.\n */\nexport const entrySchema = z.object({\n  at: timeSpecSchema,\n  for: timeSpecSchema,\n  component: z.string().min(1),\n  props: z.record(z.unknown()).default({}),\n  id: z.string().optional(),\n});\n\nexport type Entry = z.infer<typeof entrySchema>;\n\nexport const trackSchema = z.object({\n  id: z.string().optional(),\n  label: z.string().optional(),\n  entries: z.array(entrySchema),\n});\n\nexport type Track = z.infer<typeof trackSchema>;\n\n/**\n * `tracks` are parallel layers — first track sits behind, last sits on top.\n * Within a track, entries are sequential beats placed via `<Sequence from={…}>`.\n */\nexport const compositionSchema = z.object({\n  fps: z.number().positive(),\n  width: z.number().int().positive(),\n  height: z.number().int().positive(),\n  durationInFrames: z.number().int().positive().optional(),\n  tracks: z.array(trackSchema),\n});\n\nexport type Composition = z.infer<typeof compositionSchema>;\n"
+    }
+  ]
+}

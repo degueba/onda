@@ -37,6 +37,7 @@
   ],
   "registryDependencies": [
     "blur-reveal",
+    "lib-canvas",
     "lib-motion",
     "stagger-group",
     "underline"
