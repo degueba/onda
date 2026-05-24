@@ -2,6 +2,19 @@
 
 An image that enters with one of Onda's signature motion fingerprints. Wraps Remotion's `<Img>` and applies the catalog's house spring (`SPRING_SMOOTH`, no overshoot) via the chosen `motion` variant: a blur falloff matching `BlurReveal`, a clean opacity fade, or a subtle scale-in. The default behavior fills the canvas (matching `KenBurns` / `Parallax`); pass `placement` to position the image as a sub-canvas element.
 
+## When to use
+
+`ImageReveal` owns **entrance** motion — the image enters with an Onda fingerprint, then sits static. Reach for it whenever you need to render a photo as part of an Onda composition.
+
+| If you want… | Use |
+| --- | --- |
+| Show a photo, hold it with an Onda entrance | **`ImageReveal`** (this component) |
+| Continuous slow zoom-and-pan over a photo (documentary feel) | `KenBurns` |
+| Continuous linear drift over a photo, no zoom | `Parallax` |
+| A bare `<img>` with no Onda motion at all | Remotion's `<Img>` directly |
+
+`KenBurns` and `Parallax` are *sustained motion* components — the image is present from frame 0 with no entrance, then the camera moves continuously. They're not interchangeable with `ImageReveal`: forcing Ken Burns on every photo because it's the only image component you remembered is the most common mistake.
+
 ## Props
 
 | Name | Type | Default | Notes |

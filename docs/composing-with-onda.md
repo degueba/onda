@@ -208,21 +208,51 @@ Broadcast-style name + role bar that slides in from a corner with an accent unde
 
 ### Media (consume external `src` URLs)
 
-These components render user-uploaded or hosted media (images and video) with Onda's motion fingerprint applied. `src` is passed through verbatim — Onda doesn't host; the caller (Studio, brief renderer, etc.) provides whatever URL their asset store serves.
+These components render user-uploaded or hosted media. `src` is passed through verbatim — Onda doesn't host; the caller provides whatever URL their asset store serves.
+
+**Critical rule for agents:** when you need to render a user-supplied photo or video clip, **always reach for `ImageReveal` or `VideoClip` first**. Bare `<Img>` / `<OffthreadVideo>` work, but they don't carry the Onda motion identity — a scene that uses them sits visually outside the rest of the composition. `KenBurns` and `Parallax` exist for *specific sustained motions* (continuous zoom-pan / drift), not for general-purpose photo or video display.
+
+#### Picking the right media component
+
+| If you want… | Use | Don't use |
+| --- | --- | --- |
+| Show a photo with an Onda entrance, then hold it | **`ImageReveal`** (any `motion` variant) | `KenBurns` (forces zoom-pan), `Parallax` (forces drift), bare `<Img>` (no fingerprint) |
+| Show a photo with continuous slow zoom-and-pan (documentary feel) | **`KenBurns`** | `ImageReveal` (no sustained motion) |
+| Show a photo with continuous linear drift (no zoom) | **`Parallax`** | `ImageReveal`, `KenBurns` |
+| Play a trimmed video clip with Onda fade-in/out | **`VideoClip`** | Bare `<OffthreadVideo>` (no fingerprint, manual frame math) |
+| Loop a video as a background plate | **`VideoClip`** with `loop`, `muted`, `fade={false}` | Bare `<OffthreadVideo loop>` |
+| Crossfade between two video beats | **`VideoClip`** inside `<TransitionSeries>` with `fade={false}` per clip | `VideoClip` with default fade (would double-fade against the transition) |
+
+The categories are complementary, not redundant: `ImageReveal` owns *entrances*, `KenBurns` / `Parallax` own *sustained motion across a held image*. Forcing the wrong one is the most common mistake — Ken Burns-ing every photo because it's the only image component the agent remembered makes every scene feel like a documentary slideshow.
 
 #### `ImageReveal`
-An image that enters with one of Onda's signature motion fingerprints — `'blur'` (BlurReveal's fingerprint applied to images), `'fade'` (opacity only), or `'scale'` (subtle 0.95 → 1, no overshoot). All variants drive on `SPRING_SMOOTH`.
-- `placement`: yes (defaults to canvas-fill — pass `placement` to position as a sub-canvas element) · `size`: n/a (use `width` / `height` for dimensions)
+An image that enters with one of Onda's signature motion fingerprints — `'blur'` (BlurReveal's fingerprint applied to images), `'fade'` (opacity only), or `'scale'` (subtle 0.95 → 1, no overshoot). All variants drive on `SPRING_SMOOTH`. After the entrance, the image holds static — no continuous motion.
+- `placement`: yes (defaults to canvas-fill — pass `placement` to position as a sub-canvas element) · `size`: n/a (use `width` / `height` for dimensions in px)
 - Key props: `src`, `alt`, `delay`, `duration`, `motion` (`'blur' | 'fade' | 'scale'`), `fit` (`'cover' | 'contain'`), `placement`, `width`, `height`, `borderRadius`.
+- **Default `motion: 'blur'`** carries the strongest Onda fingerprint. Use `'fade'` for quieter background reveals; use `'scale'` when the image is a focal element entering on a stage.
 
 #### `VideoClip`
-A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` (preferred over `<Video>` for non-realtime renders — better seek accuracy, no audio drift). `startAt` / `endAt` accept the time-string vocabulary (`"0:04"`, `"30s"`, `"500ms"`, raw seconds).
-- `placement`: yes (defaults to canvas-fill) · `size`: n/a
+A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` (preferred over `<Video>` for non-realtime renders — better seek accuracy, no audio drift). `startAt` / `endAt` accept the time-string vocabulary (`"0:04"`, `"30s"`, `"500ms"`, raw seconds), resolved internally via `toFrames()` — agents never compute frames.
+- `placement`: yes (defaults to canvas-fill) · `size`: n/a (use `width` / `height` for dimensions in px)
 - Key props: `src`, `delay`, `startAt`, `endAt`, `fade` (boolean), `fadeDuration`, `muted`, `volume`, `loop`, `fit`, `placement`, `width`, `height`, `borderRadius`.
-- Loop disables fade-out (there's no defined end to fade against). Inside a `<TransitionSeries>`, set `fade={false}` and let the transition primitive handle fades.
+- **`loop` requires `endAt`** (the loop interval is `endAt - startAt`).
+- **Loop disables fade-out** — there's no defined end to fade against. For a fading-out looping background, wrap in `<TransitionSeries>` or a parent opacity envelope.
+- **Inside `<TransitionSeries>`, set `fade={false}`** so the transition primitive owns the crossfade instead of double-fading.
 
 #### `KenBurns`, `Parallax`
-Pre-existing specialized image-with-motion components. `KenBurns` does the iconic slow zoom-and-pan over a photo (intentionally linear for constant cinematic drift). `Parallax` does a steady horizontal/vertical drift (no zoom). Reach for these when you want their specific motion fingerprint; reach for `ImageReveal` for a general-purpose image entrance.
+Pre-existing specialized image-with-motion components. **Their job is sustained motion, not entrance** — the photo is present from frame 0 (no fade-in), then the "camera" moves continuously and linearly.
+- `KenBurns` — slow zoom + pan over a photo, default 1.0 → 1.1 scale over ~5s. The iconic documentary motion. Intentionally linear (springs at this scale read as camera acceleration).
+- `Parallax` — steady horizontal or vertical drift (no zoom). A lighter, no-zoom complement for backgrounds and b-roll.
+- Reach for these *only* when the user/agent explicitly wants the named effect. If the prompt is "show this photo," use `ImageReveal`, not `KenBurns`.
+
+#### What these media components don't do
+
+Agents should NOT expect these primitives to:
+- **Render audio.** No audio primitives exist yet — uploaded audio assets can't be rendered with an Onda visualization (separate spec when audio support lands).
+- **Compose media + caption automatically.** No `MediaCard` exists; compose `ImageReveal` + `WordStagger` / `FadeIn` manually if a caption is needed.
+- **Manage uploads, storage, signed URLs, or expiry.** `src` is a verbatim URL — the caller handles the asset's lifecycle.
+- **Apply sustained motion (zoom, pan, drift) over an `ImageReveal`.** Use `KenBurns` or `Parallax` for that. (A future spec may refactor those into wrappers that compose with `ImageReveal` for "image enters AND camera drifts" — not shipped yet.)
+- **Provide a placeholder while the asset loads.** Caller's concern.
 
 ### Media composition pattern
 
@@ -233,10 +263,10 @@ import { Series, AbsoluteFill } from 'remotion';
 import { toFrames } from '@/lib/timing';
 
 <AbsoluteFill>
-  {/* Background — Ken Burns over a static photo */}
+  {/* Background — KenBurns owns the sustained zoom-pan. Photo is present from frame 0. */}
   <KenBurns src="/backdrop.jpg" toScale={1.08} />
 
-  {/* Foreground — sequential clips with Onda fade fingerprint */}
+  {/* Foreground — each beat enters with the Onda fingerprint (ImageReveal / VideoClip) */}
   <Series>
     <Series.Sequence durationInFrames={toFrames('0:03', fps)}>
       <ImageReveal src="/intro.jpg" motion="blur" placement="center" width={720} height={480} borderRadius={12} />
@@ -248,7 +278,9 @@ import { toFrames } from '@/lib/timing';
 </AbsoluteFill>
 ```
 
-The pattern: media that should fill the canvas (background plates, hero photos) is dropped in without `placement`; media that should be inset (cards, picture-in-picture) gets `placement` plus explicit `width` / `height`.
+Notice the split: `KenBurns` is the *background plate* (sustained motion, held throughout); `ImageReveal` and `VideoClip` are the *foreground beats* (each enters with the Onda fingerprint and gives way to the next).
+
+The placement pattern: media that should fill the canvas (background plates, hero photos) is dropped in **without** `placement`; media that should be inset (cards, picture-in-picture, foreground beats) gets `placement` plus explicit `width` / `height`.
 
 ### Annotation (positioning via dedicated coords, not `placement`)
 

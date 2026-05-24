@@ -2,6 +2,19 @@
 
 A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` (preferred over `<Video>` for non-realtime renders — better seek accuracy and no audio drift). The default behavior fills the canvas (matching `ImageReveal` / `KenBurns`); pass `placement` to position the clip as a sub-canvas element.
 
+## When to use
+
+`VideoClip` is the **default video primitive** in the catalog — reach for it whenever you need to render a video file in an Onda composition. It carries the Onda motion identity (entrance/exit fade on `SPRING_SMOOTH`) and accepts time-string trim (`startAt: "0:04"`) so agents never compute frames.
+
+| If you want… | Use |
+| --- | --- |
+| Play a trimmed video clip with Onda fade-in/out | **`VideoClip`** (this component) |
+| Loop a video as a background plate | **`VideoClip`** with `loop`, `muted`, `fade={false}` |
+| Crossfade between two video beats | **`VideoClip`** inside `<TransitionSeries>` with `fade={false}` on each clip (transition primitive owns the fade) |
+| A bare `<video>` with no Onda motion or frame conversion | Remotion's `<OffthreadVideo>` directly |
+
+There is no other video-consuming component in the catalog today. Don't drop down to bare `<OffthreadVideo>` for general video display — you'd lose the fingerprint and have to do frame math by hand.
+
 ## Props
 
 | Name | Type | Default | Notes |
