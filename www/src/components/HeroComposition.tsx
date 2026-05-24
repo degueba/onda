@@ -17,9 +17,13 @@ import {
   statCardSchema,
 } from '@onda/registry/components/stat-card/StatCard';
 import {
-  BarChart,
-  barChartSchema,
-} from '@onda/registry/components/bar-chart/BarChart';
+  Typewriter,
+  typewriterSchema,
+} from '@onda/registry/components/typewriter/Typewriter';
+import {
+  BlurReveal,
+  blurRevealSchema,
+} from '@onda/registry/components/blur-reveal/BlurReveal';
 import {
   QuoteCard,
   quoteCardSchema,
@@ -29,51 +33,62 @@ import {
   endCardSchema,
 } from '@onda/registry/components/end-card/EndCard';
 import {
+  GradientShift,
+  gradientShiftSchema,
+} from '@onda/registry/components/gradient-shift/GradientShift';
+import {
+  GrainOverlay,
+  grainOverlaySchema,
+} from '@onda/registry/components/grain-overlay/GrainOverlay';
+import {
   Vignette,
   vignetteSchema,
 } from '@onda/registry/components/vignette/Vignette';
+import { WAVE_PATH, WAVE_VIEWBOX } from './logo/WavePath';
 
-// Landing hero — 28-second reel built ENTIRELY from registered Onda scene
-// blocks, framed by a persistent Vignette. Five beats:
+// Landing hero — 24-second reel, five beats, every one a registered Onda
+// primitive or scene block. Layered top-to-bottom:
 //
-//   beat 1   0   → 150     5.0s   LogoSting          wave draws + "Onda" + accent
-//   beat 2   126 → 306     6.0s   StatCard           38 components
-//   beat 3   282 → 462     6.0s   BarChart           Remotion / AE / Lottie
-//   beat 4   438 → 648     7.0s   QuoteCard          Saul Bass on motion
-//   beat 5   624 → 840     7.2s   EndCard            "Made with Onda" + onda.video
-//   total    840 frames = 28s — matches HERO_DURATION_FRAMES in HeroPlayer.
+//   GradientShift bg     ← always drifting, dusty-rose warm dark
+//   Scene Sequences      ← the five beats, each in a SceneTransition
+//   GrainOverlay         ← atmospheric texture
+//   Vignette             ← cinematic frame
 //
-// Consecutive beats overlap by FADE = 24 frames; SceneFade adds an opacity
-// envelope that crossfades them at the seam. Hard cuts on top of each scene
-// block's spring-driven entry felt jumpy; the crossfade lets the previous
-// scene drift out while the next blurs in, so the reel reads as one
-// continuous piece instead of five abutted clips.
+// The persistent gradient + grain + vignette layers give the reel
+// continuous motion AND ambient color even while individual scenes are
+// at their "settled" state. Without them the brief stillness between
+// each scene's spring entry and the crossfade-out read as dead air.
 //
-// Vignette renders OUTSIDE every Sequence so it persists across the full
-// 28s — a quiet cinematic frame that ties everything together. It's
-// pointer-events:none and has no entry motion (static atmospheric layer),
-// so it costs nothing visually beyond the slight edge darkening.
-//
-// schema.parse(overrides) is the canonical way to get fully-typed props
-// out of our zod schemas — `.default()` runs at parse time, not type-
-// inference time, so z.infer makes every prop look required. Same pattern
-// LivePreview uses.
+// Beats (30fps, FADE = 36, overlap 36f between adjacent):
+//   1   0   → 144     4.8s   LogoSting (BRAND wave path, accent rose)
+//   2   108 → 258     5.0s   StatCard (38 components)
+//   3   222 → 402     6.0s   InstallToRender — npx ondajs → BlurReveal in accent
+//   4   366 → 522     5.2s   QuoteCard (Saul Bass)
+//   5   486 → 720     7.8s   EndCard ("Made with Onda" + onda.video)
+//   total  720f = 24s
 
-const FADE = 24;
-export const HERO_DURATION_FRAMES = 840;
+const FADE = 36;
+export const HERO_DURATION_FRAMES = 720;
 
-// Per-beat duration table — kept inline rather than scattered through the
-// JSX so the crossfade math is obvious at a glance.
 const BEATS = [
-  { from: 0, duration: 150 }, // 1 — LogoSting
-  { from: 126, duration: 180 }, // 2 — StatCard
-  { from: 282, duration: 180 }, // 3 — BarChart
-  { from: 438, duration: 210 }, // 4 — QuoteCard (longer hold; quotes need to read)
-  { from: 624, duration: 216 }, // 5 — EndCard (final frame of the loop)
+  { from: 0, duration: 144 },
+  { from: 108, duration: 150 },
+  { from: 222, duration: 180 },
+  { from: 366, duration: 156 },
+  { from: 486, duration: 234 },
 ];
 
+// Brand wave — the same path the BrandLogo renders in the nav and the
+// site favicon. Using the canonical asset here means the LogoSting beat
+// opens with THE Onda mark, not a generic placeholder.
 const logoProps = logoStingSchema.parse({
   title: 'Onda',
+  d: WAVE_PATH,
+  viewBox: WAVE_VIEWBOX,
+  pathWidth: 480,
+  pathHeight: 120,
+  strokeWidth: 3,
+  stroke: '#D96B82', // accent rose — color the wave itself
   accent: true,
 });
 
@@ -83,7 +98,28 @@ const statProps = statCardSchema.parse({
   accent: true,
 });
 
-const chartProps = barChartSchema.parse({});
+// Faux-terminal install line. Linear pacing is part of Typewriter's
+// contract; duration here is total frames to type the whole string.
+const installProps = typewriterSchema.parse({
+  text: 'npx ondajs add blur-reveal',
+  delay: 6,
+  duration: 36, // ~1.2s to type 26 chars — brisk, readable
+  cursor: true,
+  color: '#F2F2F4',
+  fontSize: 36,
+  fontFamily: '"Space Grotesk", ui-monospace, monospace',
+});
+
+// The reveal that lands AFTER the typed command — and in accent rose,
+// not white, so the wow beat earns its color. Delay math: 6f offset +
+// 36f typing + ~18f beat-of-silence = ~60.
+const revealProps = blurRevealSchema.parse({
+  text: 'Onda',
+  delay: 60,
+  duration: 22,
+  fontSize: 200,
+  color: '#D96B82',
+});
 
 const quoteProps = quoteCardSchema.parse({ accent: true });
 
@@ -93,23 +129,40 @@ const endProps = endCardSchema.parse({
   accent: true,
 });
 
-// Vignette is the persistent atmospheric layer. Slightly stronger than the
-// component's default so the dark edges feel cinematic without crowding the
-// scene blocks' centered content. innerRadius left at the default 40 so
-// the clear center is generous.
-const vignetteProps = vignetteSchema.parse({ intensity: 0.65 });
+// Warm-dark drifting gradient — sits at the very bottom of the layer
+// stack and rotates 0.25°/frame so there's ALWAYS motion in the frame
+// even at peak-stillness moments of individual scenes. The colors
+// stay deep (mostly black) with a hint of rose so the accent earned
+// inside each scene still reads as the focal color.
+const gradientProps = gradientShiftSchema.parse({
+  from: '#08080A',
+  to: '#1A0E12',
+  angle: 135,
+  speed: 0.25,
+});
+
+// Subtle grain — keeps the dark areas from going flat. Stays well
+// below the cap that would start reading as noise on its own.
+const grainProps = grainOverlaySchema.parse({
+  opacity: 0.05,
+  baseFrequency: 0.9,
+  numOctaves: 1,
+});
+
+const vignetteProps = vignetteSchema.parse({ intensity: 0.7 });
 
 /**
- * Opacity envelope around a scene — fades in over the first `fade` frames,
- * holds at 1, fades out over the last `fade` frames. Wrapped around each
- * Sequence's content so consecutive (overlapping) beats crossfade at the
- * seam instead of hard-cutting.
+ * Each beat's enter / exit envelope. Three things ramp together:
  *
- * Easing is the HOUSE_EASE bezier we use for every opacity transition in
- * the library — keeps the hero motion feeling like one piece of fabric
- * with the rest of the catalog.
+ *   opacity   0 → 1 → 1 → 0          standard crossfade
+ *   scale     1.03 → 1 → 1 → 0.97    pull-in on entry, push-back on exit
+ *   blur      6px → 0 → 0 → 6px      focus on entry, soft-out on exit
+ *
+ * Apple-keynote dissolve. The scale + blur deltas are deliberately tiny
+ * so the transition reads as "two scenes blending" rather than "a
+ * transition effect" announcing itself.
  */
-function SceneFade({
+function SceneTransition({
   children,
   durationInFrames,
   fade = FADE,
@@ -119,71 +172,132 @@ function SceneFade({
   fade?: number;
 }) {
   const frame = useCurrentFrame();
-  const opacity = interpolate(
-    frame,
-    [0, fade, durationInFrames - fade, durationInFrames],
-    [0, 1, 1, 0],
-    {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-      easing: Easing.bezier(0.16, 1, 0.3, 1),
-    },
+  const easing = Easing.bezier(0.16, 1, 0.3, 1);
+  const keyframes = [0, fade, durationInFrames - fade, durationInFrames];
+
+  const opacity = interpolate(frame, keyframes, [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing,
+  });
+  const scale = interpolate(frame, keyframes, [1.03, 1, 1, 0.97], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing,
+  });
+  const blur = interpolate(frame, keyframes, [6, 0, 0, 6], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing,
+  });
+
+  return (
+    <AbsoluteFill
+      style={{
+        opacity,
+        transform: `scale(${scale})`,
+        filter: `blur(${blur}px)`,
+      }}
+    >
+      {children}
+    </AbsoluteFill>
   );
-  return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
+}
+
+/**
+ * Beat 3 — the WOW. A faux terminal types the install command, then on
+ * completion the BlurReveal it would install plays beneath in accent
+ * rose. The reel literally demonstrates the lib's promise in six
+ * seconds.
+ */
+function InstallToRender() {
+  return (
+    <AbsoluteFill
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 80,
+        padding: '0 10%',
+      }}
+    >
+      <div
+        style={{
+          background: 'rgba(14, 14, 18, 0.85)',
+          border: '1px solid #1C1C22',
+          borderRadius: 14,
+          padding: '20px 28px',
+          minWidth: 560,
+          maxWidth: 680,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          boxShadow: '0 30px 60px -34px rgba(0,0,0,0.9)',
+          backdropFilter: 'blur(8px)',
+        }}
+      >
+        <span
+          style={{
+            color: '#56565F',
+            fontFamily: '"Space Grotesk", ui-monospace, monospace',
+            fontSize: 36,
+            lineHeight: 1,
+          }}
+        >
+          $
+        </span>
+        <Typewriter {...installProps} />
+      </div>
+
+      <BlurReveal {...revealProps} />
+    </AbsoluteFill>
+  );
 }
 
 export const HeroComposition: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* Beat 1 — LogoSting. The branded opener: wave path draws itself in,
-          "Onda" settles beneath, accent rule lands. Replaces the static
-          TitleCard so the very first second of the reel demonstrates DrawOn,
-          ScaleIn, and Underline composing into a single moment. */}
+      {/* Layer 1 — persistent warm-dark drift. Always moving, always
+          slightly colored. Renders for the full 720 frames. */}
+      <GradientShift {...gradientProps} />
+
+      {/* Layer 2 — the five beats, each in its own Sequence + transition. */}
       <Sequence from={BEATS[0].from} durationInFrames={BEATS[0].duration}>
-        <SceneFade durationInFrames={BEATS[0].duration}>
+        <SceneTransition durationInFrames={BEATS[0].duration}>
           <LogoSting {...logoProps} />
-        </SceneFade>
+        </SceneTransition>
       </Sequence>
 
-      {/* Beat 2 — StatCard. Big counted-up number; label and accent rule
-          settle in beneath. Proves the catalog has weight without saying so. */}
       <Sequence from={BEATS[1].from} durationInFrames={BEATS[1].duration}>
-        <SceneFade durationInFrames={BEATS[1].duration}>
+        <SceneTransition durationInFrames={BEATS[1].duration}>
           <StatCard {...statProps} />
-        </SceneFade>
+        </SceneTransition>
       </Sequence>
 
-      {/* Beat 3 — BarChart. Defaults compare Remotion / After Effects /
-          Lottie; the largest bar (Remotion) earns the accent. Doubles as
-          a why-we-bet-on-Remotion statement and a chart-primitive demo. */}
       <Sequence from={BEATS[2].from} durationInFrames={BEATS[2].duration}>
-        <SceneFade durationInFrames={BEATS[2].duration}>
-          <BarChart {...chartProps} />
-        </SceneFade>
+        <SceneTransition durationInFrames={BEATS[2].duration}>
+          <InstallToRender />
+        </SceneTransition>
       </Sequence>
 
-      {/* Beat 4 — Saul Bass pull quote (component defaults). "Motion is the
-          difference between art and craft." From the patron saint of
-          restrained graphic design; pitch-perfect for a motion-graphics lib.
-          Longer hold (7s) so the multi-line quote has time to read. */}
       <Sequence from={BEATS[3].from} durationInFrames={BEATS[3].duration}>
-        <SceneFade durationInFrames={BEATS[3].duration}>
+        <SceneTransition durationInFrames={BEATS[3].duration}>
           <QuoteCard {...quoteProps} />
-        </SceneFade>
+        </SceneTransition>
       </Sequence>
 
-      {/* Beat 5 — EndCard. The lasting frame: brand promise + the domain,
-          and the final earned accent moment of the reel. Slightly longer
-          hold so the loop's last visible state is the home URL. */}
       <Sequence from={BEATS[4].from} durationInFrames={BEATS[4].duration}>
-        <SceneFade durationInFrames={BEATS[4].duration}>
+        <SceneTransition durationInFrames={BEATS[4].duration}>
           <EndCard {...endProps} />
-        </SceneFade>
+        </SceneTransition>
       </Sequence>
 
-      {/* Persistent atmospheric layer — sits above the scenes but is
-          static, low-opacity, and pointer-events:none. Quiet cinematic
-          frame that ties all 28 seconds into one piece. */}
+      {/* Layer 3 — subtle grain on top of scenes. Keeps the flat areas
+          alive. */}
+      <GrainOverlay {...grainProps} />
+
+      {/* Layer 4 — cinematic edge frame. Top of the stack so it darkens
+          everything below at the corners. */}
       <Vignette {...vignetteProps} />
     </AbsoluteFill>
   );
