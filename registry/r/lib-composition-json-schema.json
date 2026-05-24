@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-composition-json-schema",
+  "type": "registry:lib",
+  "title": "Composition JSON Schema",
+  "description": "Composition + Entry exposed as JSON Schema, for use with OpenAI structured output / Anthropic tool use / any LLM that consumes JSON Schema. Auto-derived from compositionSchema / entrySchema via zod-to-json-schema — change the Zod schema, the JSON Schema updates on next import.",
+  "dependencies": [
+    "zod",
+    "zod-to-json-schema"
+  ],
+  "registryDependencies": [
+    "lib-composition"
+  ],
+  "files": [
+    {
+      "path": "lib/composition-json-schema.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/composition-json-schema.ts",
+      "content": "// Composition + Entry as JSON Schema — for LLM structured-output / tool-use.\n// See `docs/composing-with-onda.md` for the full payload contract.\n\nimport { zodToJsonSchema } from 'zod-to-json-schema';\nimport { compositionSchema, entrySchema } from './composition';\n\nexport const compositionJsonSchema = zodToJsonSchema(compositionSchema, 'Composition');\nexport const entryJsonSchema = zodToJsonSchema(entrySchema, 'Entry');\n"
+    }
+  ]
+}

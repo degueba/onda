@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-canvas-presets",
+  "type": "registry:lib",
+  "title": "Canvas presets",
+  "description": "Typed constants for the common video formats — vertical social (1080×1920), horizontal social (1920×1080), square (1080×1080), portrait feed (1080×1350), cinematic 4K (3840×2160). Plus resolveCanvas() that accepts either a preset name or explicit {width, height, fps?}.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/canvas-presets.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/canvas-presets.ts",
+      "content": "// Canonical canvas dimensions for the common video formats. Belongs next\n// to lib/tokens.ts in spirit — typed constants so agents and renderers\n// don't hardcode 1080×1920 per consumer.\n\nexport const CANVAS_PRESETS = {\n  /** Vertical social — TikTok, Reels, Shorts. The most common mobile-first format. */\n  verticalSocial:   { width: 1080, height: 1920, fps: 30 },\n  /** Horizontal social — YouTube landscape, X feed. */\n  horizontalSocial: { width: 1920, height: 1080, fps: 30 },\n  /** Square — Instagram feed, LinkedIn. */\n  square:           { width: 1080, height: 1080, fps: 30 },\n  /** Portrait feed — Instagram 4:5. */\n  portraitFeed:     { width: 1080, height: 1350, fps: 30 },\n  /** Cinematic 4K — hero / premium. 24fps for film feel. */\n  cinematic4k:      { width: 3840, height: 2160, fps: 24 },\n} as const;\n\nexport type CanvasPreset = keyof typeof CANVAS_PRESETS;\n\n/**\n * Accept either a named preset (`'verticalSocial'`) or an explicit\n * `{width, height, fps?}` and return canonical `{width, height, fps}`.\n * `fps` defaults to 30 when omitted in object form.\n */\nexport function resolveCanvas(\n  spec: CanvasPreset | { width: number; height: number; fps?: number },\n): { width: number; height: number; fps: number } {\n  if (typeof spec === 'string') return { ...CANVAS_PRESETS[spec] };\n  return { width: spec.width, height: spec.height, fps: spec.fps ?? 30 };\n}\n"
+    }
+  ]
+}
