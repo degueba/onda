@@ -26,11 +26,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - uses: pnpm/action-setup@v6
+        # No `version:` here — the action defers to `packageManager` in root
+        # package.json. Having both produces ERR_PNPM_BAD_PM_VERSION.
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: pnpm
@@ -50,11 +50,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - uses: pnpm/action-setup@v6
+        # No `version:` here — the action defers to `packageManager` in root
+        # package.json. Having both produces ERR_PNPM_BAD_PM_VERSION.
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: pnpm

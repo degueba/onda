@@ -15,8 +15,11 @@ updates:
     groups:
       production:
         dependency-type: production
+        # Majors get their own PRs — easier to review one breaking change at a time.
+        update-types: ['minor', 'patch']
       development:
         dependency-type: development
+        update-types: ['minor', 'patch']
 
   - package-ecosystem: github-actions
     directory: /
