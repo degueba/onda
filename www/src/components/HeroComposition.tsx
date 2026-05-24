@@ -1,10 +1,17 @@
 'use client';
 
-import { Sequence, AbsoluteFill } from 'remotion';
+import React from 'react';
 import {
-  TitleCard,
-  titleCardSchema,
-} from '@onda/registry/components/title-card/TitleCard';
+  AbsoluteFill,
+  Easing,
+  Sequence,
+  interpolate,
+  useCurrentFrame,
+} from 'remotion';
+import {
+  LogoSting,
+  logoStingSchema,
+} from '@onda/registry/components/logo-sting/LogoSting';
 import {
   StatCard,
   statCardSchema,
@@ -21,37 +28,52 @@ import {
   EndCard,
   endCardSchema,
 } from '@onda/registry/components/end-card/EndCard';
+import {
+  Vignette,
+  vignetteSchema,
+} from '@onda/registry/components/vignette/Vignette';
 
-// Landing hero — 30-second reel built ENTIRELY from registered Onda scene
-// blocks. Five beats, each ~5–7 seconds, no bespoke motion: the hero IS
-// what Onda makes, end-to-end. Visitors are watching a sample composition,
-// not a marketing render.
+// Landing hero — 28-second reel built ENTIRELY from registered Onda scene
+// blocks, framed by a persistent Vignette. Five beats:
 //
-// Why hard cuts (no crossfade between Sequences): every scene block has
-// its own SPRING_SMOOTH-driven entry, so the seam BETWEEN scenes is the
-// next scene's blur / rise / count-up. Adding a crossfade on top would
-// fight that motion. The composition's coherence is the proof — the
-// transitions feel like one motion language because they ARE one motion
-// language (every block composes the same primitives).
+//   beat 1   0   → 150     5.0s   LogoSting          wave draws + "Onda" + accent
+//   beat 2   126 → 306     6.0s   StatCard           38 components
+//   beat 3   282 → 462     6.0s   BarChart           Remotion / AE / Lottie
+//   beat 4   438 → 648     7.0s   QuoteCard          Saul Bass on motion
+//   beat 5   624 → 840     7.2s   EndCard            "Made with Onda" + onda.video
+//   total    840 frames = 28s — matches HERO_DURATION_FRAMES in HeroPlayer.
 //
-// Why we resolve props via `schema.parse(overrides)`: zod's `.default()`
-// kicks in at parse time, not at type-inference time, so `z.infer<T>`
-// makes every prop required even though every component has defaults
-// for everything. Parsing here gives us a fully-typed Props object with
-// our overrides applied on top. Same trick LivePreview uses; reusing it
-// keeps the failure surface small.
+// Consecutive beats overlap by FADE = 24 frames; SceneFade adds an opacity
+// envelope that crossfades them at the seam. Hard cuts on top of each scene
+// block's spring-driven entry felt jumpy; the crossfade lets the previous
+// scene drift out while the next blurs in, so the reel reads as one
+// continuous piece instead of five abutted clips.
 //
-// Timing math (30fps):
-//   beat 1: 0   → 150     5s   TitleCard          "Onda" + tagline
-//   beat 2: 150 → 330     6s   StatCard           38 components
-//   beat 3: 330 → 510     6s   BarChart           Remotion / AE / Lottie defaults
-//   beat 4: 510 → 690     6s   QuoteCard          Saul Bass on motion (defaults)
-//   beat 5: 690 → 900     7s   EndCard            "Made with Onda" + onda.video
-//   total  900 frames = 30s — matches HERO_DURATION_FRAMES in HeroPlayer.
+// Vignette renders OUTSIDE every Sequence so it persists across the full
+// 28s — a quiet cinematic frame that ties everything together. It's
+// pointer-events:none and has no entry motion (static atmospheric layer),
+// so it costs nothing visually beyond the slight edge darkening.
+//
+// schema.parse(overrides) is the canonical way to get fully-typed props
+// out of our zod schemas — `.default()` runs at parse time, not type-
+// inference time, so z.infer makes every prop look required. Same pattern
+// LivePreview uses.
 
-const titleProps = titleCardSchema.parse({
+const FADE = 24;
+export const HERO_DURATION_FRAMES = 840;
+
+// Per-beat duration table — kept inline rather than scattered through the
+// JSX so the crossfade math is obvious at a glance.
+const BEATS = [
+  { from: 0, duration: 150 }, // 1 — LogoSting
+  { from: 126, duration: 180 }, // 2 — StatCard
+  { from: 282, duration: 180 }, // 3 — BarChart
+  { from: 438, duration: 210 }, // 4 — QuoteCard (longer hold; quotes need to read)
+  { from: 624, duration: 216 }, // 5 — EndCard (final frame of the loop)
+];
+
+const logoProps = logoStingSchema.parse({
   title: 'Onda',
-  subtitle: 'code-first motion graphics for Remotion',
   accent: true,
 });
 
@@ -71,41 +93,98 @@ const endProps = endCardSchema.parse({
   accent: true,
 });
 
+// Vignette is the persistent atmospheric layer. Slightly stronger than the
+// component's default so the dark edges feel cinematic without crowding the
+// scene blocks' centered content. innerRadius left at the default 40 so
+// the clear center is generous.
+const vignetteProps = vignetteSchema.parse({ intensity: 0.65 });
+
+/**
+ * Opacity envelope around a scene — fades in over the first `fade` frames,
+ * holds at 1, fades out over the last `fade` frames. Wrapped around each
+ * Sequence's content so consecutive (overlapping) beats crossfade at the
+ * seam instead of hard-cutting.
+ *
+ * Easing is the HOUSE_EASE bezier we use for every opacity transition in
+ * the library — keeps the hero motion feeling like one piece of fabric
+ * with the rest of the catalog.
+ */
+function SceneFade({
+  children,
+  durationInFrames,
+  fade = FADE,
+}: {
+  children: React.ReactNode;
+  durationInFrames: number;
+  fade?: number;
+}) {
+  const frame = useCurrentFrame();
+  const opacity = interpolate(
+    frame,
+    [0, fade, durationInFrames - fade, durationInFrames],
+    [0, 1, 1, 0],
+    {
+      extrapolateLeft: 'clamp',
+      extrapolateRight: 'clamp',
+      easing: Easing.bezier(0.16, 1, 0.3, 1),
+    },
+  );
+  return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
+}
+
 export const HeroComposition: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* Beat 1 — title card. The opening note: brand name + tagline,
-          accent underline as quiet punctuation. */}
-      <Sequence from={0} durationInFrames={150}>
-        <TitleCard {...titleProps} />
+      {/* Beat 1 — LogoSting. The branded opener: wave path draws itself in,
+          "Onda" settles beneath, accent rule lands. Replaces the static
+          TitleCard so the very first second of the reel demonstrates DrawOn,
+          ScaleIn, and Underline composing into a single moment. */}
+      <Sequence from={BEATS[0].from} durationInFrames={BEATS[0].duration}>
+        <SceneFade durationInFrames={BEATS[0].duration}>
+          <LogoSting {...logoProps} />
+        </SceneFade>
       </Sequence>
 
-      {/* Beat 2 — stat card. Big counted-up number; label and accent rule
+      {/* Beat 2 — StatCard. Big counted-up number; label and accent rule
           settle in beneath. Proves the catalog has weight without saying so. */}
-      <Sequence from={150} durationInFrames={180}>
-        <StatCard {...statProps} />
+      <Sequence from={BEATS[1].from} durationInFrames={BEATS[1].duration}>
+        <SceneFade durationInFrames={BEATS[1].duration}>
+          <StatCard {...statProps} />
+        </SceneFade>
       </Sequence>
 
-      {/* Beat 3 — bar chart. Defaults compare Remotion / After Effects /
+      {/* Beat 3 — BarChart. Defaults compare Remotion / After Effects /
           Lottie; the largest bar (Remotion) earns the accent. Doubles as
           a why-we-bet-on-Remotion statement and a chart-primitive demo. */}
-      <Sequence from={330} durationInFrames={180}>
-        <BarChart {...chartProps} />
+      <Sequence from={BEATS[2].from} durationInFrames={BEATS[2].duration}>
+        <SceneFade durationInFrames={BEATS[2].duration}>
+          <BarChart {...chartProps} />
+        </SceneFade>
       </Sequence>
 
-      {/* Beat 4 — Saul Bass pull quote (component default). "Motion is the
+      {/* Beat 4 — Saul Bass pull quote (component defaults). "Motion is the
           difference between art and craft." From the patron saint of
-          restrained graphic design; pitch-perfect for a motion-graphics lib. */}
-      <Sequence from={510} durationInFrames={180}>
-        <QuoteCard {...quoteProps} />
+          restrained graphic design; pitch-perfect for a motion-graphics lib.
+          Longer hold (7s) so the multi-line quote has time to read. */}
+      <Sequence from={BEATS[3].from} durationInFrames={BEATS[3].duration}>
+        <SceneFade durationInFrames={BEATS[3].duration}>
+          <QuoteCard {...quoteProps} />
+        </SceneFade>
       </Sequence>
 
-      {/* Beat 5 — end card. The lasting frame: brand promise + the domain,
+      {/* Beat 5 — EndCard. The lasting frame: brand promise + the domain,
           and the final earned accent moment of the reel. Slightly longer
           hold so the loop's last visible state is the home URL. */}
-      <Sequence from={690} durationInFrames={210}>
-        <EndCard {...endProps} />
+      <Sequence from={BEATS[4].from} durationInFrames={BEATS[4].duration}>
+        <SceneFade durationInFrames={BEATS[4].duration}>
+          <EndCard {...endProps} />
+        </SceneFade>
       </Sequence>
+
+      {/* Persistent atmospheric layer — sits above the scenes but is
+          static, low-opacity, and pointer-events:none. Quiet cinematic
+          frame that ties all 28 seconds into one piece. */}
+      <Vignette {...vignetteProps} />
     </AbsoluteFill>
   );
 };

@@ -124,6 +124,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             delay={delay}
             duration={DURATION.base}
             stagger={QUOTE_STAGGER}
+            justify="center"
             color={color}
             fontSize={quoteFontSize}
             fontFamily={fontFamily}

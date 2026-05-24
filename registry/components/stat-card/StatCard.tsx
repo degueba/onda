@@ -104,6 +104,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         delay={labelDelay}
         duration={DURATION.base}
         stagger={STAGGER}
+        justify="center"
         color={labelColor}
         fontSize={labelFontSize}
         fontFamily={fontFamily}

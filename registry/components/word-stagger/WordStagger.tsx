@@ -14,6 +14,14 @@ export const wordStaggerSchema = z.object({
   duration: z.number().int().min(1).default(DURATION.base),
   /** Frames between consecutive words. Canonical Onda stagger is `4`. */
   stagger: z.number().int().min(0).default(STAGGER),
+  /**
+   * Horizontal alignment of the words within the WordStagger container.
+   * With `flex-wrap: wrap`, this controls how each line's words sit
+   * relative to the line — `'center'` lets long quotes wrap with each
+   * line centered (used by QuoteCard); the default `'flex-start'`
+   * left-aligns like a tagline.
+   */
+  justify: z.enum(['flex-start', 'center', 'flex-end']).default('flex-start'),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
   color: z.string().default('#F2F2F4'),
   /** Pixels. */
@@ -33,7 +41,7 @@ export type WordStaggerProps = z.infer<typeof wordStaggerSchema>;
  * <WordStagger text="motion that moves you" stagger={4} />
  */
 export const WordStagger: React.FC<WordStaggerProps> = ({
-  text, delay, duration, stagger, color, fontSize, fontFamily,
+  text, delay, duration, stagger, justify, color, fontSize, fontFamily,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -48,6 +56,10 @@ export const WordStagger: React.FC<WordStaggerProps> = ({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        // `justifyContent` centers each wrapped line independently when
+        // flex-wrap is on — that's what makes a wrapped pull-quote read as
+        // a centered block instead of a left-anchored ragged paragraph.
+        justifyContent: justify,
         gap: '0.3em',
         color,
         fontSize,

@@ -104,6 +104,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
         delay={delay + SUBTITLE_OFFSET}
         duration={18}
         stagger={4}
+        justify="center"
         color={subtitleColor}
         fontSize={subtitleFontSize}
         fontFamily={fontFamily}
