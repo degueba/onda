@@ -74,7 +74,7 @@ export function TryItPopover({ schema, values, defaults, presets, onChange }: Pr
         aria-hidden={!open}
         className={`
           fixed top-0 right-0 z-40
-          h-screen w-80 max-w-[90vw]
+          h-screen w-72 max-w-[90vw]
           bg-onda-surface/95 backdrop-blur-lg
           border-l border-onda-border-lit
           shadow-[0_0_60px_-20px_rgba(0,0,0,0.7)]

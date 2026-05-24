@@ -88,7 +88,7 @@ Add transitions to `registry/registry.json` using the existing `items` array, wi
 
 ## Catalog
 
-Ten transitions. Every one carries the Onda fingerprint via the house defaults above. The split between Remotion-wrapped and Onda-original is documented per-entry so contributors know which arm of the codebase they're touching.
+Twelve transitions, split 6 / 6 between Remotion-wrapped and Onda-originals. Every one carries the Onda fingerprint via the house defaults above. The catalog deliberately spans three registers — *calm* (cross-fade, morph, dip, blur), *geometric* (wipe, clock, iris, flip), *spatial* (slide, push, depthPush), plus *zoom* as the lone accent — so a composition has tonal range without leaving the Onda feel. The split between Remotion-wrapped and Onda-original is documented per-entry so contributors know which arm of the codebase they're touching.
 
 ### Remotion-wrapped (6)
 
@@ -103,7 +103,7 @@ Thin presentations over `@remotion/transitions` primitives, with Onda easing/tim
 | `flip` | `flip()` | `direction: 'left' \| 'right' \| 'up' \| 'down'` |
 | `iris` | `iris()` | `x?, y?` (default: center) |
 
-### Onda-originals (4)
+### Onda-originals (6)
 
 Not provided by Remotion. Hand-written presentations.
 
@@ -113,6 +113,8 @@ Not provided by Remotion. Hand-written presentations.
 | `dipToColor` | Outgoing scene fades to a solid color, incoming fades up from it. The editing-room classic (dip-to-black, dip-to-white). Options: `color` (defaults to `--onda-bg`). |
 | `morph` | Cross-fade with a subtle synchronized scale (outgoing 1→1.04, incoming 0.96→1) so the cut feels cinematic, not flat. Pure Onda restraint — the scale is small enough to register as polish, not effect. |
 | `depthPush` | Push with parallax depth scale — outgoing scene scales down slightly as it pushes off, incoming scales from slightly large. Onda's signature multi-scene move. Options: `direction`. |
+| `blur` | Outgoing scene blurs out (0→10px) as it fades; incoming blurs in (10px→0) as it fades up. Extends Onda's reference `BlurReveal` fingerprint across a cut — the missing transition-side of the catalog's most-used entrance primitive. |
+| `zoom` | Scale-driven punch: outgoing scene scales up (1→1.2) and fades; incoming scales from larger-than-frame (1.1→1) as it fades in. The catalog's lone *accent* register — used sparingly, it's the moment that lets the calm transitions read as deliberate by contrast. Options: `direction: 'in' \| 'out'` (default `'in'`, where the incoming scene zooms toward the viewer). |
 
 ### Explicitly excluded
 
@@ -136,7 +138,7 @@ Not provided by Remotion. Hand-written presentations.
 1. **Reference implementation: `crossFade`.** Smallest possible transition; exercises the full contract (factory shape, schema, meta, README, registry entry). Lands first as the pattern other contributors copy.
 2. **Update `lib/registry-summary.ts`** to surface transitions as a distinct group.
 3. **Add `@remotion/transitions` to `package.json` deps.** Keep at the same `^4.0.0` range as the rest of the Remotion deps.
-4. **Coordinate scope with Studio** *after* (1)-(3) land — share the catalog table above, confirm the factory shape matches what Studio's mapper needs, then parallelize the remaining 9 transitions one-per-branch per the existing workflow rules in CLAUDE.md §5.
+4. **Coordinate scope with Studio** *after* (1)-(3) land — share the catalog table above, confirm the factory shape matches what Studio's mapper needs, then parallelize the remaining 11 transitions one-per-branch per the existing workflow rules in CLAUDE.md §5.
 5. **Build the catalog.** One transition per branch. Remotion-wrapped first (mechanical), then Onda-originals (require more design judgment).
 
 ## Open questions

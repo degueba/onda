@@ -316,9 +316,17 @@ function FieldControl({
     const numeric = value === undefined || value === null ? fallback : Number(value);
     const safe = Number.isFinite(numeric) ? numeric : fallback;
     if (hint) {
+      // Slider fills the control column — it needs the width to be usable.
       return <Slider value={safe} onChange={onChange} {...hint} />;
     }
-    return <NumberInput value={safe} onChange={onChange} />;
+    // No-hint number: compact input pushed to the right edge so there's
+    // visible white space between the label and the value (cleaner read
+    // than a wide input box sprawling across the column).
+    return (
+      <div className="flex justify-end">
+        <NumberInput value={safe} onChange={onChange} />
+      </div>
+    );
   }
 
   if (type === 'ZodEnum') {
@@ -374,7 +382,12 @@ function FieldControl({
   }
 
   if (type === 'ZodBoolean') {
-    return <Toggle value={Boolean(value)} onChange={onChange} />;
+    // Right-aligned — toggle is compact, hugs the value-column edge.
+    return (
+      <div className="flex justify-end">
+        <Toggle value={Boolean(value)} onChange={onChange} />
+      </div>
+    );
   }
 
   // ZodUnion handling — the catalog uses unions for three distinct
@@ -382,7 +395,7 @@ function FieldControl({
   //   - `string | string[]` (color) → swatch + comma-list text input
   //   - placement union (region | coords) → region dropdown
   //   - `string | number` primitive (time specs like '0:04', or
-  //     hillsSeed) → text input, parse numeric on change
+  //     hillsSeed) → text input, parse numeric on change (compact, right-aligned)
   if (type === 'ZodUnion') {
     if (COLOR_PROP_NAMES.has(name)) {
       return <MultiColorField value={value} onChange={onChange} />;
@@ -390,7 +403,11 @@ function FieldControl({
     if (name === 'placement') {
       return <PlacementField value={value} onChange={onChange} />;
     }
-    return <PrimitiveUnionField value={value} onChange={onChange} />;
+    return (
+      <div className="flex justify-end">
+        <PrimitiveUnionField value={value} onChange={onChange} />
+      </div>
+    );
   }
 
   return (
@@ -809,7 +826,7 @@ function PrimitiveUnionField({
         }
       }}
       placeholder='"0:04" or 4'
-      className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-full text-right focus:outline-none focus:border-onda-text/40"
+      className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-20 text-right focus:outline-none focus:border-onda-text/40"
     />
   );
 }
