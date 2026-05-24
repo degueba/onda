@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/degueba/onda/compare/ondajs-v0.2.0...ondajs-v0.3.0) (2026-05-24)
+
+
+### Features
+
+* canvas-aware components + media primitives + composition renderer ([#10](https://github.com/degueba/onda/issues/10)) ([3690e5d](https://github.com/degueba/onda/commit/3690e5d4602bccf39b853512783273a3bf134509))
+
 ## [0.2.0](https://github.com/degueba/onda/compare/ondajs-v0.1.0...ondajs-v0.2.0) (2026-05-24)
 
 
