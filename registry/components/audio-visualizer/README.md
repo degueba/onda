@@ -29,7 +29,7 @@ All four share the same `useAudioData` cache, the same `processFftValue` pipelin
 | `variant` | `'bars' \| 'wave' \| 'hills' \| 'radial'` | `'bars'` | Visualization style. |
 | `width` | `number` | `640` | Width in px (ignored by `'radial'` — use `radialDiameter`). |
 | `height` | `number` | `160` | Height in px (ignored by `'radial'`). |
-| `color` | `string` | `"#D96B82"` | Accent color. |
+| `color` | `string \| string[]` | `["#D96B82", "#E89AAB"]` | Single color OR an array. Bars / radial render a multi-stop vertical gradient. Wave cycles colors per stacked line. Hills cycle per stacked copy. Default is Onda's two-tone accent ramp (rose → soft rose). |
 | `glow` | `boolean` | `true` | Soft accent glow via `drop-shadow`. |
 | `minDb` | `number` | `-100` | Lower dB bound for FFT normalization. |
 | `maxDb` | `number` | `-30` | Upper dB bound. |
@@ -114,6 +114,35 @@ Paired with playback (the typical pattern):
 - **`'wave'` doesn't render raw audio data.** It's a parametric sine wave; the audio only drives `amplitude` via RMS. Rendering raw amplitude data as a continuous shape pinches to zero at silent samples and looks broken.
 - **`'hills'` per-bump variation is deterministic.** Driven by `hillsSeed` via Remotion's `random()`.
 - **`'radial'` mirrors the FFT data.** Takes the upper half of the spectrum, mirrors it, so the circle reads symmetrically.
+
+## Color examples
+
+```tsx
+// Default — two-tone Onda accent
+<AudioVisualizer src="..." variant="wave" />
+
+// Single color, fully tinted
+<AudioVisualizer src="..." variant="bars" color="#D96B82" />
+
+// Multi-color gradient on bars (top-to-bottom rainbow)
+<AudioVisualizer src="..." variant="bars" color={['#D96B82', '#E89AAB', '#F2F2F4']} />
+
+// Multi-color wave — each line gets its own hue
+<AudioVisualizer
+  src="..."
+  variant="wave"
+  waveLines={3}
+  color={['#D96B82', '#E89AAB', '#8E8E98']}
+/>
+
+// Multi-color hills — each copy gets its own fill
+<AudioVisualizer
+  src="..."
+  variant="hills"
+  hillsCopies={3}
+  color={['#D96B82', '#E89AAB', '#F2F2F4']}
+/>
+```
 
 ## Inspiration
 

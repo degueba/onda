@@ -58,8 +58,16 @@ export const audioVisualizerSchema = z.object({
   width: z.number().default(640),
   /** Height in px. */
   height: z.number().default(160),
-  /** Accent color. Defaults to `--onda-accent`. */
-  color: z.string().default('#D96B82'),
+  /**
+   * Accent color. Pass a single string for a one-tone visualizer, or an
+   * array for multi-color treatments — bars/radial render a vertical
+   * multi-stop gradient; wave/hills cycle through the array, one color
+   * per stacked line / copy. Default is Onda's two-tone accent ramp
+   * (rose → soft rose).
+   */
+  color: z
+    .union([z.string(), z.array(z.string()).min(1)])
+    .default(['#D96B82', '#E89AAB']),
   /** Add a soft accent glow via `drop-shadow`. */
   glow: z.boolean().default(true),
 
@@ -130,6 +138,13 @@ export type AudioVisualizerProps = z.infer<typeof audioVisualizerSchema>;
 // Drop-shadow string used when `glow` is on. Tuned for a soft accent halo.
 const GLOW_FILTER = 'drop-shadow(0 0 6px currentColor)';
 
+/** Normalize a `string | string[]` color prop to a non-empty array. */
+const toColorArray = (c: string | string[]): string[] =>
+  Array.isArray(c) ? (c.length > 0 ? c : ['#D96B82']) : [c];
+
+/** Pick a color by index, wrapping. */
+const colorAt = (colors: string[], i: number) => colors[i % colors.length];
+
 /**
  * Renders an animated visualization of an audio file. **Does not play
  * audio** — pair with `AudioClip` for playback.
@@ -189,17 +204,41 @@ const BarsVariant: React.FC<V> = ({
     return Math.log(1 + processed) / Math.log(2);
   });
 
+  // Multi-stop vertical gradient. Each color in the array becomes a stop;
+  // evenly distributed. With one color, the gradient fades to 30% alpha
+  // at the bottom (soft glow effect). With multiple colors, the array
+  // drives the stops (no alpha fade — the colors carry the visual).
+  const colors = toColorArray(color);
+  const stops = colors.length === 1
+    ? [
+        { offset: '0%', color: colors[0], opacity: 1 },
+        { offset: '100%', color: colors[0], opacity: 0.3 },
+      ]
+    : colors.map((c, i) => ({
+        offset: `${(i / (colors.length - 1)) * 100}%`,
+        color: c,
+        opacity: 1,
+      }));
+
+  // Use the first color for the glow tint (drop-shadow only takes one).
+  const tintColor = colors[0];
+
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ display: 'block', color, filter: glow ? GLOW_FILTER : undefined }}
+      style={{
+        display: 'block',
+        color: tintColor,
+        filter: glow ? GLOW_FILTER : undefined,
+      }}
     >
       <defs>
         <linearGradient id="ondaBarGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.3" />
+          {stops.map((s, i) => (
+            <stop key={i} offset={s.offset} stopColor={s.color} stopOpacity={s.opacity} />
+          ))}
         </linearGradient>
       </defs>
       {bars.map((v, i) => {
@@ -255,20 +294,27 @@ const WaveVariant: React.FC<V> = ({
     });
   });
 
+  // Cycle the color array across stacked lines. With a single color,
+  // every line is the same hue and we apply opacity decay so the layers
+  // read as one ribbon. With multiple colors, each line gets its own
+  // hue — no opacity decay so each color is fully present.
+  const colors = toColorArray(color);
+  const tintColor = colors[0];
+
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 ${-height / 2} ${width} ${height}`}
-      style={{ display: 'block', color, filter: glow ? GLOW_FILTER : undefined }}
+      style={{ display: 'block', color: tintColor, filter: glow ? GLOW_FILTER : undefined }}
     >
       {lines.map((d, i) => (
         <path
           key={i} d={d}
-          stroke="currentColor"
+          stroke={colorAt(colors, i)}
           strokeWidth={waveStrokeWidth}
           strokeLinecap="round"
-          strokeOpacity={1 - i * 0.25}
+          strokeOpacity={colors.length === 1 ? 1 - i * 0.25 : 1}
           fill="none"
         />
       ))}
@@ -359,18 +405,23 @@ const HillsVariant: React.FC<V> = ({
     return `M 0 0 ${segments.join(' ')} ${tail} Z`;
   };
 
+  // Cycle the color array across stacked copies.
+  const colors = toColorArray(color);
+  const tintColor = colors[0];
+
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 ${vbShift} ${width} ${height}`}
-      style={{ display: 'block', color, filter: glow ? GLOW_FILTER : undefined }}
+      style={{ display: 'block', color: tintColor, filter: glow ? GLOW_FILTER : undefined }}
     >
       {hills.map((line, i) => {
+        const fillColor = colorAt(colors, i);
         const pathProps = {
-          fill: 'currentColor',
+          fill: fillColor,
           fillOpacity: hillsFillOpacity / Math.max(1, hillsCopies - i),
-          stroke: hillsStrokeWidth > 0 ? 'currentColor' : 'none',
+          stroke: hillsStrokeWidth > 0 ? fillColor : 'none',
           strokeWidth: hillsStrokeWidth,
         };
         return (
@@ -413,17 +464,33 @@ const RadialVariant: React.FC<V> = ({
   });
   const amplitudes = [...halfBars, ...halfBars.slice().reverse()];
 
+  // Multi-stop gradient — same pattern as bars but oriented along the
+  // bar's height (outward from the ring). Each color becomes a stop.
+  const colors = toColorArray(color);
+  const stops = colors.length === 1
+    ? [
+        { offset: '0%', color: colors[0], opacity: 1 },
+        { offset: '100%', color: colors[0], opacity: 0.4 },
+      ]
+    : colors.map((c, i) => ({
+        offset: `${(i / (colors.length - 1)) * 100}%`,
+        color: c,
+        opacity: 1,
+      }));
+  const tintColor = colors[0];
+
   return (
     <svg
       width={radialDiameter}
       height={radialDiameter}
       viewBox={`0 0 ${radialDiameter} ${radialDiameter}`}
-      style={{ display: 'block', color, filter: glow ? GLOW_FILTER : undefined }}
+      style={{ display: 'block', color: tintColor, filter: glow ? GLOW_FILTER : undefined }}
     >
       <defs>
         <linearGradient id="ondaRadialGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.4" />
+          {stops.map((s, i) => (
+            <stop key={i} offset={s.offset} stopColor={s.color} stopOpacity={s.opacity} />
+          ))}
         </linearGradient>
       </defs>
       {amplitudes.map((v, i) => {
