@@ -14,6 +14,10 @@ Cycles through a list of phrases in place. Each phrase rises 12px and fades in o
 | `fontSize` | `number` | `96` | Pixels. Wins over `size` if both are passed. |
 | `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `fontWeight` | `number` | `600` | Font weight. |
+| `letterSpacing` | `string` | `"-0.02em"` | CSS letter-spacing — tight tracking by default. |
+| `lineHeight` | `number` | `1.1` | Unitless line height. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 
 ## Usage
 

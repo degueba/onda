@@ -27,6 +27,14 @@ export const highlightSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1`. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
   /** Pixels past the text edges that the highlight bar extends. */
   paddingX: z.number().default(8),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
@@ -56,6 +64,10 @@ export const Highlight: React.FC<HighlightProps> = ({
   fontSize,
   size,
   fontFamily,
+  fontWeight,
+  letterSpacing,
+  lineHeight,
+  align,
   paddingX,
   placement,
 }) => {
@@ -106,7 +118,10 @@ export const Highlight: React.FC<HighlightProps> = ({
             color,
             fontSize: resolvedFontSize,
             fontFamily,
-            fontWeight: 600,
+            fontWeight,
+            letterSpacing,
+            lineHeight,
+            textAlign: align,
           }}
         >
           {text}

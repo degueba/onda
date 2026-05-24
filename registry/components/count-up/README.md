@@ -17,6 +17,10 @@ An animated number that counts from `from` to `to` over `duration` while fading 
 | `fontSize` | `number` | `120` | Pixels. Counters are usually large. Wins over `size` if both are passed. |
 | `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `fontWeight` | `number` | `600` | Font weight. |
+| `letterSpacing` | `string` | `"normal"` | CSS letter-spacing (e.g. `"-0.02em"`, `"0.06em"`). |
+| `lineHeight` | `number` | `1.1` | Unitless line height. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 | `placement` | `Placement` | `'center'` | Where on the canvas the number sits. Pass a region (`'center'`, `'upper-third'`, `'top-right'`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage

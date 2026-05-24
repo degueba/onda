@@ -29,6 +29,14 @@ export const countUpSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1`. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });
@@ -44,7 +52,8 @@ export type CountUpProps = z.infer<typeof countUpSchema>;
  * <CountUp from={0} to={1247} prefix="$" suffix="+" />
  */
 export const CountUp: React.FC<CountUpProps> = ({
-  from, to, delay, duration, decimals, prefix, suffix, color, fontSize, size, fontFamily, placement,
+  from, to, delay, duration, decimals, prefix, suffix, color, fontSize, size, fontFamily,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -79,7 +88,8 @@ export const CountUp: React.FC<CountUpProps> = ({
     <PlacementBox placement={placement}>
       <div style={{
         opacity,
-        color, fontSize: resolvedFontSize, fontFamily, fontWeight: 600,
+        color, fontSize: resolvedFontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
         // tabular-nums keeps each digit slot a fixed width so the number
         // doesn't visibly shift left/right as digits change during the count.
         fontVariantNumeric: 'tabular-nums',

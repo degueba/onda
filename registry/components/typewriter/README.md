@@ -15,6 +15,10 @@ A character-by-character text reveal with an optional blinking cursor in the Ond
 | `fontSize` | `number` | `64` | Pixels. Wins over `size` if both are passed. |
 | `size` | `SizeRole?` | – | Semantic typography role — `'hero'` \| `'heading'` \| `'subheading'` \| `'body'` \| `'caption'`. Resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. |
 | `fontFamily` | `string` | `'"Space Grotesk", sans-serif'` | The Onda body font — reads more "typed" than Clash Display. Never default to monospace system fonts. |
+| `fontWeight` | `number` | `500` | Font weight. |
+| `letterSpacing` | `string` | `"normal"` | CSS letter-spacing. |
+| `lineHeight` | `number` | `1.4` | Unitless line height — looser for body / technical copy. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 
 ## Usage
 

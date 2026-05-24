@@ -23,6 +23,14 @@ export const wordRotateSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing. Default `'-0.02em'` matches the brand's tight display tracking. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1`. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link WordRotate}. */
@@ -46,6 +54,10 @@ export const WordRotate: React.FC<WordRotateProps> = ({
   fontSize,
   size,
   fontFamily,
+  fontWeight,
+  letterSpacing,
+  lineHeight,
+  align = 'left',
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -100,8 +112,10 @@ export const WordRotate: React.FC<WordRotateProps> = ({
               color,
               fontSize: resolvedFontSize,
               fontFamily,
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
+              fontWeight,
+              letterSpacing,
+              lineHeight,
+              textAlign: align,
               whiteSpace: 'nowrap',
             }}
           >

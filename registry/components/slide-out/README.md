@@ -14,6 +14,10 @@ A direction-parameterized translate-and-fade exit — the mirror of `SlideIn`. T
 | `color` | `string` | `"#F2F2F4"` | Text color — defaults to `--onda-text`. |
 | `fontSize` | `number` | `96` | Pixels. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `fontWeight` | `number` | `600` | Font weight. |
+| `letterSpacing` | `string` | `"normal"` | CSS letter-spacing (e.g. `"-0.02em"`, `"0.06em"`). |
+| `lineHeight` | `number` | `1.1` | Unitless line height. |
+| `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
 
 ## Usage
 

@@ -31,6 +31,14 @@ export const underlineSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1`. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link Underline}. */
@@ -57,6 +65,10 @@ export const Underline: React.FC<UnderlineProps> = ({
   fontSize,
   size,
   fontFamily,
+  fontWeight,
+  letterSpacing,
+  lineHeight,
+  align,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -90,7 +102,10 @@ export const Underline: React.FC<UnderlineProps> = ({
           color,
           fontSize: resolvedFontSize,
           fontFamily,
-          fontWeight: 600,
+          fontWeight,
+          letterSpacing,
+          lineHeight,
+          textAlign: align,
         }}
       >
         {text}

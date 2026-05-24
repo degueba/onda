@@ -24,6 +24,14 @@ export const typewriterSchema = z.object({
   size: sizeRoleSchema.optional(),
   /** Body / technical font — Space Grotesk reads more "terminal" than Clash. */
   fontFamily: z.string().default('"Space Grotesk", sans-serif'),
+  /** Font weight. Body / technical default `500`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'0.04em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.4` for body / multi-line copy. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link Typewriter}. */
@@ -40,6 +48,7 @@ export type TypewriterProps = z.infer<typeof typewriterSchema>;
  */
 export const Typewriter: React.FC<TypewriterProps> = ({
   text, delay, duration, cursor, cursorColor, color, fontSize, size, fontFamily,
+  fontWeight = 500, letterSpacing = 'normal', lineHeight = 1.4, align = 'left',
 }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
@@ -70,7 +79,10 @@ export const Typewriter: React.FC<TypewriterProps> = ({
       color,
       fontSize: resolvedFontSize,
       fontFamily,
-      fontWeight: 500,
+      fontWeight,
+      letterSpacing,
+      lineHeight,
+      textAlign: align,
     }}>
       {revealed}
       <span style={{ color: cursorColor, opacity: cursorOpacity }}>|</span>

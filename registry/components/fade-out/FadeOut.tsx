@@ -18,6 +18,14 @@ export const fadeOutSchema = z.object({
   fontSize: z.number().default(96),
   /** Onda display font. Never default to Inter / Arial / system. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1` for tight display copy. */
+  lineHeight: z.number().optional(),
+  /** Text alignment. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link FadeOut}. */
@@ -38,6 +46,7 @@ export type FadeOutProps = z.infer<typeof fadeOutSchema>;
  */
 export const FadeOut: React.FC<FadeOutProps> = ({
   text, delay, duration, color, fontSize, fontFamily,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
 }) => {
   const frame = useCurrentFrame();
   const local = Math.max(0, frame - delay);
@@ -51,7 +60,8 @@ export const FadeOut: React.FC<FadeOutProps> = ({
   return (
     <div style={{
       opacity,
-      color, fontSize, fontFamily, fontWeight: 600,
+      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+      textAlign: align,
     }}>
       {text}
     </div>

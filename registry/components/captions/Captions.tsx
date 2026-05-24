@@ -34,6 +34,12 @@ export const captionsSchema = z.object({
   fontFamily: z.string().default('"Clash Display", sans-serif'),
   /** Font weight (e.g. 500, 600). */
   fontWeight: z.number().default(600),
+  /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.15` for caption stacks. */
+  lineHeight: z.number().optional(),
+  /** Text alignment of the caption block. */
+  align: z.enum(['left', 'center', 'right']).optional(),
 });
 
 /** Inferred props for {@link Captions}. */
@@ -56,6 +62,9 @@ export const Captions: React.FC<CaptionsProps> = ({
   fontSize,
   fontFamily,
   fontWeight,
+  letterSpacing,
+  lineHeight,
+  align,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -72,13 +81,15 @@ export const Captions: React.FC<CaptionsProps> = ({
         display: 'flex',
         gap: '0.3em',
         flexWrap: 'wrap',
-        justifyContent: 'center',
+        // Flex justification mirrors text-alignment intent for the wrapped block.
+        justifyContent: align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center',
         alignItems: 'baseline',
         color,
         fontSize,
         fontFamily,
         fontWeight,
-        lineHeight: 1.15,
+        letterSpacing,
+        lineHeight,
       }}
     >
       {captions.map((caption, i) => {
