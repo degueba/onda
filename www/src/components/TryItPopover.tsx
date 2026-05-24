@@ -54,7 +54,7 @@ export function TryItPopover({ schema, values, defaults, presets, onChange }: Pr
           sideOffset={10}
           collisionPadding={16}
           avoidCollisions={false}
-          className="onda-popover-content z-50 w-42.5 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
+          className="onda-popover-content z-50 w-56 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
         >
           <div className="relative">
             <Popover.Close asChild>

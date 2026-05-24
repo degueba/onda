@@ -219,15 +219,14 @@ function FieldRow({
   onChange: (v: unknown) => void;
 }) {
   return (
-    // `minmax(0,1fr)` instead of `1fr` so the control column can shrink below
-    // its content's intrinsic width — otherwise wide inputs (e.g. the hex
-    // text field on color rows) push the popover open. `items-start` keeps
-    // the label at the TOP of tall multi-row controls (like the array
-    // field) so it doesn't look orphaned in the middle of the block; a
-    // small top padding on the label aligns it with the first row of
-    // single-line inputs.
-    <div className="grid grid-cols-[88px_minmax(0,1fr)] sm:grid-cols-[112px_minmax(0,1fr)] items-start gap-3">
-      <label className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate">
+    // Mobile: label stacked above control, full-width control — keeps
+    // wide controls (4-option segmented, color picker, etc.) usable on
+    // narrow popovers. Desktop (sm+): two-column grid, label on the left,
+    // control on the right. `minmax(0,1fr)` lets the control column
+    // shrink below its content's intrinsic width so wide inputs (hex
+    // field, segmented enum) don't push the popover open.
+    <div className="grid grid-cols-1 sm:grid-cols-[100px_minmax(0,1fr)] items-start gap-1 sm:gap-3">
+      <label className="text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate sm:pt-1.5">
         {name}
       </label>
       <div className="min-w-0">
@@ -610,8 +609,11 @@ function Segmented({
   options: string[];
   onChange: (v: string) => void;
 }) {
+  // `flex flex-wrap` (instead of `inline-flex`) so a 4-option enum with
+  // longer labels (e.g. variant: bars/wave/hills/radial) wraps to a
+  // second row inside narrow popover columns instead of overflowing.
   return (
-    <div className="inline-flex bg-onda-bg border border-onda-border rounded-md p-0.5">
+    <div className="flex flex-wrap gap-0.5 bg-onda-bg border border-onda-border rounded-md p-0.5">
       {options.map((option) => {
         const active = value === option;
         return (
