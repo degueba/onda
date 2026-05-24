@@ -11,7 +11,7 @@ export const endCardSchema = z.object({
   /** Hero CTA line. */
   cta: z.string().default('Made with Onda'),
   /** Social handles or URLs displayed in a row beneath the CTA. */
-  handles: z.array(z.string()).default(['@onda.dev', 'onda.dev/components']),
+  handles: z.array(z.string()).default(['@onda.video', 'onda.video/components']),
   /** Frames before the CTA starts. */
   delay: z.number().int().min(0).default(0),
   /** Show the accent underline beneath the CTA. */
@@ -47,7 +47,7 @@ const UNDERLINE_OFFSET = DURATION.base - 4; // underline starts drawing just as 
  * fingerprint stays consistent with the rest of the catalog.
  *
  * @example
- * <EndCard cta="Made with Onda" handles={['@onda.dev']} />
+ * <EndCard cta="Made with Onda" handles={['@onda.video']} />
  */
 export const EndCard: React.FC<EndCardProps> = ({
   cta,

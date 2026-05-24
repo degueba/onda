@@ -7,7 +7,7 @@ The closing scene block. A hero call-to-action reveals with the canonical Onda b
 | Name | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `cta` | `string` | `"Made with Onda"` | The headline / call-to-action. |
-| `handles` | `string[]` | `['@onda.dev', 'onda.dev/components']` | Social handles, URLs, or any short contact strings. Rendered as a horizontal staggered row. |
+| `handles` | `string[]` | `['@onda.video', 'onda.video/components']` | Social handles, URLs, or any short contact strings. Rendered as a horizontal staggered row. |
 | `delay` | `integer >= 0` | `0` | Frames before the CTA starts. The whole card is sequenced relative to this. |
 | `accent` | `boolean` | `true` | When `true`, the CTA renders through `Underline` so the accent-rose line draws beneath it. When `false`, the CTA renders through `BlurReveal` alone. |
 | `ctaFontSize` | `number` | `96` | Pixels — the CTA is the focal element. |
@@ -34,7 +34,7 @@ export const Root: React.FC = () => (
     schema={endCardSchema}
     defaultProps={{
       cta: 'Made with Onda',
-      handles: ['@onda.dev', 'onda.dev/components'],
+      handles: ['@onda.video', 'onda.video/components'],
       delay: 0,
       accent: true,
       ctaFontSize: 96,

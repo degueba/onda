@@ -17,7 +17,7 @@ The vehicle is wrong for our audience. Remotion users are not predominantly shad
 
 1. **Adopt the shadcn registry JSON format** as our on-disk serialization (`registry.json` + per-component JSON under `/r/<name>.json`). It's a well-designed spec; reinventing it adds no value.
 2. **Build a thin `npx onda` CLI** as the primary install path: `npx onda add <name>`. No project init. No `components.json`. Defaults to copying into `./components/onda/<name>/` (auto-detects `src/` and prefers `src/components/onda/<name>/` if present).
-3. **Make the docs site a first-class registry surface.** Every component page has a copy-to-clipboard button on its source, and a stable `https://onda.dev/r/<name>.json` URL for scripted / curl access.
+3. **Make the docs site a first-class registry surface.** Every component page has a copy-to-clipboard button on its source, and a stable `https://onda.video/r/<name>.json` URL for scripted / curl access.
 4. **Shadcn-CLI compatibility is a bonus, not a requirement.** Because we follow their JSON format, users who *already* have shadcn set up can pull from us. We don't advertise it as the primary path or build for it.
 5. **Drop the "shadcn for video" tagline.** Reposition as "code-first motion graphics for Remotion — installed as source, owned by you."
 
@@ -59,7 +59,7 @@ Hence: adopt format, replace CLI, keep compatibility as a side benefit.
 
 - Defaults:
   - `--out` → `./src/components/onda/<name>/` if a `src/` directory exists at the call site, else `./components/onda/<name>/`.
-  - `--registry` → `https://onda.dev/r`.
+  - `--registry` → `https://onda.video/r`.
 - Behavior:
   1. Fetch `<registry>/<name>.json`.
   2. Validate the shape (Zod schema mirroring the shadcn registry item schema).

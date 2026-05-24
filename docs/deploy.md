@@ -1,12 +1,12 @@
 # Deploy
 
-How to ship `onda.dev` to Vercel. Estimated time: ~30 minutes, most of which is DNS propagation.
+How to ship `onda.video` to Vercel. Estimated time: ~30 minutes, most of which is DNS propagation.
 
 ## Prerequisites
 
 - A Vercel account on a team that can create new projects.
 - The GitHub repository connected to that Vercel team (Settings → Git → connect GitHub).
-- The `onda.dev` domain purchased at a registrar (Namecheap, Cloudflare Registrar, Porkbun, etc.) with DNS managed at the registrar — not yet delegated anywhere.
+- The `onda.video` domain purchased at a registrar (Namecheap, Cloudflare Registrar, Porkbun, etc.) with DNS managed at the registrar — not yet delegated anywhere.
 - Local repo on `main`, with `vercel.json` committed and pushed.
 
 ## Why the config looks the way it does
@@ -62,10 +62,10 @@ https://onda-<hash>.vercel.app/r/index.json
 
 Project → **Settings → Domains** → add both:
 
-- `onda.dev` (apex)
-- `www.onda.dev`
+- `onda.video` (apex)
+- `www.onda.video`
 
-Vercel will mark `www.onda.dev` as a redirect to `onda.dev` automatically (or set it the other way around in the same panel — owner's call; apex-as-canonical is the modern default and matches the `https://onda.dev` constant in `www/src/lib/seo.ts`).
+Vercel will mark `www.onda.video` as a redirect to `onda.video` automatically (or set it the other way around in the same panel — owner's call; apex-as-canonical is the modern default and matches the `https://onda.video` constant in `www/src/lib/seo.ts`).
 
 ### 2. Add DNS records at the registrar
 
@@ -78,7 +78,7 @@ Add these two records in the registrar's DNS panel:
 
 Notes:
 
-- `@` means the apex (`onda.dev` itself). Some registrars use a blank field or the literal domain name instead.
+- `@` means the apex (`onda.video` itself). Some registrars use a blank field or the literal domain name instead.
 - The trailing dot on the CNAME is correct DNS notation. Most registrar UIs accept it with or without; both work.
 - `cname.vercel-dns-0.com` is Vercel's current general-purpose CNAME target. The older `cname.vercel-dns.com` still works but is deprecated. **Owner: confirm the exact records Vercel shows in Settings → Domains for this specific project** — they sometimes vary. See <https://vercel.com/docs/domains/working-with-dns> and <https://vercel.com/docs/domains/set-up-custom-domain>.
 - TTL `3600` (1 hour) is fine for a fresh domain. If the domain has been used elsewhere and you're cutting over, drop TTL to `60` ~24h before the switch.
@@ -91,24 +91,24 @@ Once Vercel detects the records, the domain rows in Settings → Domains will tu
 After the domain is live, hit these URLs and confirm a 200 + correct content:
 
 ```
-https://onda.dev/
-https://onda.dev/components
-https://onda.dev/components/blur-reveal
-https://onda.dev/compare
-https://onda.dev/r/blur-reveal.json
-https://onda.dev/r/index.json
-https://onda.dev/sitemap.xml
-https://onda.dev/robots.txt
+https://onda.video/
+https://onda.video/components
+https://onda.video/components/blur-reveal
+https://onda.video/compare
+https://onda.video/r/blur-reveal.json
+https://onda.video/r/index.json
+https://onda.video/sitemap.xml
+https://onda.video/robots.txt
 ```
 
-Also confirm `https://www.onda.dev/` 301-redirects to `https://onda.dev/`.
+Also confirm `https://www.onda.video/` 301-redirects to `https://onda.video/`.
 
 Quick check from the terminal:
 
 ```bash
-curl -sI https://onda.dev/ | head -1
-curl -sI https://www.onda.dev/ | head -2
-curl -s https://onda.dev/r/index.json | head -c 200
+curl -sI https://onda.video/ | head -1
+curl -sI https://www.onda.video/ | head -2
+curl -s https://onda.video/r/index.json | head -c 200
 ```
 
 ## Troubleshooting
@@ -127,7 +127,7 @@ The `prebuild` script didn't run, or the source `registry/r/*.json` files weren'
 
 **Fonts (Clash Display / Space Grotesk) render as fallback on production but work locally**
 
-The font files are loaded from a CDN that blocks the production hostname, or the `@font-face` URLs are relative. Check the Network tab in DevTools on `https://onda.dev/` and confirm the font requests are 200. If they're served from Fontshare/Adobe/Typekit, add `onda.dev` and `www.onda.dev` to the allowed domains in that provider's dashboard.
+The font files are loaded from a CDN that blocks the production hostname, or the `@font-face` URLs are relative. Check the Network tab in DevTools on `https://onda.video/` and confirm the font requests are 200. If they're served from Fontshare/Adobe/Typekit, add `onda.video` and `www.onda.video` to the allowed domains in that provider's dashboard.
 
 **"No Next.js version detected"**
 
@@ -139,4 +139,4 @@ Vercel caches aggressively. Project → Deployments → latest → **Redeploy** 
 
 **DNS records are added but the domain still shows "Invalid Configuration" in Vercel**
 
-Wait. DNS propagation. If it's still failing after 2 hours, run `dig onda.dev A +short` and `dig www.onda.dev CNAME +short` — the values must exactly match what Vercel asked for. A common gotcha is the registrar silently adding a parking page A record alongside yours; delete any extra A records on `@`.
+Wait. DNS propagation. If it's still failing after 2 hours, run `dig onda.video A +short` and `dig www.onda.video CNAME +short` — the values must exactly match what Vercel asked for. A common gotcha is the registrar silently adding a parking page A record alongside yours; delete any extra A records on `@`.

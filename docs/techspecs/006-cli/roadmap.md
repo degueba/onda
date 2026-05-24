@@ -22,7 +22,7 @@ End-to-end install of a single component that has no `registryDependencies`. Tar
 
 **Acceptance:**
 
-- Tested with `--registry file:///…/registry/r` against the in-repo manifests since `https://onda.dev/r/` doesn't serve yet (lands in M6). ✅
+- Tested with `--registry file:///…/registry/r` against the in-repo manifests since `https://onda.video/r/` doesn't serve yet (lands in M6). ✅
 - `node …/onda.js add blur-reveal` in a fresh directory creates `./components/onda/blur-reveal/{BlurReveal.tsx, schema.ts, blur-reveal.meta.json, README.md}` with the manifest's `content` written verbatim. ✅
 - In a project with a `src/` directory at cwd, the same invocation writes to `./src/components/onda/blur-reveal/…`. ✅
 - Re-running with a hand-modified file in place exits 1 and prints exactly one conflict line citing the modified file. ✅
@@ -74,7 +74,7 @@ Discovery without leaving the terminal. Important for the AI-agent use case.
 
 ## M6 — Site changes to host the registry + flip the install snippet — Done
 
-Wire the site so `https://onda.dev/r/<slug>.json` actually serves the manifests; flip the install snippet on every README and on the home/compare page from "this is what it'll look like" to "this works."
+Wire the site so `https://onda.video/r/<slug>.json` actually serves the manifests; flip the install snippet on every README and on the home/compare page from "this is what it'll look like" to "this works."
 
 **Acceptance:**
 
@@ -93,7 +93,7 @@ Make `npx onda` resolve from the public npm registry.
 **Acceptance:**
 
 - `npm publish` from `packages/cli/` succeeds. Version `0.1.0`.
-- From a clean machine (or `nvm use && rm -rf ~/.npm/_npx`), `npx onda add blur-reveal` works end-to-end against `https://onda.dev/r`, in a fresh directory, no prior `npm install` of anything.
+- From a clean machine (or `nvm use && rm -rf ~/.npm/_npx`), `npx onda add blur-reveal` works end-to-end against `https://onda.video/r`, in a fresh directory, no prior `npm install` of anything.
 - A short CLI section is added to the docs site (probably `/docs/cli` since the user introduced a `/docs` page) documenting flags and the install-path layout.
 - Release note appears in [CHANGELOG.md](../../../CHANGELOG.md) (created if absent — first entry: "0.1.0 — `npx onda` ships").
 

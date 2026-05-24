@@ -15,7 +15,7 @@
   "engines": {
     "node": ">=20"
   },
-  "homepage": "https://onda.dev",
+  "homepage": "https://onda.video",
   "repository": {
     "type": "git",
     "url": "https://github.com/degueba/onda.git",

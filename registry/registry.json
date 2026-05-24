@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "onda",
-  "homepage": "https://onda.dev",
+  "homepage": "https://onda.video",
   "items": [
     {
       "name": "blur-reveal",

@@ -21,7 +21,7 @@ Concretely:
    - `onda list` — print the catalog grouped by category; an integrated discovery surface so users don't have to leave the terminal.
    - `onda --help` / `onda --version` — table-stakes.
 
-3. **Registry source.** Default `--registry https://onda.dev/r` (already shipping under `/www/public/r/` once we wire it; today `registry/r/*.json` are file-only). The CLI fetches `<registry>/<slug>.json` per the shadcn registry-item schema and validates with Zod before touching disk.
+3. **Registry source.** Default `--registry https://onda.video/r` (already shipping under `/www/public/r/` once we wire it; today `registry/r/*.json` are file-only). The CLI fetches `<registry>/<slug>.json` per the shadcn registry-item schema and validates with Zod before touching disk.
 
 4. **Shared `/lib` helpers ship as their own registry items.** New manifests under `registry/r/`: `lib-motion.json`, `lib-choreography.json`, `lib-easing.json`, `lib-text-timing.json`, `lib-random.json`, `lib-tokens.json`. Each component's manifest declares `registryDependencies: ["lib-motion", …]` for whichever helpers its source uses. The CLI walks the dep graph and installs every node exactly once.
 
@@ -136,7 +136,7 @@ npx onda --help
 - **TS-import parser vs regex for the rewrite step.** A real parser (`@babel/parser`, `oxc`) is bulletproof but ships a bundle. A targeted regex over `from '<path>'` works for our actual import shapes (single-quote, double-quote, no template literals in the source we own). Start with regex; document the assumption; switch to a parser if it ever bites.
 - **What happens when a user's project has its own `lib/onda/motion.ts` from a prior install with different content?** The default refuse-and-flag rule handles it cleanly — they edited the file, and we're not going to clobber it. `--force` is the escape hatch.
 - **Telemetry.** None for v1. (Trivial to add later; trust is built first.)
-- **Compatibility with the shadcn CLI.** Per 002, our format is theirs — confirm a `pnpm dlx shadcn add https://onda.dev/r/blur-reveal.json` invocation succeeds end-to-end as a side-channel test. Don't advertise; verify.
+- **Compatibility with the shadcn CLI.** Per 002, our format is theirs — confirm a `pnpm dlx shadcn add https://onda.video/r/blur-reveal.json` invocation succeeds end-to-end as a side-channel test. Don't advertise; verify.
 
 ## Renumbering / sequence note
 

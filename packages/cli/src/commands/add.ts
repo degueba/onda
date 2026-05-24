@@ -29,7 +29,7 @@ import {
 //   6. Otherwise: write everything, collecting outcomes.
 //   7. Print a per-slug summary + the peer-dep install line.
 
-const DEFAULT_REGISTRY = 'https://onda.dev/r';
+const DEFAULT_REGISTRY = 'https://onda.video/r';
 
 type AddOptions = {
   slugs: string[];

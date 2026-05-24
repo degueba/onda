@@ -35,10 +35,10 @@ export type Manifest = {
 /**
  * Fetch a manifest from either an HTTP(S) URL or a file:// URL.
  *
- * The CLI defaults `--registry` to `https://onda.dev/r`, but it accepts a
+ * The CLI defaults `--registry` to `https://onda.video/r`, but it accepts a
  * `file://` URL too — both for local development against `registry/r/`
  * fixtures and for offline-air-gapped installs in the future. We pass the
- * full per-slug URL here (e.g. `https://onda.dev/r/blur-reveal.json`)
+ * full per-slug URL here (e.g. `https://onda.video/r/blur-reveal.json`)
  * rather than the registry root + slug, so the caller controls naming.
  */
 export async function fetchManifest(url: string): Promise<Manifest> {

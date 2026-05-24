@@ -6,8 +6,8 @@
 npx onda add blur-reveal
 ```
 
-This is the official CLI for the [Onda](https://onda.dev) component library —
-a thin tool that fetches Onda's [shadcn-format registry](https://onda.dev/r)
+This is the official CLI for the [Onda](https://onda.video) component library —
+a thin tool that fetches Onda's [shadcn-format registry](https://onda.video/r)
 and writes component source into your project. You own the files; edit them
 freely. No project init, no config files, no lock-in.
 

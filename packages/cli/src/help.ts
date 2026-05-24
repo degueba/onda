@@ -26,14 +26,14 @@ GLOBAL OPTIONS
                             else ./components/onda/<slug>/.
   --lib-out <path>          Where shared lib helpers are written.
                             Default: ./src/lib/onda/ if src/ exists, else ./lib/onda/.
-  --registry <url>          Registry base URL. Default: https://onda.dev/r.
+  --registry <url>          Registry base URL. Default: https://onda.video/r.
   --force                   Overwrite existing files. Without this, conflicts abort.
   --dry-run                 Print the plan; write nothing.
 
 \`list\` OPTIONS
   --category <name>         Filter to one category (entrances, data, graphics,
                             atmosphere, cinematic, scenes).
-  --registry <url>          Registry base URL. Default: https://onda.dev/r.
+  --registry <url>          Registry base URL. Default: https://onda.video/r.
   --json                    Emit JSON instead of human-readable text.
 
 EXAMPLES
@@ -44,6 +44,6 @@ EXAMPLES
   npx onda list --json
 
 DOCS
-  https://onda.dev/docs
+  https://onda.video/docs
   https://github.com/degueba/onda
 `;
