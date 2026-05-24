@@ -124,6 +124,16 @@ export type PlacementBoxProps = {
  * </PlacementBox>
  */
 export const PlacementBox: React.FC<PlacementBoxProps> = ({ placement, children }) => {
+  // Pass-through when placement is undefined — let the parent's layout
+  // decide where this sits. Critical for composers (TitleCard, StatCard,
+  // etc.) that arrange their own children inside a flex column: a child
+  // wrapping itself in PlacementBox+AbsoluteFill would escape the parent
+  // flow and stack on top of its siblings at canvas-center, breaking the
+  // composer's layout. Standalone use that wants centering should pass
+  // `placement="center"` explicitly — the catalog reel hero does this.
+  if (placement === undefined) {
+    return <>{children}</>;
+  }
   const { x, y, anchor } = resolvePlacement(placement);
   return (
     <AbsoluteFill>
