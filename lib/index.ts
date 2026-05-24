@@ -65,3 +65,5 @@ export {
   type PlacementBoxProps,
   type SizeRole,
 } from './canvas';
+
+export { parseTime, toFrames } from './timing';
