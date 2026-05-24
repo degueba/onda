@@ -1,0 +1,11 @@
+# Changelog
+
+## [0.2.0](https://github.com/degueba/onda/compare/ondajs-v0.1.0...ondajs-v0.2.0) (2026-05-24)
+
+
+### Features
+
+* **cli:** `onda add` happy path — techspec 006 M2 ([bd3e79c](https://github.com/degueba/onda/commit/bd3e79c59dd460f36c76a9efffda6cb0ec32787d))
+* **cli:** scaffold `onda` package — techspec 006 M1 ([a3de5c5](https://github.com/degueba/onda/commit/a3de5c50a6d2b19149f458c4ada555dad7c165ce))
+* **cli:** transitive deps + import rewriting — techspec 006 M3 + M4 ([3a24e26](https://github.com/degueba/onda/commit/3a24e2626b92c461796ae8c8932be4a659714bfd))
+* ship `onda list` + site-served registry + Vercel deploy prep — techspec 006 M5 + M6 ([799691f](https://github.com/degueba/onda/commit/799691f79fbe3b0273d55fe261d1a1c78e27a3d8))
