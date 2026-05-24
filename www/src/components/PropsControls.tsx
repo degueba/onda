@@ -100,6 +100,37 @@ function unwrap(field: ZodTypeAny): { type: string; field: ZodTypeAny } {
   return { type: def.typeName, field };
 }
 
+// Read the `description` annotation from a Zod field. Onda components
+// can stash hints like `only:bars` here to tell tooling which props are
+// relevant under which conditions. Survives all wrapper unwrapping.
+function fieldDescription(field: ZodTypeAny): string | undefined {
+  // ZodDescription lives at the OUTERMOST level (so does .default, .optional).
+  // We check the field as-passed and its inner-types.
+  type WithDesc = { description?: string; _def?: { description?: string; innerType?: ZodTypeAny } };
+  const seen = new Set<unknown>();
+  let cursor: WithDesc | undefined = field as unknown as WithDesc;
+  while (cursor && !seen.has(cursor)) {
+    seen.add(cursor);
+    if (cursor.description) return cursor.description;
+    if (cursor._def?.description) return cursor._def.description;
+    cursor = cursor._def?.innerType as unknown as WithDesc | undefined;
+  }
+  return undefined;
+}
+
+/**
+ * Parse the `only:<value>` hint from a field's description. Returns the
+ * required value, or undefined if the field has no `only:` hint. Used to
+ * hide props that don't apply to the current variant of a multi-variant
+ * component (e.g. AudioVisualizer's `bar*` props when `variant: 'wave'`).
+ */
+function parseOnlyHint(field: ZodTypeAny): string | undefined {
+  const desc = fieldDescription(field);
+  if (!desc) return undefined;
+  const m = desc.match(/^only:(.+)$/);
+  return m?.[1].trim();
+}
+
 export function PropsControls({
   schema,
   values,
@@ -126,6 +157,25 @@ export function PropsControls({
 
   const setField = (name: string, value: unknown) =>
     onChange({ ...values, [name]: value });
+
+  // Variant-aware filtering. Components with a `variant` discriminator
+  // (AudioVisualizer is the first) annotate variant-specific props with
+  // `.describe('only:<variant>')` in their Zod schema. Hide rows whose
+  // hint doesn't match the current `values.variant` so the form only
+  // shows what's actually relevant.
+  //
+  // Generalization: any field name in `values` can be a discriminator —
+  // we just look up `values[<hint>]`... no wait, the hint is the
+  // *required value*, not the key. Onda's convention: hints are always
+  // values of the field named `variant`. If a future component uses a
+  // different discriminator name, this can be expanded.
+  const currentVariant = values.variant as string | undefined;
+  const fieldEntries = Object.entries(shape).filter(([, field]) => {
+    const only = parseOnlyHint(field);
+    if (!only) return true; // no hint → always show
+    if (currentVariant === undefined) return true; // no variant value → show all
+    return only === currentVariant;
+  });
 
   const wrapperClass = bare
     ? 'p-3 sm:p-4'
@@ -187,7 +237,7 @@ export function PropsControls({
       )}
 
       <div className="flex flex-col gap-2">
-        {Object.entries(shape).map(([name, field]) => {
+        {fieldEntries.map(([name, field]) => {
           const { type, field: inner } = unwrap(field);
           return (
             <FieldRow
@@ -219,14 +269,13 @@ function FieldRow({
   onChange: (v: unknown) => void;
 }) {
   return (
-    // Mobile: label stacked above control, full-width control — keeps
-    // wide controls (4-option segmented, color picker, etc.) usable on
-    // narrow popovers. Desktop (sm+): two-column grid, label on the left,
-    // control on the right. `minmax(0,1fr)` lets the control column
-    // shrink below its content's intrinsic width so wide inputs (hex
-    // field, segmented enum) don't push the popover open.
-    <div className="grid grid-cols-1 sm:grid-cols-[100px_minmax(0,1fr)] items-start gap-1 sm:gap-3">
-      <label className="text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate sm:pt-1.5">
+    // Two-column grid: label on the left, control on the right. The
+    // control column uses `minmax(0,1fr)` so it can shrink below its
+    // content's intrinsic width — wide controls (segmented enum, color
+    // hex field) wrap or scale-down inside the column instead of pushing
+    // the popover open.
+    <div className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-3">
+      <label className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate">
         {name}
       </label>
       <div className="min-w-0">
@@ -321,6 +370,18 @@ function FieldControl({
       );
     }
     return <TextInput value={String(value)} onChange={onChange} />;
+  }
+
+  if (type === 'ZodBoolean') {
+    return <Toggle value={Boolean(value)} onChange={onChange} />;
+  }
+
+  // ZodUnion handling — we only support the specific shape that shows up
+  // in the catalog today: `string | string[]` for multi-color props.
+  // Render as a single text field where the user types `a` for one
+  // color or `a,b,c` for an array; we parse on change.
+  if (type === 'ZodUnion' && COLOR_PROP_NAMES.has(name)) {
+    return <MultiColorField value={value} onChange={onChange} />;
   }
 
   return (
@@ -631,6 +692,92 @@ function Segmented({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+// ─── Toggle (Boolean) ────────────────────────────────────────────────
+
+function Toggle({
+  value,
+  onChange,
+}: {
+  value: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={value}
+      onClick={() => onChange(!value)}
+      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors border ${
+        value
+          ? 'bg-onda-accent/30 border-onda-accent/60'
+          : 'bg-onda-bg border-onda-border hover:border-onda-border-lit'
+      }`}
+    >
+      <span
+        className={`inline-block h-3.5 w-3.5 rounded-full bg-onda-text transition-transform ${
+          value ? 'translate-x-4' : 'translate-x-0.5'
+        }`}
+      />
+    </button>
+  );
+}
+
+// ─── MultiColorField (string | string[]) ─────────────────────────────
+
+function MultiColorField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | string[]) => void;
+}) {
+  // Normalize the incoming value to a comma-separated string for the
+  // text input, AND to an array of hexes for the swatch row.
+  const asArray: string[] = Array.isArray(value)
+    ? (value as string[])
+    : typeof value === 'string'
+      ? [value]
+      : [];
+  const text = asArray.join(', ');
+
+  return (
+    <div className="flex flex-col gap-1.5 w-full">
+      {/* Swatch row — visual preview of each color in the array. */}
+      {asArray.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {asArray.map((c, i) => (
+            <span
+              key={i}
+              className="inline-block h-4 w-4 rounded-sm border border-onda-border"
+              style={{ backgroundColor: c }}
+              title={c}
+            />
+          ))}
+        </div>
+      )}
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => {
+          const raw = e.target.value;
+          // `a, b, c` → ['a','b','c']. Empty entries dropped so a trailing
+          // comma doesn't push `''` into the array. Single token (no comma)
+          // → emit a plain string so the schema accepts either form
+          // naturally.
+          const parts = raw.split(',').map((s) => s.trim()).filter(Boolean);
+          if (parts.length === 1 && !raw.includes(',')) {
+            onChange(parts[0]);
+          } else {
+            onChange(parts);
+          }
+        }}
+        placeholder="#D96B82 or #D96B82,#E89AAB"
+        className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-full text-right focus:outline-none focus:border-onda-text/40"
+      />
     </div>
   );
 }
