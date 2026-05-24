@@ -11,16 +11,19 @@ const ComponentPreview = dynamic(
   { ssr: false },
 );
 
-import { WavePenTest, WAVEPEN_TEST_DURATION } from '@/components/hero/WavePenTest';
+import {
+  MovingPenScene,
+  MOVING_PEN_DURATION,
+} from '@/components/hero/MovingPenScene';
 
 const EMPTY_PROPS = {} as const;
 
 export function WavePenLab() {
   return (
     <ComponentPreview
-      component={WavePenTest}
+      component={MovingPenScene}
       inputProps={EMPTY_PROPS}
-      durationInFrames={WAVEPEN_TEST_DURATION}
+      durationInFrames={MOVING_PEN_DURATION}
       fps={30}
       compositionWidth={1920}
       compositionHeight={1080}
