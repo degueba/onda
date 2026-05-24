@@ -1,7 +1,7 @@
 'use client';
 
-import * as Popover from '@radix-ui/react-popover';
 import { SlidersHorizontal, X } from '@phosphor-icons/react';
+import { useState } from 'react';
 import type { ZodTypeAny } from 'zod';
 import { PropsControls } from './PropsControls';
 
@@ -10,89 +10,108 @@ type Props = {
   values: Record<string, unknown>;
   defaults: Record<string, unknown>;
   /** Curated "known good" preset configurations. Rendered as a chip row
-   *  at the top of the popover. Each preset is a `Partial<Props>` merged
-   *  into the current values when clicked. */
+   *  at the top of the drawer. */
   presets?: Record<string, Record<string, unknown>>;
   onChange: (next: Record<string, unknown>) => void;
 };
 
-// "Try it" trigger + side drawer. Anchored to the right edge of the
-// preview card so the drawer opens BESIDE the preview (not over it) —
-// users can scrub controls and watch the visualization change at the
-// same time. The drawer does NOT trap focus or close on outside click,
-// so interactions with the rest of the page (or another preview) stay
-// live while it's open.
+// "Try it" trigger + side sheet drawer.
 //
-// On narrow viewports where there's no room to the right, Radix flips
-// the drawer below the trigger automatically (collisionPadding +
-// avoidCollisions defaults).
+// The drawer slides in from the RIGHT EDGE OF THE VIEWPORT (not the
+// preview card) — full viewport height, fixed width on desktop, 90vw
+// max on mobile. No backdrop: clicking anywhere else on the page (the
+// preview, other UI) keeps the drawer open and stays interactive. Only
+// the explicit X button closes it.
+//
+// This lets users scrub a slider in the drawer and watch the preview
+// canvas update in real time without the drawer ever covering or
+// blocking the canvas.
+//
+// Implemented as a stateful sibling pair (button + fixed div) instead of
+// Radix popover/dialog so we keep full control over the no-backdrop,
+// no-focus-trap, no-auto-close behavior. The drawer is always in the
+// DOM — just transformed off-screen when closed — so the slide
+// animation runs cleanly in both directions.
 export function TryItPopover({ schema, values, defaults, presets, onChange }: Props) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Open props controls"
-          className="
-            absolute top-3 right-3 z-20
-            inline-flex items-center gap-1.5
-            px-2.5 py-1.5 rounded-md
-            bg-onda-surface/70 backdrop-blur-md
-            border border-onda-border-lit
-            text-onda-text
-            text-[11px] uppercase tracking-wider font-medium
-            shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
-            transition-all duration-200 ease-out
-            hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
-            active:scale-95
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-onda-accent/40
-            data-[state=open]:bg-onda-surface data-[state=open]:border-onda-text/40
-          "
-        >
-          <SlidersHorizontal size={12} weight="bold" />
-          Try it
-        </button>
-      </Popover.Trigger>
+    <>
+      <button
+        type="button"
+        aria-label={open ? 'Close props controls' : 'Open props controls'}
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className={`
+          absolute top-3 right-3 z-20
+          inline-flex items-center gap-1.5
+          px-2.5 py-1.5 rounded-md
+          bg-onda-surface/70 backdrop-blur-md
+          border border-onda-border-lit
+          text-onda-text
+          text-[11px] uppercase tracking-wider font-medium
+          shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
+          transition-all duration-200 ease-out
+          hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
+          active:scale-95
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-onda-accent/40
+          ${open ? 'bg-onda-surface border-onda-text/40' : ''}
+        `}
+      >
+        <SlidersHorizontal size={12} weight="bold" />
+        Try it
+      </button>
 
-      <Popover.Portal>
-        <Popover.Content
-          // `side="right"` opens the drawer to the right of the preview.
-          // `align="start"` aligns the drawer's top edge with the trigger.
-          // Combined: drawer appears beside the preview, top edges aligned —
-          // no overlap with the preview area itself.
-          side="right"
-          align="start"
-          sideOffset={12}
-          collisionPadding={16}
-          // Don't auto-close when the user clicks the preview (so they can
-          // scrub the slider and immediately interact with the canvas).
-          // Don't trap focus — the rest of the page stays usable.
-          onPointerDownOutside={(e) => e.preventDefault()}
-          onInteractOutside={(e) => e.preventDefault()}
-          className="onda-popover-content z-50 w-56 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
-        >
-          <div className="relative">
-            <Popover.Close asChild>
-              <button
-                type="button"
-                aria-label="Close"
-                className="absolute top-2.5 right-2.5 text-onda-faint hover:text-onda-text transition-colors p-1 rounded-md z-10"
-              >
-                <X size={14} weight="bold" />
-              </button>
-            </Popover.Close>
-
-            <PropsControls
-              schema={schema}
-              values={values}
-              defaults={defaults}
-              presets={presets}
-              onChange={onChange}
-              bare
-            />
+      {/*
+        The drawer itself. `fixed` to the viewport, anchored to the right
+        edge, full height. Slides in via translateX. `aria-hidden` and
+        `pointer-events-none` on the closed state so the drawer can't
+        intercept clicks that go to the page below.
+      */}
+      <aside
+        role="dialog"
+        aria-label="Props controls"
+        aria-hidden={!open}
+        className={`
+          fixed top-0 right-0 z-40
+          h-screen w-80 max-w-[90vw]
+          bg-onda-surface/95 backdrop-blur-lg
+          border-l border-onda-border-lit
+          shadow-[0_0_60px_-20px_rgba(0,0,0,0.7)]
+          flex flex-col
+          transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+          ${open ? 'translate-x-0' : 'translate-x-full pointer-events-none'}
+        `}
+      >
+        {/* Drawer header — title + close button. Mirrors the existing
+            Try-it header style for consistency. */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-onda-border">
+          <div className="text-[10px] uppercase tracking-[0.16em] text-onda-faint">
+            Try it
           </div>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setOpen(false)}
+            className="text-onda-faint hover:text-onda-text transition-colors p-1 rounded-md"
+          >
+            <X size={14} weight="bold" />
+          </button>
+        </div>
+
+        {/* Scrollable controls body. Overscroll-contain so scrolling the
+            drawer doesn't accidentally scroll the underlying page. */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
+          <PropsControls
+            schema={schema}
+            values={values}
+            defaults={defaults}
+            presets={presets}
+            onChange={onChange}
+            bare
+          />
+        </div>
+      </aside>
+    </>
   );
 }
