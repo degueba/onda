@@ -67,3 +67,18 @@ export {
 } from './canvas';
 
 export { parseTime, toFrames } from './timing';
+
+export {
+  entrySchema,
+  trackSchema,
+  compositionSchema,
+  type Entry,
+  type Track,
+  type Composition,
+} from './composition';
+
+export {
+  CompositionRenderer,
+  type ComponentRegistry,
+  type CompositionRendererProps,
+} from './composition-renderer';
