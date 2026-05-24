@@ -132,12 +132,15 @@ export function PropsControls({
     : 'onda-rise bg-onda-surface/60 backdrop-blur-sm border border-onda-border rounded-2xl p-3 sm:p-4';
 
   // Detect the active preset by deep-equality of its prop subset against
-  // current values. Used to highlight the active chip. A preset is "active"
-  // if every prop it sets matches the current value.
+  // current values. A preset is "active" iff every prop it sets matches
+  // the current value AND it has at least one prop (empty presets would
+  // vacuously match `every` — see the deleted `default` preset that hit
+  // exactly this bug).
   const activePreset = presets
-    ? Object.entries(presets).find(([, preset]) =>
-        Object.entries(preset).every(([k, v]) => deepEqual(values[k], v)),
-      )?.[0]
+    ? Object.entries(presets).find(([, preset]) => {
+        const entries = Object.entries(preset);
+        return entries.length > 0 && entries.every(([k, v]) => deepEqual(values[k], v));
+      })?.[0]
     : undefined;
 
   return (

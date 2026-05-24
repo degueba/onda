@@ -146,14 +146,14 @@ export type AudioVisualizerProps = z.infer<typeof audioVisualizerSchema>;
  *   - agents picking a preset by name is simpler than guessing prop combos
  *   - downstream consumers (Studio, brief renderers) can offer the same set
  *
- * Restraint: every color in every preset is from Onda's token palette
- * (`accent` `#D96B82`, `accentSoft` `#E89AAB`, `text` `#F2F2F4`,
- * `dim` `#8E8E98`). Custom palettes are the caller's job.
+ * Color story: rose (`#D96B82`) is always the anchor — Onda's brand
+ * accent — paired with a different complementary color per preset for
+ * visual personality. The WOW palette additions (cyan / violet / amber)
+ * live LOCAL to the visualizer, not in the brand tokens — visualizers
+ * are an earned-color moment where bolder pairings earn their place.
  */
 export const audioVisualizerPresets = {
-  /** Onda defaults — rose two-tone bars. */
-  default: {},
-  /** Spotify-style: chunky bars, single accent, middle-aligned. */
+  /** Spotify-style: chunky bars, single rose accent, middle-aligned. */
   spotify: {
     variant: 'bars',
     barWidth: 12,
@@ -161,51 +161,52 @@ export const audioVisualizerPresets = {
     barAlign: 'middle',
     color: '#D96B82',
   },
-  /** SoundCloud-style: dense thin bars, two-tone gradient. */
+  /** SoundCloud-style: dense thin bars, rose → cyan complement. */
   soundcloud: {
     variant: 'bars',
     barWidth: 2,
     barGap: 1,
     barAlign: 'middle',
-    color: ['#D96B82', '#E89AAB'],
+    color: ['#D96B82', '#4DD4D8'],
   },
-  /** Bottom-anchored equalizer bars — classic DJ look. */
+  /** Bottom-anchored equalizer bars — classic DJ look, two-tone rose. */
   equalizer: {
     variant: 'bars',
     barWidth: 6,
     barGap: 4,
     barAlign: 'bottom',
+    color: ['#D96B82', '#E89AAB'],
   },
-  /** Aurora hills — three-tone layered fills, mirrored. */
+  /** Aurora hills — three-tone layered fills, rose / violet / soft rose. */
   aurora: {
     variant: 'hills',
     hillsCopies: 3,
-    hillsFillOpacity: 0.4,
-    color: ['#D96B82', '#E89AAB', '#F2F2F4'],
+    hillsFillOpacity: 0.5,
+    color: ['#D96B82', '#7C5CE5', '#E89AAB'],
   },
-  /** Voice ribbon — four stacked wave lines, two-tone, slow drift. */
-  voiceRibbon: {
+  /** Voice ribbon — four stacked wave lines, rose ↔ cyan, slow drift. */
+  voice: {
     variant: 'wave',
     waveLines: 4,
     waveLineGap: 18,
     waveScrollSpeed: -100,
-    color: ['#D96B82', '#E89AAB'],
+    color: ['#D96B82', '#4DD4D8'],
   },
-  /** Sunburst — radial bars growing OUTWARD from the inner ring. */
+  /** Sunburst — radial bars outward, amber ↔ rose (warm). */
   sunburst: {
     variant: 'radial',
     radialBarOrigin: 'outer',
     radialBarWidth: 6,
     radialBarGap: 4,
-    color: '#D96B82',
+    color: ['#FFB547', '#D96B82'],
   },
-  /** Neon ring — radial bars growing INWARD with a generous inner radius. */
-  neonRing: {
+  /** Neon ring — radial bars inward, rose ↔ violet (synthwave). */
+  neon: {
     variant: 'radial',
     radialBarOrigin: 'inner',
     radialInnerRadius: 120,
     radialBarWidth: 4,
-    color: ['#D96B82', '#E89AAB'],
+    color: ['#D96B82', '#7C5CE5'],
   },
 } as const satisfies Record<string, Partial<AudioVisualizerProps>>;
 
