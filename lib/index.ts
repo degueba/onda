@@ -17,7 +17,44 @@ export {
 
 export { HOUSE_EASE } from './easing';
 
+export {
+  RADIUS,
+  SHADOW,
+  SHEEN,
+  GLOW,
+  BLUR,
+  GRAIN_OPACITY,
+  type RadiusToken,
+  type ShadowToken,
+  type GlowToken,
+  type BlurToken,
+} from './elevation';
+
 export { seededRandom } from './random';
+
+export {
+  useEntrance,
+  useStaggeredEntrance,
+  useSpringValue,
+  useSceneProgress,
+  useSeededRandom,
+  useTextReveal,
+  useCameraRig,
+  type EntranceType,
+  type EntranceOptions,
+  type CameraKeyframe,
+} from './hooks';
+
+export {
+  Surface,
+  Glow,
+  GridField,
+  Camera,
+  type SurfaceProps,
+  type GlowProps,
+  type GridFieldProps,
+  type CameraProps,
+} from './primitives';
 
 export {
   holdFramesForText,

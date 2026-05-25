@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-elevation",
+  "type": "registry:lib",
+  "title": "Surface polish",
+  "description": "Radius, shadow, sheen, glow, and blur tokens — the shared material vocabulary for cards, glass, and frames.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/elevation.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/elevation.ts",
+      "content": "// Surface-polish tokens — radius, shadow, sheen, glow, blur, grain.\n//\n// CLAUDE.md §2 \"Surface polish\" describes these in prose; this file is the\n// in-code source of truth. Reach for these before hardcoding a shadow string\n// or radius — surfaces across the catalog must feel like one material.\n\n/** Corner radius scale (px). Cards default to `lg` (~20px) per §2. */\nexport const RADIUS = {\n  sm: 10,\n  md: 14,\n  lg: 20,\n  xl: 28,\n  pill: 9999,\n} as const;\n\n/**\n * Deep, soft shadows. The Onda card shadow (`card`) is the §2 canonical\n * `0 30px 60px -34px rgba(0,0,0,0.9)` — a long, low-spread drop that reads as\n * depth on the near-black canvas without a hard edge.\n */\nexport const SHADOW = {\n  soft: '0 10px 30px -12px rgba(0,0,0,0.6)',\n  card: '0 30px 60px -34px rgba(0,0,0,0.9)',\n  lifted: '0 50px 90px -40px rgba(0,0,0,0.95)',\n} as const;\n\n/**\n * The 1px top sheen — a barely-there white-alpha gradient that gives a raised\n * surface its lit upper edge. Apply as the `backgroundImage` of an overlay\n * layer (see {@link \"./primitives\".Surface}); never as the surface's own fill.\n */\nexport const SHEEN =\n  'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0) 40%)';\n\n/**\n * Restrained accent glows — **one per major section, max** (§2). These are\n * `box-shadow` strings; layer them on a positioned element, not the content.\n */\nexport const GLOW = {\n  accent: '0 0 80px -20px rgba(217,107,130,0.45)',\n  accentSoft: '0 0 120px -30px rgba(232,154,171,0.35)',\n  neutral: '0 0 60px -20px rgba(255,255,255,0.10)',\n} as const;\n\n/** Backdrop-blur radii (px) for glass surfaces. */\nexport const BLUR = {\n  veil: 6,\n  glass: 14,\n  frost: 22,\n} as const;\n\n/** Grain overlay opacity — ~2% texture, never busy (§2). */\nexport const GRAIN_OPACITY = 0.02;\n\nexport type RadiusToken = keyof typeof RADIUS;\nexport type ShadowToken = keyof typeof SHADOW;\nexport type GlowToken = keyof typeof GLOW;\nexport type BlurToken = keyof typeof BLUR;\n"
+    }
+  ]
+}
