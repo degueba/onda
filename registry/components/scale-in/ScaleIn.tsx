@@ -15,7 +15,8 @@ export { scaleInSchema, type ScaleInProps };
  */
 export const ScaleIn: React.FC<ScaleInProps> = ({
   text, delay, duration, fromScale, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -35,6 +36,7 @@ export const ScaleIn: React.FC<ScaleInProps> = ({
         transform,
         color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
         textAlign: align,
+        textTransform, textShadow, fontStyle, textWrap,
       }}>
         {text}
       </div>

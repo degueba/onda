@@ -16,7 +16,8 @@ export { wordStaggerSchema, type WordStaggerProps };
  */
 export const WordStagger: React.FC<WordStaggerProps> = ({
   text, delay, duration, stagger, justify, color, fontSize, size, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1,
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -44,6 +45,10 @@ export const WordStagger: React.FC<WordStaggerProps> = ({
           fontWeight,
           letterSpacing,
           lineHeight,
+          textTransform,
+          textShadow,
+          fontStyle,
+          textWrap,
         }}
       >
         {words.map((word, i) => {

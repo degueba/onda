@@ -34,6 +34,14 @@ export const wordStaggerSchema = z.object({
   letterSpacing: z.string().optional(),
   /** Unitless line height. Default `1.1` for tight display copy. */
   lineHeight: z.number().optional(),
+  /** CSS text-transform. Useful for eyebrow / kicker copy. */
+  textTransform: z.enum(['none', 'uppercase', 'lowercase', 'capitalize']).optional(),
+  /** CSS text-shadow value (e.g. `'0 4px 24px rgba(0,0,0,0.55)'`). Useful for readability over busy backgrounds. */
+  textShadow: z.string().optional(),
+  /** CSS font-style. */
+  fontStyle: z.enum(['normal', 'italic', 'oblique']).optional(),
+  /** CSS text-wrap. `'balance'` evens out headline line-breaks; `'pretty'` polishes body text. */
+  textWrap: z.enum(['wrap', 'nowrap', 'balance', 'pretty']).optional(),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

@@ -15,7 +15,8 @@ export { rotateInSchema, type RotateInProps };
  */
 export const RotateIn: React.FC<RotateInProps> = ({
   text, delay, duration, fromAngle, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -46,6 +47,7 @@ export const RotateIn: React.FC<RotateInProps> = ({
         transformOrigin: 'center',
         color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
         textAlign: align,
+        textTransform, textShadow, fontStyle, textWrap,
       }}>
         {text}
       </div>

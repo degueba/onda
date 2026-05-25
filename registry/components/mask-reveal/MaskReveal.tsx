@@ -15,7 +15,8 @@ export { maskRevealSchema, type MaskRevealProps };
  */
 export const MaskReveal: React.FC<MaskRevealProps> = ({
   text, delay, duration, direction, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -66,6 +67,7 @@ export const MaskReveal: React.FC<MaskRevealProps> = ({
         WebkitClipPath: clipPath,
         color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
         textAlign: align,
+        textTransform, textShadow, fontStyle, textWrap,
       }}>
         {text}
       </div>
