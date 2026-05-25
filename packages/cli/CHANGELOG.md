@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/degueba/onda/compare/ondajs-v0.4.1...ondajs-v0.5.0) (2026-05-25)
+
+
+### Features
+
+* 022 completeness program — 28 new components, 6 transitions, 18 showcases, agent discovery ([#29](https://github.com/degueba/onda/issues/29)) ([a01e46d](https://github.com/degueba/onda/commit/a01e46d285f9fe490d97d4f00445ccb67e0218d3))
+
 ## [0.4.1](https://github.com/degueba/onda/compare/ondajs-v0.4.0...ondajs-v0.4.1) (2026-05-25)
 
 
