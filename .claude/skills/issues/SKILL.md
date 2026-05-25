@@ -123,14 +123,64 @@ gh issue list --state open --assignee @me --limit 30 ...
 
 This is the workflow entry point.
 
-1. Fetch issue details via `gh issue view <number>`.
-2. Generate a branch name: `fix/issue-<number>-<slugified-title>`.
-   - Lowercase, kebab-case, max 50 chars total.
-   - Strip articles (a/the/an), keep keywords.
+1. Fetch issue details via `gh issue view <number> --json title,body,labels,number`.
+2. **Decide if the work is a feature** by inspecting labels:
+   - **Feature**: any label matches `feat`, `feature`, or `enhancement` (case-insensitive).
+   - **Not a feature**: anything else (bug, docs, chore, no labels at all — none of these get a techspec).
+
+   Don't ask the user. The label is the source of truth — if a feature wasn't tagged that way, the user can either re-label and re-run, or accept that no spec is created.
+3. Generate the branch name:
+   - **Feature**: `feat/issue-<number>-<slugified-title>`
+   - **Otherwise**: `fix/issue-<number>-<slugified-title>`
+   - Slug rules: lowercase, kebab-case, max 50 chars, strip articles (a/the/an), keep keywords.
    - Example: issue 42 "Audio visualizer wave looks weird" → `fix/issue-42-audio-visualizer-wave-looks-weird`.
-3. **Confirm with the user**: "About to run `git checkout -b <branch>`. Approve? [y/N]"
-4. If approved: create the branch, print the issue body inline so the user can start investigating.
-5. Remind: "Reference `closes #<number>` in your eventual commit / PR body to auto-close on merge."
+4. **Confirm with the user**: *"About to run `git checkout -b <branch>`. Approve? [y/N]"*
+5. If approved: create the branch.
+6. **If this is a feature, also create a techspec skeleton.** Project convention — every new feature gets a paper trail at `docs/techspecs/<NNN>-<slug>/design.md` before code lands. **If it's not a feature, skip this step entirely.**
+   - Only attempt this if the repo has a `docs/techspecs/` directory (signals the project uses this convention). If it doesn't, skip.
+   - Find next spec number: scan `docs/techspecs/` for directories matching `^[0-9]{3}-`, take the highest, increment, zero-pad to 3 digits. Example: existing 001..017 → next is 018.
+   - Same slug as the branch (without `feat/issue-N-` prefix).
+   - Create directory: `docs/techspecs/<NNN>-<slug>/`.
+   - Write `design.md` from the skeleton below.
+   - Tell the user: *"Created `docs/techspecs/<NNN>-<slug>/design.md`. Fill in the **Decision**, **Goals**, and **Non-goals** sections as you investigate."*
+7. Print the issue body inline so the user can start investigating immediately.
+8. Remind: *"Reference `closes #<number>` in your eventual commit / PR body to auto-close on merge."*
+
+#### Techspec skeleton
+
+Use exactly this format when creating the skeleton — it matches the existing 007-017 specs in the repo, so contributors can pattern-match:
+
+```markdown
+# Techspec <NNN> — <Title from issue>
+
+> Tracks [#<N>](<issue url>).
+
+## Problem
+
+<Issue body, lightly summarized into 1-2 paragraphs. Keep the original wording where it's already clear; rephrase only if needed for flow. Quote any code snippets verbatim from the issue.>
+
+## Decision
+
+> TBD — fill in once you've investigated and chosen an approach.
+
+## Goals
+
+> TBD — what success looks like, 3-6 bullets.
+
+## Non-goals
+
+> TBD — what we're explicitly NOT doing, 2-4 bullets.
+
+## Reasonable calls (challenge any)
+
+> TBD — design choices that aren't obvious, with the reasoning so a reviewer can challenge.
+
+## Open questions
+
+> TBD — things you don't know yet, deferred to discussion / later.
+```
+
+Don't fabricate content for the TBD sections — leave them as TBD markers. The whole point is to give the user a structured scratchpad they fill in as the work clarifies, not a fake spec.
 
 ### `/issues close <number> [reason]` — **Close an issue**
 
