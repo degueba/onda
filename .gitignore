@@ -16,7 +16,14 @@ build/
 # Local Claude Code state — per-developer permission allowlists, session
 # locks, scheduled-task pids. Personal to whoever is driving the project
 # from this checkout; not useful to anyone else and noisy in diffs.
-.claude/
+#
+# Exception: .claude/skills/ holds team-shared workflow tooling (e.g. the
+# /issues skill that wraps `gh issue` for triaging this repo). Those ARE
+# meant to be versioned and used by any contributor running Claude Code.
+# (Note: must exclude contents via `*` not the dir itself, otherwise git
+# refuses to re-include any path beneath it.)
+.claude/*
+!.claude/skills/
 
 # Internal docs that aren't useful to outside contributors — running activity
 # logs, internal task queues. Their content lives here so the local maintainer
