@@ -9,6 +9,8 @@ import { z } from 'zod';
  * of override can wrap their own factory.
  */
 export const crossFadeSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('cross-fade').default('cross-fade'),
   /**
    * Whether the exiting scene fades to transparent during the
    * transition. Default `true` — the eye sees both scenes briefly

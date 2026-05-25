@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link ChapterCard} props. */
 export const chapterCardSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('chapter-card').default('chapter-card'),
   /** The chapter heading — the focal text on the card. */
   chapter: z.string().default('The setup'),
   /** Numbered index displayed above the chapter. String so leading zeros (`"01"`) read as intended. */

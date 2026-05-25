@@ -72,7 +72,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
         }}
       >
         {/* Name — slides in from the side. Uses the primitive's own spring. */}
-        <SlideIn
+        <SlideIn kind="slide-in"
           text={name}
           delay={delay}
           direction={slideDirection}
@@ -87,7 +87,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
         />
 
         {/* Role — fades in 4 frames after the name. */}
-        <FadeIn
+        <FadeIn kind="fade-in"
           text={role}
           delay={delay + ROLE_OFFSET}
           color={roleColor}
@@ -110,7 +110,7 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
               alignSelf: isLeft ? 'flex-start' : 'flex-end',
             }}
           >
-            <Underline
+            <Underline kind="underline"
               text=""
               delay={delay + UNDERLINE_OFFSET}
               color={color}

@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link StatCard} props. */
 export const statCardSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('stat-card').default('stat-card'),
   /** The headline number to count up to. */
   value: z.number().default(1247),
   /** Qualifier beneath the number — cascaded word-by-word. */

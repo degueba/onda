@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link MaskReveal} props. */
 export const maskRevealSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('mask-reveal').default('mask-reveal'),
   /** What to reveal. */
   text: z.string().default('Onda'),
   /** Frames before the animation starts. */

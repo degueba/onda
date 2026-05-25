@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link DrawOn} props. */
 export const drawOnSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('draw-on').default('draw-on'),
   /** SVG path `d` attribute. The default is a gentle wave — on-brand. */
   d: z.string().default('M 10 50 Q 100 10 190 50'),
   /** Frames before stroking starts. */

@@ -4,6 +4,8 @@ const timeSpec = z.union([z.string(), z.number()]);
 
 /** Zod schema for {@link AudioClip} props. */
 export const audioClipSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('audio-clip').default('audio-clip'),
   /** URL or path to the audio file. AAC-in-MP4 or WAV preferred (see README format hints). */
   src: z.string().default('https://www.w3schools.com/html/horse.mp3'),
   /**

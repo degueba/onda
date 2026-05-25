@@ -4,6 +4,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link WordStagger} props. */
 export const wordStaggerSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('word-stagger').default('word-stagger'),
   /** The phrase. Split on whitespace into one reveal per word. */
   text: z.string().default('motion that moves you'),
   /** Frames before the **first** word starts. */

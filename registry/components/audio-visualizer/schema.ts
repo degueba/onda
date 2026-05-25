@@ -5,6 +5,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link AudioVisualizer} props. */
 export const audioVisualizerSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('audio-visualizer').default('audio-visualizer'),
   /** URL or path to the audio file. */
   src: z.string().default('https://www.w3schools.com/html/horse.mp3'),
   /**

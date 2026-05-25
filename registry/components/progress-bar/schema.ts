@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link ProgressBar} props. */
 export const progressBarSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('progress-bar').default('progress-bar'),
   /** Target fill, 0–100. The bar grows from 0 to this value. */
   value: z.number().min(0).max(100).default(64),
   /** Frames before the animation starts. */

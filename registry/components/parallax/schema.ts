@@ -3,6 +3,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Parallax} props. */
 export const parallaxSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('parallax').default('parallax'),
   /**
    * Image URL. The default is a stable Picsum seed so the playground render
    * is reproducible — supply your own `src` in real compositions.

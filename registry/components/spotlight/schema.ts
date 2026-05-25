@@ -3,6 +3,8 @@ import { DURATION } from '../../../lib/motion';
 
 /** Zod schema for {@link Spotlight} props — drives Remotion `defaultProps` validation. */
 export const spotlightSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('spotlight').default('spotlight'),
   /** Horizontal centre of the spotlight as a 0–1 fraction of canvas width. */
   x: z.number().min(0).max(1).default(0.5),
   /** Vertical centre of the spotlight as a 0–1 fraction of canvas height. */

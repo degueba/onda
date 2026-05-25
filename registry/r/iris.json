@@ -21,7 +21,7 @@
       "path": "registry/transitions/iris/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/iris/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link iris} options. */\nexport const irisSchema = z.object({\n  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's iris. */\n  width: z.number().int().positive(),\n  /** Canvas height in px — typically `useVideoConfig().height`. */\n  height: z.number().int().positive(),\n});\n\nexport type IrisOptions = z.input<typeof irisSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link iris} options. */\nexport const irisSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('iris').default('iris'),\n  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's iris. */\n  width: z.number().int().positive(),\n  /** Canvas height in px — typically `useVideoConfig().height`. */\n  height: z.number().int().positive(),\n});\n\nexport type IrisOptions = z.input<typeof irisSchema>;\n"
     },
     {
       "path": "registry/transitions/iris/iris.meta.json",

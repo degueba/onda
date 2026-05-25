@@ -4,6 +4,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link IconPop} props. */
 export const iconPopSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('icon-pop').default('icon-pop'),
   /** Which icon to render. */
   icon: z.enum(['check', 'cross', 'dot', 'star']).default('check'),
   /** Frames before the animation starts. */

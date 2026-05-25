@@ -4,6 +4,8 @@ import { sizeRoleSchema, placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Underline} props. */
 export const underlineSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('underline').default('underline'),
   /** Text to reveal. Pass `""` to render the rule alone. */
   text: z.string().default('underline this'),
   /** Frames before the text starts revealing. */

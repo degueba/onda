@@ -21,7 +21,7 @@
       "path": "registry/transitions/depth-push/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/depth-push/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link depthPush} options. */\nexport const depthPushSchema = z.object({\n  /** Direction the camera move travels. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /**\n   * Amount of parallax scale. Outgoing scene scales down by this factor\n   * as it pushes off; incoming scales from `1 + scaleAmount` toward 1.\n   * Default `0.05` (5%) — subtle by design.\n   */\n  scaleAmount: z.number().min(0).max(0.3).default(0.05),\n});\n\nexport type DepthPushOptions = z.input<typeof depthPushSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link depthPush} options. */\nexport const depthPushSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('depth-push').default('depth-push'),\n  /** Direction the camera move travels. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /**\n   * Amount of parallax scale. Outgoing scene scales down by this factor\n   * as it pushes off; incoming scales from `1 + scaleAmount` toward 1.\n   * Default `0.05` (5%) — subtle by design.\n   */\n  scaleAmount: z.number().min(0).max(0.3).default(0.05),\n});\n\nexport type DepthPushOptions = z.input<typeof depthPushSchema>;\n"
     },
     {
       "path": "registry/transitions/depth-push/depth-push.meta.json",

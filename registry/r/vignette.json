@@ -20,7 +20,7 @@
       "path": "registry/components/vignette/schema.ts",
       "type": "registry:component",
       "target": "components/onda/vignette/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link Vignette} props. */\nexport const vignetteSchema = z.object({\n  /** Edge darkness. `0` = no vignette, `1` = fully dark edges. */\n  intensity: z.number().min(0).max(1).default(0.5),\n  /** Percent from center where the darkening begins. Larger = bigger clean middle. */\n  innerRadius: z.number().min(0).max(100).default(40),\n  /** Edge color. Defaults to pure black for the classic cinematic frame. */\n  color: z.string().default('#000000'),\n});\n\n/** Inferred props for {@link Vignette}. */\nexport type VignetteProps = z.infer<typeof vignetteSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link Vignette} props. */\nexport const vignetteSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('vignette').default('vignette'),\n  /** Edge darkness. `0` = no vignette, `1` = fully dark edges. */\n  intensity: z.number().min(0).max(1).default(0.5),\n  /** Percent from center where the darkening begins. Larger = bigger clean middle. */\n  innerRadius: z.number().min(0).max(100).default(40),\n  /** Edge color. Defaults to pure black for the classic cinematic frame. */\n  color: z.string().default('#000000'),\n});\n\n/** Inferred props for {@link Vignette}. */\nexport type VignetteProps = z.infer<typeof vignetteSchema>;\n"
     },
     {
       "path": "registry/components/vignette/vignette.meta.json",

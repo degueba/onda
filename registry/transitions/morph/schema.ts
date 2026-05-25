@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 /** Zod schema for {@link morph} options. */
 export const morphSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('morph').default('morph'),
   /**
    * Maximum scale delta around 1.0. Default `0.04` — outgoing scales
    * 1 → 1.04, incoming scales 0.96 → 1. Small by design; the point is

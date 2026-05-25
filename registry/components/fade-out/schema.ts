@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link FadeOut} props — drives Remotion `defaultProps` validation. */
 export const fadeOutSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('fade-out').default('fade-out'),
   /** What to fade out. */
   text: z.string().default('Onda'),
   /** Frames before the fade begins. */

@@ -70,7 +70,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         }}
       >
         {/* The headline number — counts up from 0 to value on SPRING_SMOOTH. */}
-        <CountUp
+        <CountUp kind="count-up"
           from={0}
           to={value}
           delay={delay}
@@ -87,7 +87,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         />
 
         {/* The qualifier — words cascade in after the number has settled. */}
-        <WordStagger
+        <WordStagger kind="word-stagger"
           text={label}
           delay={labelDelay}
           duration={DURATION.base}
@@ -106,7 +106,7 @@ export const StatCard: React.FC<StatCardProps> = ({
             render the glyphs transparent so what the eye sees is the rule
             alone, proportioned to the label above it. */}
         {accent ? (
-          <Underline
+          <Underline kind="underline"
             text={label}
             delay={underlineDelay}
             duration={1}

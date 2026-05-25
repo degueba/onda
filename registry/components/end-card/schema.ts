@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link EndCard} props. */
 export const endCardSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('end-card').default('end-card'),
   /** Hero CTA line. */
   cta: z.string().default('Made with Onda'),
   /** Social handles or URLs displayed in a row beneath the CTA. */
