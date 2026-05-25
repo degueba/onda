@@ -1,0 +1,18 @@
+{
+  "name": "pulsing-indicator",
+  "title": "PulsingIndicator",
+  "description": "A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.",
+  "category": "interface",
+  "tags": [
+    "status",
+    "live",
+    "indicator",
+    "pulse",
+    "dot"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

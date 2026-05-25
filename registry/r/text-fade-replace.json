@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-fade-replace",
+  "type": "registry:component",
+  "title": "TextFadeReplace",
+  "description": "Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-easing"
+  ],
+  "files": [
+    {
+      "path": "registry/components/text-fade-replace/TextFadeReplace.tsx",
+      "type": "registry:component",
+      "target": "components/onda/text-fade-replace/TextFadeReplace.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';\nimport { PlacementBox, resolveSize } from '../../../lib/canvas';\nimport { HOUSE_EASE } from '../../../lib/easing';\nimport { textFadeReplaceSchema, type TextFadeReplaceProps } from './schema';\n\nexport { textFadeReplaceSchema, type TextFadeReplaceProps };\n\n/**\n * Cycles through a list of phrases, crossfading one into the next in place.\n * Both the outgoing and incoming phrase are layered so the swap never shifts\n * the layout. Calm `HOUSE_EASE` crossfade — for rotating taglines / value\n * props.\n *\n * @example\n * <TextFadeReplace phrases={['ship', 'render', 'repeat']} />\n */\nexport const TextFadeReplace: React.FC<TextFadeReplaceProps> = ({\n  phrases, interval, crossfade, delay, loop, color,\n  fontSize, size, fontFamily, fontWeight, letterSpacing, lineHeight, align, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const { width, height } = useVideoConfig();\n  const local = Math.max(0, frame - delay);\n  const total = phrases.length;\n  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;\n\n  const slot = Math.floor(local / interval);\n  const idx = loop ? ((slot % total) + total) % total : Math.min(slot, total - 1);\n  const nextIdx = loop ? (idx + 1) % total : Math.min(slot + 1, total - 1);\n\n  const into = local - slot * interval;\n  const fadeStart = interval - crossfade;\n  const swapping = into >= fadeStart && (loop || slot < total - 1);\n  const p = swapping\n    ? interpolate(into, [fadeStart, interval], [0, 1], {\n        extrapolateLeft: 'clamp',\n        extrapolateRight: 'clamp',\n        easing: HOUSE_EASE,\n      })\n    : 0;\n\n  const justify = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';\n  const textStyle: React.CSSProperties = {\n    position: 'absolute',\n    color, fontSize: resolvedFontSize, fontFamily, fontWeight, letterSpacing, lineHeight, textAlign: align,\n    whiteSpace: 'nowrap',\n  };\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ position: 'relative', display: 'flex', justifyContent: justify }}>\n        {/* reserve height so the layout is stable */}\n        <span style={{ opacity: 0, fontSize: resolvedFontSize, fontFamily, fontWeight, lineHeight }}>{phrases[idx]}</span>\n        <span style={{ ...textStyle, opacity: 1 - p }}>{phrases[idx]}</span>\n        {swapping && <span style={{ ...textStyle, opacity: p }}>{phrases[nextIdx]}</span>}\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/text-fade-replace/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/text-fade-replace/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link TextFadeReplace} props. */\nexport const textFadeReplaceSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('text-fade-replace').default('text-fade-replace'),\n  /** The phrases to cycle through, in order. */\n  phrases: z.array(z.string()).default(['ship', 'render', 'repeat']),\n  /** Frames each phrase holds (including its crossfade out). */\n  interval: z.number().int().min(1).default(45),\n  /** Frames of crossfade between phrases. */\n  crossfade: z.number().int().min(1).default(12),\n  /** Frames before the first phrase appears. */\n  delay: z.number().int().min(0).default(0),\n  /** Loop back to the first phrase after the last. */\n  loop: z.boolean().default(true),\n  /** Text color. Defaults to `--onda-text`. */\n  color: z.string().default('#F2F2F4'),\n  /** Pixels. Wins over `size` if both are passed. */\n  fontSize: z.number().default(96),\n  /** Semantic typography role — canvas-aware pixels. */\n  size: sizeRoleSchema.optional(),\n  /** Onda display font. Never default to Inter / Arial / system. */\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n  /** Font weight. */\n  fontWeight: z.number().default(600),\n  /** CSS letter-spacing. */\n  letterSpacing: z.string().optional(),\n  /** Unitless line height. */\n  lineHeight: z.number().default(1.1),\n  /** Text alignment. */\n  align: z.enum(['left', 'center', 'right']).default('center'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link TextFadeReplace}. */\nexport type TextFadeReplaceProps = z.infer<typeof textFadeReplaceSchema>;\n"
+    },
+    {
+      "path": "registry/components/text-fade-replace/text-fade-replace.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/text-fade-replace/text-fade-replace.meta.json",
+      "content": "{\n  \"name\": \"text-fade-replace\",\n  \"title\": \"TextFadeReplace\",\n  \"description\": \"Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"rotate\",\n    \"swap\",\n    \"crossfade\",\n    \"tagline\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/text-fade-replace/README.md",
+      "type": "registry:file",
+      "target": "components/onda/text-fade-replace/README.md",
+      "content": "# TextFadeReplace\n\nCycles through a list of phrases, crossfading one into the next in place. Both the outgoing and incoming phrase are layered (with an invisible spacer reserving height) so the swap never shifts the layout. A calm `HOUSE_EASE` crossfade — for rotating taglines, value props, or \"X, then Y, then Z\" beats.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `phrases` | `string[]` | `[\"ship\",\"render\",\"repeat\"]` | Phrases, in order. |\n| `interval` | `number` | `45` | Frames each phrase holds. |\n| `crossfade` | `number` | `12` | Frames of crossfade between phrases. |\n| `delay` | `number` | `0` | Frames before the first phrase. |\n| `loop` | `boolean` | `true` | Loop after the last phrase. |\n| `color` | `string` | `#F2F2F4` | Text color. |\n| `fontSize` / `size` | `number` / role | `96` | Explicit px or canvas-aware role. |\n| `fontFamily`, `fontWeight`, `letterSpacing`, `lineHeight`, `align` | — | display defaults | Typography vocabulary. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { TextFadeReplace } from './components/onda/text-fade-replace/TextFadeReplace';\n\nexport const TaglineScene = () => (\n  <TextFadeReplace phrases={['Plan', 'Render', 'Ship']} placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

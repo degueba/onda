@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dynamic-grid",
+  "type": "registry:component",
+  "title": "DynamicGrid",
+  "description": "A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-primitives"
+  ],
+  "files": [
+    {
+      "path": "registry/components/dynamic-grid/DynamicGrid.tsx",
+      "type": "registry:component",
+      "target": "components/onda/dynamic-grid/DynamicGrid.tsx",
+      "content": "import React from 'react';\nimport { AbsoluteFill, useCurrentFrame } from 'remotion';\nimport { GridField, Glow } from '../../../lib/primitives';\nimport { dynamicGridSchema, type DynamicGridProps } from './schema';\n\nexport { dynamicGridSchema, type DynamicGridProps };\n\n/**\n * A technical grid that drifts diagonally — the `GridField` primitive on a\n * frame-driven translate that loops by one cell, so it's seamless and\n * deterministic. Optional centered accent `Glow` lifts the middle. A\n * full-canvas atmosphere layer for dashboards / data / dev scenes.\n *\n * @example\n * <DynamicGrid variant=\"dots\" />\n */\nexport const DynamicGrid: React.FC<DynamicGridProps> = ({\n  cell, variant, color, speed, opacity, glow, glowColor, background,\n}) => {\n  const frame = useCurrentFrame();\n  const offset = (frame * speed) % cell;\n\n  return (\n    <AbsoluteFill style={{ background, overflow: 'hidden' }}>\n      <div style={{ position: 'absolute', inset: `-${cell}px`, transform: `translate(${-offset}px, ${-offset}px)` }}>\n        <GridField cell={cell} variant={variant} color={color} opacity={opacity} />\n      </div>\n      {glow && <Glow color={glowColor} size={1} opacity={0.22} />}\n    </AbsoluteFill>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/dynamic-grid/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/dynamic-grid/schema.ts",
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link DynamicGrid} props. */\nexport const dynamicGridSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('dynamic-grid').default('dynamic-grid'),\n  /** Cell size in px. */\n  cell: z.number().int().min(4).default(48),\n  /** Ruled lines or a dot lattice. */\n  variant: z.enum(['lines', 'dots']).default('lines'),\n  /** Grid color. Defaults to `--onda-border`. */\n  color: z.string().default('#1C1C22'),\n  /** Scroll speed in px/frame (diagonal drift). */\n  speed: z.number().default(0.4),\n  /** Grid opacity. */\n  opacity: z.number().min(0).max(1).default(0.6),\n  /** Add a centered accent glow over the grid. */\n  glow: z.boolean().default(true),\n  /** Glow color. Defaults to `--onda-accent`. */\n  glowColor: z.string().default('#D96B82'),\n  /** Canvas color behind the grid. */\n  background: z.string().default('#08080A'),\n});\n\n/** Inferred props for {@link DynamicGrid}. */\nexport type DynamicGridProps = z.infer<typeof dynamicGridSchema>;\n"
+    },
+    {
+      "path": "registry/components/dynamic-grid/dynamic-grid.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/dynamic-grid/dynamic-grid.meta.json",
+      "content": "{\n  \"name\": \"dynamic-grid\",\n  \"title\": \"DynamicGrid\",\n  \"description\": \"A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"grid\",\n    \"technical\",\n    \"atmosphere\",\n    \"dashboard\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/dynamic-grid/README.md",
+      "type": "registry:file",
+      "target": "components/onda/dynamic-grid/README.md",
+      "content": "# DynamicGrid\n\nA technical grid that drifts diagonally — the `GridField` primitive on a frame-driven translate that loops by exactly one cell, so the motion is seamless and deterministic (§1). An optional centered accent `Glow` lifts the middle. A full-canvas atmosphere layer for dashboards, data, and dev scenes.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `cell` | `number` | `48` | Cell size in px. |\n| `variant` | `'lines' \\| 'dots'` | `'lines'` | Ruled grid or dot lattice. |\n| `color` | `string` | `#1C1C22` | Grid color. |\n| `speed` | `number` | `0.4` | Diagonal drift px/frame. |\n| `opacity` | `number` | `0.6` | Grid opacity. |\n| `glow` | `boolean` | `true` | Centered accent glow. |\n| `glowColor` | `string` | `#D96B82` | Glow color. |\n| `background` | `string` | `#08080A` | Canvas color. |\n\n## Usage\n\n```tsx\nimport { AbsoluteFill } from 'remotion';\nimport { DynamicGrid } from './components/onda/dynamic-grid/DynamicGrid';\n\nexport const Scene = () => (\n  <AbsoluteFill>\n    <DynamicGrid variant=\"dots\" />\n    {/* foreground */}\n  </AbsoluteFill>\n);\n```\n"
+    }
+  ]
+}

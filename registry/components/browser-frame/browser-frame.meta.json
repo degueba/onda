@@ -1,0 +1,18 @@
+{
+  "name": "browser-frame",
+  "title": "BrowserFrame",
+  "description": "A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.",
+  "category": "interface",
+  "tags": [
+    "browser",
+    "frame",
+    "mockup",
+    "container",
+    "developer"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

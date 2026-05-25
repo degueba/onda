@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pulsing-indicator",
+  "type": "registry:component",
+  "title": "PulsingIndicator",
+  "description": "A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas"
+  ],
+  "files": [
+    {
+      "path": "registry/components/pulsing-indicator/PulsingIndicator.tsx",
+      "type": "registry:component",
+      "target": "components/onda/pulsing-indicator/PulsingIndicator.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, interpolate } from 'remotion';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { pulsingIndicatorSchema, type PulsingIndicatorProps } from './schema';\n\nexport { pulsingIndicatorSchema, type PulsingIndicatorProps };\n\n/**\n * A live status dot with a calm expanding-ring pulse, plus an optional label.\n * The pulse is keyed off `frame % period`, so it loops seamlessly and renders\n * deterministically (§1) — no timers. One steady ring, not a strobe.\n *\n * @example\n * <PulsingIndicator label=\"LIVE\" />\n */\nexport const PulsingIndicator: React.FC<PulsingIndicatorProps> = ({\n  color, size, label, labelColor, fontFamily, fontSize, period, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const t = ((frame % period) + period) % period / period;\n  const ringScale = interpolate(t, [0, 1], [1, 2.6]);\n  const ringOpacity = interpolate(t, [0, 1], [0.5, 0]);\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ display: 'inline-flex', alignItems: 'center', gap: size * 0.7 }}>\n        <div style={{ position: 'relative', width: size, height: size }}>\n          <div\n            style={{\n              position: 'absolute',\n              inset: 0,\n              borderRadius: 999,\n              background: color,\n              transform: `scale(${ringScale})`,\n              opacity: ringOpacity,\n            }}\n          />\n          <div style={{ position: 'absolute', inset: 0, borderRadius: 999, background: color }} />\n        </div>\n        {label && (\n          <span style={{ color: labelColor, fontFamily, fontSize, letterSpacing: '0.16em', textTransform: 'uppercase' }}>\n            {label}\n          </span>\n        )}\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/pulsing-indicator/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/pulsing-indicator/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link PulsingIndicator} props. */\nexport const pulsingIndicatorSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('pulsing-indicator').default('pulsing-indicator'),\n  /** Dot + ring color. The earned accent by default. */\n  color: z.string().default('#D96B82'),\n  /** Dot diameter in px. */\n  size: z.number().default(20),\n  /** Optional label to the right of the dot. Empty hides it. */\n  label: z.string().default('LIVE'),\n  /** Label color. */\n  labelColor: z.string().default('#8E8E98'),\n  /** Label font family. */\n  fontFamily: z.string().default('\"Space Grotesk\", sans-serif'),\n  /** Label font size in px. */\n  fontSize: z.number().default(28),\n  /** Frames per pulse cycle. */\n  period: z.number().int().min(1).default(45),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link PulsingIndicator}. */\nexport type PulsingIndicatorProps = z.infer<typeof pulsingIndicatorSchema>;\n"
+    },
+    {
+      "path": "registry/components/pulsing-indicator/pulsing-indicator.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/pulsing-indicator/pulsing-indicator.meta.json",
+      "content": "{\n  \"name\": \"pulsing-indicator\",\n  \"title\": \"PulsingIndicator\",\n  \"description\": \"A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"status\",\n    \"live\",\n    \"indicator\",\n    \"pulse\",\n    \"dot\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/pulsing-indicator/README.md",
+      "type": "registry:file",
+      "target": "components/onda/pulsing-indicator/README.md",
+      "content": "# PulsingIndicator\n\nA live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off `frame % period`, so it loops seamlessly and renders deterministically — no timers, one steady ring rather than a strobe. The dot carries the earned accent by default.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `color` | `string` | `#D96B82` | Dot + ring color. |\n| `size` | `number` | `20` | Dot diameter in px. |\n| `label` | `string` | `\"LIVE\"` | Text to the right; empty hides it. |\n| `labelColor` | `string` | `#8E8E98` | Label color. |\n| `fontFamily` / `fontSize` | — | UI defaults | Label type. |\n| `period` | `number` | `45` | Frames per pulse cycle. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { PulsingIndicator } from './components/onda/pulsing-indicator/PulsingIndicator';\n\nexport const StatusScene = () => (\n  <PulsingIndicator label=\"LIVE\" placement=\"upper-right\" />\n);\n```\n"
+    }
+  ]
+}

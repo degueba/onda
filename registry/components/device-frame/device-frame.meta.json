@@ -1,0 +1,18 @@
+{
+  "name": "device-frame",
+  "title": "DeviceFrame",
+  "description": "A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.",
+  "category": "interface",
+  "tags": [
+    "device",
+    "phone",
+    "laptop",
+    "mockup",
+    "container"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slot-machine-roll",
+  "type": "registry:component",
+  "title": "SlotMachineRoll",
+  "description": "Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-motion",
+    "lib-random"
+  ],
+  "files": [
+    {
+      "path": "registry/components/slot-machine-roll/SlotMachineRoll.tsx",
+      "type": "registry:component",
+      "target": "components/onda/slot-machine-roll/SlotMachineRoll.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';\nimport { SPRING_SMOOTH } from '../../../lib/motion';\nimport { PlacementBox, resolveSize } from '../../../lib/canvas';\nimport { seededRandom } from '../../../lib/random';\nimport { slotMachineRollSchema, type SlotMachineRollProps } from './schema';\n\nexport { slotMachineRollSchema, type SlotMachineRollProps };\n\n/**\n * Each character spins down a reel of glyphs and lands on its target, settling\n * on the house spring — staggered left-to-right. The filler glyphs are seeded\n * (deterministic), so the spin is identical every render (§1). Best on short\n * numeric strings (years, counts, prices); defaults to a monospace stack so\n * the reels stay column-aligned.\n *\n * @example\n * <SlotMachineRoll text=\"2026\" />\n */\nexport const SlotMachineRoll: React.FC<SlotMachineRollProps> = ({\n  text, delay, charDelay, duration, reelLength, seed, charset,\n  color, fontSize, size, fontFamily, fontWeight, letterSpacing, align, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const { fps, width, height } = useVideoConfig();\n  const local = frame - delay;\n  const cell = size ? resolveSize(size, { width, height }) : fontSize;\n  const chars = text.split('');\n\n  const justify = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ display: 'flex', justifyContent: justify, fontFamily, fontWeight, letterSpacing, color }}>\n        {chars.map((ch, i) => {\n          if (ch === ' ') return <span key={i} style={{ width: cell * 0.4 }} />;\n\n          const rand = seededRandom(seed + i * 7919);\n          const reel: string[] = [];\n          for (let k = 0; k < reelLength; k++) reel.push(charset[Math.floor(rand() * charset.length)] ?? ch);\n          reel.push(ch);\n\n          const p = spring({ frame: local - i * charDelay, fps, config: SPRING_SMOOTH, durationInFrames: duration });\n          const ty = interpolate(p, [0, 1], [-reelLength * cell, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });\n\n          return (\n            <span key={i} style={{ display: 'inline-block', height: cell, lineHeight: `${cell}px`, fontSize: cell, overflow: 'hidden', verticalAlign: 'top' }}>\n              <span style={{ display: 'block', transform: `translateY(${ty}px)` }}>\n                {reel.map((g, k) => (\n                  <span key={k} style={{ display: 'block', height: cell, lineHeight: `${cell}px` }}>{g}</span>\n                ))}\n              </span>\n            </span>\n          );\n        })}\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/slot-machine-roll/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/slot-machine-roll/schema.ts",
+      "content": "import { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\nimport { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link SlotMachineRoll} props. */\nexport const slotMachineRollSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('slot-machine-roll').default('slot-machine-roll'),\n  /** The text that rolls into place. */\n  text: z.string().default('2026'),\n  /** Frames before rolling starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames between successive characters starting their roll. */\n  charDelay: z.number().int().min(0).default(4),\n  /** Frames for each character's reel to settle. */\n  duration: z.number().int().min(1).default(DURATION.slow),\n  /** How many filler glyphs spin past before the target lands. */\n  reelLength: z.number().int().min(1).default(12),\n  /** Seed for the (deterministic) filler glyphs. */\n  seed: z.number().int().default(7),\n  /** Glyph pool the reel spins through. */\n  charset: z.string().default('0123456789'),\n  /** Text color. Defaults to `--onda-text`. */\n  color: z.string().default('#F2F2F4'),\n  /** Pixels. Wins over `size` if both are passed. */\n  fontSize: z.number().default(140),\n  /** Semantic typography role — canvas-aware pixels. */\n  size: sizeRoleSchema.optional(),\n  /** Monospace stack keeps reels column-aligned. */\n  fontFamily: z.string().default('\"Space Grotesk\", ui-monospace, monospace'),\n  /** Font weight. */\n  fontWeight: z.number().default(600),\n  /** CSS letter-spacing. */\n  letterSpacing: z.string().default('0.02em'),\n  /** Text alignment. */\n  align: z.enum(['left', 'center', 'right']).default('center'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link SlotMachineRoll}. */\nexport type SlotMachineRollProps = z.infer<typeof slotMachineRollSchema>;\n"
+    },
+    {
+      "path": "registry/components/slot-machine-roll/slot-machine-roll.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/slot-machine-roll/slot-machine-roll.meta.json",
+      "content": "{\n  \"name\": \"slot-machine-roll\",\n  \"title\": \"SlotMachineRoll\",\n  \"description\": \"Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"number\",\n    \"roll\",\n    \"reel\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/slot-machine-roll/README.md",
+      "type": "registry:file",
+      "target": "components/onda/slot-machine-roll/README.md",
+      "content": "# SlotMachineRoll\n\nEach character spins down a reel of glyphs and lands on its target, settling on the house spring — staggered left-to-right so the string resolves like an odometer. The filler glyphs come from a seeded PRNG (`seededRandom`), so the spin is identical every render (§1). Best on short numeric strings (years, counts, prices); defaults to a monospace stack so the reels stay column-aligned.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"2026\"` | Text that rolls in. |\n| `delay` | `number` | `0` | Frames before rolling. |\n| `charDelay` | `number` | `4` | Frames between chars starting. |\n| `duration` | `number` | `24` | Frames per reel to settle. |\n| `reelLength` | `number` | `12` | Filler glyphs before the target. |\n| `seed` | `number` | `7` | Deterministic filler seed. |\n| `charset` | `string` | `\"0123456789\"` | Glyph pool the reel spins. |\n| `color` | `string` | `#F2F2F4` | Text color. |\n| `fontSize` / `size` | `number` / role | `140` | Explicit px or canvas-aware role. |\n| `fontFamily`, `fontWeight`, `letterSpacing`, `align` | — | mono defaults | Typography vocabulary. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { SlotMachineRoll } from './components/onda/slot-machine-roll/SlotMachineRoll';\n\nexport const YearScene = () => (\n  <SlotMachineRoll text=\"2026\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

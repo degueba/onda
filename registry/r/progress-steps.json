@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-steps",
+  "type": "registry:component",
+  "title": "ProgressSteps",
+  "description": "A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-hooks"
+  ],
+  "files": [
+    {
+      "path": "registry/components/progress-steps/ProgressSteps.tsx",
+      "type": "registry:component",
+      "target": "components/onda/progress-steps/ProgressSteps.tsx",
+      "content": "import React from 'react';\nimport { interpolate } from 'remotion';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { useSpringValue } from '../../../lib/hooks';\nimport { progressStepsSchema, type ProgressStepsProps } from './schema';\n\nexport { progressStepsSchema, type ProgressStepsProps };\n\n/**\n * A horizontal stepper whose fill animates to the `current` step on the house\n * spring. Completed dots and the connecting track carry the earned accent;\n * pending steps stay neutral. The active step gets a soft glow ring.\n *\n * @example\n * <ProgressSteps steps={['Plan', 'Build', 'Ship']} current={2} />\n */\nexport const ProgressSteps: React.FC<ProgressStepsProps> = ({\n  steps, current, delay, duration, accentColor, dimColor, labelColor, fontFamily, fontSize, width, placement,\n}) => {\n  const p = useSpringValue({ delay, durationInFrames: duration });\n  const filled = p * current; // 0..current, animated\n\n  const dot = 30;\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ width, display: 'flex', alignItems: 'flex-start' }}>\n        {steps.map((label, i) => {\n          const on = interpolate(filled, [i - 0.5, i], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });\n          const connector = i < steps.length - 1\n            ? interpolate(filled, [i, i + 1], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })\n            : 0;\n          const dotColor = `color-mix(in srgb, ${accentColor} ${on * 100}%, ${dimColor})`;\n          return (\n            <div key={i} style={{ flex: i < steps.length - 1 ? 1 : '0 0 auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minWidth: 0 }}>\n              <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>\n                <div\n                  style={{\n                    width: dot, height: dot, borderRadius: 999, flex: '0 0 auto',\n                    background: dotColor,\n                    boxShadow: on > 0.6 ? `0 0 ${on * 24}px ${accentColor}` : undefined,\n                  }}\n                />\n                {i < steps.length - 1 && (\n                  <div style={{ flex: 1, height: 3, background: dimColor, position: 'relative', margin: '0 6px' }}>\n                    <div style={{ position: 'absolute', inset: 0, width: `${connector * 100}%`, background: accentColor }} />\n                  </div>\n                )}\n              </div>\n              <span style={{ marginTop: 16, color: labelColor, fontFamily, fontSize, opacity: 0.5 + on * 0.5 }}>{label}</span>\n            </div>\n          );\n        })}\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/progress-steps/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/progress-steps/schema.ts",
+      "content": "import { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link ProgressSteps} props. */\nexport const progressStepsSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('progress-steps').default('progress-steps'),\n  /** Step labels, left to right. */\n  steps: z.array(z.string()).default(['Plan', 'Build', 'Render', 'Ship']),\n  /** How many steps are complete — the fill animates to this index (0-based count). */\n  current: z.number().int().min(0).default(2),\n  /** Frames before the fill animates. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames for the fill to travel to `current`. */\n  duration: z.number().int().min(1).default(DURATION.slower),\n  /** Completed / active color — the earned accent. */\n  accentColor: z.string().default('#D96B82'),\n  /** Pending color. */\n  dimColor: z.string().default('#26262E'),\n  /** Label color. */\n  labelColor: z.string().default('#8E8E98'),\n  /** Font family for labels. */\n  fontFamily: z.string().default('\"Space Grotesk\", sans-serif'),\n  /** Label font size in px. Sized for a 1080p+ video canvas. */\n  fontSize: z.number().default(34),\n  /** Overall width in px. */\n  width: z.number().default(1280),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link ProgressSteps}. */\nexport type ProgressStepsProps = z.infer<typeof progressStepsSchema>;\n"
+    },
+    {
+      "path": "registry/components/progress-steps/progress-steps.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/progress-steps/progress-steps.meta.json",
+      "content": "{\n  \"name\": \"progress-steps\",\n  \"title\": \"ProgressSteps\",\n  \"description\": \"A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"steps\",\n    \"stepper\",\n    \"progress\",\n    \"onboarding\",\n    \"ui\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/progress-steps/README.md",
+      "type": "registry:file",
+      "target": "components/onda/progress-steps/README.md",
+      "content": "# ProgressSteps\n\nA horizontal stepper whose fill animates to the `current` step on the house spring (`useSpringValue`). Completed dots and the connecting track carry the earned accent; the active dot gets a soft glow ring; pending steps stay neutral. Labels brighten as their step activates.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `steps` | `string[]` | `[\"Plan\",\"Build\",\"Render\",\"Ship\"]` | Step labels. |\n| `current` | `number` | `2` | Completed count; fill animates here. |\n| `delay` | `number` | `0` | Frames before the fill. |\n| `duration` | `number` | `30` | Frames for the fill to travel. |\n| `accentColor` | `string` | `#D96B82` | Completed / active color. |\n| `dimColor` | `string` | `#26262E` | Pending color. |\n| `labelColor` | `string` | `#8E8E98` | Label color. |\n| `fontFamily` / `fontSize` | — | `34` | Label type (sized for video). |\n| `width` | `number` | `1280` | Overall width. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n> Uses CSS `color-mix` to blend the dot color across activation. Supported in modern Chromium (Remotion's renderer).\n\n## Usage\n\n```tsx\nimport { ProgressSteps } from './components/onda/progress-steps/ProgressSteps';\n\nexport const OnboardingScene = () => (\n  <ProgressSteps steps={['Plan', 'Build', 'Ship']} current={2} placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

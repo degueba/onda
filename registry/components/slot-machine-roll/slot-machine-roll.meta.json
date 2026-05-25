@@ -1,0 +1,18 @@
+{
+  "name": "slot-machine-roll",
+  "title": "SlotMachineRoll",
+  "description": "Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.",
+  "category": "entrances",
+  "tags": [
+    "text",
+    "number",
+    "roll",
+    "reel",
+    "entrance"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

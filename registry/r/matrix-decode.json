@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "matrix-decode",
+  "type": "registry:component",
+  "title": "MatrixDecode",
+  "description": "Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-random"
+  ],
+  "files": [
+    {
+      "path": "registry/components/matrix-decode/MatrixDecode.tsx",
+      "type": "registry:component",
+      "target": "components/onda/matrix-decode/MatrixDecode.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig } from 'remotion';\nimport { PlacementBox, resolveSize } from '../../../lib/canvas';\nimport { seededRandom } from '../../../lib/random';\nimport { matrixDecodeSchema, type MatrixDecodeProps } from './schema';\n\nexport { matrixDecodeSchema, type MatrixDecodeProps };\n\n/**\n * Each character flickers through random glyphs, then settles to its target\n * left-to-right — a decode reveal. The flicker is deterministic (glyph picks\n * come from a seeded PRNG keyed by char index + frame bucket), so it renders\n * identically every time (§1). Scrambling glyphs carry the accent; settled\n * text goes neutral.\n *\n * @example\n * <MatrixDecode text=\"ONDA\" />\n */\nexport const MatrixDecode: React.FC<MatrixDecodeProps> = ({\n  text, delay, charDelay, scrambleDuration, scrambleSpeed, seed, charset,\n  color, scrambleColor, fontSize, size, fontFamily, fontWeight, letterSpacing, align, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const { width, height } = useVideoConfig();\n  const local = frame - delay;\n  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;\n\n  const chars = text.split('');\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ fontFamily, fontSize: resolvedFontSize, fontWeight, letterSpacing, textAlign: align, whiteSpace: 'pre' }}>\n        {chars.map((ch, i) => {\n          if (ch === ' ') return <span key={i}> </span>;\n          const settleAt = i * charDelay + scrambleDuration;\n          const settled = local >= settleAt;\n          if (settled) {\n            return <span key={i} style={{ color }}>{ch}</span>;\n          }\n          // Scramble: pick a glyph deterministically from (index, frame bucket).\n          const bucket = Math.floor(Math.max(0, local) / scrambleSpeed);\n          const rand = seededRandom(seed + i * 9301 + bucket * 49297);\n          const glyph = charset[Math.floor(rand() * charset.length)] ?? ch;\n          return <span key={i} style={{ color: scrambleColor }}>{glyph}</span>;\n        })}\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/matrix-decode/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/matrix-decode/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link MatrixDecode} props. */\nexport const matrixDecodeSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('matrix-decode').default('matrix-decode'),\n  /** The text that decodes into place. */\n  text: z.string().default('ONDA'),\n  /** Frames before decoding starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames between successive characters settling (left-to-right). */\n  charDelay: z.number().int().min(0).default(3),\n  /** Frames each character scrambles before it settles. */\n  scrambleDuration: z.number().int().min(1).default(18),\n  /** Frames between glyph swaps while scrambling. Lower = faster flicker. */\n  scrambleSpeed: z.number().int().min(1).default(2),\n  /** Seed for the (deterministic) glyph picks. */\n  seed: z.number().int().default(7),\n  /** Glyph pool drawn from while scrambling. */\n  charset: z.string().default('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=<>/'),\n  /** Settled text color. Defaults to `--onda-text`. */\n  color: z.string().default('#F2F2F4'),\n  /** Color of still-scrambling glyphs — the earned accent. */\n  scrambleColor: z.string().default('#D96B82'),\n  /** Pixels. Wins over `size` if both are passed. */\n  fontSize: z.number().default(120),\n  /** Semantic typography role — canvas-aware pixels. */\n  size: sizeRoleSchema.optional(),\n  /** Monospace stack keeps the width steady as glyphs flicker. */\n  fontFamily: z.string().default('\"Space Grotesk\", ui-monospace, monospace'),\n  /** Font weight. */\n  fontWeight: z.number().default(600),\n  /** CSS letter-spacing. */\n  letterSpacing: z.string().default('0.06em'),\n  /** Text alignment. */\n  align: z.enum(['left', 'center', 'right']).default('center'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link MatrixDecode}. */\nexport type MatrixDecodeProps = z.infer<typeof matrixDecodeSchema>;\n"
+    },
+    {
+      "path": "registry/components/matrix-decode/matrix-decode.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/matrix-decode/matrix-decode.meta.json",
+      "content": "{\n  \"name\": \"matrix-decode\",\n  \"title\": \"MatrixDecode\",\n  \"description\": \"Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"decode\",\n    \"glitch\",\n    \"scramble\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/matrix-decode/README.md",
+      "type": "registry:file",
+      "target": "components/onda/matrix-decode/README.md",
+      "content": "# MatrixDecode\n\nEach character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is **deterministic**: glyph picks come from a seeded PRNG (`seededRandom`) keyed by character index + frame bucket, so the same seed renders the same flicker every time (§1). Still-scrambling glyphs carry the accent; settled text goes neutral. Defaults to a monospace stack so the width stays steady while glyphs swap.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"ONDA\"` | Text that decodes in. |\n| `delay` | `number` | `0` | Frames before decoding. |\n| `charDelay` | `number` | `3` | Frames between chars settling. |\n| `scrambleDuration` | `number` | `18` | Frames each char scrambles. |\n| `scrambleSpeed` | `number` | `2` | Frames between glyph swaps. |\n| `seed` | `number` | `7` | Deterministic glyph seed. |\n| `charset` | `string` | A–Z 0–9 symbols | Glyph pool. |\n| `color` / `scrambleColor` | `string` | text / accent | Settled vs scrambling color. |\n| `fontSize` / `size` | `number` / role | `120` | Explicit px or canvas-aware role. |\n| `fontFamily`, `fontWeight`, `letterSpacing`, `align` | — | mono defaults | Typography vocabulary. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { MatrixDecode } from './components/onda/matrix-decode/MatrixDecode';\n\nexport const DecodeScene = () => (\n  <MatrixDecode text=\"DECODED\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

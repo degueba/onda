@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cursor",
+  "type": "registry:component",
+  "title": "Cursor",
+  "description": "An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-hooks",
+    "lib-motion"
+  ],
+  "files": [
+    {
+      "path": "registry/components/cursor/Cursor.tsx",
+      "type": "registry:component",
+      "target": "components/onda/cursor/Cursor.tsx",
+      "content": "import React from 'react';\nimport { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate } from 'remotion';\nimport { useSpringValue } from '../../../lib/hooks';\nimport { cursorSchema, type CursorProps } from './schema';\n\nexport { cursorSchema, type CursorProps };\n\n/**\n * An animated pointer that travels from one canvas point to another on the\n * house spring and emits a single restrained click ripple on arrival. A\n * full-canvas layer — position it with the `from*` / `to*` fractions, not\n * placement. Pairs with `code-block` / `terminal` / `browser-frame` for\n * product and dev demos.\n *\n * @example\n * <Cursor fromX={0.3} fromY={0.7} toX={0.6} toY={0.4} />\n */\nexport const Cursor: React.FC<CursorProps> = ({\n  fromX, fromY, toX, toY, delay, travelDuration, click, clickDelay, color, size,\n}) => {\n  const frame = useCurrentFrame();\n  const { width, height } = useVideoConfig();\n  const p = useSpringValue({ delay, durationInFrames: travelDuration });\n\n  const x = interpolate(p, [0, 1], [fromX, toX]) * width;\n  const y = interpolate(p, [0, 1], [fromY, toY]) * height;\n\n  const clickFrame = delay + travelDuration + clickDelay;\n  const ripple = click\n    ? interpolate(frame, [clickFrame, clickFrame + 14], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })\n    : 0;\n  // A brief press-down on the pointer at the click moment.\n  const press = click\n    ? interpolate(frame, [clickFrame, clickFrame + 4, clickFrame + 9], [1, 0.86, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })\n    : 1;\n\n  const ringSize = size * 1.4;\n\n  return (\n    <AbsoluteFill style={{ pointerEvents: 'none' }}>\n      <div style={{ position: 'absolute', left: x, top: y, transform: 'translate(-4px, -2px)' }}>\n        {/* click ripple */}\n        {ripple > 0 && ripple < 1 && (\n          <div\n            style={{\n              position: 'absolute',\n              left: -ringSize / 2 + 6,\n              top: -ringSize / 2 + 4,\n              width: ringSize,\n              height: ringSize,\n              borderRadius: 999,\n              border: `2px solid ${color}`,\n              transform: `scale(${interpolate(ripple, [0, 1], [0.2, 1.4])})`,\n              opacity: interpolate(ripple, [0, 1], [0.6, 0]),\n            }}\n          />\n        )}\n        {/* pointer */}\n        <svg\n          width={size * 0.62}\n          height={size}\n          viewBox=\"0 0 40 64\"\n          style={{ display: 'block', transform: `scale(${press})`, transformOrigin: '4px 2px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}\n        >\n          <path\n            d=\"M4 2 L4 46 L15 36 L22 54 L30 50 L23 33 L38 33 Z\"\n            fill={color}\n            stroke=\"#08080A\"\n            strokeWidth={2}\n            strokeLinejoin=\"round\"\n          />\n        </svg>\n      </div>\n    </AbsoluteFill>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/cursor/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/cursor/schema.ts",
+      "content": "import { z } from 'zod';\nimport { DURATION } from '../../../lib/motion';\n\n/** Zod schema for {@link Cursor} props. Positions are 0..1 canvas fractions. */\nexport const cursorSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('cursor').default('cursor'),\n  /** Start X as a 0..1 fraction of canvas width. */\n  fromX: z.number().default(0.28),\n  /** Start Y as a 0..1 fraction of canvas height. */\n  fromY: z.number().default(0.72),\n  /** End X as a 0..1 fraction of canvas width. */\n  toX: z.number().default(0.6),\n  /** End Y as a 0..1 fraction of canvas height. */\n  toY: z.number().default(0.42),\n  /** Frames before the cursor starts moving. */\n  delay: z.number().int().min(0).default(6),\n  /** Frames to travel from start to end on the house spring. */\n  travelDuration: z.number().int().min(1).default(DURATION.slow),\n  /** Emit a click ripple on arrival. */\n  click: z.boolean().default(true),\n  /** Frames after arrival before the click fires. */\n  clickDelay: z.number().int().min(0).default(6),\n  /** Pointer + ripple color. Defaults to `--onda-text`. */\n  color: z.string().default('#F2F2F4'),\n  /** Pointer height in px. */\n  size: z.number().default(56),\n});\n\n/** Inferred props for {@link Cursor}. */\nexport type CursorProps = z.infer<typeof cursorSchema>;\n"
+    },
+    {
+      "path": "registry/components/cursor/cursor.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/cursor/cursor.meta.json",
+      "content": "{\n  \"name\": \"cursor\",\n  \"title\": \"Cursor\",\n  \"description\": \"An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"cursor\",\n    \"pointer\",\n    \"click\",\n    \"demo\",\n    \"interface\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/cursor/README.md",
+      "type": "registry:file",
+      "target": "components/onda/cursor/README.md",
+      "content": "# Cursor\n\nAn animated pointer that travels from one canvas point to another on the house spring (`useSpringValue`) and emits a single restrained click ripple on arrival. It's a full-canvas layer — you position it with the `from*` / `to*` fractions (0..1 of the canvas), not with `placement`. Pairs with `code-block`, `terminal`, and `browser-frame` to narrate product and dev demos.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `fromX` / `fromY` | `number` | `0.28` / `0.72` | Start point (canvas fractions). |\n| `toX` / `toY` | `number` | `0.6` / `0.42` | End point (canvas fractions). |\n| `delay` | `number` | `6` | Frames before moving. |\n| `travelDuration` | `number` | `24` | Frames to travel. |\n| `click` | `boolean` | `true` | Emit a click ripple on arrival. |\n| `clickDelay` | `number` | `6` | Frames after arrival before the click. |\n| `color` | `string` | `#F2F2F4` | Pointer + ripple color. |\n| `size` | `number` | `56` | Pointer height in px. |\n\n## Usage\n\n```tsx\nimport { AbsoluteFill } from 'remotion';\nimport { Cursor } from './components/onda/cursor/Cursor';\n\nexport const ClickScene = () => (\n  <AbsoluteFill>\n    {/* ...UI under the cursor... */}\n    <Cursor fromX={0.3} fromY={0.7} toX={0.55} toY={0.4} />\n  </AbsoluteFill>\n);\n```\n"
+    }
+  ]
+}

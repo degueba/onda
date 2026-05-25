@@ -1,0 +1,18 @@
+{
+  "name": "shimmer-sweep",
+  "title": "ShimmerSweep",
+  "description": "A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.",
+  "category": "graphics",
+  "tags": [
+    "text",
+    "shimmer",
+    "sweep",
+    "highlight",
+    "emphasis"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

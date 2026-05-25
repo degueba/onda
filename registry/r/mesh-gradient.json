@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mesh-gradient",
+  "type": "registry:component",
+  "title": "MeshGradient",
+  "description": "A soft mesh-gradient backdrop — colored blobs drifting slowly over the near-black canvas. Sine drift keyed off a seeded phase, so it loops cleanly and renders deterministically. Atmosphere, not subject.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-random"
+  ],
+  "files": [
+    {
+      "path": "registry/components/mesh-gradient/MeshGradient.tsx",
+      "type": "registry:component",
+      "target": "components/onda/mesh-gradient/MeshGradient.tsx",
+      "content": "import React from 'react';\nimport { AbsoluteFill, useCurrentFrame } from 'remotion';\nimport { seededRandom } from '../../../lib/random';\nimport { meshGradientSchema, type MeshGradientProps } from './schema';\n\nexport { meshGradientSchema, type MeshGradientProps };\n\n/**\n * A soft mesh-gradient backdrop — colored blobs that drift slowly over the\n * near-black canvas. Motion is a pure function of the frame (sine drift keyed\n * off a seeded phase), so it loops cleanly and renders deterministically (§1).\n * Atmosphere, not subject: keep `speed` and `opacity` low.\n *\n * @example\n * <MeshGradient />\n */\nexport const MeshGradient: React.FC<MeshGradientProps> = ({\n  colors, background, speed, seed, opacity,\n}) => {\n  const frame = useCurrentFrame();\n  const rand = seededRandom(seed);\n\n  const layers = colors.map((color) => {\n    const phase = rand() * Math.PI * 2;\n    const ampX = 16 + rand() * 14;\n    const ampY = 14 + rand() * 14;\n    const baseX = 25 + rand() * 50;\n    const baseY = 25 + rand() * 50;\n    const w = frame * 0.012 * speed;\n    const x = baseX + Math.sin(w + phase) * ampX;\n    const y = baseY + Math.cos(w * 0.8 + phase) * ampY;\n    return `radial-gradient(circle at ${x}% ${y}%, ${color} 0%, transparent 45%)`;\n  });\n\n  return (\n    <AbsoluteFill style={{ background }}>\n      <AbsoluteFill style={{ backgroundImage: layers.join(', '), opacity, filter: 'blur(8px)' }} />\n    </AbsoluteFill>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/mesh-gradient/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/mesh-gradient/schema.ts",
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link MeshGradient} props. */\nexport const meshGradientSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('mesh-gradient').default('mesh-gradient'),\n  /** Blob colors. 2–4 reads best; they drift over the `--onda-bg` canvas. */\n  colors: z.array(z.string()).default(['#D96B82', '#E89AAB', '#26262E']),\n  /** Base canvas color behind the blobs. */\n  background: z.string().default('#08080A'),\n  /** Drift speed multiplier. Keep low — this is atmosphere, not motion. */\n  speed: z.number().default(1),\n  /** Seed for the blob phase offsets (deterministic). */\n  seed: z.number().int().default(7),\n  /** Overall blob opacity over the canvas. */\n  opacity: z.number().min(0).max(1).default(0.5),\n});\n\n/** Inferred props for {@link MeshGradient}. */\nexport type MeshGradientProps = z.infer<typeof meshGradientSchema>;\n"
+    },
+    {
+      "path": "registry/components/mesh-gradient/mesh-gradient.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/mesh-gradient/mesh-gradient.meta.json",
+      "content": "{\n  \"name\": \"mesh-gradient\",\n  \"title\": \"MeshGradient\",\n  \"description\": \"A soft mesh-gradient backdrop — colored blobs drifting slowly over the near-black canvas. Sine drift keyed off a seeded phase, so it loops cleanly and renders deterministically. Atmosphere, not subject.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"gradient\",\n    \"mesh\",\n    \"atmosphere\",\n    \"ambient\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/mesh-gradient/README.md",
+      "type": "registry:file",
+      "target": "components/onda/mesh-gradient/README.md",
+      "content": "# MeshGradient\n\nA soft mesh-gradient backdrop — colored blobs that drift slowly over the near-black canvas. The drift is a pure function of the frame (sine motion keyed off seeded per-blob phases), so it loops cleanly and renders deterministically (§1). This is a full-canvas atmosphere layer — no placement; drop it behind your scene with `<AbsoluteFill>`.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `colors` | `string[]` | rose + soft + border | Blob colors; 2–4 reads best. |\n| `background` | `string` | `#08080A` | Canvas color behind blobs. |\n| `speed` | `number` | `1` | Drift multiplier — keep low. |\n| `seed` | `number` | `7` | Phase seed (deterministic). |\n| `opacity` | `number` | `0.5` | Overall blob opacity. |\n\n## Usage\n\n```tsx\nimport { AbsoluteFill } from 'remotion';\nimport { MeshGradient } from './components/onda/mesh-gradient/MeshGradient';\n\nexport const Scene = () => (\n  <AbsoluteFill>\n    <MeshGradient />\n    {/* foreground content */}\n  </AbsoluteFill>\n);\n```\n"
+    }
+  ]
+}

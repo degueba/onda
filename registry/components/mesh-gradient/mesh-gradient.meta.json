@@ -1,0 +1,18 @@
+{
+  "name": "mesh-gradient",
+  "title": "MeshGradient",
+  "description": "A soft mesh-gradient backdrop — colored blobs drifting slowly over the near-black canvas. Sine drift keyed off a seeded phase, so it loops cleanly and renders deterministically. Atmosphere, not subject.",
+  "category": "atmosphere",
+  "tags": [
+    "background",
+    "gradient",
+    "mesh",
+    "atmosphere",
+    "ambient"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}
