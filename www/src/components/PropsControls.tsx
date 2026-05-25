@@ -60,6 +60,58 @@ const STRING_OPTIONS: Record<string, { label: string; value: string }[]> = {
   ],
 };
 
+// Split a camelCase prop name into space-separated words so long labels
+// (`numberOfSamples`, `waveStrokeWidth`) wrap naturally at word
+// boundaries inside the narrow label column. Combined with the
+// `uppercase` Tailwind class, the result reads as `NUMBER OF SAMPLES`.
+function formatLabel(name: string): string {
+  return name.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
+
+/**
+ * Derive a slider hint (`{ min, max, step }`) from a Zod number
+ * schema's `_def.checks`. Returns `null` if the schema has no bounds
+ * the user could intuit a range from (e.g. `numberOfSamples` is just
+ * `z.number().int()` — no min/max → user is on their own).
+ *
+ * Heuristics for the unset bound:
+ *   - When only `min` is set: max = `max(min + 10, defaultValue * 4)`.
+ *     E.g. `barWidth: min(1).default(4)` → slider 1..16.
+ *   - When only `max` is set: min = 0.
+ *
+ * Step inference:
+ *   - integer schema → step 1
+ *   - range ≤ 1     → step 0.05 (opacity-like)
+ *   - range ≤ 50    → step 1
+ *   - otherwise     → step 5
+ */
+function deriveSliderHint(
+  field: ZodTypeAny,
+  defaultValue: number | undefined,
+): { min: number; max: number; step: number } | null {
+  const def = (field as unknown as {
+    _def: { checks?: Array<{ kind: string; value?: number }> };
+  })._def;
+  const checks = def.checks ?? [];
+  const minCheck = checks.find((c) => c.kind === 'min');
+  const maxCheck = checks.find((c) => c.kind === 'max');
+  const isInt = checks.some((c) => c.kind === 'int');
+
+  // Need at least one bound to anchor a meaningful slider range.
+  if (minCheck === undefined && maxCheck === undefined) return null;
+
+  const dflt = Number.isFinite(defaultValue ?? NaN) ? (defaultValue as number) : 0;
+  const min = minCheck?.value ?? 0;
+  const max =
+    maxCheck?.value ??
+    Math.max(min + 10, Math.abs(dflt) * 4 || min + 100);
+
+  const range = max - min;
+  const step = isInt ? 1 : range <= 1 ? 0.05 : range <= 50 ? 1 : 5;
+
+  return { min, max, step };
+}
+
 // Format a preset's camelCase / kebab-case key as a human-readable label.
 // `voiceRibbon` → "Voice ribbon"; `neon-ring` → "Neon ring".
 function presetLabel(key: string): string {
@@ -247,6 +299,7 @@ export function PropsControls({
               type={type}
               inner={inner}
               value={values[name]}
+              defaultValue={defaults[name]}
               onChange={(v) => setField(name, v)}
             />
           );
@@ -261,12 +314,14 @@ function FieldRow({
   type,
   inner,
   value,
+  defaultValue,
   onChange,
 }: {
   name: string;
   type: string;
   inner: ZodTypeAny;
   value: unknown;
+  defaultValue: unknown;
   onChange: (v: unknown) => void;
 }) {
   return (
@@ -276,8 +331,11 @@ function FieldRow({
     // hex field) wrap or scale-down inside the column instead of pushing
     // the popover open.
     <div className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-3">
-      <label className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate">
-        {name}
+      <label
+        className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono leading-snug"
+        title={name}
+      >
+        {formatLabel(name)}
       </label>
       <div className="min-w-0">
         <FieldControl
@@ -285,6 +343,7 @@ function FieldRow({
           type={type}
           inner={inner}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
         />
       </div>
@@ -297,16 +356,28 @@ function FieldControl({
   type,
   inner,
   value,
+  defaultValue,
   onChange,
 }: {
   name: string;
   type: string;
   inner: ZodTypeAny;
   value: unknown;
+  defaultValue: unknown;
   onChange: (v: unknown) => void;
 }) {
   if (type === 'ZodNumber') {
-    const hint = NUMERIC_HINTS[name];
+    // Hint priority: hand-tuned NUMERIC_HINTS (per-prop overrides) →
+    // Zod-schema-derived range (`.min().max()` checks) → no hint.
+    // The Zod-derived path is the catalog-wide default — schemas that
+    // declare `.min(0).max(1)` or even just `.min(1)` automatically
+    // get a slider with sensible bounds, no manual map maintenance.
+    const numericDefault =
+      typeof defaultValue === 'number' && Number.isFinite(defaultValue)
+        ? defaultValue
+        : undefined;
+    const hint = NUMERIC_HINTS[name] ?? deriveSliderHint(inner, numericDefault);
+
     // Optional fields with no schema default arrive as `undefined`.
     // `Number(undefined)` is NaN — passing NaN to <input value={...}>
     // triggers a React warning AND renders a broken slider. Coerce to
