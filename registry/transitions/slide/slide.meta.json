@@ -1,0 +1,17 @@
+{
+  "name": "slide",
+  "title": "slide",
+  "description": "A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "slide",
+    "directional",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

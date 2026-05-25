@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "push",
+  "type": "registry:component",
+  "title": "push",
+  "description": "A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/push/push.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/push/push.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link push} options. */\nexport const pushSchema = z.object({\n  /**\n   * Which direction the entire frame translates. Both scenes move\n   * together as a unit — reads as a camera pan between them.\n   */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n});\n\nexport type PushOptions = z.input<typeof pushSchema>;\n\ntype PushProps = { direction: 'left' | 'right' | 'up' | 'down' };\n\n// Map direction → translation vector for the OUTGOING scene. The\n// incoming scene starts at the opposite edge and moves with the same\n// vector toward (0,0). This gives the camera-pan feel where both\n// scenes appear to slide together.\nconst VECTOR: Record<PushProps['direction'], { x: number; y: number }> = {\n  left: { x: -1, y: 0 },\n  right: { x: 1, y: 0 },\n  up: { x: 0, y: -1 },\n  down: { x: 0, y: 1 },\n};\n\nconst PushPresentation: React.FC<TransitionPresentationComponentProps<PushProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const { x, y } = VECTOR[passedProps.direction];\n  const isEntering = presentationDirection === 'entering';\n  // Outgoing scene: translates from (0,0) toward the vector × 100%.\n  // Incoming scene: starts at the OPPOSITE vector × 100% and lands at (0,0).\n  // Both move with the same vector, so the perceived motion is unified.\n  const translateX = isEntering\n    ? -x * 100 * (1 - presentationProgress)\n    : x * 100 * presentationProgress;\n  const translateY = isEntering\n    ? -y * 100 * (1 - presentationProgress)\n    : y * 100 * presentationProgress;\n\n  return (\n    <AbsoluteFill style={{ transform: `translate(${translateX}%, ${translateY}%)` }}>\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * A directional push between two scenes — both scenes translate\n * together in the same direction, like a camera pan. Different from\n * `slide` (which only moves the incoming scene) and `depthPush`\n * (which adds parallax scale).\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original — no Remotion equivalent.\n */\nexport function push(\n  options?: PushOptions,\n): TransitionPresentation<PushProps> {\n  const opts = pushSchema.parse(options ?? {});\n  return {\n    component: PushPresentation,\n    props: { direction: opts.direction },\n  };\n}\n\nexport default push;\n"
+    },
+    {
+      "path": "registry/transitions/push/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/push/schema.ts",
+      "content": "export { pushSchema, type PushOptions } from './push';\n"
+    },
+    {
+      "path": "registry/transitions/push/push.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/push/push.meta.json",
+      "content": "{\n  \"name\": \"push\",\n  \"title\": \"push\",\n  \"description\": \"A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"directional\",\n    \"camera-pan\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/push/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/push/README.md",
+      "content": "# push\n\nA directional push between two scenes. Both scenes translate together in the same direction — reads as a camera pan between them.\n\nDifferent from `slide` (only incoming moves) and `depthPush` (adds parallax scale).\n\n## When to use\n\n| If you want… | Use |\n| --- | --- |\n| Both scenes move together (camera pan feel) | **`push`** |\n| Only the new scene slides in | `slide` |\n| Camera pan WITH depth (parallax scale) | `depthPush` |\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | Direction the entire frame pans. `'left'` = both scenes move leftward together. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { push } from './components/onda/transitions/push/push';\n\n<TransitionSeries.Transition\n  presentation={push({ direction: 'left' })}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Both scenes share the same translation vector.** At progress 0.5 the outgoing scene is half-off-screen in the pan direction; the incoming scene is half-on-screen from the opposite edge. They appear as one continuous panning frame.\n- **Onda-original.** Remotion's `slide()` only translates the incoming scene; `push` adds the outgoing translation that makes the motion read as a single camera move.\n- **Pair with the house timing** for the standard rhythm.\n"
+    }
+  ]
+}

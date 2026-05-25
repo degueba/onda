@@ -1,0 +1,17 @@
+{
+  "name": "wipe",
+  "title": "wipe",
+  "description": "A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "wipe",
+    "directional",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

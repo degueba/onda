@@ -1,0 +1,19 @@
+{
+  "name": "depth-push",
+  "title": "depthPush",
+  "description": "Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "push",
+    "depth",
+    "parallax",
+    "camera-dolly",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "blur",
+  "type": "registry:component",
+  "title": "blur",
+  "description": "Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/blur/blur.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/blur/blur.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link blur} options. */\nexport const blurSchema = z.object({\n  /**\n   * Max blur radius in px. Outgoing blurs from 0 to this value as it\n   * fades; incoming blurs from this value to 0 as it fades in.\n   * Default `10` matches the BlurReveal entrance fingerprint.\n   */\n  blurAmount: z.number().min(0).max(40).default(10),\n});\n\nexport type BlurOptions = z.input<typeof blurSchema>;\n\ntype BlurProps = { blurAmount: number };\n\nconst BlurPresentation: React.FC<TransitionPresentationComponentProps<BlurProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const { blurAmount } = passedProps;\n  const isEntering = presentationDirection === 'entering';\n  const opacity = isEntering ? presentationProgress : 1 - presentationProgress;\n  // Outgoing: 0 → blurAmount as it fades.\n  // Incoming: blurAmount → 0 as it fades in.\n  const blur = isEntering\n    ? blurAmount * (1 - presentationProgress)\n    : blurAmount * presentationProgress;\n\n  return (\n    <AbsoluteFill style={{ opacity, filter: `blur(${blur}px)` }}>\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * Outgoing scene blurs out as it fades; incoming scene blurs in as it\n * fades up. Extends the `BlurReveal` entrance fingerprint across a\n * cut — the missing transition-side of the catalog's most-used reveal.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function blur(\n  options?: BlurOptions,\n): TransitionPresentation<BlurProps> {\n  const opts = blurSchema.parse(options ?? {});\n  return {\n    component: BlurPresentation,\n    props: { blurAmount: opts.blurAmount },\n  };\n}\n\nexport default blur;\n"
+    },
+    {
+      "path": "registry/transitions/blur/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/blur/schema.ts",
+      "content": "export { blurSchema, type BlurOptions } from './blur';\n"
+    },
+    {
+      "path": "registry/transitions/blur/blur.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/blur/blur.meta.json",
+      "content": "{\n  \"name\": \"blur\",\n  \"title\": \"blur\",\n  \"description\": \"Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"blur\",\n    \"fade\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/blur/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/blur/README.md",
+      "content": "# blur\n\nOutgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the `BlurReveal` entrance fingerprint across a cut — the missing transition-side of the catalog's most-used reveal.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `blurAmount` | `number 0..40` | `10` | Max blur radius in px. `10` matches the `BlurReveal` component's default and keeps the fingerprint consistent across the catalog. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { blur } from './components/onda/transitions/blur/blur';\n\n<TransitionSeries.Transition\n  presentation={blur()}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Default `blurAmount: 10` matches `BlurReveal`.** Same maximum blur radius the catalog's reference text-entrance uses. A scene that opens with a `BlurReveal` text and is preceded by a `blur` transition feels seamless because both motions use the same defocus value.\n- **Combines blur and opacity.** The eye reads the cut as \"scene defocusing and disappearing\" rather than as two separate effects.\n- **Pair with the house timing** for the standard rhythm.\n"
+    }
+  ]
+}

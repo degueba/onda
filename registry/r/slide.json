@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide",
+  "type": "registry:component",
+  "title": "slide",
+  "description": "A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/slide/slide.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/slide/slide.tsx",
+      "content": "import { slide as remotionSlide, type SlideProps as RemotionSlideProps } from '@remotion/transitions/slide';\nimport type { TransitionPresentation } from '@remotion/transitions';\nimport { z } from 'zod';\n\n// User-facing direction vocabulary maps to Remotion's. Going with motion\n// direction (\"slide left\" = scene moves left = enters from the right)\n// because that's how most editors and motion-design tools name it.\nconst DIRECTION_MAP = {\n  left: 'from-right',\n  right: 'from-left',\n  up: 'from-bottom',\n  down: 'from-top',\n} as const;\n\n/** Zod schema for {@link slide} options. */\nexport const slideSchema = z.object({\n  /**\n   * Which direction the incoming scene slides toward.\n   * - `'left'` — both scenes appear to move leftward (new scene from the right)\n   * - `'right'` — both appear to move rightward (new from the left)\n   * - `'up'` — both move upward (new from below)\n   * - `'down'` — both move downward (new from above)\n   */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n});\n\nexport type SlideOptions = z.input<typeof slideSchema>;\n\n/**\n * A directional slide between two scenes — only the incoming scene\n * translates; the outgoing scene stays in place. For both-scenes-move\n * together (camera-pan feel), use {@link push} instead.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Wraps Remotion's `slide()`.\n */\nexport function slide(\n  options?: SlideOptions,\n): TransitionPresentation<RemotionSlideProps> {\n  const opts = slideSchema.parse(options ?? {});\n  return remotionSlide({ direction: DIRECTION_MAP[opts.direction] });\n}\n\nexport default slide;\n"
+    },
+    {
+      "path": "registry/transitions/slide/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/slide/schema.ts",
+      "content": "// Re-exports the Zod schema so tooling (registry builds, docs site,\n// training-data pipelines) can consume options validation without\n// pulling in the transition factory itself.\nexport { slideSchema, type SlideOptions } from './slide';\n"
+    },
+    {
+      "path": "registry/transitions/slide/slide.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/slide/slide.meta.json",
+      "content": "{\n  \"name\": \"slide\",\n  \"title\": \"slide\",\n  \"description\": \"A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"slide\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/slide/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/slide/README.md",
+      "content": "# slide\n\nA directional slide between two scenes. Only the incoming scene translates; the outgoing scene stays in place. Wraps Remotion's `slide()` with Onda's `left` / `right` / `up` / `down` vocabulary.\n\nFor both-scenes-move-together (camera-pan feel), use `push` instead.\n\n## When to use\n\n| If you want… | Use |\n| --- | --- |\n| New scene slides in, old scene stays | **`slide`** |\n| Both scenes move together (camera pan) | `push` |\n| Both move with depth (scene 1 recedes, scene 2 approaches) | `depthPush` |\n| Plain cross-fade | `crossFade` |\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | The direction the motion appears to travel. `'left'` means both scenes appear to move leftward (new scene enters from the right). |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { slide } from './components/onda/transitions/slide/slide';\n\n<TransitionSeries>\n  <TransitionSeries.Sequence durationInFrames={150}>\n    <Scene1 />\n  </TransitionSeries.Sequence>\n  <TransitionSeries.Transition\n    presentation={slide({ direction: 'left' })}\n    timing={linearTiming({\n      durationInFrames: 18,\n      easing: Easing.bezier(0.16, 1, 0.3, 1),\n    })}\n  />\n  <TransitionSeries.Sequence durationInFrames={150}>\n    <Scene2 />\n  </TransitionSeries.Sequence>\n</TransitionSeries>\n```\n\n## Composition notes\n\n- **Direction maps to motion, not entry side.** `'left'` = scenes appear to move leftward = the new scene enters from the right. This matches how most motion-design tools name it; the spec rationale is in [techspec 017](../../../docs/techspecs/017-transitions/design.md).\n- **Outgoing scene stays put.** The illusion of a slide comes entirely from the incoming scene's movement. If you want the outgoing scene to translate out with the incoming sliding in, use `push`.\n- **House timing is the path of least resistance.** Pair with `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })` — same easing every other Onda primitive uses for opacity / color.\n"
+    }
+  ]
+}

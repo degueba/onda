@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "iris",
+  "type": "registry:component",
+  "title": "iris",
+  "description": "A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/iris/iris.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/iris/iris.tsx",
+      "content": "import { iris as remotionIris, type IrisProps as RemotionIrisProps } from '@remotion/transitions/iris';\nimport type { TransitionPresentation } from '@remotion/transitions';\nimport { z } from 'zod';\n\n/** Zod schema for {@link iris} options. */\nexport const irisSchema = z.object({\n  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's iris. */\n  width: z.number().int().positive(),\n  /** Canvas height in px — typically `useVideoConfig().height`. */\n  height: z.number().int().positive(),\n});\n\nexport type IrisOptions = z.input<typeof irisSchema>;\n\n/**\n * An iris transition — a circular reveal that grows from / collapses\n * toward the canvas center, like a camera shutter opening. Classic\n * cinematic effect; the catalog's most \"deliberate\" cut.\n *\n * **Requires `width` + `height`** — pass them from `useVideoConfig()` in\n * the surrounding scene (Remotion's iris needs explicit dimensions to\n * size the radial clip path).\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Wraps Remotion's `iris()`.\n */\nexport function iris(\n  options: IrisOptions,\n): TransitionPresentation<RemotionIrisProps> {\n  const opts = irisSchema.parse(options);\n  return remotionIris({ width: opts.width, height: opts.height });\n}\n\nexport default iris;\n"
+    },
+    {
+      "path": "registry/transitions/iris/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/iris/schema.ts",
+      "content": "export { irisSchema, type IrisOptions } from './iris';\n"
+    },
+    {
+      "path": "registry/transitions/iris/iris.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/iris/iris.meta.json",
+      "content": "{\n  \"name\": \"iris\",\n  \"title\": \"iris\",\n  \"description\": \"A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"iris\",\n    \"circular\",\n    \"cinematic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/iris/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/iris/README.md",
+      "content": "# iris\n\nA circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Classic cinematic effect — the catalog's most \"deliberate\" cut.\n\n## Options\n\n| Name | Type | Required | Notes |\n| --- | --- | --- | --- |\n| `width` | `integer > 0` | ✓ | Canvas width in px. Typically `useVideoConfig().width`. |\n| `height` | `integer > 0` | ✓ | Canvas height in px. Typically `useVideoConfig().height`. |\n\n## Usage\n\n```tsx\nimport { Easing, useVideoConfig } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { iris } from './components/onda/transitions/iris/iris';\n\nconst MyScene = () => {\n  const { width, height } = useVideoConfig();\n  return (\n    <TransitionSeries>\n      <TransitionSeries.Sequence durationInFrames={150}>\n        <Scene1 />\n      </TransitionSeries.Sequence>\n      <TransitionSeries.Transition\n        presentation={iris({ width, height })}\n        timing={linearTiming({\n          durationInFrames: 18,\n          easing: Easing.bezier(0.16, 1, 0.3, 1),\n        })}\n      />\n      <TransitionSeries.Sequence durationInFrames={150}>\n        <Scene2 />\n      </TransitionSeries.Sequence>\n    </TransitionSeries>\n  );\n};\n```\n\n## Composition notes\n\n- **Width / height are required.** Remotion's `iris()` needs explicit dimensions to size the radial clip path. Pull them from `useVideoConfig()`.\n- **Centered by default.** The current Remotion `iris()` doesn't expose an x/y center (the spec mentioned this as a possible future option but the underlying API doesn't support it today). If off-center iris becomes important, that's a follow-up.\n- **Use sparingly.** Like `flip`, iris is loud — reserve for genuine \"this beat is the cut\" moments.\n"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "morph",
+  "type": "registry:component",
+  "title": "morph",
+  "description": "Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/morph/morph.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/morph/morph.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link morph} options. */\nexport const morphSchema = z.object({\n  /**\n   * Maximum scale delta around 1.0. Default `0.04` — outgoing scales\n   * 1 → 1.04, incoming scales 0.96 → 1. Small by design; the point is\n   * to feel cinematic, not loud.\n   */\n  scaleAmount: z.number().min(0).max(0.2).default(0.04),\n});\n\nexport type MorphOptions = z.input<typeof morphSchema>;\n\ntype MorphProps = { scaleAmount: number };\n\nconst MorphPresentation: React.FC<TransitionPresentationComponentProps<MorphProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const { scaleAmount } = passedProps;\n  const isEntering = presentationDirection === 'entering';\n  // Outgoing: opacity 1 → 0, scale 1 → 1+delta (slight zoom away).\n  // Incoming: opacity 0 → 1, scale 1-delta → 1 (slight zoom in).\n  const opacity = isEntering ? presentationProgress : 1 - presentationProgress;\n  const scale = isEntering\n    ? 1 - scaleAmount + scaleAmount * presentationProgress\n    : 1 + scaleAmount * presentationProgress;\n\n  return (\n    <AbsoluteFill style={{ opacity, transform: `scale(${scale})` }}>\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * Cross-fade plus a subtle synchronized scale — outgoing 1 → 1.04,\n * incoming 0.96 → 1. The scale is small enough to register as polish,\n * not effect. Reads as cinematic where `crossFade` reads as flat.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original. The defining \"premium feel\" transition in the catalog.\n */\nexport function morph(\n  options?: MorphOptions,\n): TransitionPresentation<MorphProps> {\n  const opts = morphSchema.parse(options ?? {});\n  return {\n    component: MorphPresentation,\n    props: { scaleAmount: opts.scaleAmount },\n  };\n}\n\nexport default morph;\n"
+    },
+    {
+      "path": "registry/transitions/morph/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/morph/schema.ts",
+      "content": "export { morphSchema, type MorphOptions } from './morph';\n"
+    },
+    {
+      "path": "registry/transitions/morph/morph.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/morph/morph.meta.json",
+      "content": "{\n  \"name\": \"morph\",\n  \"title\": \"morph\",\n  \"description\": \"Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"morph\",\n    \"fade\",\n    \"scale\",\n    \"cinematic\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/morph/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/morph/README.md",
+      "content": "# morph\n\nCross-fade plus a subtle synchronized scale — outgoing 1 → 1.04, incoming 0.96 → 1. The scale is small enough to register as polish, not effect.\n\nReads as cinematic where `crossFade` reads as flat. The defining \"premium feel\" transition in the catalog.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `scaleAmount` | `number 0..0.2` | `0.04` | Max scale delta around 1.0. `0.04` (default) is the Onda-recommended subtlety. Push higher only if the scene genuinely warrants drama; over `0.1` it starts to read as \"zoom transition\" rather than \"morph.\" |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { morph } from './components/onda/transitions/morph/morph';\n\n<TransitionSeries.Transition\n  presentation={morph()}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **The default scale is intentionally small.** `0.04` ≈ 4% — visible enough to give the cut depth, small enough that viewers don't perceive it as an effect. Bumping past `0.10` shifts the read from \"morph\" to \"zoom\" — use `zoom` directly if that's the intent.\n- **Centered around 1.0.** The midpoint of the transition has BOTH scenes scaled slightly off — outgoing at ~1.02, incoming at ~0.98 — and the eye reads this as the cut having \"depth.\"\n- **Pair with the house timing.** The cubic-bezier easing is what makes the scale read as breath, not as motion.\n"
+    }
+  ]
+}

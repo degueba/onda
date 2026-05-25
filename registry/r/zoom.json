@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "zoom",
+  "type": "registry:component",
+  "title": "zoom",
+  "description": "Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/zoom/zoom.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/zoom/zoom.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link zoom} options. */\nexport const zoomSchema = z.object({\n  /**\n   * Direction of the zoom:\n   * - `'in'` — incoming scene zooms toward the viewer (outgoing scales\n   *   up out of frame, incoming arrives from slightly larger).\n   * - `'out'` — incoming scene appears to pull away (outgoing shrinks\n   *   inward, incoming arrives from slightly smaller).\n   */\n  direction: z.enum(['in', 'out']).default('in'),\n  /**\n   * Maximum scale delta. Default `0.2` — the catalog's \"accent\"\n   * transition, used sparingly. Smaller values read closer to `morph`;\n   * larger values lean into \"punch.\"\n   */\n  scaleAmount: z.number().min(0.05).max(0.5).default(0.2),\n});\n\nexport type ZoomOptions = z.input<typeof zoomSchema>;\n\ntype ZoomProps = { direction: 'in' | 'out'; scaleAmount: number };\n\nconst ZoomPresentation: React.FC<TransitionPresentationComponentProps<ZoomProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const isEntering = presentationDirection === 'entering';\n  const { direction, scaleAmount: s } = passedProps;\n\n  // 'in': outgoing scales 1 → 1+s (zooms out of frame),\n  //       incoming scales 1-s/2 → 1 (arrives from slightly larger... wait,\n  //       per spec: incoming 1.1 → 1 when zoom is 'in').\n  //       Actually: 'in' = camera moves toward incoming scene,\n  //       so the incoming starts LARGER and settles to 1.0,\n  //       outgoing scales LARGER as the \"camera\" leaves it.\n  // 'out': opposite — outgoing shrinks, incoming starts smaller.\n  let scale: number;\n  if (direction === 'in') {\n    scale = isEntering\n      ? 1 + s / 2 - (s / 2) * presentationProgress  // 1+s/2 → 1\n      : 1 + s * presentationProgress;                // 1 → 1+s\n  } else {\n    scale = isEntering\n      ? 1 - s / 2 + (s / 2) * presentationProgress  // 1-s/2 → 1\n      : 1 - s * presentationProgress;                // 1 → 1-s\n  }\n\n  const opacity = isEntering ? presentationProgress : 1 - presentationProgress;\n\n  return (\n    <AbsoluteFill style={{ opacity, transform: `scale(${scale})` }}>\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * Scale-driven punch transition. The catalog's lone \"accent\" register —\n * use sparingly. Two directions:\n *   - `'in'` — incoming scene approaches the viewer (default)\n *   - `'out'` — incoming scene pulls back\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original. The contrast register — when every other cut in the\n * composition uses calm transitions (`crossFade`, `morph`), a single\n * `zoom` reads as a punctuation moment.\n */\nexport function zoom(\n  options?: ZoomOptions,\n): TransitionPresentation<ZoomProps> {\n  const opts = zoomSchema.parse(options ?? {});\n  return {\n    component: ZoomPresentation,\n    props: { direction: opts.direction, scaleAmount: opts.scaleAmount },\n  };\n}\n\nexport default zoom;\n"
+    },
+    {
+      "path": "registry/transitions/zoom/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/zoom/schema.ts",
+      "content": "export { zoomSchema, type ZoomOptions } from './zoom';\n"
+    },
+    {
+      "path": "registry/transitions/zoom/zoom.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/zoom/zoom.meta.json",
+      "content": "{\n  \"name\": \"zoom\",\n  \"title\": \"zoom\",\n  \"description\": \"Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"zoom\",\n    \"scale\",\n    \"punch\",\n    \"accent\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/zoom/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/zoom/README.md",
+      "content": "# zoom\n\nScale-driven punch transition. The catalog's lone \"accent\" register — use sparingly so it stays a punctuation moment.\n\nWhen every other cut in the composition uses calm transitions (`crossFade`, `morph`), a single `zoom` reads as deliberate emphasis by contrast.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'in' \\| 'out'` | `'in'` | `'in'` = incoming scene approaches the viewer (outgoing scales up out of frame; incoming arrives from slightly larger). `'out'` = incoming pulls back (outgoing shrinks inward; incoming arrives from slightly smaller). |\n| `scaleAmount` | `number 0.05..0.5` | `0.2` | Maximum scale delta. Smaller values read closer to `morph`; larger values lean into \"punch.\" Default `0.2` is the recommended punch — visible without being loud. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { zoom } from './components/onda/transitions/zoom/zoom';\n\n<TransitionSeries.Transition\n  presentation={zoom({ direction: 'in' })}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Use sparingly.** If every cut uses `zoom`, none of them are accents. Reserve for the one moment in a composition where the cut itself is meant to read as a beat.\n- **`'in'` is the default.** Reads as \"camera moves toward the new scene\" — the more energetic, forward-leaning choice. `'out'` is for \"stepping back\" moments (revealing context, ending a thought).\n- **`scaleAmount` calibration.** `0.2` is the catalog's calibrated default. Drop to `0.1` for something between `morph` and `zoom`; push to `0.4+` only if the scene genuinely earns the drama.\n- **Pair with the house timing** — even on a punchy transition, the cubic-bezier easing keeps the scale from feeling mechanical.\n"
+    }
+  ]
+}

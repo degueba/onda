@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "flip",
+  "type": "registry:component",
+  "title": "flip",
+  "description": "A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/flip/flip.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/flip/flip.tsx",
+      "content": "import { flip as remotionFlip, type FlipProps as RemotionFlipProps } from '@remotion/transitions/flip';\nimport type { TransitionPresentation } from '@remotion/transitions';\nimport { z } from 'zod';\n\nconst DIRECTION_MAP = {\n  left: 'from-right',\n  right: 'from-left',\n  up: 'from-bottom',\n  down: 'from-top',\n} as const;\n\n/** Zod schema for {@link flip} options. */\nexport const flipSchema = z.object({\n  /** Which way the flip rotates. `'left'` flips the scene around like a card revealing the new face from the right edge. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /**\n   * Perspective in pixels — distance of the implicit \"camera\" from the\n   * flipping plane. Lower = more dramatic 3D, higher = subtler.\n   * Default `1000` matches Remotion's default.\n   */\n  perspective: z.number().positive().default(1000),\n});\n\nexport type FlipOptions = z.input<typeof flipSchema>;\n\n/**\n * A 3D card-flip between two scenes — outgoing scene rotates away,\n * incoming scene rotates into view. The most dramatic of the wrapped\n * Remotion transitions; use when a beat genuinely warrants a \"now we're\n * looking at something new\" punch.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Wraps Remotion's `flip()`.\n */\nexport function flip(\n  options?: FlipOptions,\n): TransitionPresentation<RemotionFlipProps> {\n  const opts = flipSchema.parse(options ?? {});\n  return remotionFlip({\n    direction: DIRECTION_MAP[opts.direction],\n    perspective: opts.perspective,\n  });\n}\n\nexport default flip;\n"
+    },
+    {
+      "path": "registry/transitions/flip/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/flip/schema.ts",
+      "content": "export { flipSchema, type FlipOptions } from './flip';\n"
+    },
+    {
+      "path": "registry/transitions/flip/flip.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/flip/flip.meta.json",
+      "content": "{\n  \"name\": \"flip\",\n  \"title\": \"flip\",\n  \"description\": \"A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"flip\",\n    \"3d\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/flip/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/flip/README.md",
+      "content": "# flip\n\nA 3D card-flip between two scenes. The outgoing scene rotates away; the incoming scene rotates into view from the opposite side.\n\nThe most dramatic of the wrapped Remotion transitions — use when a beat genuinely warrants a \"now we're looking at something new\" punch.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | Rotation axis. `'left'` flips around a vertical axis, revealing the new face from the right edge. |\n| `perspective` | `number > 0` | `1000` | Distance of the implicit \"camera\" from the flipping plane (px). Lower = more dramatic 3D depth; higher = subtler. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { flip } from './components/onda/transitions/flip/flip';\n\n<TransitionSeries.Transition\n  presentation={flip({ direction: 'left' })}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Use sparingly.** A flip is loud — if every cut uses it, the composition reads as a slideshow. Reserve for genuine \"card turn\" moments.\n- **`perspective` tuning.** The default `1000` is balanced. Drop to `600` for a more dramatic camera-close-to-the-scene look; raise to `2000` for an almost-flat rotation.\n- **Pair with the house timing** — `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`. The cubic-bezier easing softens the flip's midpoint so it doesn't feel mechanical.\n"
+    }
+  ]
+}

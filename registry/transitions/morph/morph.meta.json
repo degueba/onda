@@ -1,0 +1,18 @@
+{
+  "name": "morph",
+  "title": "morph",
+  "description": "Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "morph",
+    "fade",
+    "scale",
+    "cinematic"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

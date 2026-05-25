@@ -1,0 +1,18 @@
+{
+  "name": "clock-wipe",
+  "title": "clockWipe",
+  "description": "A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "wipe",
+    "clock",
+    "rotational",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}
