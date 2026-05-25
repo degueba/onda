@@ -34,6 +34,12 @@ _private/
 # Source of truth: registry/r/ and registry/registry.json.
 www/public/r/
 
+# Generated at build time by scripts/sync-manifest-module.mjs (runs as
+# part of the CLI's `pnpm build`). Source of truth: each component's
+# schema.ts re-export + its meta.json. Regenerated automatically before
+# every publish via the CLI package's prepublishOnly hook.
+packages/cli/src/manifest.ts
+
 # npm credentials / publish tokens — never commit, regardless of subdirectory.
 .npmrc.publish
 .npmrc.local

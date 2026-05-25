@@ -8,7 +8,18 @@
     "url": "https://github.com/degueba"
   },
   "type": "module",
-  "main": "./dist/onda.js",
+  "main": "./dist/manifest.js",
+  "types": "./dist/manifest.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/manifest.d.ts",
+      "import": "./dist/manifest.js"
+    },
+    "./manifest": {
+      "types": "./dist/manifest.d.ts",
+      "import": "./dist/manifest.js"
+    }
+  },
   "bin": {
     "ondajs": "./dist/onda.js"
   },
@@ -44,12 +55,34 @@
     "onda"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "sync-manifest": "node ../../scripts/sync-manifest-module.mjs",
+    "build:cli": "tsc -p tsconfig.json",
+    "build:manifest": "pnpm sync-manifest && node build-manifest.mjs",
+    "build": "pnpm build:cli && pnpm build:manifest",
+    "prepublishOnly": "pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist"
   },
+  "peerDependencies": {
+    "zod": "^3.23.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0",
+    "@remotion/transitions": "^4.0.0",
+    "@remotion/media-utils": "^4.0.0",
+    "@remotion/paths": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true },
+    "remotion": { "optional": true },
+    "@remotion/transitions": { "optional": true },
+    "@remotion/media-utils": { "optional": true },
+    "@remotion/paths": { "optional": true }
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "esbuild": "^0.28.0",
     "typescript": "^5.4.0"
   }
 }
