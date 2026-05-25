@@ -21,6 +21,9 @@ importers:
       '@remotion/paths':
         specifier: ^4.0.0
         version: 4.0.465
+      '@remotion/transitions':
+        specifier: ^4.0.465
+        version: 4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react:
         specifier: ^19.0.0
         version: 19.2.6
@@ -885,6 +888,12 @@ packages:
       react: ^19.0.0
       react-dom: ^19.0.0
 
+  '@remotion/shapes@4.0.465':
+    resolution: {integrity: sha512-qSTNWB3EDk5wIIHJwPDGmbBisxdORG4AFuWNj1UOiNfbVgTnxRgreWogGyTX8B3buPD7xxGOoHzgIvtDg69/Bg==}
+    peerDependencies:
+      react: ^19.0.0
+      react-dom: ^19.0.0
+
   '@remotion/streaming@4.0.465':
     resolution: {integrity: sha512-TIPO4Powwb9z8QyiAsysfSfzFoQzyv8Fig3sovXHR+xHoWX1pVyYfDIvKuq3Eioc6chIyFrZvu9vdinWRU9Xjw==}
 
@@ -902,6 +911,12 @@ packages:
 
   '@remotion/timeline-utils@4.0.465':
     resolution: {integrity: sha512-LHFHgPKenkjWJpa36NTtQcLzchWKvryABwrRPktSOLbXrqQgIiQz8he5VSX/4D8Rty+Q8r1ETgfnfUGO0uM/lg==}
+
+  '@remotion/transitions@4.0.465':
+    resolution: {integrity: sha512-SbDv1FobM3iBlnJeym9jJaML6rBCI0khhyGlInC6EbVrcGcAWz4goF8qlx6gQF+u4FI7uwsnEyJQnsgRpY3hkg==}
+    peerDependencies:
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   '@remotion/web-renderer@4.0.465':
     resolution: {integrity: sha512-VPSQZ4SQo6eW1ufNebEtG2nIKNyCmrPMiHik3ZpSoViHMGxshaEM21G/JX8HVWadiSsOaW0w124zb+CGQioItA==}
@@ -3059,6 +3074,12 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@remotion/shapes@4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      '@remotion/paths': 4.0.465
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+
   '@remotion/streaming@4.0.465': {}
 
   '@remotion/studio-server@4.0.465(@swc/helpers@0.5.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
@@ -3125,6 +3146,14 @@ snapshots:
   '@remotion/timeline-utils@4.0.465':
     dependencies:
       mediabunny: 1.45.0
+
+  '@remotion/transitions@4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      '@remotion/paths': 4.0.465
+      '@remotion/shapes': 4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      remotion: 4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
 
   '@remotion/web-renderer@4.0.465(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:

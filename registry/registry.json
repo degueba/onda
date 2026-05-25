@@ -338,6 +338,102 @@
       "description": "Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).",
       "categories": ["media"],
       "dependencies": ["remotion", "@remotion/media-utils", "zod", "react"]
+    },
+    {
+      "name": "cross-fade",
+      "type": "registry:component",
+      "title": "crossFade",
+      "description": "A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "blur",
+      "type": "registry:component",
+      "title": "blur",
+      "description": "Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "clock-wipe",
+      "type": "registry:component",
+      "title": "clockWipe",
+      "description": "A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "depth-push",
+      "type": "registry:component",
+      "title": "depthPush",
+      "description": "Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "dip-to-color",
+      "type": "registry:component",
+      "title": "dipToColor",
+      "description": "The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "flip",
+      "type": "registry:component",
+      "title": "flip",
+      "description": "A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "iris",
+      "type": "registry:component",
+      "title": "iris",
+      "description": "A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "morph",
+      "type": "registry:component",
+      "title": "morph",
+      "description": "Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "push",
+      "type": "registry:component",
+      "title": "push",
+      "description": "A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "slide",
+      "type": "registry:component",
+      "title": "slide",
+      "description": "A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "wipe",
+      "type": "registry:component",
+      "title": "wipe",
+      "description": "A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "zoom",
+      "type": "registry:component",
+      "title": "zoom",
+      "description": "Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
     }
   ]
 }

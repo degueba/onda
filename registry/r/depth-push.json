@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "depth-push",
+  "type": "registry:component",
+  "title": "depthPush",
+  "description": "Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/depth-push/depthPush.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/depth-push/depthPush.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link depthPush} options. */\nexport const depthPushSchema = z.object({\n  /** Direction the camera move travels. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /**\n   * Amount of parallax scale. Outgoing scene scales down by this factor\n   * as it pushes off; incoming scales from `1 + scaleAmount` toward 1.\n   * Default `0.05` (5%) — subtle by design.\n   */\n  scaleAmount: z.number().min(0).max(0.3).default(0.05),\n});\n\nexport type DepthPushOptions = z.input<typeof depthPushSchema>;\n\ntype DepthPushProps = { direction: 'left' | 'right' | 'up' | 'down'; scaleAmount: number };\n\nconst VECTOR: Record<DepthPushProps['direction'], { x: number; y: number }> = {\n  left: { x: -1, y: 0 },\n  right: { x: 1, y: 0 },\n  up: { x: 0, y: -1 },\n  down: { x: 0, y: 1 },\n};\n\nconst DepthPushPresentation: React.FC<TransitionPresentationComponentProps<DepthPushProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const { x, y } = VECTOR[passedProps.direction];\n  const isEntering = presentationDirection === 'entering';\n  const s = passedProps.scaleAmount;\n\n  // Same translation as push, layered with a scale that gives depth:\n  //   Outgoing: 1.0 → 1.0 - s (recedes slightly as it pushes off)\n  //   Incoming: 1.0 + s → 1.0 (approaches from slightly large)\n  const translateX = isEntering\n    ? -x * 100 * (1 - presentationProgress)\n    : x * 100 * presentationProgress;\n  const translateY = isEntering\n    ? -y * 100 * (1 - presentationProgress)\n    : y * 100 * presentationProgress;\n  const scale = isEntering\n    ? 1 + s * (1 - presentationProgress)\n    : 1 - s * presentationProgress;\n\n  return (\n    <AbsoluteFill\n      style={{\n        transform: `translate(${translateX}%, ${translateY}%) scale(${scale})`,\n      }}\n    >\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * Push with parallax depth — outgoing scene scales down slightly as it\n * pushes off, incoming scales from slightly larger. The catalog's\n * signature multi-scene move; reads as a camera dolly between scenes.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function depthPush(\n  options?: DepthPushOptions,\n): TransitionPresentation<DepthPushProps> {\n  const opts = depthPushSchema.parse(options ?? {});\n  return {\n    component: DepthPushPresentation,\n    props: { direction: opts.direction, scaleAmount: opts.scaleAmount },\n  };\n}\n\nexport default depthPush;\n"
+    },
+    {
+      "path": "registry/transitions/depth-push/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/depth-push/schema.ts",
+      "content": "export { depthPushSchema, type DepthPushOptions } from './depthPush';\n"
+    },
+    {
+      "path": "registry/transitions/depth-push/depth-push.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/depth-push/depth-push.meta.json",
+      "content": "{\n  \"name\": \"depth-push\",\n  \"title\": \"depthPush\",\n  \"description\": \"Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"depth\",\n    \"parallax\",\n    \"camera-dolly\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/depth-push/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/depth-push/README.md",
+      "content": "# depthPush\n\nPush with parallax depth — outgoing scene scales down slightly as it pushes off, incoming scales from slightly larger. Reads as a camera dolly between scenes.\n\nThe catalog's signature multi-scene move.\n\n## When to use\n\n| If you want… | Use |\n| --- | --- |\n| Plain camera pan (no depth) | `push` |\n| Camera dolly (pan + depth) | **`depthPush`** |\n| Just the new scene slides in | `slide` |\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | Direction the camera move travels. |\n| `scaleAmount` | `number 0..0.3` | `0.05` | Parallax depth amount. Outgoing recedes by this factor; incoming approaches from this factor larger. Default `0.05` is the Onda-recommended subtlety. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { depthPush } from './components/onda/transitions/depth-push/depthPush';\n\n<TransitionSeries.Transition\n  presentation={depthPush({ direction: 'left' })}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Default scale is intentionally small.** `0.05` ≈ 5% — enough for the eye to read depth without it announcing itself as a 3D effect. Push past `0.15` and it starts to feel like a movie trailer \"zoom-and-push.\" Stay under for the Onda restraint.\n- **Combines two motions cleanly.** Translation gives the pan; scale gives the depth. The cubic-bezier easing keeps both feeling like one unified motion rather than two effects stacked.\n- **Pair with the house timing.** The same 18-frame cadence used by `crossFade`, `morph`, etc. keeps cuts in rhythm with the scenes.\n"
+    }
+  ]
+}

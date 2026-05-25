@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dip-to-color",
+  "type": "registry:component",
+  "title": "dipToColor",
+  "description": "The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/dip-to-color/dipToColor.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/dip-to-color/dipToColor.tsx",
+      "content": "import React from 'react';\nimport type {\n  TransitionPresentation,\n  TransitionPresentationComponentProps,\n} from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { z } from 'zod';\n\n/** Zod schema for {@link dipToColor} options. */\nexport const dipToColorSchema = z.object({\n  /**\n   * Solid color to dip through. Default `#08080A` (Onda canvas bg) for\n   * brand consistency. Pass `'#000'` for the editing-room classic\n   * dip-to-black, or `'#fff'` for dip-to-white.\n   */\n  color: z.string().default('#08080A'),\n});\n\nexport type DipToColorOptions = z.input<typeof dipToColorSchema>;\n\ntype DipToColorProps = { color: string };\n\nconst DipToColorPresentation: React.FC<TransitionPresentationComponentProps<DipToColorProps>> = ({\n  presentationProgress,\n  presentationDirection,\n  children,\n  passedProps,\n}) => {\n  const isEntering = presentationDirection === 'entering';\n\n  // Two-stage dip:\n  //   First half  (progress 0..0.5): outgoing fades to color\n  //   Second half (progress 0.5..1): incoming fades up from color\n  //\n  // Scene opacity follows a triangular wave that peaks at midpoint (0)\n  // and is 1 at both ends. Color overlay does the opposite — peaks\n  // at midpoint, 0 at both ends — so the dip color is most visible\n  // when both scenes are most faded.\n  const sceneOpacity = isEntering\n    ? Math.max(0, presentationProgress * 2 - 1) // 0 until 0.5, then ramps to 1\n    : Math.max(0, 1 - presentationProgress * 2); // 1 at 0, ramps to 0 at 0.5\n  const colorOpacity = isEntering\n    ? Math.max(0, 1 - (presentationProgress - 0.5) * 2) // 1 at 0.5, ramps to 0 at 1\n    : Math.min(1, presentationProgress * 2); // 0 at 0, ramps to 1 at 0.5\n\n  return (\n    <AbsoluteFill>\n      <AbsoluteFill style={{ opacity: sceneOpacity }}>{children}</AbsoluteFill>\n      <AbsoluteFill\n        style={{\n          backgroundColor: passedProps.color,\n          opacity: colorOpacity,\n          pointerEvents: 'none',\n        }}\n      />\n    </AbsoluteFill>\n  );\n};\n\n/**\n * The editing-room classic — outgoing scene fades to a solid color,\n * incoming fades up from it. Reads as \"time passes\" or \"scene break.\"\n * Default color is `--onda-bg` (`#08080A`) for brand consistency; pass\n * `'#000'` for traditional dip-to-black or `'#fff'` for dip-to-white.\n *\n * Pair with the recommended Onda timing for the house feel — though\n * for dipToColor specifically, a longer duration (30-45 frames) often\n * reads more like a deliberate beat break:\n * `linearTiming({ durationInFrames: 30, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function dipToColor(\n  options?: DipToColorOptions,\n): TransitionPresentation<DipToColorProps> {\n  const opts = dipToColorSchema.parse(options ?? {});\n  return {\n    component: DipToColorPresentation,\n    props: { color: opts.color },\n  };\n}\n\nexport default dipToColor;\n"
+    },
+    {
+      "path": "registry/transitions/dip-to-color/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/dip-to-color/schema.ts",
+      "content": "export { dipToColorSchema, type DipToColorOptions } from './dipToColor';\n"
+    },
+    {
+      "path": "registry/transitions/dip-to-color/dip-to-color.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/dip-to-color/dip-to-color.meta.json",
+      "content": "{\n  \"name\": \"dip-to-color\",\n  \"title\": \"dipToColor\",\n  \"description\": \"The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"dip\",\n    \"fade\",\n    \"scene-break\",\n    \"editorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/dip-to-color/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/dip-to-color/README.md",
+      "content": "# dipToColor\n\nThe editing-room classic: outgoing scene fades to a solid color, incoming fades up from it. Reads as \"time passes\" or \"scene break.\"\n\nDefault color is `--onda-bg` (`#08080A`) for brand consistency. Pass `'#000'` for traditional dip-to-black, `'#fff'` for dip-to-white.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `color` | `string` | `\"#08080A\"` | The solid color to dip through. Defaults to `--onda-bg` so the cut stays on-brand. Override with `'#000'`, `'#fff'`, or any hex / CSS color string. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { dipToColor } from './components/onda/transitions/dip-to-color/dipToColor';\n\n<TransitionSeries.Transition\n  presentation={dipToColor()}  // dips through --onda-bg\n  timing={linearTiming({\n    durationInFrames: 30,        // longer than 18 reads more like a scene break\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\nEditorial dip-to-black:\n\n```tsx\n<TransitionSeries.Transition\n  presentation={dipToColor({ color: '#000' })}\n  timing={linearTiming({ durationInFrames: 30, easing: Easing.bezier(0.16, 1, 0.3, 1) })}\n/>\n```\n\n## Composition notes\n\n- **Two-stage timing.** First half: outgoing fades to color. Second half: color fades to incoming. The color is most visible at the exact midpoint of the transition.\n- **Default color is `--onda-bg`, not pure black.** Per [017 Q1](../../../docs/techspecs/017-transitions/design.md), every other Onda default uses tokens; the cut should follow suit. Pass `'#000'` if you specifically want the editing convention.\n- **Longer duration reads better.** The default 18-frame Onda cadence is too short for a dipToColor — it feels rushed. Use `30-45 frames` for a beat-break feel, longer for a deliberate \"act break.\"\n"
+    }
+  ]
+}

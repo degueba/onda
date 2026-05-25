@@ -1,0 +1,17 @@
+{
+  "name": "cross-fade",
+  "title": "crossFade",
+  "description": "A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "fade",
+    "cross-fade",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

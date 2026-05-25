@@ -1,0 +1,18 @@
+{
+  "name": "push",
+  "title": "push",
+  "description": "A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "push",
+    "directional",
+    "camera-pan",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "wipe",
+  "type": "registry:component",
+  "title": "wipe",
+  "description": "A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/wipe/wipe.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/wipe/wipe.tsx",
+      "content": "import { wipe as remotionWipe, type WipeProps as RemotionWipeProps } from '@remotion/transitions/wipe';\nimport type { TransitionPresentation } from '@remotion/transitions';\nimport { z } from 'zod';\n\n// Remotion's wipe supports 8 directions including diagonals. Onda caps\n// at 4 cardinals — diagonals tend to read as \"PowerPoint slide\n// transition\" rather than deliberate motion. Add the diagonals if a\n// concrete use case shows up.\nconst DIRECTION_MAP = {\n  left: 'from-right',\n  right: 'from-left',\n  up: 'from-bottom',\n  down: 'from-top',\n} as const;\n\n/** Zod schema for {@link wipe} options. */\nexport const wipeSchema = z.object({\n  /** Which direction the wipe travels across the screen. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n});\n\nexport type WipeOptions = z.input<typeof wipeSchema>;\n\n/**\n * A hard-edged wipe between two scenes — incoming scene reveals from\n * one edge to the opposite as a moving boundary. Sharper feel than\n * `slide` or `crossFade`; works well when the cut needs to read as a\n * deliberate transition.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Wraps Remotion's `wipe()`.\n */\nexport function wipe(\n  options?: WipeOptions,\n): TransitionPresentation<RemotionWipeProps> {\n  const opts = wipeSchema.parse(options ?? {});\n  return remotionWipe({ direction: DIRECTION_MAP[opts.direction] });\n}\n\nexport default wipe;\n"
+    },
+    {
+      "path": "registry/transitions/wipe/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/wipe/schema.ts",
+      "content": "export { wipeSchema, type WipeOptions } from './wipe';\n"
+    },
+    {
+      "path": "registry/transitions/wipe/wipe.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/wipe/wipe.meta.json",
+      "content": "{\n  \"name\": \"wipe\",\n  \"title\": \"wipe\",\n  \"description\": \"A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/wipe/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/wipe/README.md",
+      "content": "# wipe\n\nA hard-edged wipe between two scenes. The incoming scene reveals from one edge to the opposite as a moving boundary — sharper than `slide` or `crossFade`, useful when the cut needs to read as a deliberate transition.\n\n## Options\n\n| Name | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | Direction the wipe boundary travels. `'left'` means the boundary moves leftward, revealing the new scene as it goes. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { wipe } from './components/onda/transitions/wipe/wipe';\n\n<TransitionSeries.Transition\n  presentation={wipe({ direction: 'left' })}\n  timing={linearTiming({\n    durationInFrames: 18,\n    easing: Easing.bezier(0.16, 1, 0.3, 1),\n  })}\n/>\n```\n\n## Composition notes\n\n- **Cardinal directions only.** Remotion's `wipe()` supports 8 directions including diagonals (`from-top-left` etc.); Onda caps at 4 because diagonals tend to read as PowerPoint-y rather than deliberate. If a concrete use case for diagonals shows up, the wrapper can be extended.\n- **Hard edge by default.** The wipe's boundary is sharp. For a softer edge, use `crossFade` instead.\n- **Pair with the house timing** — `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })` keeps the cut in the same rhythm as Onda's scene entrances.\n"
+    }
+  ]
+}
