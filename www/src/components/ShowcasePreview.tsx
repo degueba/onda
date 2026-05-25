@@ -11,7 +11,13 @@ import { loadShowcaseComponent, type ShowcaseMeta } from '@/lib/showcase';
 // Lazy so the gallery cards can be SSR'd without dragging Remotion into
 // the server bundle; the actual preview only mounts on the client.
 
-export function ShowcasePreview({ meta }: { meta: ShowcaseMeta }) {
+export function ShowcasePreview({
+  meta,
+  hoverToPlay = false,
+}: {
+  meta: ShowcaseMeta;
+  hoverToPlay?: boolean;
+}) {
   const [Component, setComponent] = useState<ComponentType<Record<string, never>> | null>(null);
 
   useEffect(() => {
@@ -49,6 +55,7 @@ export function ShowcasePreview({ meta }: { meta: ShowcaseMeta }) {
         fps={meta.fps}
         compositionWidth={meta.width}
         compositionHeight={meta.height}
+        hoverToPlay={hoverToPlay}
       />
       {meta.hasAudio && <AudioBadge />}
     </div>

@@ -70,7 +70,7 @@ export function ShowcaseFilter({
           <div className="columns-1 sm:columns-2 gap-6 [column-fill:balance]">
             {group.items.map((s) => (
               <div key={s.slug} className="mb-6 break-inside-avoid group">
-                <ShowcasePreview meta={s} />
+                <ShowcasePreview meta={s} hoverToPlay />
                 <Link href={`/showcase/${s.slug}`} className="block mt-3">
                   <h3 className="font-display text-lg font-semibold tracking-tight text-onda-text group-hover:text-onda-accent transition-colors">
                     {s.title}

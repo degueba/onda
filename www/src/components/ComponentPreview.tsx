@@ -21,6 +21,10 @@ type Props<T extends Record<string, unknown>> = {
   compositionHeight?: number;
   autoPlay?: boolean;
   loop?: boolean;
+  // Gallery mode: don't autoplay, play only while hovered, reset to frame 0
+  // on leave, and hide all player chrome (button + time readout) so a grid of
+  // cards reads as a showcase rather than a wall of running players.
+  hoverToPlay?: boolean;
   className?: string;
 };
 
@@ -37,8 +41,12 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   compositionHeight = 1080,
   autoPlay = true,
   loop = true,
+  hoverToPlay = false,
   className,
 }: Props<T>) {
+  // Hover mode owns playback entirely — mount autoplay would fight the
+  // play-on-hover / pause-on-leave handlers.
+  const effectiveAutoPlay = hoverToPlay ? false : autoPlay;
   // Memoize so <Player /> sees a stable component identity across renders —
   // otherwise it tears down and re-mounts on every parent re-render and
   // playback never starts.
@@ -94,7 +102,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   //      first mousemove / pointerdown / keydown — typically within a
   //      second of the user landing.
   useEffect(() => {
-    if (!autoPlay) return;
+    if (!effectiveAutoPlay) return;
     let cancelled = false;
 
     const tryPlay = () => {
@@ -129,7 +137,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
       timeoutIds.forEach(window.clearTimeout);
       cleanupListeners();
     };
-  }, [autoPlay, Wrapped]);
+  }, [effectiveAutoPlay, Wrapped]);
 
   const toggle = useCallback(() => {
     const player = playerRef.current;
@@ -149,8 +157,20 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   return (
     <div
       className={`relative w-full h-full ${className ?? ''}`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={() => {
+        setIsHovering(true);
+        if (hoverToPlay) playerRef.current?.play();
+      }}
+      onMouseLeave={() => {
+        setIsHovering(false);
+        if (hoverToPlay) {
+          const player = playerRef.current;
+          if (player) {
+            player.pause();
+            player.seekTo(0);
+          }
+        }
+      }}
     >
       <Player
         ref={playerRef}
@@ -160,7 +180,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         fps={fps}
         compositionWidth={compositionWidth}
         compositionHeight={compositionHeight}
-        autoPlay={autoPlay}
+        autoPlay={effectiveAutoPlay}
         loop={loop}
         controls={false}
         clickToPlay={false}
@@ -173,60 +193,64 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         style={{ width: '100%', height: '100%', display: 'block' }}
       />
 
-      <button
-        type="button"
-        onClick={toggle}
-        aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
-        className={`
-          absolute inset-0 grid place-items-center
-          transition-opacity duration-300 ease-out
-          focus:outline-none
-          ${showOverlay ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-        `}
-      >
-        <span
-          className="
-            grid place-items-center
-            h-9 w-9 rounded-full
-            bg-onda-surface/70 backdrop-blur-md
-            border border-onda-border-lit
-            text-onda-text
-            shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
-            transition-all duration-200 ease-out
-            hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
-            active:scale-95
-          "
+      {!hoverToPlay && (
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
+          className={`
+            absolute inset-0 grid place-items-center
+            transition-opacity duration-300 ease-out
+            focus:outline-none
+            ${showOverlay ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+          `}
         >
-          {isPlaying ? (
-            <Pause size={16} weight="fill" />
-          ) : (
-            // The triangle's visual mass is on the left — nudge right 1px so
-            // it reads as optically centered.
-            <Play size={16} weight="fill" className="translate-x-px" />
-          )}
-        </span>
-      </button>
+          <span
+            className="
+              grid place-items-center
+              h-9 w-9 rounded-full
+              bg-onda-surface/70 backdrop-blur-md
+              border border-onda-border-lit
+              text-onda-text
+              shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
+              transition-all duration-200 ease-out
+              hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
+              active:scale-95
+            "
+          >
+            {isPlaying ? (
+              <Pause size={16} weight="fill" />
+            ) : (
+              // The triangle's visual mass is on the left — nudge right 1px so
+              // it reads as optically centered.
+              <Play size={16} weight="fill" className="translate-x-px" />
+            )}
+          </span>
+        </button>
+      )}
 
       {/* Time readout. Sits in the bottom-right corner, restrained so it
           never competes with the content. Current frame in onda-text,
           slash in onda-faint (barely there), total in onda-dim — the eye
           lands on the moving digit, treats the rest as scaffold. Fades
           to 60% opacity while playing without hover, full otherwise. */}
-      <div
-        className={`
-          absolute bottom-3 right-3 pointer-events-none
-          px-2 py-1 rounded-md
-          bg-onda-bg/60 backdrop-blur-md
-          border border-onda-border
-          font-mono text-[11px] tabular-nums leading-none
-          transition-opacity duration-300 ease-out
-          ${isPlaying && !isHovering ? 'opacity-60' : 'opacity-100'}
-        `}
-      >
-        <span className="text-onda-text">{currentSec}</span>
-        <span className="text-onda-faint mx-1">/</span>
-        <span className="text-onda-dim">{totalSec}s</span>
-      </div>
+      {!hoverToPlay && (
+        <div
+          className={`
+            absolute bottom-3 right-3 pointer-events-none
+            px-2 py-1 rounded-md
+            bg-onda-bg/60 backdrop-blur-md
+            border border-onda-border
+            font-mono text-[11px] tabular-nums leading-none
+            transition-opacity duration-300 ease-out
+            ${isPlaying && !isHovering ? 'opacity-60' : 'opacity-100'}
+          `}
+        >
+          <span className="text-onda-text">{currentSec}</span>
+          <span className="text-onda-faint mx-1">/</span>
+          <span className="text-onda-dim">{totalSec}s</span>
+        </div>
+      )}
     </div>
   );
 }
