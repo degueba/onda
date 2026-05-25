@@ -23,10 +23,29 @@ import { courseCompleteMeta } from '@/showcase/course-complete/meta';
 import { launchCountdownMeta } from '@/showcase/launch-countdown/meta';
 import { saveTheDateMeta } from '@/showcase/save-the-date/meta';
 import { kpiSnapshotMeta } from '@/showcase/kpi-snapshot/meta';
+import { devDemoMeta } from '@/showcase/dev-demo/meta';
+import { changelogMeta } from '@/showcase/changelog/meta';
+import { productLaunchMeta } from '@/showcase/product-launch/meta';
+import { liveMetricsMeta } from '@/showcase/live-metrics/meta';
+import { changelogLoopMeta } from '@/showcase/changelog-loop/meta';
+import { deployRevealMeta } from '@/showcase/deploy-reveal/meta';
+import { annotatedClickMeta } from '@/showcase/annotated-click/meta';
+import { browserWalkthroughMeta } from '@/showcase/browser-walkthrough/meta';
+import { bentoDriftMeta } from '@/showcase/bento-drift/meta';
+import { deviceAssembleMeta } from '@/showcase/device-assemble/meta';
+import { launchTrailerMeta } from '@/showcase/launch-trailer/meta';
+import { integrationOrbitMeta } from '@/showcase/integration-orbit/meta';
+import { boardFlowMeta } from '@/showcase/board-flow/meta';
+import { dashboardFillMeta } from '@/showcase/dashboard-fill/meta';
+import { promptToDashboardMeta } from '@/showcase/prompt-to-dashboard/meta';
+import { pricingFocusMeta } from '@/showcase/pricing-focus/meta';
+import { codeToPreviewMeta } from '@/showcase/code-to-preview/meta';
+import { kineticTypeMeta } from '@/showcase/kinetic-type/meta';
 
 /** Top-level grouping. Drives the section split in the gallery. */
 export type ShowcaseCategory =
   | 'marketing'
+  | 'developer'
   | 'media'
   | 'reports'
   | 'education'
@@ -42,6 +61,11 @@ export const SHOWCASE_CATEGORIES: ReadonlyArray<{
     key: 'marketing',
     label: 'Marketing & promo',
     blurb: 'Explainers, social ads, release cards — moves that sell something.',
+  },
+  {
+    key: 'developer',
+    label: 'Developer & product',
+    blurb: 'Code, terminals, deploys, boards, dashboards — content that ships software.',
   },
   {
     key: 'media',
@@ -100,6 +124,24 @@ export const SHOWCASES: readonly ShowcaseMeta[] = [
   courseCompleteMeta,
   launchCountdownMeta,
   saveTheDateMeta,
+  devDemoMeta,
+  changelogMeta,
+  productLaunchMeta,
+  liveMetricsMeta,
+  changelogLoopMeta,
+  deployRevealMeta,
+  annotatedClickMeta,
+  browserWalkthroughMeta,
+  bentoDriftMeta,
+  deviceAssembleMeta,
+  launchTrailerMeta,
+  integrationOrbitMeta,
+  boardFlowMeta,
+  dashboardFillMeta,
+  promptToDashboardMeta,
+  pricingFocusMeta,
+  codeToPreviewMeta,
+  kineticTypeMeta,
 ] as const;
 
 export const SHOWCASE_SLUGS = SHOWCASES.map((s) => s.slug);
@@ -172,6 +214,60 @@ export async function loadShowcaseComponent(
     case 'kpi-snapshot':
       return (await import('@/showcase/kpi-snapshot/composition'))
         .KpiSnapshotComposition;
+    case 'dev-demo':
+      return (await import('@/showcase/dev-demo/composition'))
+        .DevDemoComposition;
+    case 'changelog':
+      return (await import('@/showcase/changelog/composition'))
+        .ChangelogComposition;
+    case 'product-launch':
+      return (await import('@/showcase/product-launch/composition'))
+        .ProductLaunchComposition;
+    case 'live-metrics':
+      return (await import('@/showcase/live-metrics/composition'))
+        .LiveMetricsComposition;
+    case 'changelog-loop':
+      return (await import('@/showcase/changelog-loop/composition'))
+        .ChangelogLoopComposition;
+    case 'deploy-reveal':
+      return (await import('@/showcase/deploy-reveal/composition'))
+        .DeployRevealComposition;
+    case 'annotated-click':
+      return (await import('@/showcase/annotated-click/composition'))
+        .AnnotatedClickComposition;
+    case 'browser-walkthrough':
+      return (await import('@/showcase/browser-walkthrough/composition'))
+        .BrowserWalkthroughComposition;
+    case 'bento-drift':
+      return (await import('@/showcase/bento-drift/composition'))
+        .BentoDriftComposition;
+    case 'device-assemble':
+      return (await import('@/showcase/device-assemble/composition'))
+        .DeviceAssembleComposition;
+    case 'launch-trailer':
+      return (await import('@/showcase/launch-trailer/composition'))
+        .LaunchTrailerComposition;
+    case 'integration-orbit':
+      return (await import('@/showcase/integration-orbit/composition'))
+        .IntegrationOrbitComposition;
+    case 'board-flow':
+      return (await import('@/showcase/board-flow/composition'))
+        .BoardFlowComposition;
+    case 'dashboard-fill':
+      return (await import('@/showcase/dashboard-fill/composition'))
+        .DashboardFillComposition;
+    case 'prompt-to-dashboard':
+      return (await import('@/showcase/prompt-to-dashboard/composition'))
+        .PromptToDashboardComposition;
+    case 'pricing-focus':
+      return (await import('@/showcase/pricing-focus/composition'))
+        .PricingFocusComposition;
+    case 'code-to-preview':
+      return (await import('@/showcase/code-to-preview/composition'))
+        .CodeToPreviewComposition;
+    case 'kinetic-type':
+      return (await import('@/showcase/kinetic-type/composition'))
+        .KineticTypeComposition;
     default:
       return null;
   }

@@ -478,6 +478,46 @@ body {
   }
 }
 
+/* Multicol-safe shimmer ring. The masked `onda-shimmer-border` above relies on
+   `mask-composite` + `filter: blur`, which render unreliably inside a CSS
+   multi-column / masonry context (the showcase gallery uses `columns-*`) —
+   there the gradient escapes the mask and washes over the card. This variant
+   uses NO mask and NO filter: a conic-gradient *background* with 1.5px padding
+   reveals a ring around an OPAQUE inner child (which covers everything but the
+   ring), and the glow is a box-shadow. Both survive multicol. The inner child
+   must be opaque and use a slightly smaller radius so the ring shows evenly. */
+.onda-shimmer-edge {
+  position: relative;
+  padding: 1.5px;
+  background: transparent;
+  /* Radius is set by the consumer (e.g. `rounded-xl` / `rounded-2xl`) so the
+     gradient clips to the same corners as the inner card. */
+  transition: box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .onda-shimmer-edge {
+  background: conic-gradient(
+    from var(--onda-shimmer-angle),
+    transparent 0deg,
+    #d96b82 50deg,
+    #e89aab 90deg,
+    #f2f2f4 120deg,
+    #c8a4e8 155deg,
+    #88b8e6 195deg,
+    #e89aab 235deg,
+    #d96b82 275deg,
+    transparent 360deg
+  );
+  box-shadow: 0 0 30px -8px rgba(217, 107, 130, 0.45);
+  animation: onda-shimmer-rotate 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .onda-shimmer-edge {
+    animation: none;
+  }
+}
+
 /*
  * Thin styled scrollbar for code-block scroll regions. Sits inside the
  * black surface as a faint border-colored rail so it reads as part of

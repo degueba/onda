@@ -223,7 +223,11 @@ export function PropsControls({
   // values of the field named `variant`. If a future component uses a
   // different discriminator name, this can be expanded.
   const currentVariant = values.variant as string | undefined;
-  const fieldEntries = Object.entries(shape).filter(([, field]) => {
+  const fieldEntries = Object.entries(shape).filter(([name, field]) => {
+    // Hide the `kind` discriminator (techspec 021) — it's a fixed literal with
+    // exactly one allowed value, so there's nothing to control. Same for any
+    // other literal field.
+    if (name === 'kind' || unwrap(field).type === 'ZodLiteral') return false;
     const only = parseOnlyHint(field);
     if (!only) return true; // no hint → always show
     if (currentVariant === undefined) return true; // no variant value → show all

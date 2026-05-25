@@ -19,9 +19,12 @@ function Placeholder({ title }: { title: string }) {
 }
 
 // Slugs we deliberately don't auto-preview in the catalog grid.
-// `audio-clip` has no visual at all and `logo-sting` blasts a loud chord
-// on hover. We render a quiet placeholder instead.
-const NO_PREVIEW = new Set<string>(['audio-clip']);
+// `audio-clip` has no visual at all. `video-clip` defaults to a remote sample
+// video (BigBuckBunny) that throws an uncaught `MediaPlaybackError` whenever
+// the browser can't fetch/play it (CORS/network/codec) — and there's no
+// self-hosted video to fall back to — so previewing it risks a broken,
+// error-throwing tile. We render a quiet placeholder for both instead.
+const NO_PREVIEW = new Set<string>(['audio-clip', 'video-clip']);
 
 // One catalog tile: a 16:9 hover-to-play preview of a single component.
 //
@@ -41,14 +44,15 @@ export function CatalogPreview({ slug, title }: { slug: string; title: string })
   }, [entry]);
 
   // Two nested layers on purpose:
-  //   • Outer (.onda-shimmer-border): no overflow clipping, so the
-  //     rotating gradient ring + blurred halo (CSS pseudos at inset:-1px
-  //     and inset:-3px) can paint past the card edge.
-  //   • Inner: clips the Player to a rounded rectangle. Without this,
-  //     the video's hard edges would bleed past the shimmer ring.
+  //   • Outer (.onda-shimmer-edge): a mask-free shimmer — a conic-gradient
+  //     background with 1.5px padding reveals a rotating ring around the card
+  //     (glow via box-shadow). No mask/filter, so it survives every layout
+  //     (this grid AND the showcase's `columns-*` masonry).
+  //   • Inner: opaque, clips the Player to a rounded rectangle and covers
+  //     everything but the 1.5px ring.
   return (
     <div
-      className="onda-shimmer-border relative w-full rounded-xl"
+      className="onda-shimmer-edge relative w-full rounded-xl"
       style={{ aspectRatio: '16 / 9' }}
     >
       <div className="relative w-full h-full overflow-hidden rounded-xl bg-onda-bg border border-onda-border">
