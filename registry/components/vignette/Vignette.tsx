@@ -1,19 +1,8 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { z } from 'zod';
+import { vignetteSchema, type VignetteProps } from './schema';
 
-/** Zod schema for {@link Vignette} props. */
-export const vignetteSchema = z.object({
-  /** Edge darkness. `0` = no vignette, `1` = fully dark edges. */
-  intensity: z.number().min(0).max(1).default(0.5),
-  /** Percent from center where the darkening begins. Larger = bigger clean middle. */
-  innerRadius: z.number().min(0).max(100).default(40),
-  /** Edge color. Defaults to pure black for the classic cinematic frame. */
-  color: z.string().default('#000000'),
-});
-
-/** Inferred props for {@link Vignette}. */
-export type VignetteProps = z.infer<typeof vignetteSchema>;
+export { vignetteSchema, type VignetteProps };
 
 /**
  * A static cinematic vignette — a radial darkening at the canvas edges that

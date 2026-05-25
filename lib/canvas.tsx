@@ -1,63 +1,25 @@
 // Canvas-aware placement and sizing for Onda components.
 // See `docs/techspecs/008-canvas-aware-components/` for rationale.
+//
+// Pure schemas + constants live in `./canvas-schemas` so they can be
+// imported without React/Remotion. This file owns the React component
+// (`PlacementBox`) and the runtime utilities (`resolvePlacement`,
+// `resolveSize`), and re-exports everything from canvas-schemas for
+// back-compat — existing `import { placementSchema } from '../../../lib/canvas'`
+// imports continue to work.
 
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { z } from 'zod';
+import {
+  type Anchor,
+  type Placement,
+  type PlacementCoords,
+  type PlacementRegion,
+  type SizeRole,
+  SIZE_ROLES,
+} from './canvas-schemas';
 
-export const ANCHORS = [
-  'center',
-  'top',
-  'bottom',
-  'left',
-  'right',
-  'top-left',
-  'top-right',
-  'bottom-left',
-  'bottom-right',
-] as const;
-
-export type Anchor = (typeof ANCHORS)[number];
-export const anchorSchema = z.enum(ANCHORS);
-
-/** Coordinates are NOT clamped — off-canvas placements (entrances, exits, bleed) are intentional. */
-export type PlacementCoords = {
-  x: number;
-  y: number;
-  anchor?: Anchor;
-};
-
-export const placementCoordsSchema = z.object({
-  x: z.number(),
-  y: z.number(),
-  anchor: anchorSchema.optional(),
-});
-
-export const PLACEMENT_REGIONS = [
-  'center',
-  'top',
-  'bottom',
-  'left',
-  'right',
-  'top-left',
-  'top-right',
-  'bottom-left',
-  'bottom-right',
-  'upper-third',
-  'lower-third',
-] as const;
-
-export type PlacementRegion = (typeof PLACEMENT_REGIONS)[number];
-export const placementRegionSchema = z.enum(PLACEMENT_REGIONS);
-
-/**
- * @example
- * placement="upper-third"
- * placement={{ x: 0.3, y: 0.7, anchor: 'top-left' }}
- * placement={{ x: 1.1, y: 0.5 }}  // off-canvas — slides in from the right
- */
-export type Placement = PlacementRegion | PlacementCoords;
-export const placementSchema = z.union([placementRegionSchema, placementCoordsSchema]);
+export * from './canvas-schemas';
 
 // Anchor picked so the region's name matches its visual intent —
 // 'top-left' puts the component's top-left corner near the canvas's
@@ -158,26 +120,6 @@ export const PlacementBox: React.FC<PlacementBoxProps> = ({ placement, children 
     </AbsoluteFill>
   );
 };
-
-/**
- * Semantic typography sizes — fraction of the *smaller* canvas dimension, so
- * the same role reads at the same weight on horizontal, vertical, or square.
- * Calibrated against the catalog's current `fontSize` defaults — passing a
- * role lands within 1–2px of the previous pixel default on a 1080-min canvas.
- */
-export const SIZE_ROLES = {
-  hero:       0.15,
-  heading:    0.09,
-  subheading: 0.052,
-  body:       0.03,
-  caption:    0.02,
-} as const;
-
-export type SizeRole = keyof typeof SIZE_ROLES;
-
-export const sizeRoleSchema = z.enum(
-  Object.keys(SIZE_ROLES) as [SizeRole, ...SizeRole[]],
-);
 
 export function resolveSize(
   role: SizeRole,

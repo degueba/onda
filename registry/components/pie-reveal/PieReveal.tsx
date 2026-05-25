@@ -1,39 +1,10 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
-import { z } from 'zod';
-import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
-import { PlacementBox, placementSchema } from '../../../lib/canvas';
+import { SPRING_SMOOTH } from '../../../lib/motion';
+import { PlacementBox } from '../../../lib/canvas';
+import { pieRevealSchema, type PieRevealProps } from './schema';
 
-/** Zod schema for {@link PieReveal} props. */
-export const pieRevealSchema = z.object({
-  /** Percentage to reveal, 0–100. */
-  value: z.number().min(0).max(100).default(64),
-  /** Frames before the animation starts. */
-  delay: z.number().int().min(0).default(0),
-  /** Frames until the arc has fully filled to `value`. */
-  duration: z.number().int().min(1).default(DURATION.slow),
-  /** Arc radius in pixels. */
-  radius: z.number().default(120),
-  /** Stroke width of both the track and the arc, in pixels. */
-  strokeWidth: z.number().default(12),
-  /** Arc color. Defaults to `--onda-accent` (`#D96B82`). */
-  accentColor: z.string().default('#D96B82'),
-  /** Track (background ring) color. Defaults to `--onda-border-lit` (`#26262E`). */
-  trackColor: z.string().default('#26262E'),
-  /** Render the `value%` label in the center of the ring. */
-  showValue: z.boolean().default(true),
-  /** Color of the center `%` label. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
-  /** Center label font size in pixels. */
-  fontSize: z.number().default(56),
-  /** Center label font family. The Onda display font by default. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
-  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
-  placement: placementSchema.optional(),
-});
-
-/** Inferred props for {@link PieReveal}. */
-export type PieRevealProps = z.infer<typeof pieRevealSchema>;
+export { pieRevealSchema, type PieRevealProps };
 
 /**
  * A single-arc pie reveal — the SVG arc fills from 0 to `value` percent on

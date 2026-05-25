@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { placementSchema } from '../../../lib/canvas';
+import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for `LogoSting` props. */
 export const logoStingSchema = z.object({
