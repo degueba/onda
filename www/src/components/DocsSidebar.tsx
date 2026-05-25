@@ -18,7 +18,7 @@ export function DocsSidebar() {
   return (
     <nav
       aria-label="Documentation"
-      className="hidden md:block w-56 shrink-0 sticky top-20 self-start max-h-[calc(100vh-6rem)] overflow-y-auto pr-4"
+      className="hidden md:block w-28 shrink-0 sticky top-2 self-start max-h-[calc(100vh-1.5rem)] overflow-y-auto pr-4"
     >
       <ul className="space-y-6">
         {DOCS_NAV.map((group) => (
