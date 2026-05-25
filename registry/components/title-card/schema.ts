@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link TitleCard} props. */
 export const titleCardSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('title-card').default('title-card'),
   /** Hero headline. */
   title: z.string().default('Onda'),
   /** Smaller phrase beneath the headline, cascaded word-by-word. */

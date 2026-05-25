@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 /** Zod schema for {@link GrainOverlay} props. */
 export const grainOverlaySchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('grain-overlay').default('grain-overlay'),
   /** Layer opacity. Capped at `0.15` — CLAUDE.md tokens say ~2%. */
   opacity: z.number().min(0).max(0.15).default(0.04),
   /** SVG turbulence base frequency. Higher = finer grain. */

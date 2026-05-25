@@ -21,7 +21,7 @@
       "path": "registry/transitions/morph/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/morph/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link morph} options. */\nexport const morphSchema = z.object({\n  /**\n   * Maximum scale delta around 1.0. Default `0.04` — outgoing scales\n   * 1 → 1.04, incoming scales 0.96 → 1. Small by design; the point is\n   * to feel cinematic, not loud.\n   */\n  scaleAmount: z.number().min(0).max(0.2).default(0.04),\n});\n\nexport type MorphOptions = z.input<typeof morphSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link morph} options. */\nexport const morphSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('morph').default('morph'),\n  /**\n   * Maximum scale delta around 1.0. Default `0.04` — outgoing scales\n   * 1 → 1.04, incoming scales 0.96 → 1. Small by design; the point is\n   * to feel cinematic, not loud.\n   */\n  scaleAmount: z.number().min(0).max(0.2).default(0.04),\n});\n\nexport type MorphOptions = z.input<typeof morphSchema>;\n"
     },
     {
       "path": "registry/transitions/morph/morph.meta.json",

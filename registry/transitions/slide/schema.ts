@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 /** Zod schema for {@link slide} options. */
 export const slideSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('slide').default('slide'),
   /**
    * Which direction the incoming scene slides toward.
    * - `'left'` — both scenes appear to move leftward (new scene from the right)

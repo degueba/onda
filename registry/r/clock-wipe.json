@@ -21,7 +21,7 @@
       "path": "registry/transitions/clock-wipe/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/clock-wipe/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link clockWipe} options. */\nexport const clockWipeSchema = z.object({\n  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's clock wipe. */\n  width: z.number().int().positive(),\n  /** Canvas height in px — typically `useVideoConfig().height`. */\n  height: z.number().int().positive(),\n});\n\nexport type ClockWipeOptions = z.input<typeof clockWipeSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link clockWipe} options. */\nexport const clockWipeSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('clock-wipe').default('clock-wipe'),\n  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's clock wipe. */\n  width: z.number().int().positive(),\n  /** Canvas height in px — typically `useVideoConfig().height`. */\n  height: z.number().int().positive(),\n});\n\nexport type ClockWipeOptions = z.input<typeof clockWipeSchema>;\n"
     },
     {
       "path": "registry/transitions/clock-wipe/clock-wipe.meta.json",

@@ -6,6 +6,8 @@ const timeSpec = z.union([z.string(), z.number()]);
 
 /** Zod schema for {@link VideoClip} props. */
 export const videoClipSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('video-clip').default('video-clip'),
   /** URL or path to the video. */
   src: z.string().default('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'),
   /** Frames before the clip starts in the composition. */

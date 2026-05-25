@@ -4,6 +4,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Highlight} props. */
 export const highlightSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('highlight').default('highlight'),
   /** Text to highlight. */
   text: z.string().default('highlight this'),
   /** Frames before the text starts revealing. */

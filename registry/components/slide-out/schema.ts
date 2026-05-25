@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link SlideOut} props. */
 export const slideOutSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('slide-out').default('slide-out'),
   /** What to slide out. */
   text: z.string().default('Onda'),
   /** Frames before the animation starts. */

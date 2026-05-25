@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link PieReveal} props. */
 export const pieRevealSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('pie-reveal').default('pie-reveal'),
   /** Percentage to reveal, 0–100. */
   value: z.number().min(0).max(100).default(64),
   /** Frames before the animation starts. */

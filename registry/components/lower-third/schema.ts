@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for `LowerThird` props. */
 export const lowerThirdSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('lower-third').default('lower-third'),
   /** The person's name. */
   name: z.string().default('Rodrigo'),
   /** The person's role / title. */

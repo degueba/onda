@@ -3,6 +3,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for `LogoSting` props. */
 export const logoStingSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('logo-sting').default('logo-sting'),
   /** SVG path `d` for the logo mark. The default is a sample wave. */
   d: z.string().default('M 50 60 Q 100 20 150 60 T 250 60'),
   /** The brand / product title beneath the mark. */

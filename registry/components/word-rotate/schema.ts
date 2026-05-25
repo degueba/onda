@@ -3,6 +3,8 @@ import { sizeRoleSchema, placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link WordRotate} props — drives Remotion `defaultProps` validation. */
 export const wordRotateSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('word-rotate').default('word-rotate'),
   /** Phrases cycled in place, in order. One is visible at a time. */
   phrases: z.array(z.string()).default(['fast', 'beautiful', 'restrained']),
   /** Frames before the first phrase begins to enter. */

@@ -98,7 +98,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             width: '100%',
           }}
         >
-          <WordStagger
+          <WordStagger kind="word-stagger"
             text={quote}
             delay={delay}
             duration={DURATION.base}
@@ -130,7 +130,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
               lineHeight: `${DIVIDER_HEIGHT}px`,
             }}
           >
-            <MaskReveal
+            <MaskReveal kind="mask-reveal"
               text="████"
               delay={dividerDelay}
               duration={dividerDuration}
@@ -152,7 +152,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             gap: 4,
           }}
         >
-          <FadeIn
+          <FadeIn kind="fade-in"
             text={author}
             delay={attributionDelay}
             duration={DURATION.base}
@@ -163,7 +163,7 @@ export const QuoteCard: React.FC<QuoteCardProps> = ({
             letterSpacing={authorLetterSpacing}
             lineHeight={authorLineHeight}
           />
-          <FadeIn
+          <FadeIn kind="fade-in"
             text={role}
             delay={attributionDelay}
             duration={DURATION.base}

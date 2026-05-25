@@ -64,7 +64,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
           // Underline (which owns both the text fade and the rule). The
           // primitive's defaults already match Onda's blur-reveal feel via the
           // shared SPRING_SMOOTH / entryFade — no need to re-blur on top.
-          <Underline
+          <Underline kind="underline"
             text={title}
             delay={delay}
             duration={18}
@@ -81,7 +81,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
             lineHeight={titleLineHeight}
           />
         ) : (
-          <BlurReveal
+          <BlurReveal kind="blur-reveal"
             text={title}
             delay={delay}
             duration={18}
@@ -94,7 +94,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
           />
         )}
 
-        <WordStagger
+        <WordStagger kind="word-stagger"
           text={subtitle}
           delay={delay + SUBTITLE_OFFSET}
           duration={18}

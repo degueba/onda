@@ -3,6 +3,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link QuoteCard} props. */
 export const quoteCardSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('quote-card').default('quote-card'),
   /** The pull-quote body. Cascaded word-by-word on a slower-than-canonical stagger. */
   quote: z.string().default('Motion is the difference between art and craft.'),
   /** Attribution name. */

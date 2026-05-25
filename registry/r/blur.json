@@ -21,7 +21,7 @@
       "path": "registry/transitions/blur/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/blur/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link blur} options. */\nexport const blurSchema = z.object({\n  /**\n   * Max blur radius in px. Outgoing blurs from 0 to this value as it\n   * fades; incoming blurs from this value to 0 as it fades in.\n   * Default `10` matches the BlurReveal entrance fingerprint.\n   */\n  blurAmount: z.number().min(0).max(40).default(10),\n});\n\nexport type BlurOptions = z.input<typeof blurSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link blur} options. */\nexport const blurSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('blur').default('blur'),\n  /**\n   * Max blur radius in px. Outgoing blurs from 0 to this value as it\n   * fades; incoming blurs from this value to 0 as it fades in.\n   * Default `10` matches the BlurReveal entrance fingerprint.\n   */\n  blurAmount: z.number().min(0).max(40).default(10),\n});\n\nexport type BlurOptions = z.input<typeof blurSchema>;\n"
     },
     {
       "path": "registry/transitions/blur/blur.meta.json",

@@ -54,7 +54,7 @@ export const LogoSting: React.FC<LogoStingProps> = ({
   const stack = (
     <>
       {/* 1. Logo stroke — the mark arrives. */}
-      <DrawOn
+      <DrawOn kind="draw-on"
         d={d}
         delay={delay}
         duration={DURATION.slow}
@@ -66,7 +66,7 @@ export const LogoSting: React.FC<LogoStingProps> = ({
       />
 
       {/* 2. Title — settles in beneath the mark. */}
-      <ScaleIn
+      <ScaleIn kind="scale-in"
         text={title}
         delay={delay + TITLE_OFFSET}
         duration={DURATION.base}
@@ -81,7 +81,7 @@ export const LogoSting: React.FC<LogoStingProps> = ({
           invisible) text and the rule; we pass an empty string and zero
           line offset so only the rule reads. */}
       {accent ? (
-        <Underline
+        <Underline kind="underline"
           text=""
           delay={delay + UNDERLINE_OFFSET}
           color={color}

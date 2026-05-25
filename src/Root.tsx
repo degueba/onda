@@ -15,6 +15,7 @@ export const Root: React.FC = () => {
         height={1920}
         schema={blurRevealSchema}
         defaultProps={{
+          kind: 'blur-reveal',
           text: 'Onda',
           delay: 0,
           duration: 20,

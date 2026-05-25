@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link BarChart} props. */
 export const barChartSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('bar-chart').default('bar-chart'),
   /** Bars to render. Order is preserved — top to bottom. */
   data: z
     .array(z.object({ label: z.string(), value: z.number() }))

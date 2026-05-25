@@ -66,7 +66,7 @@ export const EndCard: React.FC<EndCardProps> = ({
           // keeps the underline visually attached to the CTA glyphs (which the
           // Underline primitive measures) instead of stacking a separate line
           // below a separately-revealed BlurReveal — composition over duplication.
-          <Underline
+          <Underline kind="underline"
             text={cta}
             delay={delay}
             duration={DURATION.base}
@@ -83,7 +83,7 @@ export const EndCard: React.FC<EndCardProps> = ({
             lineOffset={6}
           />
         ) : (
-          <BlurReveal
+          <BlurReveal kind="blur-reveal"
             text={cta}
             delay={delay}
             duration={DURATION.base}
@@ -100,7 +100,7 @@ export const EndCard: React.FC<EndCardProps> = ({
             so URLs and social handles read as a single strip of metadata, not a
             stack. The dot separators are part of the items themselves so the
             stagger fingerprint stays consistent (each handle is one beat). */}
-        <StaggerGroup
+        <StaggerGroup kind="stagger-group"
           items={handles}
           delay={delay + HANDLES_OFFSET}
           duration={DURATION.base}

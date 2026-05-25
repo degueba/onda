@@ -3,6 +3,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Marquee} props. */
 export const marqueeSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('marquee').default('marquee'),
   /** Items to scroll. The list is rendered three times for seamless wrap. */
   items: z.array(z.string()).default([
     'REMOTION',

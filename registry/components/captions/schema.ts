@@ -3,6 +3,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Captions} props. */
 export const captionsSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('captions').default('captions'),
   /**
    * The transcript timeline. Each entry is a word + its `[startMs, endMs)`
    * window — the format every STT / transcript tool already speaks.

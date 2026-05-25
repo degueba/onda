@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 /** Zod schema for {@link depthPush} options. */
 export const depthPushSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('depth-push').default('depth-push'),
   /** Direction the camera move travels. */
   direction: z.enum(['left', 'right', 'up', 'down']).default('left'),
   /**

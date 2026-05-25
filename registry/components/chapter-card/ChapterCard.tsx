@@ -65,7 +65,7 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
         {/* Numbered eyebrow — pure fade so the title (the next beat) owns the
             rise. When accent is on, the number takes the rose; otherwise it
             falls back to the dim metadata color. */}
-        <FadeIn
+        <FadeIn kind="fade-in"
           text={number}
           delay={delay}
           duration={DURATION.base}
@@ -79,7 +79,7 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
 
         {/* Chapter title — the focal element. BlurReveal's spring-driven rise +
             blur falloff is the canonical Onda entrance for headline text. */}
-        <BlurReveal
+        <BlurReveal kind="blur-reveal"
           text={chapter}
           delay={delay + TITLE_OFFSET}
           duration={DURATION.base}
@@ -96,7 +96,7 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
             means only the rule draws — the BlurReveal above already owns the
             typography. */}
         {accent ? (
-          <Underline
+          <Underline kind="underline"
             text=""
             delay={delay + UNDERLINE_OFFSET}
             duration={1}

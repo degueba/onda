@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 /** Zod schema for {@link GradientShift} props. */
 export const gradientShiftSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('gradient-shift').default('gradient-shift'),
   /** Starting gradient color. Defaults to `--onda-surface`. */
   from: z.string().default('#0E0E12'),
   /** Ending gradient color. Defaults to `--onda-border`. */

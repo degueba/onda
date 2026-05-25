@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link ImageReveal} props. */
 export const imageRevealSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('image-reveal').default('image-reveal'),
   /**
    * Image URL or path. The default is a stable Picsum seed so the playground
    * render is reproducible — supply your own `src` in real compositions.

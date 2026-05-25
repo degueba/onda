@@ -4,6 +4,8 @@ import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link CountUp} props. */
 export const countUpSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('count-up').default('count-up'),
   /** Starting value. */
   from: z.number().default(0),
   /** Ending value. */

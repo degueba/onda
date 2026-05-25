@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link StaggerGroup} props. */
 export const staggerGroupSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('stagger-group').default('stagger-group'),
   /** The items to reveal, in order. */
   items: z
     .array(z.string())

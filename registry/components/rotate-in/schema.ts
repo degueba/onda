@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link RotateIn} props. */
 export const rotateInSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('rotate-in').default('rotate-in'),
   /** What to reveal. */
   text: z.string().default('Onda'),
   /** Frames before the animation starts. */

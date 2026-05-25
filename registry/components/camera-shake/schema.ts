@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link CameraShake} props. */
 export const cameraShakeSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('camera-shake').default('camera-shake'),
   /** What to wrap with the shake. Optional — a placeholder renders if omitted. */
   children: z.any().optional(),
   /** Frames before the shake starts. */

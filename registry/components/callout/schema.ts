@@ -3,6 +3,8 @@ import { DURATION } from '../../../lib/motion';
 
 /** Zod schema for {@link Callout} props. */
 export const calloutSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('callout').default('callout'),
   /** Bubble label. */
   label: z.string().default('Look here'),
   /** Anchor point X as a `0..1` fraction of the canvas width. */

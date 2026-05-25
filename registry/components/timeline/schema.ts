@@ -4,6 +4,8 @@ import { placementSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for {@link Timeline} props. */
 export const timelineSchema = z.object({
+  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
+  kind: z.literal('timeline').default('timeline'),
   /** Anchor points along the timeline. Order is preserved — left to right. */
   points: z
     .array(z.object({ label: z.string() }))
