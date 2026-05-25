@@ -118,6 +118,12 @@ export type PlacementBoxProps = {
  * (left anchors → `'left'`, right → `'right'`, else `'center'`); components
  * override on their own inner element when they want different behavior.
  *
+ * Passing `placement` makes the component its own `AbsoluteFill` layer —
+ * it parks at the canvas anchor regardless of parent. For stacked
+ * layouts, omit `placement` on the children and let a wrapping flex
+ * container do the centering; otherwise multiple `placement="center"`
+ * siblings will overlap at the same canvas point.
+ *
  * @example
  * <PlacementBox placement="upper-third">
  *   <h1 style={{ fontSize: 96 }}>Hello</h1>

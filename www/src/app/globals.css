@@ -358,6 +358,52 @@ body {
 }
 
 /*
+ * Equalizer-bar pulse for the audio badge. Three bars run the same
+ * keyframe with staggered delays so they appear to dance out of phase —
+ * the universal "audio playing" visual language at a glance.
+ */
+@keyframes onda-eq-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+
+.onda-eq-bar {
+  transform-origin: bottom;
+  animation: onda-eq-bar 0.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onda-eq-bar {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+}
+
+/*
+ * Thin styled scrollbar for code-block scroll regions. Sits inside the
+ * black surface as a faint border-colored rail so it reads as part of
+ * the chrome, not chrome-floating-on-content.
+ */
+.onda-code-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.onda-code-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.onda-code-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-onda-border);
+  border-radius: 999px;
+}
+.onda-code-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-onda-border-lit);
+}
+.onda-code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-onda-border) transparent;
+}
+
+/*
  * Onda search palette — native <dialog>-based ⌘K modal. We use the platform
  * dialog so focus-trap, Esc-to-close, and inert background come for free; the
  * styling below positions it dead-centre and replaces the default browser

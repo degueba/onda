@@ -42,6 +42,7 @@ export const DOCS_NAV: DocsGroup[] = [
     label: 'Reference',
     items: [
       { href: '/components', label: 'Components catalog' },
+      { href: '/showcase', label: 'Showcase' },
     ],
   },
 ];

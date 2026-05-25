@@ -112,7 +112,19 @@ registry/components/<component-name>/
 
 -----
 
-## 5. Workflow rules for parallel agents
+## 5. Site rules (`www/`)
+
+These apply to anything rendered by the docs/landing site, not the component library itself.
+
+### Code blocks — always go through the MDX → Shiki → CodeBlock pipeline
+
+Every code block on the site is syntax-highlighted by Shiki using [www/src/lib/onda-shiki-theme.ts](www/src/lib/onda-shiki-theme.ts) and wrapped by [www/src/components/CodeBlock.tsx](www/src/components/CodeBlock.tsx) (which adds the copy affordance). **Never render a raw `<pre><code>` dump** — it skips highlighting and the copy button, so it visually breaks the page's code-block consistency.
+
+- For **markdown / MDX content** (component READMEs, docs/*.md): use `<MDXRemote>` with `rehypeShiki` and `components={{ pre: CodeBlock }}`. Pattern reference: [www/src/app/components/[slug]/page.tsx](www/src/app/components/%5Bslug%5D/page.tsx), [www/src/app/docs/[slug]/page.tsx](www/src/app/docs/%5Bslug%5D/page.tsx).
+- For **raw source strings** (e.g. a `.tsx` read off disk): wrap in a synthesized fenced block and feed it through the same `MDXRemote` pipeline. Use a 4-tilde fence (`~~~~tsx`) so embedded template literals in the source can't accidentally close the fence. Pattern reference: [www/src/app/showcase/[slug]/page.tsx](www/src/app/showcase/%5Bslug%5D/page.tsx).
+- The **only** acceptable inline code is `<code>` for short single-line snippets (install commands, file paths, prop names). Anything multi-line or fenced goes through the pipeline.
+
+## 6. Workflow rules for parallel agents
 
 - **One component per task/branch.** Never edit two components in one pass.
 - **Pattern-match the reference component** ([docs/component-reference.md](docs/component-reference.md)) exactly — same file structure, same export shape, Zod-first.

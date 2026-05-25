@@ -83,6 +83,10 @@ export const BarChart: React.FC<BarChartProps> = ({
           // bars somewhere to grow into while leaving generous side margins.
           width: '80%',
           maxWidth: 1400,
+          // Self-center inside any wider parent. Flex-centering parents
+          // are unaffected; non-flex parents would otherwise leave the
+          // chart flush-left.
+          marginInline: 'auto',
         }}
       >
         {data.map((d, i) => {
