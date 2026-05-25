@@ -1,4 +1,4 @@
-# Techspec 018 — CLI polish
+# Techspec 019 — CLI polish
 
 > Filed for later. The catalog is feature-complete; the CLI hasn't kept pace. None of these are urgent, but together they would lift the CLI from "shadcn-fork that works" to "a tool that earns trust." Pick up when there's appetite for CLI work — not before the bigger product moves (showcase compositions, theme aggregation, Studio integration).
 
@@ -12,7 +12,7 @@ None of these are *broken* — every reported user story still completes. But th
 
 ## Decision
 
-Ship a focused CLI v0.4.0 covering five improvements, in priority order:
+Ship a focused CLI v0.5.0 covering five improvements, in priority order:
 
 ### 1. Category-aware `list` (highest impact)
 
@@ -159,7 +159,7 @@ GitHub:  https://github.com/degueba/onda
 
 ## Reasonable calls (challenge any)
 
-- **Ship as 0.4.0 (minor), not 0.3.1 (patch).** Five user-visible additions plus a help refresh — that's a minor by Conventional Commits / semver. The improvements are additive (no breaking changes), so a major isn't warranted.
+- **Ship as 0.5.0 (minor), not 0.4.1 (patch).** Five user-visible additions plus a help refresh — that's a minor by Conventional Commits / semver. The improvements are additive (no breaking changes), so a major isn't warranted.
 - **`upgrade` and `remove` are core commands, not flags on `add`.** Could be `add --force-overwrite` (upgrade) and `add --remove` (cringe). Named commands win — they show up in `--help` discoverably and read better in scripts.
 - **Suggestion algorithm: Levenshtein vs trigram vs embedding.** Levenshtein at edit distance ≤ 3 is the right default — fast, no deps, catches the actual class of mistake (typos, casing). Trigram or embedding-based "fuzzy" would be overkill for a 64-slug namespace.
 - **`--dry-run` on `add`, not on `remove` / `upgrade`.** `remove` is destructive enough to warrant always-confirm anyway; `upgrade` should always show the diff inline before writing. Only `add` benefits from a separate dry-run mode because users don't always know what an unfamiliar slug pulls in.
