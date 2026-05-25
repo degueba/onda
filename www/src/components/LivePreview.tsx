@@ -74,8 +74,9 @@ import { TryItPopover } from './TryItPopover';
 // `defaultPropsOverride` lets a per-slug entry override what the component's
 // schema would default to. Used mostly by audio components, where the
 // schema default points at a public sample URL that fails CORS in the
-// browser — we serve a self-hosted /sample-audio.wav instead so the
-// preview "just works" without network round-trips or licensing concerns.
+// browser — we serve self-hosted CC0 audio under /www/public instead so
+// the preview "just works" without network round-trips or licensing
+// concerns.
 //
 // `presets` is a curated set of named visual personalities exported by the
 // component itself. When present, the TryIt popover renders them as a
@@ -257,7 +258,7 @@ const REGISTRY: Record<
     schema: audioClipSchema,
     // Self-hosted sample; the schema's default src is a remote URL meant
     // for end users with their own assets — that fails CORS in-browser.
-    defaultPropsOverride: { src: '/sample-audio.wav' },
+    defaultPropsOverride: { src: '/music.mp3' },
   },
   'audio-visualizer': {
     // Composite — visualizer + parallel AudioClip so the preview is
@@ -265,7 +266,7 @@ const REGISTRY: Record<
     // the visualization knobs.
     component: AudioVisualizerWithPlayback as unknown as ComponentType<never>,
     schema: audioVisualizerSchema,
-    defaultPropsOverride: { src: '/sample-audio.wav' },
+    defaultPropsOverride: { src: '/music.mp3' },
     presets: audioVisualizerPresets as unknown as Record<string, Record<string, unknown>>,
   },
 };

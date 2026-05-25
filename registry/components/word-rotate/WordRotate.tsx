@@ -66,20 +66,20 @@ export const WordRotate: React.FC<WordRotateProps> = ({
   const { fps, width, height } = useVideoConfig();
   const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;
 
-  // Each phrase owns a window of (transitionDuration + holdDuration) frames.
-  // Inside its window: fade-in over `transitionDuration`, hold for
-  // `holdDuration`, fade-out over `transitionDuration` (overlapping the next
-  // phrase's fade-in — they share the slot, so the swap reads as one motion).
+  // Each phrase's slot overlaps its neighbor's by `transitionDuration` —
+  // the outgoing fade and the incoming fade share frames, so the swap
+  // reads as one motion rather than two.
   const slot = holdDuration + transitionDuration;
+  const justifySelf =
+    align === 'left' ? 'start' : align === 'right' ? 'end' : 'center';
 
   return (
     <PlacementBox placement={placement}>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ display: 'inline-grid', gridTemplateAreas: '"phrase"' }}>
         {phrases.map((phrase, i) => {
           const phraseStart = delay + i * slot;
           const local = frame - phraseStart;
 
-          // Rise on SPRING_SMOOTH — Onda's house spring, no overshoot.
           const rise = spring({
             frame: local,
             fps,
@@ -91,8 +91,6 @@ export const WordRotate: React.FC<WordRotateProps> = ({
             extrapolateRight: 'clamp',
           });
 
-          // Opacity: 0 → 1 over transitionDuration, hold at 1 for holdDuration,
-          // 1 → 0 over the next transitionDuration. HOUSE_EASE per CLAUDE.md §3.
           const opacity = interpolate(
             local,
             [0, transitionDuration, transitionDuration + holdDuration, slot + transitionDuration],
@@ -108,9 +106,8 @@ export const WordRotate: React.FC<WordRotateProps> = ({
             <div
               key={i}
               style={{
-                position: i === 0 ? 'relative' : 'absolute',
-                top: 0,
-                left: 0,
+                gridArea: 'phrase',
+                justifySelf,
                 opacity,
                 transform: `translateY(${translateY}px)`,
                 color,

@@ -32,6 +32,7 @@ export function Nav() {
   // never drift.
   const links = [
     { href: '/components', label: 'Components' },
+    { href: '/showcase', label: 'Showcase' },
     { href: '/docs', label: 'Docs' },
     { href: '/compare', label: 'Compare' },
   ];

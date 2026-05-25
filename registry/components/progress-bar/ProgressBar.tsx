@@ -86,6 +86,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         // gotcha as BarChart — see CLAUDE.md component contract.
         width: '80%',
         maxWidth: 800,
+        // Self-center inside any wider parent. Flex-centering parents
+        // are unaffected; non-flex parents (e.g. a fixed-width wrapper)
+        // would otherwise leave the bar flush-left.
+        marginInline: 'auto',
       }}
     >
       <div

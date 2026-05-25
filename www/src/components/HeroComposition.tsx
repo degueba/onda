@@ -4,11 +4,10 @@ import React from 'react';
 import {
   AbsoluteFill,
   Easing,
-  Series,
-  interpolate,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
+import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import {
   BlurReveal,
   blurRevealSchema,
@@ -69,43 +68,61 @@ import {
   Vignette,
   vignetteSchema,
 } from '@onda/registry/components/vignette/Vignette';
+import { crossFade } from '@onda/registry/transitions/cross-fade/crossFade';
+import { morph } from '@onda/registry/transitions/morph/morph';
+import { depthPush } from '@onda/registry/transitions/depth-push/depthPush';
+import { blur } from '@onda/registry/transitions/blur/blur';
+import { zoom } from '@onda/registry/transitions/zoom/zoom';
+import type { TransitionPresentation } from '@remotion/transitions';
+
+// Each transition factory returns a TransitionPresentation parameterized
+// by a different concrete props shape, so we widen to `any` to store a
+// heterogeneous mix in `BEATS`. Each entry is otherwise typed by its own
+// factory call site.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyTransition = TransitionPresentation<any>;
 
 // Landing hero — data-driven catalog reel.
 //
-// The honest demo for Onda IS the components. This file cycles through a
-// curated subset of the catalog, one component per beat, hard-cuts on the
-// beat boundary, small caption with the component name + slug at the
-// bottom edge. ~30 seconds, loops cleanly.
-//
-// The reel is intentionally NOT a hand-crafted narrative film. Each beat
-// renders one catalog component using its own internal layout and the
-// canvas-aware `size` roles from lib/canvas — so nothing overlaps when the
-// Player container shrinks below the 1920×1080 design canvas.
+// The honest demo for Onda IS the components + transitions. This file
+// cycles through a curated subset of the catalog, one component per beat,
+// with a varied (but restrained) palette of catalog transitions between
+// beats. Small caption with the component name + slug at the bottom edge.
+// ~30 seconds, loops cleanly.
 //
 // Adding a component to the reel is a 1-entry append to `BEATS` below.
-// No hand-choreographed transitions, no per-beat absolute positioning.
-//
-// `<Schema>.parse({...})` applies the schema's defaults so we only have to
-// list the props the beat actually customizes — matches the convention the
-// old narrative hero used and keeps each beat's props block readable.
+// Each beat also names the transition that *follows* it — the trailing
+// beat's `transition` is ignored (there is no next sibling).
 
-const TRANSITION = 8; // frames of crossfade between beats — quick but soft
 const DEFAULT_HOLD = 75; // frames per beat — 2.5s feels right at this density
+
+// House timing — same easing every Onda primitive uses, matches
+// `DURATION.base` from lib/motion.ts. Pinned here so every transition in
+// the reel inherits the same rhythm.
+const houseTiming = linearTiming({
+  durationInFrames: 18,
+  easing: Easing.bezier(0.16, 1, 0.3, 1),
+});
 
 type Beat = {
   slug: string;
   label: string;
   hold?: number; // frames; defaults to DEFAULT_HOLD
   render: () => React.ReactNode;
+  // Transition that plays AFTER this beat, into the next one. The last
+  // beat's transition is ignored. Default is `crossFade()` — the catalog's
+  // calm workhorse. Premium beats opt into morph / depthPush / blur / zoom.
+  transition?: AnyTransition;
 };
 
-// Curated subset — represents typography, scene blocks, data, and
+// Curated subset — represents typography, scene blocks, data, and a
 // cinematic close. Each beat uses size roles so it scales with the canvas
 // instead of hardcoded pixels.
 const BEATS: Beat[] = [
   {
     slug: 'blur-reveal',
     label: 'BlurReveal',
+    transition: morph(),
     render: () => (
       <BlurReveal
         {...blurRevealSchema.parse({
@@ -121,6 +138,7 @@ const BEATS: Beat[] = [
     slug: 'title-card',
     label: 'TitleCard',
     hold: 90,
+    transition: crossFade(),
     render: () => (
       <TitleCard
         {...titleCardSchema.parse({
@@ -136,6 +154,7 @@ const BEATS: Beat[] = [
   {
     slug: 'word-stagger',
     label: 'WordStagger',
+    transition: morph(),
     render: () => (
       <WordStagger
         {...wordStaggerSchema.parse({
@@ -151,6 +170,7 @@ const BEATS: Beat[] = [
   {
     slug: 'count-up',
     label: 'CountUp',
+    transition: depthPush({ direction: 'left' }),
     render: () => (
       <CountUp
         {...countUpSchema.parse({
@@ -166,6 +186,7 @@ const BEATS: Beat[] = [
   {
     slug: 'highlight',
     label: 'Highlight',
+    transition: crossFade(),
     render: () => (
       <Highlight
         {...highlightSchema.parse({
@@ -180,6 +201,8 @@ const BEATS: Beat[] = [
     slug: 'stat-card',
     label: 'StatCard',
     hold: 90,
+    // The one "punch" moment in the reel. Used once, never more.
+    transition: zoom({ direction: 'in', scaleAmount: 0.15 }),
     render: () => (
       <StatCard
         {...statCardSchema.parse({
@@ -195,19 +218,21 @@ const BEATS: Beat[] = [
     slug: 'bar-chart',
     label: 'BarChart',
     hold: 90,
+    transition: crossFade(),
     render: () => <BarChart {...barChartSchema.parse({ placement: 'center' })} />,
   },
   {
     slug: 'audio-visualizer',
     label: 'AudioVisualizer',
     hold: 90,
+    transition: blur({ blurAmount: 18 }),
     render: () => (
       <AudioVisualizer
         {...audioVisualizerSchema.parse({
-          // Self-hosted WAV — see scripts/generate-sample-audio.mjs.
-          // Schema default is a public remote URL meant for end users
-          // with their own assets; that fails CORS in the browser.
-          src: '/sample-audio.wav',
+          // Self-hosted music bed — the schema default is a public remote
+          // URL meant for end users with their own assets; that fails CORS
+          // in the browser.
+          src: '/music.mp3',
           variant: 'bars',
           numberOfSamples: 64,
           placement: 'center',
@@ -220,6 +245,7 @@ const BEATS: Beat[] = [
   {
     slug: 'underline',
     label: 'Underline',
+    transition: morph(),
     render: () => (
       <Underline
         {...underlineSchema.parse({
@@ -234,6 +260,7 @@ const BEATS: Beat[] = [
     slug: 'word-rotate',
     label: 'WordRotate',
     hold: 105, // longer — rotation needs time to read
+    transition: depthPush({ direction: 'right' }),
     render: () => (
       <WordRotate
         {...wordRotateSchema.parse({
@@ -249,6 +276,7 @@ const BEATS: Beat[] = [
   {
     slug: 'typewriter',
     label: 'Typewriter',
+    transition: morph(),
     render: () => (
       <Typewriter
         {...typewriterSchema.parse({
@@ -265,6 +293,7 @@ const BEATS: Beat[] = [
     slug: 'end-card',
     label: 'EndCard',
     hold: 90,
+    // No `transition` — trailing beat.
     render: () => (
       <EndCard
         {...endCardSchema.parse({
@@ -277,51 +306,30 @@ const BEATS: Beat[] = [
   },
 ];
 
-// Total duration — sum of each beat's hold. The Player reads this constant.
-export const HERO_DURATION_FRAMES = BEATS.reduce(
-  (sum, b) => sum + (b.hold ?? DEFAULT_HOLD),
-  0,
-);
+const TRANSITION_FRAMES = 18; // houseTiming.durationInFrames — kept in sync
 
-// ---------- per-beat transition wrapper ----------
-
-// Soft fade-in / fade-out at the beat boundaries. Easing matches the rest
-// of Onda — `Easing.bezier(0.16, 1, 0.3, 1)` (HOUSE_EASE shape).
-function BeatTransition({
-  children,
-  durationInFrames,
-}: {
-  children: React.ReactNode;
-  durationInFrames: number;
-}) {
-  const frame = useCurrentFrame();
-  const easing = Easing.bezier(0.16, 1, 0.3, 1);
-  const keyframes = [
-    0,
-    TRANSITION,
-    durationInFrames - TRANSITION,
-    durationInFrames,
-  ];
-  const opacity = interpolate(frame, keyframes, [0, 1, 1, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing,
-  });
-  return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
-}
+// Total duration — sum of each beat's hold MINUS the overlap consumed by
+// each between-beat transition (TransitionSeries plays sequences with the
+// transition overlapping the boundary, so total < sum-of-holds). The
+// Player reads this constant.
+export const HERO_DURATION_FRAMES =
+  BEATS.reduce((sum, b) => sum + (b.hold ?? DEFAULT_HOLD), 0) -
+  TRANSITION_FRAMES * (BEATS.length - 1);
 
 // ---------- caption + CTA overlay ----------
 
 // Identifies the active beat from the current composition frame so the
-// caption can label what the viewer is looking at. Same lookup the Series
-// uses internally — replicated here so the overlay stays in sync without
-// passing state through the tree.
+// caption can label what the viewer is looking at. Mirrors how
+// TransitionSeries overlaps the transition duration across the boundary —
+// each beat's effective on-screen window is (hold - transitionFrames) past
+// the cursor, except the last which holds the full duration.
 function activeBeatIndex(frame: number): number {
   let cursor = 0;
   for (let i = 0; i < BEATS.length; i++) {
     const hold = BEATS[i].hold ?? DEFAULT_HOLD;
-    if (frame < cursor + hold) return i;
-    cursor += hold;
+    const effective = i === BEATS.length - 1 ? hold : hold - TRANSITION_FRAMES;
+    if (frame < cursor + effective) return i;
+    cursor += effective;
   }
   return BEATS.length - 1;
 }
@@ -369,7 +377,7 @@ function Chrome() {
           textTransform: 'uppercase',
         }}
       >
-        all 42 components →
+        42 components · 12 transitions →
       </div>
     </AbsoluteFill>
   );
@@ -390,19 +398,32 @@ export const HeroComposition: React.FC = () => {
         })}
       />
 
-      {/* The reel — Series owns the beat-by-beat sequencing. */}
-      <Series>
-        {BEATS.map((beat) => {
+      {/* The reel — TransitionSeries owns the beat-by-beat sequencing,
+          with one catalog transition between each pair of beats. */}
+      <TransitionSeries>
+        {BEATS.flatMap((beat, i) => {
           const hold = beat.hold ?? DEFAULT_HOLD;
-          return (
-            <Series.Sequence key={beat.slug} durationInFrames={hold}>
-              <BeatTransition durationInFrames={hold}>
-                {beat.render()}
-              </BeatTransition>
-            </Series.Sequence>
-          );
+          const nodes: React.ReactNode[] = [
+            <TransitionSeries.Sequence
+              key={`${beat.slug}-seq`}
+              durationInFrames={hold}
+            >
+              {beat.render()}
+            </TransitionSeries.Sequence>,
+          ];
+          // Insert the named transition AFTER every beat except the last.
+          if (i < BEATS.length - 1) {
+            nodes.push(
+              <TransitionSeries.Transition
+                key={`${beat.slug}-trans`}
+                presentation={beat.transition ?? crossFade()}
+                timing={houseTiming}
+              />,
+            );
+          }
+          return nodes;
         })}
-      </Series>
+      </TransitionSeries>
 
       {/* Caption + CTA — always on top, never overlaps the beat content
           because beats use placement='center' and chrome lives at the
