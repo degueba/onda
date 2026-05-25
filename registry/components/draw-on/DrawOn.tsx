@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig, spring } from 'remotion';
 import { evolvePath } from '@remotion/paths';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link DrawOn} props. */
 export const drawOnSchema = z.object({
@@ -22,6 +23,8 @@ export const drawOnSchema = z.object({
   width: z.number().default(800),
   /** Rendered height of the SVG in pixels. */
   height: z.number().default(400),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link DrawOn}. */
@@ -35,7 +38,7 @@ export type DrawOnProps = z.infer<typeof drawOnSchema>;
  * <DrawOn d="M 10 50 Q 100 10 190 50" duration={24} />
  */
 export const DrawOn: React.FC<DrawOnProps> = ({
-  d, delay, duration, stroke, strokeWidth, viewBox, width, height,
+  d, delay, duration, stroke, strokeWidth, viewBox, width, height, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -55,17 +58,19 @@ export const DrawOn: React.FC<DrawOnProps> = ({
   const { strokeDasharray, strokeDashoffset } = evolvePath(progress, d);
 
   return (
-    <svg viewBox={viewBox} width={width} height={height} style={{ overflow: 'visible' }}>
-      <path
-        d={d}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        strokeDasharray={strokeDasharray}
-        strokeDashoffset={strokeDashoffset}
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <PlacementBox placement={placement}>
+      <svg viewBox={viewBox} width={width} height={height} style={{ overflow: 'visible' }}>
+        <path
+          d={d}
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={strokeDashoffset}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </PlacementBox>
   );
 };

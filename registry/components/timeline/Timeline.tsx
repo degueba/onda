@@ -4,6 +4,7 @@ import { evolvePath } from '@remotion/paths';
 import { z } from 'zod';
 import { DURATION, STAGGER, SPRING_SMOOTH, staggerFrames } from '../../../lib/motion';
 import { entryScale, entryFade } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link Timeline} props. */
 export const timelineSchema = z.object({
@@ -40,6 +41,8 @@ export const timelineSchema = z.object({
   fontSize: z.number().default(22),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link Timeline}. */
@@ -74,6 +77,7 @@ export const Timeline: React.FC<TimelineProps> = ({
   labelColor,
   fontSize,
   fontFamily,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -100,6 +104,7 @@ export const Timeline: React.FC<TimelineProps> = ({
   const lastIndex = points.length - 1;
 
   return (
+    <PlacementBox placement={placement}>
     <div
       style={{
         // Without an explicit width the flex column shrinks to its content
@@ -208,5 +213,6 @@ export const Timeline: React.FC<TimelineProps> = ({
         })}
       </div>
     </div>
+    </PlacementBox>
   );
 };

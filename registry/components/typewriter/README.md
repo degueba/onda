@@ -19,6 +19,7 @@ A character-by-character text reveal with an optional blinking cursor in the Ond
 | `letterSpacing` | `string` | `"normal"` | CSS letter-spacing. |
 | `lineHeight` | `number` | `1.4` | Unitless line height — looser for body / technical copy. |
 | `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

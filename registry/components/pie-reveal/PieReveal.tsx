@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
 import { z } from 'zod';
 import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link PieReveal} props. */
 export const pieRevealSchema = z.object({
@@ -27,6 +28,8 @@ export const pieRevealSchema = z.object({
   fontSize: z.number().default(56),
   /** Center label font family. The Onda display font by default. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link PieReveal}. */
@@ -54,6 +57,7 @@ export const PieReveal: React.FC<PieRevealProps> = ({
   color,
   fontSize,
   fontFamily,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -84,6 +88,7 @@ export const PieReveal: React.FC<PieRevealProps> = ({
   const center = size / 2;
 
   return (
+    <PlacementBox placement={placement}>
     <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ position: 'relative', width: size, height: size }}>
         <svg
@@ -133,6 +138,7 @@ export const PieReveal: React.FC<PieRevealProps> = ({
         )}
       </div>
     </AbsoluteFill>
+    </PlacementBox>
   );
 };
 

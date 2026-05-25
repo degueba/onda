@@ -11,6 +11,7 @@ Slow horizontal or vertical drift over an image. A lighter, no-zoom complement t
 | `duration` | `integer ≥ 1` | `180` | Frames the drift takes (6s @ 30fps). Parallax wants time; shortening reads as a swipe. |
 | `direction` | `'left' \| 'right' \| 'up' \| 'down'` | `'left'` | The edge the image drifts *toward* as time advances. |
 | `distance` | `number` | `40` | Total drift in pixels across `duration`. Keep restrained — large values stop reading as parallax. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

@@ -19,6 +19,7 @@ A silent, restrained branded reveal. An SVG logo stroke draws itself in, a title
 | `titleFontSize` | `number` | `96` | Title size in px. |
 | `color` | `string` | `"#F2F2F4"` | Title color — defaults to `--onda-text`. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

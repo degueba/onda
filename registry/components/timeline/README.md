@@ -19,6 +19,7 @@ A horizontal timeline data primitive. A thin line strokes itself on, then a dot 
 | `labelColor` | `string` | `"#8E8E98"` | Defaults to `--onda-dim`. |
 | `fontSize` | `number` | `22` | Label size in px. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

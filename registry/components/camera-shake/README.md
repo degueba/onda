@@ -12,6 +12,7 @@ A wrapper primitive that applies a subtle, decaying camera shake to its `childre
 | `intensity` | `number` | `4` | Max pixel offset on each axis. Keep ≤ 8 for Onda restraint; anything above 12 reads as a violent shake (off-brand). |
 | `seed` | `integer` | `0` | Seed for the deterministic PRNG. Bump it to get a different shake pattern with the same other props. |
 | `decay` | `boolean` | `true` | If true, intensity falls linearly from full → 0 across `duration`, so the shake settles. If false, it stays at full intensity for the whole window. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

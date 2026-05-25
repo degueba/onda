@@ -41,7 +41,28 @@ import { SlideOut, slideOutSchema } from '@onda/registry/components/slide-out/Sl
 import { Parallax, parallaxSchema } from '@onda/registry/components/parallax/Parallax';
 import { Vignette, vignetteSchema } from '@onda/registry/components/vignette/Vignette';
 import { ChapterCard, chapterCardSchema } from '@onda/registry/components/chapter-card/ChapterCard';
+import { ImageReveal, imageRevealSchema } from '@onda/registry/components/image-reveal/ImageReveal';
+import { VideoClip, videoClipSchema } from '@onda/registry/components/video-clip/VideoClip';
+import { AudioClip, audioClipSchema } from '@onda/registry/components/audio-clip/AudioClip';
+import { AudioVisualizer, audioVisualizerSchema, audioVisualizerPresets, type AudioVisualizerProps } from '@onda/registry/components/audio-visualizer/AudioVisualizer';
 import { ComponentPreview } from './ComponentPreview';
+
+// Composite preview for `audio-visualizer` — by design the component
+// itself does NOT play audio (see techspec 011), so a bare preview shows
+// bars dancing to silence and reads as broken. We pair it with a parallel
+// AudioClip pointing at the same `src` so the user hears + sees the same
+// stream. The TryIt sliders still bind to the visualizer's schema, so
+// every interactive control affects the visualization; the AudioClip just
+// rides along on whatever src the visualizer is using.
+function AudioVisualizerWithPlayback(props: AudioVisualizerProps) {
+  const clipProps = audioClipSchema.parse({ src: props.src, volume: 0.6 });
+  return (
+    <>
+      <AudioClip {...clipProps} />
+      <AudioVisualizer {...props} />
+    </>
+  );
+}
 import { TryItPopover } from './TryItPopover';
 
 // Slug → live React component + Zod schema. Lives in a client-only module so
@@ -49,9 +70,27 @@ import { TryItPopover } from './TryItPopover';
 //
 // One entry per registered component. When the catalog grows past ~5, a
 // codegen script (own techspec) can replace this hand-maintained map.
+//
+// `defaultPropsOverride` lets a per-slug entry override what the component's
+// schema would default to. Used mostly by audio components, where the
+// schema default points at a public sample URL that fails CORS in the
+// browser — we serve a self-hosted /sample-audio.wav instead so the
+// preview "just works" without network round-trips or licensing concerns.
+//
+// `presets` is a curated set of named visual personalities exported by the
+// component itself. When present, the TryIt popover renders them as a
+// chip row above the slider controls — one click swaps to a "known good"
+// configuration so users see what's possible without manually wiring every
+// prop. Other components can opt in by exporting their own preset map and
+// adding it here.
 const REGISTRY: Record<
   string,
-  { component: ComponentType<never>; schema: ZodTypeAny }
+  {
+    component: ComponentType<never>;
+    schema: ZodTypeAny;
+    defaultPropsOverride?: Record<string, unknown>;
+    presets?: Record<string, Record<string, unknown>>;
+  }
 > = {
   'blur-reveal': {
     component: BlurReveal as unknown as ComponentType<never>,
@@ -205,6 +244,30 @@ const REGISTRY: Record<
     component: ChapterCard as unknown as ComponentType<never>,
     schema: chapterCardSchema,
   },
+  'image-reveal': {
+    component: ImageReveal as unknown as ComponentType<never>,
+    schema: imageRevealSchema,
+  },
+  'video-clip': {
+    component: VideoClip as unknown as ComponentType<never>,
+    schema: videoClipSchema,
+  },
+  'audio-clip': {
+    component: AudioClip as unknown as ComponentType<never>,
+    schema: audioClipSchema,
+    // Self-hosted sample; the schema's default src is a remote URL meant
+    // for end users with their own assets — that fails CORS in-browser.
+    defaultPropsOverride: { src: '/sample-audio.wav' },
+  },
+  'audio-visualizer': {
+    // Composite — visualizer + parallel AudioClip so the preview is
+    // audible. Schema is still the visualizer's so TryIt controls only
+    // the visualization knobs.
+    component: AudioVisualizerWithPlayback as unknown as ComponentType<never>,
+    schema: audioVisualizerSchema,
+    defaultPropsOverride: { src: '/sample-audio.wav' },
+    presets: audioVisualizerPresets as unknown as Record<string, Record<string, unknown>>,
+  },
 };
 
 type LivePreviewProps = {
@@ -223,13 +286,14 @@ export function LivePreview({
 }: LivePreviewProps) {
   const entry = REGISTRY[slug];
 
-  // Schema-derived defaults + any per-mount overrides. Memoized so the values
+  // Schema-derived defaults + per-slug registry override + per-mount
+  // override. Layered so the most specific source wins. Memoized so the
   // useState initializer sees a stable reference and the controls' Reset
-  // button can return to a known good state.
+  // button returns to a known good state.
   const defaults = useMemo(() => {
     if (!entry) return {} as Record<string, unknown>;
     const base = entry.schema.parse({}) as Record<string, unknown>;
-    return { ...base, ...propsOverride };
+    return { ...base, ...(entry.defaultPropsOverride ?? {}), ...propsOverride };
   }, [entry, propsOverride]);
 
   const [values, setValues] = useState<Record<string, unknown>>(defaults);
@@ -251,6 +315,7 @@ export function LivePreview({
           schema={entry.schema}
           values={values}
           defaults={defaults}
+          presets={entry.presets}
           onChange={setValues}
         />
       )}

@@ -16,6 +16,7 @@ The inverse of `FadeIn`: a pure opacity exit. Opacity goes from 1 to 0 starting 
 | `letterSpacing` | `string` | `"normal"` | CSS letter-spacing (e.g. `"-0.02em"`, `"0.06em"`). |
 | `lineHeight` | `number` | `1.1` | Unitless line height. |
 | `align` | `"left" \| "center" \| "right"` | `"left"` | Text alignment. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

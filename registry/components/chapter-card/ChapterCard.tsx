@@ -27,10 +27,22 @@ export const chapterCardSchema = z.object({
   numberFontSize: z.number().default(32),
   /** Semantic role for the number — resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. */
   numberSize: sizeRoleSchema.optional(),
+  /** Font weight for the number. */
+  numberFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the number (e.g. `'0.16em'`). */
+  numberLetterSpacing: z.string().optional(),
+  /** Unitless line height for the number. */
+  numberLineHeight: z.number().optional(),
   /** Chapter title font size in px — the focal element on the card. Wins over `titleSize` if both are passed. */
   titleFontSize: z.number().default(96),
   /** Semantic role for the title — resolves to canvas-aware pixels. `titleFontSize` wins when both are passed. */
   titleSize: sizeRoleSchema.optional(),
+  /** Font weight for the title. */
+  titleFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the title (e.g. `'-0.02em'`). */
+  titleLetterSpacing: z.string().optional(),
+  /** Unitless line height for the title. */
+  titleLineHeight: z.number().optional(),
   /** Onda display font. Applied to both number and title for tonal consistency. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
@@ -69,8 +81,14 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
   subtitleColor,
   numberFontSize,
   numberSize,
+  numberFontWeight,
+  numberLetterSpacing,
+  numberLineHeight,
   titleFontSize,
   titleSize,
+  titleFontWeight,
+  titleLetterSpacing,
+  titleLineHeight,
   fontFamily,
   placement,
 }) => {
@@ -97,6 +115,9 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
           color={accent ? numberColor : subtitleColor}
           fontSize={resolvedNumberFontSize}
           fontFamily={fontFamily}
+          fontWeight={numberFontWeight}
+          letterSpacing={numberLetterSpacing}
+          lineHeight={numberLineHeight}
         />
 
         {/* Chapter title — the focal element. BlurReveal's spring-driven rise +
@@ -108,6 +129,9 @@ export const ChapterCard: React.FC<ChapterCardProps> = ({
           color={color}
           fontSize={resolvedTitleFontSize}
           fontFamily={fontFamily}
+          fontWeight={titleFontWeight}
+          letterSpacing={titleLetterSpacing}
+          lineHeight={titleLineHeight}
         />
 
         {/* Accent underline — only when accent is on, so the rose stays earned

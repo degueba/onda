@@ -9,9 +9,11 @@ A small state icon — `check`, `cross`, `dot`, or `star` — that pops into pla
 | `icon` | `'check' \| 'cross' \| 'dot' \| 'star'` | `'check'` | Which glyph to render. `check`/`cross` are stroked; `dot`/`star` are filled. |
 | `delay` | `integer ≥ 0` | `0` | Frames before the animation starts. |
 | `duration` | `integer ≥ 1` | `DURATION.base` (18) | Target frames to settle. With `SPRING_SMOOTH` the visible motion settles in roughly this range. |
-| `size` | `number` | `96` | Width and height in pixels (square). |
+| `iconSize` | `number` | `96` | Width and height in pixels (square). Wins over `size` if both are passed. |
+| `size` | `SizeRole?` | – | Semantic size role (`'hero' \| 'heading' \| 'subheading' \| 'body' \| 'caption'`) — resolves to canvas-aware pixels via the smaller canvas dimension. Same vocabulary the typography primitives use. |
 | `color` | `string` | `"#D96B82"` | Icon color — defaults to `--onda-accent`. |
 | `strokeWidth` | `number` | `3` | Stroke width for outline icons. Ignored by `dot` and `star`. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 
@@ -32,7 +34,7 @@ export const Root: React.FC = () => (
       icon: 'check',
       delay: 0,
       duration: 18,
-      size: 96,
+      iconSize: 96,
       color: '#D96B82',
       strokeWidth: 3,
     }}

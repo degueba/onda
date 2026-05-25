@@ -5,6 +5,7 @@ import { DrawOn } from '../draw-on/DrawOn';
 import { ScaleIn } from '../scale-in/ScaleIn';
 import { Underline } from '../underline/Underline';
 import { DURATION } from '../../../lib/motion';
+import { PlacementBox } from '../../../lib/canvas';
 import { logoStingSchema } from './schema';
 
 export { logoStingSchema };
@@ -38,6 +39,7 @@ export const LogoSting: React.FC<LogoStingProps> = ({
   titleFontSize,
   color,
   fontFamily,
+  placement,
 }) => {
   // Choreography offsets — frames *after* the block's own delay.
   // The stroke (DrawOn) defaults to DURATION.slow (24 frames). The title begins
@@ -47,16 +49,10 @@ export const LogoSting: React.FC<LogoStingProps> = ({
   const TITLE_OFFSET = 18;     // title starts as the stroke is almost home
   const UNDERLINE_OFFSET = 34; // underline waits for the title to land
 
-  return (
-    <AbsoluteFill
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: 32,
-        fontFamily,
-      }}
-    >
+  const fillCanvas = placement === undefined;
+
+  const stack = (
+    <>
       {/* 1. Logo stroke — the mark arrives. */}
       <DrawOn
         d={d}
@@ -99,7 +95,40 @@ export const LogoSting: React.FC<LogoStingProps> = ({
           lineDuration={10}
         />
       ) : null}
-    </AbsoluteFill>
+    </>
+  );
+
+  if (fillCanvas) {
+    return (
+      <AbsoluteFill
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: 32,
+          fontFamily,
+        }}
+      >
+        {stack}
+      </AbsoluteFill>
+    );
+  }
+
+  return (
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: 32,
+          fontFamily,
+        }}
+      >
+        {stack}
+      </div>
+    </PlacementBox>
   );
 };
 

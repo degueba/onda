@@ -14,6 +14,7 @@ A calm, spring-driven SVG stroke reveal. A path draws itself in from its start p
 | `viewBox` | `string` | `"0 0 200 100"` | SVG viewBox — must match the coordinate space of `d`. |
 | `width` | `number` | `800` | Rendered width in CSS pixels. |
 | `height` | `number` | `400` | Rendered height in CSS pixels. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

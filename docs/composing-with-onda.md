@@ -50,7 +50,9 @@ Every Onda component is a pure function of `useCurrentFrame()` and `useVideoConf
 
 ## Placement
 
-Where on the canvas a component sits. Accepted on 10 components today (see the index). One vocabulary, two shapes:
+Where on the canvas a component sits. **Every renderable component accepts `placement`** — text primitives, motion wrappers, scene blocks, data primitives, media, cinematic. The only exemptions are pure layer effects (`Vignette`, `GrainOverlay`, `GradientShift`) which describe an effect over the whole frame, and `Callout` / `Spotlight` which use their own `x` / `y` vocabulary (preserved for now).
+
+One vocabulary, two shapes:
 
 ```ts
 type Placement =
@@ -135,75 +137,75 @@ Examples:
 
 ## Component index
 
-Per component: one-line purpose, whether it accepts `placement` and `size` (or per-element size props), and the key props an agent needs to emit a valid payload. Full schemas live in each component's README.
+Per component: one-line purpose, the `size` (or per-element size) story, and the key props an agent needs to emit a valid payload. **Every renderable component accepts `placement`** (see §Placement above); only `size` is called out per-row. Full schemas live in each component's README.
 
 ### Typography primitives
 
 #### `BlurReveal`
 Canonical text reveal — opacity + blur + 16px rise on `SPRING_SMOOTH`, no overshoot.
-- `placement`: yes · `size`: yes
+- `size`: yes
 - Key props: `text` (string), `delay` (frames), `duration` (frames), `color`, `fontSize` | `size`, `fontFamily`.
 
 #### `CountUp`
 Animated number from `from` to `to` with locale grouping and tabular-nums.
-- `placement`: yes · `size`: yes
+- `size`: yes
 - Key props: `from`, `to`, `prefix`, `suffix`, `decimals`, `delay`, `duration`, `color`, `fontSize` | `size`.
 
 #### `WordStagger`
 Multi-word phrase where each word fades and rises in sequence (4-frame canonical stagger).
-- `placement`: yes · `size`: yes
+- `size`: yes
 - Key props: `text` (string), `delay`, `duration`, `stagger` (frames), `justify` (`'flex-start' | 'center' | 'flex-end'`), `color`, `fontSize` | `size`.
 
 #### `Highlight`
 Marker-style text: text fades in, then an accent-rose bar sweeps in behind it. Reserved for emphasis.
-- `placement`: yes · `size`: yes
+- `size`: yes
 - Key props: `text`, `delay`, `duration`, `lineDelay`, `lineDuration`, `color`, `accentColor`, `fontSize` | `size`, `paddingX`.
 
 #### `WordRotate`
 Cycles through phrases in place — each rises in, holds, fades out as the next arrives.
-- `placement`: no · `size`: yes
+- `size`: yes
 - Key props: `phrases` (string[]), `delay`, `holdDuration` (frames), `transitionDuration` (frames), `color`, `fontSize` | `size`.
 
 #### `Typewriter`
 Character-by-character text reveal with optional blinking cursor. **Linear** by design (typing needs constant rate).
-- `placement`: no · `size`: yes
+- `size`: yes
 - Key props: `text`, `delay`, `duration`, `cursor` (boolean), `cursorColor`, `color`, `fontSize` | `size`. Defaults to Space Grotesk (body font) — reads more "terminal" than Clash.
 
 #### `Underline`
 Text fades in, then an accent-rose underline draws beneath. Two-phase emphasis primitive.
-- `placement`: no · `size`: yes
+- `size`: yes
 - Key props: `text`, `delay`, `duration`, `lineDelay`, `lineDuration`, `color`, `accentColor`, `lineThickness`, `lineOffset`, `fontSize` | `size`.
 
 ### Scene blocks (compose multiple primitives)
 
 #### `TitleCard`
 Hero title-card: large headline rises with blur-reveal, subtitle cascades word-by-word, optional accent underline.
-- `placement`: yes · `size`: per-element (`titleSize`, `subtitleSize`)
+- `size`: per-element (`titleSize`, `subtitleSize`)
 - Key props: `title`, `subtitle`, `delay`, `accent` (boolean), `titleFontSize` | `titleSize`, `subtitleFontSize` | `subtitleSize`, `color`, `subtitleColor`, `accentColor`.
 
 #### `StatCard`
 Big counted-up number above a word-staggered label above an accent rule. The "Onda data look."
-- `placement`: yes · `size`: per-element (`numberSize`, `labelSize`)
+- `size`: per-element (`numberSize`, `labelSize`)
 - Key props: `value` (number), `label`, `prefix`, `suffix`, `delay`, `accent`, `numberFontSize` | `numberSize`, `labelFontSize` | `labelSize`, `color`, `labelColor`, `accentColor`.
 
 #### `QuoteCard`
 Centered pull-quote with attribution and an accent divider. Quote staggers in slowly (reads, not cascades), then divider, then author + role.
-- `placement`: yes · `size`: per-element (`quoteSize`, `authorSize`)
+- `size`: per-element (`quoteSize`, `authorSize`)
 - Key props: `quote`, `author`, `role`, `delay`, `accent`, `quoteFontSize` | `quoteSize`, `authorFontSize` | `authorSize`, `color`, `authorColor`, `accentColor`.
 
 #### `ChapterCard`
 Numbered eyebrow ("01") above a chapter title with optional accent underline. Documentary / explainer chapter break.
-- `placement`: yes · `size`: per-element (`numberSize`, `titleSize`)
+- `size`: per-element (`numberSize`, `titleSize`)
 - Key props: `chapter`, `number` (string), `delay`, `accent`, `numberFontSize` | `numberSize`, `titleFontSize` | `titleSize`, `color`, `numberColor`, `subtitleColor`.
 
 #### `EndCard`
 Closing scene: hero CTA with optional accent underline, then a staggered row of social handles or URLs.
-- `placement`: yes · `size`: per-element (`ctaSize`, `handlesSize`)
+- `size`: per-element (`ctaSize`, `handlesSize`)
 - Key props: `cta`, `handles` (string[]), `delay`, `accent`, `ctaFontSize` | `ctaSize`, `handlesFontSize` | `handlesSize`, `color`, `handlesColor`, `accentColor`.
 
 #### `LowerThird`
 Broadcast-style name + role bar that slides in from a corner with an accent underline. Slide direction and inner alignment derive from `placement`.
-- `placement`: yes · `size`: per-element (`nameSize`, `roleSize`)
+- `size`: per-element (`nameSize`, `roleSize`)
 - Key props: `name`, `role`, `delay`, `accent`, `placement` (default `'bottom-left'`), `fontSize` | `nameSize`, `roleFontSize` | `roleSize`, `color`, `roleColor`, `accentColor`.
 
 ### Media (consume external `src` URLs)
@@ -230,13 +232,13 @@ The categories are complementary, not redundant: `ImageReveal` owns *entrances*,
 
 #### `ImageReveal`
 An image that enters with one of Onda's signature motion fingerprints — `'blur'` (BlurReveal's fingerprint applied to images), `'fade'` (opacity only), or `'scale'` (subtle 0.95 → 1, no overshoot). All variants drive on `SPRING_SMOOTH`. After the entrance, the image holds static — no continuous motion.
-- `placement`: yes (defaults to canvas-fill — pass `placement` to position as a sub-canvas element) · `size`: n/a (use `width` / `height` for dimensions in px)
+- `size`: n/a (use `width` / `height` for dimensions in px)
 - Key props: `src`, `alt`, `delay`, `duration`, `motion` (`'blur' | 'fade' | 'scale'`), `fit` (`'cover' | 'contain'`), `placement`, `width`, `height`, `borderRadius`.
 - **Default `motion: 'blur'`** carries the strongest Onda fingerprint. Use `'fade'` for quieter background reveals; use `'scale'` when the image is a focal element entering on a stage.
 
 #### `VideoClip`
 A video clip with agent-friendly trim, Onda's entrance/exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` (preferred over `<Video>` for non-realtime renders — better seek accuracy, no audio drift). `startAt` / `endAt` accept the time-string vocabulary (`"0:04"`, `"30s"`, `"500ms"`, raw seconds), resolved internally via `toFrames()` — agents never compute frames.
-- `placement`: yes (defaults to canvas-fill) · `size`: n/a (use `width` / `height` for dimensions in px)
+- `size`: n/a (use `width` / `height` for dimensions in px)
 - Key props: `src`, `delay`, `startAt`, `endAt`, `fade` (boolean), `fadeDuration`, `muted`, `volume`, `loop`, `fit`, `placement`, `width`, `height`, `borderRadius`.
 - **`loop` requires `endAt`** (the loop interval is `endAt - startAt`).
 - **Loop disables fade-out** — there's no defined end to fade against. For a fading-out looping background, wrap in `<TransitionSeries>` or a parent opacity envelope.
@@ -380,20 +382,15 @@ Radial light reveal — a soft circle of light grows from 0 to `radius`, centere
 
 ### Other component categories
 
-Components below don't accept `placement` or `size` for principled reasons. Use them for what they do; let other components handle layout and typography.
+**Motion wrappers** (`FadeIn`, `SlideIn`, `ScaleIn`, `FadeOut`, `SlideOut`, `RotateIn`, `StaggerGroup`, `MaskReveal`, `DrawOn`, `CameraShake`) — apply motion to text or a child element. All accept `placement`.
 
-**Motion wrappers** — apply motion to a child component or text. The child handles its own placement and sizing.
-`FadeIn`, `SlideIn`, `ScaleIn`, `FadeOut`, `SlideOut`, `RotateIn`, `StaggerGroup`, `MaskReveal`, `PieReveal`, `DrawOn`, `CameraShake`.
+**Data primitives** (`BarChart`, `PieReveal`, `ProgressBar`, `Timeline`, `IconPop`) — render visualized data. All accept `placement`. `IconPop` uses a pixel `size` prop (square SVG dimension); the semantic `SizeRole` doesn't apply directly.
 
-**Full-canvas effects** — render across the entire canvas; "placement" doesn't apply.
-`Vignette`, `GrainOverlay`, `KenBurns`, `Parallax`, `GradientShift`, `Marquee`.
+**Cinematic** (`KenBurns`, `Parallax`, `Marquee`) — sustained motion across a frame. **Default to canvas-fill** when `placement` is omitted; pass `placement` plus `width`/`height` to inset them (e.g. a Ken Burns vignette inside a card).
 
-**Composites with internal layout** — manage their own children's layout. Could grow `placement` if needed; not retrofitted yet.
-`BarChart`, `Timeline`, `ProgressBar`, `Captions`.
+**Pure layer effects** (`Vignette`, `GrainOverlay`, `GradientShift`) — describe an effect over the whole frame. Placement doesn't apply; they always fill the canvas.
 
-**Icons** — `IconPop` has its own pixel `size` prop (square SVG dimension). The semantic `SizeRole` doesn't apply directly; an icon-specific size scale is on the roadmap.
-
-**Brand/identity** — `LogoSting` is the Onda mark animation; no positioning customization.
+**Brand/identity** — `LogoSting` is the Onda mark animation; accepts `placement` like every other renderable component.
 
 ---
 

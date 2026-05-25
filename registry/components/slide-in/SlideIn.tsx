@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { entrySlide } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link SlideIn} props. */
 export const slideInSchema = z.object({
@@ -30,6 +31,8 @@ export const slideInSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link SlideIn}. */
@@ -44,7 +47,7 @@ export type SlideInProps = z.infer<typeof slideInSchema>;
  */
 export const SlideIn: React.FC<SlideInProps> = ({
   text, delay, duration, direction, distance, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -59,13 +62,15 @@ export const SlideIn: React.FC<SlideInProps> = ({
   });
 
   return (
-    <div style={{
-      opacity,
-      transform,
-      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
-      textAlign: align,
-    }}>
-      {text}
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        opacity,
+        transform,
+        color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
+      }}>
+        {text}
+      </div>
+    </PlacementBox>
   );
 };

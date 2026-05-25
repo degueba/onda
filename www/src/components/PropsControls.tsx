@@ -3,11 +3,15 @@
 import { ArrowCounterClockwise, Plus, X } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { z, type ZodTypeAny } from 'zod';
+import { PLACEMENT_REGIONS } from '@onda/lib/canvas';
 
 type PropsControlsProps = {
   schema: ZodTypeAny;
   values: Record<string, unknown>;
   defaults: Record<string, unknown>;
+  /** Curated named configurations. Rendered as a chip row above the
+   *  sliders — one click applies the preset by merging it into values. */
+  presets?: Record<string, Record<string, unknown>>;
   onChange: (next: Record<string, unknown>) => void;
   /** Skip the outer card styling and enter animation — use when the parent
    * (e.g. a popover) already provides a surface. */
@@ -56,6 +60,85 @@ const STRING_OPTIONS: Record<string, { label: string; value: string }[]> = {
   ],
 };
 
+// Split a camelCase prop name into space-separated words so long labels
+// (`numberOfSamples`, `waveStrokeWidth`) wrap naturally at word
+// boundaries inside the narrow label column. Combined with the
+// `uppercase` Tailwind class, the result reads as `NUMBER OF SAMPLES`.
+function formatLabel(name: string): string {
+  return name.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
+
+/**
+ * Derive a slider hint (`{ min, max, step }`) from a Zod number
+ * schema's `_def.checks`. Returns `null` if the schema has no bounds
+ * the user could intuit a range from (e.g. `numberOfSamples` is just
+ * `z.number().int()` — no min/max → user is on their own).
+ *
+ * Heuristics for the unset bound:
+ *   - When only `min` is set: max = `max(min + 10, defaultValue * 4)`.
+ *     E.g. `barWidth: min(1).default(4)` → slider 1..16.
+ *   - When only `max` is set: min = 0.
+ *
+ * Step inference:
+ *   - integer schema → step 1
+ *   - range ≤ 1     → step 0.05 (opacity-like)
+ *   - range ≤ 50    → step 1
+ *   - otherwise     → step 5
+ */
+function deriveSliderHint(
+  field: ZodTypeAny,
+  defaultValue: number | undefined,
+): { min: number; max: number; step: number } | null {
+  const def = (field as unknown as {
+    _def: { checks?: Array<{ kind: string; value?: number }> };
+  })._def;
+  const checks = def.checks ?? [];
+  const minCheck = checks.find((c) => c.kind === 'min');
+  const maxCheck = checks.find((c) => c.kind === 'max');
+  const isInt = checks.some((c) => c.kind === 'int');
+
+  // Need at least one bound to anchor a meaningful slider range.
+  if (minCheck === undefined && maxCheck === undefined) return null;
+
+  const dflt = Number.isFinite(defaultValue ?? NaN) ? (defaultValue as number) : 0;
+  const min = minCheck?.value ?? 0;
+  const max =
+    maxCheck?.value ??
+    Math.max(min + 10, Math.abs(dflt) * 4 || min + 100);
+
+  const range = max - min;
+  const step = isInt ? 1 : range <= 1 ? 0.05 : range <= 50 ? 1 : 5;
+
+  return { min, max, step };
+}
+
+// Format a preset's camelCase / kebab-case key as a human-readable label.
+// `voiceRibbon` → "Voice ribbon"; `neon-ring` → "Neon ring".
+function presetLabel(key: string): string {
+  const spaced = key
+    .replace(/[-_]/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase();
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
+// Deep-equality helper for spotting which preset is currently active.
+// Handles primitives, arrays, and plain objects — enough for the prop
+// types schemas declare. Not a general deepEqual.
+function deepEqual(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((v, i) => deepEqual(v, b[i]));
+  }
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const ak = Object.keys(a);
+    const bk = Object.keys(b);
+    if (ak.length !== bk.length) return false;
+    return ak.every((k) => deepEqual((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]));
+  }
+  return false;
+}
+
 // Walk through ZodDefault / ZodOptional / ZodNullable wrappers to find the
 // real type underneath. Zod stores wrapped types under `_def.innerType`.
 function unwrap(field: ZodTypeAny): { type: string; field: ZodTypeAny } {
@@ -70,14 +153,57 @@ function unwrap(field: ZodTypeAny): { type: string; field: ZodTypeAny } {
   return { type: def.typeName, field };
 }
 
+// Read the `description` annotation from a Zod field. Onda components
+// can stash hints like `only:bars` here to tell tooling which props are
+// relevant under which conditions. Survives all wrapper unwrapping.
+function fieldDescription(field: ZodTypeAny): string | undefined {
+  // ZodDescription lives at the OUTERMOST level (so does .default, .optional).
+  // We check the field as-passed and its inner-types.
+  type WithDesc = { description?: string; _def?: { description?: string; innerType?: ZodTypeAny } };
+  const seen = new Set<unknown>();
+  let cursor: WithDesc | undefined = field as unknown as WithDesc;
+  while (cursor && !seen.has(cursor)) {
+    seen.add(cursor);
+    if (cursor.description) return cursor.description;
+    if (cursor._def?.description) return cursor._def.description;
+    cursor = cursor._def?.innerType as unknown as WithDesc | undefined;
+  }
+  return undefined;
+}
+
+/**
+ * Parse the `only:<value>` hint from a field's description. Returns the
+ * required value, or undefined if the field has no `only:` hint. Used to
+ * hide props that don't apply to the current variant of a multi-variant
+ * component (e.g. AudioVisualizer's `bar*` props when `variant: 'wave'`).
+ */
+function parseOnlyHint(field: ZodTypeAny): string | undefined {
+  const desc = fieldDescription(field);
+  if (!desc) return undefined;
+  const m = desc.match(/^only:(.+)$/);
+  return m?.[1].trim();
+}
+
 export function PropsControls({
   schema,
   values,
   defaults,
+  presets,
   onChange,
   bare = false,
 }: PropsControlsProps) {
   const reset = useCallback(() => onChange(defaults), [defaults, onChange]);
+
+  // Apply a preset by merging its partial props onto the SCHEMA DEFAULTS
+  // (not the current `values`). Important: if a previous preset set
+  // `waveLines: 4` and the new preset doesn't mention `waveLines`, the
+  // new preset's "intended" look would inherit `waveLines: 4` from the
+  // stale current state — wrong. Re-deriving from defaults guarantees
+  // each preset renders in isolation.
+  const applyPreset = useCallback(
+    (preset: Record<string, unknown>) => onChange({ ...defaults, ...preset }),
+    [defaults, onChange],
+  );
 
   if (!(schema instanceof z.ZodObject)) return null;
   const shape = schema.shape as Record<string, ZodTypeAny>;
@@ -85,9 +211,40 @@ export function PropsControls({
   const setField = (name: string, value: unknown) =>
     onChange({ ...values, [name]: value });
 
+  // Variant-aware filtering. Components with a `variant` discriminator
+  // (AudioVisualizer is the first) annotate variant-specific props with
+  // `.describe('only:<variant>')` in their Zod schema. Hide rows whose
+  // hint doesn't match the current `values.variant` so the form only
+  // shows what's actually relevant.
+  //
+  // Generalization: any field name in `values` can be a discriminator —
+  // we just look up `values[<hint>]`... no wait, the hint is the
+  // *required value*, not the key. Onda's convention: hints are always
+  // values of the field named `variant`. If a future component uses a
+  // different discriminator name, this can be expanded.
+  const currentVariant = values.variant as string | undefined;
+  const fieldEntries = Object.entries(shape).filter(([, field]) => {
+    const only = parseOnlyHint(field);
+    if (!only) return true; // no hint → always show
+    if (currentVariant === undefined) return true; // no variant value → show all
+    return only === currentVariant;
+  });
+
   const wrapperClass = bare
     ? 'p-3 sm:p-4'
     : 'onda-rise bg-onda-surface/60 backdrop-blur-sm border border-onda-border rounded-2xl p-3 sm:p-4';
+
+  // Detect the active preset by deep-equality of its prop subset against
+  // current values. A preset is "active" iff every prop it sets matches
+  // the current value AND it has at least one prop (empty presets would
+  // vacuously match `every` — see the deleted `default` preset that hit
+  // exactly this bug).
+  const activePreset = presets
+    ? Object.entries(presets).find(([, preset]) => {
+        const entries = Object.entries(preset);
+        return entries.length > 0 && entries.every(([k, v]) => deepEqual(values[k], v));
+      })?.[0]
+    : undefined;
 
   return (
     <div className={wrapperClass}>
@@ -105,8 +262,35 @@ export function PropsControls({
         </button>
       </div>
 
+      {presets && Object.keys(presets).length > 0 && (
+        <div className="mb-3 pb-3 border-b border-onda-border">
+          <div className="text-[10px] uppercase tracking-[0.16em] text-onda-faint mb-1.5">
+            Presets
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {Object.entries(presets).map(([name, preset]) => {
+              const isActive = activePreset === name;
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => applyPreset(preset)}
+                  className={
+                    isActive
+                      ? 'text-[10px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-md border bg-onda-accent/15 border-onda-accent/50 text-onda-text transition-colors'
+                      : 'text-[10px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-md border bg-onda-bg/40 border-onda-border text-onda-dim hover:text-onda-text hover:border-onda-border-lit transition-colors'
+                  }
+                >
+                  {presetLabel(name)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-2">
-        {Object.entries(shape).map(([name, field]) => {
+        {fieldEntries.map(([name, field]) => {
           const { type, field: inner } = unwrap(field);
           return (
             <FieldRow
@@ -115,6 +299,7 @@ export function PropsControls({
               type={type}
               inner={inner}
               value={values[name]}
+              defaultValue={defaults[name]}
               onChange={(v) => setField(name, v)}
             />
           );
@@ -129,25 +314,28 @@ function FieldRow({
   type,
   inner,
   value,
+  defaultValue,
   onChange,
 }: {
   name: string;
   type: string;
   inner: ZodTypeAny;
   value: unknown;
+  defaultValue: unknown;
   onChange: (v: unknown) => void;
 }) {
   return (
-    // `minmax(0,1fr)` instead of `1fr` so the control column can shrink below
-    // its content's intrinsic width — otherwise wide inputs (e.g. the hex
-    // text field on color rows) push the popover open. `items-start` keeps
-    // the label at the TOP of tall multi-row controls (like the array
-    // field) so it doesn't look orphaned in the middle of the block; a
-    // small top padding on the label aligns it with the first row of
-    // single-line inputs.
-    <div className="grid grid-cols-[88px_minmax(0,1fr)] sm:grid-cols-[112px_minmax(0,1fr)] items-start gap-3">
-      <label className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono truncate">
-        {name}
+    // Two-column grid: label on the left, control on the right. The
+    // control column uses `minmax(0,1fr)` so it can shrink below its
+    // content's intrinsic width — wide controls (segmented enum, color
+    // hex field) wrap or scale-down inside the column instead of pushing
+    // the popover open.
+    <div className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-3">
+      <label
+        className="pt-1.5 text-[10px] uppercase tracking-[0.14em] text-onda-faint font-mono leading-snug"
+        title={name}
+      >
+        {formatLabel(name)}
       </label>
       <div className="min-w-0">
         <FieldControl
@@ -155,6 +343,7 @@ function FieldRow({
           type={type}
           inner={inner}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
         />
       </div>
@@ -167,20 +356,48 @@ function FieldControl({
   type,
   inner,
   value,
+  defaultValue,
   onChange,
 }: {
   name: string;
   type: string;
   inner: ZodTypeAny;
   value: unknown;
+  defaultValue: unknown;
   onChange: (v: unknown) => void;
 }) {
   if (type === 'ZodNumber') {
-    const hint = NUMERIC_HINTS[name];
+    // Hint priority: hand-tuned NUMERIC_HINTS (per-prop overrides) →
+    // Zod-schema-derived range (`.min().max()` checks) → no hint.
+    // The Zod-derived path is the catalog-wide default — schemas that
+    // declare `.min(0).max(1)` or even just `.min(1)` automatically
+    // get a slider with sensible bounds, no manual map maintenance.
+    const numericDefault =
+      typeof defaultValue === 'number' && Number.isFinite(defaultValue)
+        ? defaultValue
+        : undefined;
+    const hint = NUMERIC_HINTS[name] ?? deriveSliderHint(inner, numericDefault);
+
+    // Optional fields with no schema default arrive as `undefined`.
+    // `Number(undefined)` is NaN — passing NaN to <input value={...}>
+    // triggers a React warning AND renders a broken slider. Coerce to
+    // the hint's min (or 0) so the field is editable from the moment it
+    // mounts.
+    const fallback = hint ? hint.min : 0;
+    const numeric = value === undefined || value === null ? fallback : Number(value);
+    const safe = Number.isFinite(numeric) ? numeric : fallback;
     if (hint) {
-      return <Slider value={Number(value)} onChange={onChange} {...hint} />;
+      // Slider fills the control column — it needs the width to be usable.
+      return <Slider value={safe} onChange={onChange} {...hint} />;
     }
-    return <NumberInput value={Number(value)} onChange={onChange} />;
+    // No-hint number: compact input pushed to the right edge so there's
+    // visible white space between the label and the value (cleaner read
+    // than a wide input box sprawling across the column).
+    return (
+      <div className="flex justify-end">
+        <NumberInput value={safe} onChange={onChange} />
+      </div>
+    );
   }
 
   if (type === 'ZodEnum') {
@@ -233,6 +450,35 @@ function FieldControl({
       );
     }
     return <TextInput value={String(value)} onChange={onChange} />;
+  }
+
+  if (type === 'ZodBoolean') {
+    // Right-aligned — toggle is compact, hugs the value-column edge.
+    return (
+      <div className="flex justify-end">
+        <Toggle value={Boolean(value)} onChange={onChange} />
+      </div>
+    );
+  }
+
+  // ZodUnion handling — the catalog uses unions for three distinct
+  // shapes that each want their own input:
+  //   - `string | string[]` (color) → swatch + comma-list text input
+  //   - placement union (region | coords) → region dropdown
+  //   - `string | number` primitive (time specs like '0:04', or
+  //     hillsSeed) → text input, parse numeric on change (compact, right-aligned)
+  if (type === 'ZodUnion') {
+    if (COLOR_PROP_NAMES.has(name)) {
+      return <MultiColorField value={value} onChange={onChange} />;
+    }
+    if (name === 'placement') {
+      return <PlacementField value={value} onChange={onChange} />;
+    }
+    return (
+      <div className="flex justify-end">
+        <PrimitiveUnionField value={value} onChange={onChange} />
+      </div>
+    );
   }
 
   return (
@@ -521,8 +767,11 @@ function Segmented({
   options: string[];
   onChange: (v: string) => void;
 }) {
+  // `flex flex-wrap` (instead of `inline-flex`) so a 4-option enum with
+  // longer labels (e.g. variant: bars/wave/hills/radial) wraps to a
+  // second row inside narrow popover columns instead of overflowing.
   return (
-    <div className="inline-flex bg-onda-bg border border-onda-border rounded-md p-0.5">
+    <div className="flex flex-wrap gap-0.5 bg-onda-bg border border-onda-border rounded-md p-0.5">
       {options.map((option) => {
         const active = value === option;
         return (
@@ -540,6 +789,171 @@ function Segmented({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+// ─── Toggle (Boolean) ────────────────────────────────────────────────
+
+function Toggle({
+  value,
+  onChange,
+}: {
+  value: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={value}
+      onClick={() => onChange(!value)}
+      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors border ${
+        value
+          ? 'bg-onda-accent/30 border-onda-accent/60'
+          : 'bg-onda-bg border-onda-border hover:border-onda-border-lit'
+      }`}
+    >
+      <span
+        className={`inline-block h-3.5 w-3.5 rounded-full bg-onda-text transition-transform ${
+          value ? 'translate-x-4' : 'translate-x-0.5'
+        }`}
+      />
+    </button>
+  );
+}
+
+// ─── PlacementField (PlacementRegion | PlacementCoords) ─────────────
+
+function PlacementField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | undefined) => void;
+}) {
+  // The catalog's placement schema is `region-string | {x, y, anchor}`.
+  // The TryIt UX covers the common case — region picker via a select.
+  // Custom coords are still possible via code; if the current value is
+  // already an object, we show a hint so the user knows what they're
+  // looking at, with a one-click "convert to region" affordance.
+  const isCustomCoords = value !== null && typeof value === 'object';
+  const currentRegion = typeof value === 'string' ? value : '';
+
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      <select
+        value={currentRegion}
+        onChange={(e) => onChange(e.target.value || undefined)}
+        className="bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs text-onda-text w-full focus:outline-none focus:border-onda-text/40 cursor-pointer"
+      >
+        <option value="">— none (default) —</option>
+        {PLACEMENT_REGIONS.map((r) => (
+          <option key={r} value={r}>{r}</option>
+        ))}
+      </select>
+      {isCustomCoords && (
+        <div className="text-[10px] text-onda-faint italic">
+          custom {JSON.stringify(value)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── PrimitiveUnionField (string | number) ───────────────────────────
+
+function PrimitiveUnionField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | number) => void;
+}) {
+  // Text input that parses to a number when the value is all-numeric,
+  // and stays a string otherwise. Covers `timeSpec` ('0:04' OR raw
+  // seconds) and `hillsSeed` (number OR string).
+  const text =
+    value === undefined || value === null ? '' : String(value);
+
+  return (
+    <input
+      type="text"
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value;
+        if (raw === '') {
+          // Emit empty string — the renderer or schema decides what to do
+          // (most schemas treat empty as default).
+          onChange('');
+          return;
+        }
+        // Pure-numeric → emit as number; mixed/colon → emit as string.
+        const n = Number(raw);
+        if (Number.isFinite(n) && /^[\d.-]+$/.test(raw)) {
+          onChange(n);
+        } else {
+          onChange(raw);
+        }
+      }}
+      placeholder='"0:04" or 4'
+      className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-20 text-right focus:outline-none focus:border-onda-text/40"
+    />
+  );
+}
+
+// ─── MultiColorField (string | string[]) ─────────────────────────────
+
+function MultiColorField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (v: string | string[]) => void;
+}) {
+  // Normalize the incoming value to a comma-separated string for the
+  // text input, AND to an array of hexes for the swatch row.
+  const asArray: string[] = Array.isArray(value)
+    ? (value as string[])
+    : typeof value === 'string'
+      ? [value]
+      : [];
+  const text = asArray.join(', ');
+
+  return (
+    <div className="flex flex-col gap-1.5 w-full">
+      {/* Swatch row — visual preview of each color in the array. */}
+      {asArray.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {asArray.map((c, i) => (
+            <span
+              key={i}
+              className="inline-block h-4 w-4 rounded-sm border border-onda-border"
+              style={{ backgroundColor: c }}
+              title={c}
+            />
+          ))}
+        </div>
+      )}
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => {
+          const raw = e.target.value;
+          // `a, b, c` → ['a','b','c']. Empty entries dropped so a trailing
+          // comma doesn't push `''` into the array. Single token (no comma)
+          // → emit a plain string so the schema accepts either form
+          // naturally.
+          const parts = raw.split(',').map((s) => s.trim()).filter(Boolean);
+          if (parts.length === 1 && !raw.includes(',')) {
+            onChange(parts[0]);
+          } else {
+            onChange(parts);
+          }
+        }}
+        placeholder="#D96B82 or #D96B82,#E89AAB"
+        className="onda-number-input bg-onda-bg border border-onda-border rounded-md px-2 py-1 text-xs font-mono text-onda-text w-full text-right focus:outline-none focus:border-onda-text/40"
+      />
     </div>
   );
 }

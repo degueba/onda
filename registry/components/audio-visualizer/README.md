@@ -1,70 +1,149 @@
 # AudioVisualizer
 
-Renders an animated visualization of an audio file — bars (frequency-domain) or a waveform (time-domain). **Does not play audio.** Visualization and playback are independent concerns; a typical scene has both an `AudioVisualizer` (shows) and an `AudioClip` (plays) pointing at the same `src`.
+Animated visualization of an audio file — four variants, all driven by the same dB-normalized FFT pipeline and rendered in SVG with Onda's accent treatment (single `color` prop + soft glow).
 
-## When to use
+**Does not play audio.** Pair with a parallel `AudioClip` pointing at the same `src` for audible playback.
 
-| If you want… | Use |
+## Variants
+
+| Variant | What it shows |
 | --- | --- |
-| Visible bars on top of music | **`AudioVisualizer`** (`variant: 'bars'`) + parallel `AudioClip` |
-| A waveform under VO | **`AudioVisualizer`** (`variant: 'waveform'`) + parallel `AudioClip` |
-| Play audio without showing anything | **`AudioClip`** alone |
+| `'bars'` | Frequency-domain bars (spectrum analyzer). Each bar is one FFT bin. |
+| `'wave'` | Parametric sine wave whose amplitude is driven by the audio's RMS energy. Always smooth and flowing — the audio drives one scalar, not the shape. |
+| `'hills'` | Filled smooth-curve "mountains" mirrored around a centerline. Mid-frequency band drives the bump heights; per-bump variation is seed-deterministic. |
+| `'radial'` | Bars arranged in a circle, each driven by a high-frequency FFT bin. Mirrored so the circle reads symmetrically. |
+
+All four use the same dB-normalization (`minDb..maxDb`) so the visual response is perceptually correct — raw FFT magnitudes sit below 0.1 and look dead without this.
+
+## Why it ships as one component (not four)
+
+All four share the same `useAudioData` cache, the same `processFftValue` pipeline, the same Onda accent treatment, and most of the same props. Switching variants is a single prop change. The per-variant props (`bar*`, `wave*`, `hills*`, `radial*`) are namespaced so they don't collide.
 
 ## Props
 
+### Universal
+
 | Name | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `src` | `string` | sample URL | URL or path. The same `src` an `AudioClip` plays — `useAudioData` caches by URL, so multiple visualizers share one decode. |
-| `variant` | `'bars' \| 'waveform'` | `'bars'` | `'bars'` is frequency-domain (FFT); `'waveform'` is time-domain (amplitude). |
-| `numberOfSamples` | `integer (power of two)` | `32` | FFT bin count for `'bars'`. Validated by Zod. 32 is the perceptual sweet spot; raise past 128 only with `optimizeFor: 'speed'`. |
-| `smoothing` | `boolean` | `true` | 3-frame symmetric averaging across bins for less jittery bars. Disable for raw FFT amplitudes. |
-| `optimizeFor` | `'accuracy' \| 'speed'` | `'accuracy'` | `'speed'` is recommended for Lambda renders and high sample counts. |
-| `color` | `string` | `"#D96B82"` | Bar / waveform color. Defaults to `--onda-accent` — visualizations are an earned-color moment. |
-| `placement` | `Placement?` | – | Where on the canvas this sits. Defaults to centered. |
-| `width` | `number?` | – | Width in px. When omitted, the visualizer fills its placement box. |
-| `height` | `number` | `80` | Height in px. |
-| `barGap` | `number ≥ 0` | `4` | Gap between bars (only `variant: 'bars'`). |
-| `barRadius` | `number ≥ 0` | `2` | Border radius for bars (only `variant: 'bars'`). |
-| `waveformStrokeWidth` | `number ≥ 0.5` | `2` | Stroke width for the waveform line (only `variant: 'waveform'`). |
+| `src` | `string` | sample URL | URL or path to the audio file. |
+| `variant` | `'bars' \| 'wave' \| 'hills' \| 'radial'` | `'bars'` | Visualization style. |
+| `width` | `number` | `640` | Width in px (ignored by `'radial'` — use `radialDiameter`). |
+| `height` | `number` | `160` | Height in px (ignored by `'radial'`). |
+| `color` | `string \| string[]` | `["#D96B82", "#E89AAB"]` | Single color OR an array. Bars / radial render a multi-stop vertical gradient. Wave cycles colors per stacked line. Hills cycle per stacked copy. Default is Onda's two-tone accent ramp (rose → soft rose). |
+| `glow` | `boolean` | `true` | Soft accent glow via `drop-shadow`. |
+| `minDb` | `number` | `-100` | Lower dB bound for FFT normalization. |
+| `maxDb` | `number` | `-30` | Upper dB bound. |
+| `numberOfSamples` | `integer (power of two)` | `256` | FFT bin count. |
+| `placement` | `Placement?` | – | Canvas placement. |
+
+### `'bars'` variant
+
+| Name | Type | Default |
+| --- | --- | --- |
+| `barWidth` | `number` | `4` |
+| `barGap` | `number` | `4` |
+| `barRadius` | `number` | `2` |
+| `barAlign` | `'top' \| 'middle' \| 'bottom'` | `'middle'` |
+
+### `'wave'` variant
+
+| Name | Type | Default |
+| --- | --- | --- |
+| `waveSections` | `integer` | `12` |
+| `waveLines` | `integer` | `2` |
+| `waveLineGap` | `number` | `16` |
+| `waveStrokeWidth` | `number` | `2` |
+| `waveScrollSpeed` | `number` | `-160` |
+
+### `'hills'` variant
+
+| Name | Type | Default |
+| --- | --- | --- |
+| `hillsBumps` | `integer` | `8` |
+| `hillsCopies` | `integer` | `2` |
+| `hillsAlign` | `'top' \| 'middle' \| 'bottom'` | `'middle'` |
+| `hillsFillOpacity` | `number 0..1` | `0.4` |
+| `hillsStrokeWidth` | `number` | `0` |
+| `hillsSeed` | `number \| string` | `42` |
+
+### `'radial'` variant
+
+| Name | Type | Default |
+| --- | --- | --- |
+| `radialDiameter` | `number` | `360` |
+| `radialInnerRadius` | `number` | `80` |
+| `radialBarWidth` | `number` | `4` |
+| `radialBarGap` | `number` | `4` |
+| `radialBarRadius` | `number` | `2` |
+| `radialBarOrigin` | `'outer' \| 'inner' \| 'middle'` | `'inner'` |
 
 ## Usage
 
 ```tsx
-import { AbsoluteFill, Sequence } from 'remotion';
-import { AudioClip } from './components/onda/audio-clip/AudioClip';
-import { AudioVisualizer } from './components/onda/audio-visualizer/AudioVisualizer';
+import { Composition } from 'remotion';
+import { AudioVisualizer, audioVisualizerSchema } from './components/onda/audio-visualizer/AudioVisualizer';
 
-export const Scene: React.FC = () => (
-  <AbsoluteFill>
-    <Sequence from={0} durationInFrames={240}>
-      {/* plays */}
-      <AudioClip src="/music.mp3" startAt={0} endAt="0:08" volume={0.6} />
-      {/* shows */}
-      <AudioVisualizer src="/music.mp3" variant="bars" placement="bottom" />
-    </Sequence>
-  </AbsoluteFill>
-);
-```
-
-### Waveform variant (under voiceover)
-
-```tsx
-<AudioVisualizer
-  src="/voiceover.mp3"
-  variant="waveform"
-  placement="bottom"
-  width={960}
-  height={120}
-  waveformStrokeWidth={3}
+<Composition
+  id="Visualizer"
+  component={AudioVisualizer}
+  durationInFrames={300}
+  fps={30}
+  width={1920}
+  height={1080}
+  schema={audioVisualizerSchema}
+  defaultProps={audioVisualizerSchema.parse({
+    src: '/music.mp3',
+    variant: 'wave',
+  })}
 />
 ```
 
-## Composition notes
+Paired with playback (the typical pattern):
 
-- **No playback.** Don't try to add a `play` prop — the right pattern is a separate `AudioClip`. Conflating them would force every scene that wants playback to also pay for FFT analysis (and every visualizer to compete for the audio output device).
-- **Cache by `src`.** `useAudioData(src)` decodes the audio once per URL per session. Multiple visualizers on the same `src` share that decode — call `useAudioData` inside the component, not via props.
-- **Power-of-two `numberOfSamples`.** Validated by the schema. 32 is the visual sweet spot for typical canvas widths; 64 reads as more detail; >128 should pair with `optimizeFor: 'speed'`.
-- **Smoothing is on by default.** Disable for raw FFT amplitudes (waveform analysis, beat detection); leave on for visible bars.
-- **For audio > 5 minutes**, the windowed variant (`useWindowedAudioData`) avoids loading the entire file into memory. Not exposed in v1 — add a separate `AudioVisualizerWindowed` if a real composition needs it.
-- **Async loading.** While `useAudioData` is fetching, the component renders an empty placeholder at the configured dimensions so layout doesn't jump. Same dimensions during SSR.
-- **Waveform is a single SVG polyline.** Smooth, scalable, deterministic. Mapped from `visualizeAudioWaveform`'s sample array (`v - 0.5` centers ±height/2 around the middle line). For multi-channel / stereo visualization, ship `AudioVisualizerStereo` later — current spec sums to mono.
+```tsx
+<AbsoluteFill>
+  <AudioClip src="/music.mp3" />
+  <AudioVisualizer src="/music.mp3" variant="hills" placement="bottom" />
+</AbsoluteFill>
+```
+
+## Implementation notes
+
+- **dB normalization is the secret.** `processFftValue(v, minDb, maxDb)` converts raw FFT magnitudes → decibels → 0..1. Without it, almost all bars sit between 0 and 0.1 of canvas height and look dead. Adjust `minDb` / `maxDb` to tune responsiveness for different content.
+- **`useAudioData` caches by `src`.** Multiple visualizers on the same audio file share one decode.
+- **`'wave'` doesn't render raw audio data.** It's a parametric sine wave; the audio only drives `amplitude` via RMS. Rendering raw amplitude data as a continuous shape pinches to zero at silent samples and looks broken.
+- **`'hills'` per-bump variation is deterministic.** Driven by `hillsSeed` via Remotion's `random()`.
+- **`'radial'` mirrors the FFT data.** Takes the upper half of the spectrum, mirrors it, so the circle reads symmetrically.
+
+## Color examples
+
+```tsx
+// Default — two-tone Onda accent
+<AudioVisualizer src="..." variant="wave" />
+
+// Single color, fully tinted
+<AudioVisualizer src="..." variant="bars" color="#D96B82" />
+
+// Multi-color gradient on bars (top-to-bottom rainbow)
+<AudioVisualizer src="..." variant="bars" color={['#D96B82', '#E89AAB', '#F2F2F4']} />
+
+// Multi-color wave — each line gets its own hue
+<AudioVisualizer
+  src="..."
+  variant="wave"
+  waveLines={3}
+  color={['#D96B82', '#E89AAB', '#8E8E98']}
+/>
+
+// Multi-color hills — each copy gets its own fill
+<AudioVisualizer
+  src="..."
+  variant="hills"
+  hillsCopies={3}
+  color={['#D96B82', '#E89AAB', '#F2F2F4']}
+/>
+```
+
+## Inspiration
+
+Visual design ported (technique, not code) from [marcusstenbeck/remotion-audio-visualizers](https://github.com/marcusstenbeck/remotion-audio-visualizers). The signal-processing primitives (`processFftValue`, `getRms`) are standard WebAudio / W3C patterns reimplemented from scratch for our MIT-licensed catalog.

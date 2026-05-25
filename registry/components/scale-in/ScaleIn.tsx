@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
 import { entryScale } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link ScaleIn} props. */
 export const scaleInSchema = z.object({
@@ -28,6 +29,8 @@ export const scaleInSchema = z.object({
   lineHeight: z.number().optional(),
   /** Text alignment. */
   align: z.enum(['left', 'center', 'right']).optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link ScaleIn}. */
@@ -42,7 +45,7 @@ export type ScaleInProps = z.infer<typeof scaleInSchema>;
  */
 export const ScaleIn: React.FC<ScaleInProps> = ({
   text, delay, duration, fromScale, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -56,13 +59,15 @@ export const ScaleIn: React.FC<ScaleInProps> = ({
   });
 
   return (
-    <div style={{
-      opacity,
-      transform,
-      color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
-      textAlign: align,
-    }}>
-      {text}
-    </div>
+    <PlacementBox placement={placement}>
+      <div style={{
+        opacity,
+        transform,
+        color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
+        textAlign: align,
+      }}>
+        {text}
+      </div>
+    </PlacementBox>
   );
 };

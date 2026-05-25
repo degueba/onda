@@ -2,6 +2,7 @@ import React from 'react';
 import { useCurrentFrame, random } from 'remotion';
 import { z } from 'zod';
 import { DURATION } from '../../../lib/motion';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link CameraShake} props. */
 export const cameraShakeSchema = z.object({
@@ -17,6 +18,8 @@ export const cameraShakeSchema = z.object({
   seed: z.number().int().default(0),
   /** Linearly decay intensity to 0 over `duration`. */
   decay: z.boolean().default(true),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link CameraShake}. */
@@ -39,6 +42,7 @@ export const CameraShake: React.FC<CameraShakeProps> = ({
   intensity,
   seed,
   decay,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const local = frame - delay;
@@ -60,30 +64,32 @@ export const CameraShake: React.FC<CameraShakeProps> = ({
   }
 
   return (
-    <div
-      style={{
-        transform: `translate(${x}px, ${y}px)`,
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      {children ?? (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#F2F2F4',
-            fontSize: 96,
-            fontFamily: '"Clash Display", sans-serif',
-            fontWeight: 600,
-          }}
-        >
-          shake me
-        </div>
-      )}
-    </div>
+    <PlacementBox placement={placement}>
+      <div
+        style={{
+          transform: `translate(${x}px, ${y}px)`,
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        {children ?? (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#F2F2F4',
+              fontSize: 96,
+              fontFamily: '"Clash Display", sans-serif',
+              fontWeight: 600,
+            }}
+          >
+            shake me
+          </div>
+        )}
+      </div>
+    </PlacementBox>
   );
 };

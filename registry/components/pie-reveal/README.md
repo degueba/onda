@@ -17,6 +17,7 @@ A single-arc SVG ring that fills from 0 to `value` percent on `SPRING_SMOOTH`. T
 | `color` | `string` | `"#F2F2F4"` | Center label color — defaults to `--onda-text`. |
 | `fontSize` | `number` | `56` | Center label font size in pixels. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. Never default to Inter / Arial / system. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

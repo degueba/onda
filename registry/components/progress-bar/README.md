@@ -17,6 +17,7 @@ A pill-shaped bar that fills from 0 to `value`% on `SPRING_SMOOTH`. The fill is 
 | `color` | `string` | `"#F2F2F4"` | Label color — defaults to `--onda-text`. |
 | `fontSize` | `number` | `28` | Label font size in px. |
 | `fontFamily` | `string` | `'"Clash Display", sans-serif'` | The Onda display font. |
+| `placement` | `Placement?` | – | Where on the canvas this sits. Region (`"center"`, `"upper-third"`, …) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. |
 
 ## Usage
 

@@ -3,6 +3,7 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { DURATION, STAGGER, staggerFrames } from '../../../lib/motion';
 import { entryFadeRise } from '../../../lib/choreography';
+import { PlacementBox, placementSchema } from '../../../lib/canvas';
 
 /** Zod schema for {@link StaggerGroup} props. */
 export const staggerGroupSchema = z.object({
@@ -28,6 +29,14 @@ export const staggerGroupSchema = z.object({
   fontSize: z.number().default(48),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
+  /** Font weight. Display default `600`. */
+  fontWeight: z.number().optional(),
+  /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
+  letterSpacing: z.string().optional(),
+  /** Unitless line height. Default `1.1` for tight display copy. */
+  lineHeight: z.number().optional(),
+  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
+  placement: placementSchema.optional(),
 });
 
 /** Inferred props for {@link StaggerGroup}. */
@@ -66,11 +75,16 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
   color,
   fontSize,
   fontFamily,
+  fontWeight = 600,
+  letterSpacing = 'normal',
+  lineHeight = 1.1,
+  placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   return (
+    <PlacementBox placement={placement}>
     <div
       style={{
         display: 'flex',
@@ -82,7 +96,9 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
         color,
         fontSize,
         fontFamily,
-        fontWeight: 600,
+        fontWeight,
+        letterSpacing,
+        lineHeight,
       }}
     >
       {items.map((item, i) => {
@@ -109,5 +125,6 @@ export const StaggerGroup: React.FC<StaggerGroupProps> = ({
         );
       })}
     </div>
+    </PlacementBox>
   );
 };

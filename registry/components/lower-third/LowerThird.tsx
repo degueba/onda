@@ -32,8 +32,14 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
   accentColor,
   fontSize,
   nameSize,
+  nameFontWeight,
+  nameLetterSpacing,
+  nameLineHeight,
   roleFontSize,
   roleSize,
+  roleFontWeight,
+  roleLetterSpacing,
+  roleLineHeight,
   fontFamily,
 }) => {
   const { width, height } = useVideoConfig();
@@ -73,6 +79,9 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
           color={color}
           fontSize={resolvedNameFontSize}
           fontFamily={fontFamily}
+          fontWeight={nameFontWeight}
+          letterSpacing={nameLetterSpacing}
+          lineHeight={nameLineHeight}
           distance={16}
           duration={18}
         />
@@ -84,6 +93,9 @@ export const LowerThird: React.FC<LowerThirdProps> = ({
           color={roleColor}
           fontSize={resolvedRoleFontSize}
           fontFamily={fontFamily}
+          fontWeight={roleFontWeight}
+          letterSpacing={roleLetterSpacing}
+          lineHeight={roleLineHeight}
           duration={18}
         />
 

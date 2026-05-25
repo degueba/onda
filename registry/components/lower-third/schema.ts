@@ -23,10 +23,22 @@ export const lowerThirdSchema = z.object({
   fontSize: z.number().default(48),
   /** Semantic role for the name — resolves to canvas-aware pixels. `fontSize` wins when both are passed. */
   nameSize: sizeRoleSchema.optional(),
+  /** Font weight for the name. */
+  nameFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the name (e.g. `'-0.02em'`). */
+  nameLetterSpacing: z.string().optional(),
+  /** Unitless line height for the name. */
+  nameLineHeight: z.number().optional(),
   /** Role font size in px. Wins over `roleSize` if both are passed. */
   roleFontSize: z.number().default(22),
   /** Semantic role for the role line — resolves to canvas-aware pixels. `roleFontSize` wins when both are passed. */
   roleSize: sizeRoleSchema.optional(),
+  /** Font weight for the role. */
+  roleFontWeight: z.number().optional(),
+  /** CSS letter-spacing for the role (e.g. `'0.06em'`). */
+  roleLetterSpacing: z.string().optional(),
+  /** Unitless line height for the role. */
+  roleLineHeight: z.number().optional(),
   /** Onda display font. */
   fontFamily: z.string().default('"Clash Display", sans-serif'),
 });
