@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "grid-pixelate",
+  "type": "registry:component",
+  "title": "gridPixelate",
+  "description": "The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [
+    "lib-random"
+  ],
+  "files": [
+    {
+      "path": "registry/transitions/grid-pixelate/gridPixelate.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/grid-pixelate/gridPixelate.tsx",
+      "content": "import React from 'react';\nimport type { TransitionPresentation, TransitionPresentationComponentProps } from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { seededRandom } from '../../../lib/random';\nimport { gridPixelateSchema, type GridPixelateOptions } from './schema';\n\nexport { gridPixelateSchema, type GridPixelateOptions };\n\ntype GridPixelateProps = { cols: number; rows: number; seed: number; color: string };\n\n// How long (in progress units) a single cell takes to flip.\nconst RAMP = 0.16;\n\nconst GridPixelatePresentation: React.FC<\n  TransitionPresentationComponentProps<GridPixelateProps>\n> = ({ presentationProgress, presentationDirection, children, passedProps }) => {\n  const { cols, rows, seed, color } = passedProps;\n  const count = cols * rows;\n  const isEntering = presentationDirection === 'entering';\n\n  // Deterministic per-cell reveal threshold — same sequence every render.\n  const rand = seededRandom(seed);\n  const thresholds = Array.from({ length: count }, () => rand() * (1 - RAMP));\n\n  return (\n    <AbsoluteFill>\n      {children}\n      <AbsoluteFill\n        style={{\n          display: 'grid',\n          gridTemplateColumns: `repeat(${cols}, 1fr)`,\n          gridTemplateRows: `repeat(${rows}, 1fr)`,\n        }}\n      >\n        {thresholds.map((th, i) => {\n          const reveal = Math.min(1, Math.max(0, (presentationProgress - th) / RAMP));\n          // Entering: cells start covering, flip to revealed. Exiting: cover up.\n          const cover = isEntering ? 1 - reveal : reveal;\n          return <div key={i} style={{ background: color, opacity: cover }} />;\n        })}\n      </AbsoluteFill>\n    </AbsoluteFill>\n  );\n};\n\n/**\n * The scene breaks into a grid of cells that flip in a seeded scatter — the\n * outgoing scene pixelates away to canvas while the incoming assembles from\n * it. Deterministic cell order (seeded), so the scatter is identical every\n * render. A retro, high-energy cut.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function gridPixelate(\n  options?: GridPixelateOptions,\n): TransitionPresentation<GridPixelateProps> {\n  const opts = gridPixelateSchema.parse(options ?? {});\n  return {\n    component: GridPixelatePresentation,\n    props: { cols: opts.cols, rows: opts.rows, seed: opts.seed, color: opts.color },\n  };\n}\n\nexport default gridPixelate;\n"
+    },
+    {
+      "path": "registry/transitions/grid-pixelate/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/grid-pixelate/schema.ts",
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link gridPixelate} options. */\nexport const gridPixelateSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('grid-pixelate').default('grid-pixelate'),\n  /** Number of cell columns. */\n  cols: z.number().int().min(2).max(80).default(24),\n  /** Number of cell rows. */\n  rows: z.number().int().min(2).max(60).default(14),\n  /** Seed for the (deterministic) cell reveal order. */\n  seed: z.number().int().default(7),\n  /** Cell fill while covering — match your canvas color. */\n  color: z.string().default('#08080A'),\n});\n\nexport type GridPixelateOptions = z.input<typeof gridPixelateSchema>;\n"
+    },
+    {
+      "path": "registry/transitions/grid-pixelate/grid-pixelate.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/grid-pixelate/grid-pixelate.meta.json",
+      "content": "{\n  \"name\": \"grid-pixelate\",\n  \"title\": \"gridPixelate\",\n  \"description\": \"The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"pixelate\",\n    \"grid\",\n    \"mosaic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/grid-pixelate/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/grid-pixelate/README.md",
+      "content": "# gridPixelate\n\nThe scene breaks into a grid of cells that flip in a seeded scatter — the outgoing scene pixelates away to the canvas color while the incoming assembles from it. The cell reveal order comes from a seeded PRNG, so the scatter is deterministic and identical every render. A retro, high-energy cut.\n\nOnda-original. Use inside Remotion's `<TransitionSeries>`.\n\n## Options\n\n| Option | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `cols` | `number` | `24` | Cell columns. |\n| `rows` | `number` | `14` | Cell rows. |\n| `seed` | `number` | `7` | Deterministic reveal-order seed. |\n| `color` | `string` | `#08080A` | Cell fill while covering — match your canvas. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { gridPixelate } from './components/onda/transitions/grid-pixelate/gridPixelate';\n\n<TransitionSeries>\n  <TransitionSeries.Sequence durationInFrames={150}><SceneA /></TransitionSeries.Sequence>\n  <TransitionSeries.Transition\n    presentation={gridPixelate()}\n    timing={linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })}\n  />\n  <TransitionSeries.Sequence durationInFrames={150}><SceneB /></TransitionSeries.Sequence>\n</TransitionSeries>\n```\n"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "glass-wipe",
+  "type": "registry:component",
+  "title": "glassWipe",
+  "description": "The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/glass-wipe/glassWipe.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/glass-wipe/glassWipe.tsx",
+      "content": "import React from 'react';\nimport type { TransitionPresentation, TransitionPresentationComponentProps } from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { glassWipeSchema, type GlassWipeOptions } from './schema';\n\nexport { glassWipeSchema, type GlassWipeOptions };\n\ntype GlassWipeProps = { direction: 'left' | 'right' | 'up' | 'down'; frost: number };\n\nfunction clipFor(direction: GlassWipeProps['direction'], hidden: number): string {\n  const pct = `${hidden * 100}%`;\n  switch (direction) {\n    case 'left':\n      return `inset(0 ${pct} 0 0)`;\n    case 'right':\n      return `inset(0 0 0 ${pct})`;\n    case 'up':\n      return `inset(0 0 ${pct} 0)`;\n    case 'down':\n      return `inset(${pct} 0 0 0)`;\n  }\n}\n\nconst GlassWipePresentation: React.FC<\n  TransitionPresentationComponentProps<GlassWipeProps>\n> = ({ presentationProgress, presentationDirection, children, passedProps }) => {\n  const { direction, frost } = passedProps;\n  const isEntering = presentationDirection === 'entering';\n\n  if (isEntering) {\n    // Wipe in behind a frosted leading edge that sharpens, fading up so the\n    // scene below never shows through the revealed area as a hard seam.\n    return (\n      <AbsoluteFill\n        style={{\n          opacity: presentationProgress,\n          clipPath: clipFor(direction, 1 - presentationProgress),\n          filter: `blur(${frost * (1 - presentationProgress)}px)`,\n        }}\n      >\n        {children}\n      </AbsoluteFill>\n    );\n  }\n  // Outgoing frosts over AND fades out as it's covered — so it doesn't linger\n  // as a blurry opaque ghost behind the incoming scene.\n  return (\n    <AbsoluteFill\n      style={{\n        opacity: 1 - presentationProgress,\n        filter: `blur(${frost * presentationProgress}px)`,\n      }}\n    >\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * The incoming scene wipes in from a direction behind a frosted-glass edge\n * that sharpens as it settles, while the outgoing scene frosts over beneath\n * it. Reads like a sheet of glass sliding across — calmer than a hard wipe,\n * more textured than a cross-fade.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function glassWipe(\n  options?: GlassWipeOptions,\n): TransitionPresentation<GlassWipeProps> {\n  const opts = glassWipeSchema.parse(options ?? {});\n  return {\n    component: GlassWipePresentation,\n    props: { direction: opts.direction, frost: opts.frost },\n  };\n}\n\nexport default glassWipe;\n"
+    },
+    {
+      "path": "registry/transitions/glass-wipe/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/glass-wipe/schema.ts",
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link glassWipe} options. */\nexport const glassWipeSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('glass-wipe').default('glass-wipe'),\n  /** The direction the incoming scene wipes in from. */\n  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),\n  /** Peak frosted blur in px at the wipe edge — clears as the scene settles. */\n  frost: z.number().min(0).max(40).default(12),\n});\n\nexport type GlassWipeOptions = z.input<typeof glassWipeSchema>;\n"
+    },
+    {
+      "path": "registry/transitions/glass-wipe/glass-wipe.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/glass-wipe/glass-wipe.meta.json",
+      "content": "{\n  \"name\": \"glass-wipe\",\n  \"title\": \"glassWipe\",\n  \"description\": \"The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"glass\",\n    \"frost\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/glass-wipe/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/glass-wipe/README.md",
+      "content": "# glassWipe\n\nThe incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Reads like a sheet of glass sliding across — calmer than a hard wipe, more textured than a cross-fade.\n\nOnda-original. Use inside Remotion's `<TransitionSeries>`.\n\n## Options\n\n| Option | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `direction` | `'left' \\| 'right' \\| 'up' \\| 'down'` | `'left'` | Where the incoming scene wipes in from. |\n| `frost` | `number` | `16` | Peak edge blur (px); clears as it settles. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { glassWipe } from './components/onda/transitions/glass-wipe/glassWipe';\n\n<TransitionSeries>\n  <TransitionSeries.Sequence durationInFrames={150}><SceneA /></TransitionSeries.Sequence>\n  <TransitionSeries.Transition\n    presentation={glassWipe({ direction: 'left' })}\n    timing={linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })}\n  />\n  <TransitionSeries.Sequence durationInFrames={150}><SceneB /></TransitionSeries.Sequence>\n</TransitionSeries>\n```\n"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "glass-wipe",
+  "title": "glassWipe",
+  "description": "The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "wipe",
+    "glass",
+    "frost",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}
