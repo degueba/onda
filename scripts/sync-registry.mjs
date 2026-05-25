@@ -27,23 +27,39 @@ const ROOT = resolve(__dirname, '..');
 
 const REGISTRY_PATH = resolve(ROOT, 'registry/registry.json');
 const COMPONENTS_DIR = resolve(ROOT, 'registry/components');
+const TRANSITIONS_DIR = resolve(ROOT, 'registry/transitions');
 
 /**
- * Load every published component's meta.json. "Published" = the dir has
- * both <slug>.meta.json and README.md; WIP dirs are skipped.
+ * Load every published catalog entry's meta.json from the given root dir.
+ * "Published" = the dir has both <slug>.meta.json and README.md; WIP dirs
+ * are skipped. Same rule the docs site uses to surface an entry.
  */
-function loadMetas() {
-  return readdirSync(COMPONENTS_DIR, { withFileTypes: true })
+function loadMetasFrom(rootDir) {
+  if (!existsSync(rootDir)) return [];
+  return readdirSync(rootDir, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => {
-      const compDir = resolve(COMPONENTS_DIR, d.name);
-      const metaPath = resolve(compDir, `${d.name}.meta.json`);
-      const readmePath = resolve(compDir, 'README.md');
+      const dir = resolve(rootDir, d.name);
+      const metaPath = resolve(dir, `${d.name}.meta.json`);
+      const readmePath = resolve(dir, 'README.md');
       if (!existsSync(metaPath) || !existsSync(readmePath)) return null;
       const meta = JSON.parse(readFileSync(metaPath, 'utf-8'));
       return { slug: d.name, meta };
     })
     .filter(Boolean);
+}
+
+/**
+ * Load every published catalog entry from both components/ and
+ * transitions/. Transitions live in their own dir to keep the file
+ * layout aligned with the conceptual split (per techspec 017) — but
+ * they share the same registry.json items array via this combined load.
+ */
+function loadMetas() {
+  return [
+    ...loadMetasFrom(COMPONENTS_DIR),
+    ...loadMetasFrom(TRANSITIONS_DIR),
+  ];
 }
 
 /**

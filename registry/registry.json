@@ -338,6 +338,14 @@
       "description": "Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).",
       "categories": ["media"],
       "dependencies": ["remotion", "@remotion/media-utils", "zod", "react"]
+    },
+    {
+      "name": "cross-fade",
+      "type": "registry:component",
+      "title": "crossFade",
+      "description": "A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
     }
   ]
 }

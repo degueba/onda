@@ -3,6 +3,7 @@
 // zod-to-json-schema) as the introspection format — stable and well-known.
 
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import type { ZodTypeAny } from 'zod';
 import type { ComponentRegistry } from './composition-renderer';
 
 export type RegistryPropSummary = {
@@ -24,6 +25,38 @@ export type RegistryComponentSummary = {
 export type RegistrySummary = {
   components: RegistryComponentSummary[];
 };
+
+/**
+ * Catalog entry for a transition. Mirrors {@link RegistryComponentSummary}
+ * shape minus the component-specific capability flags (transitions don't
+ * support `placement` / `size` — those concepts apply to scene rendering,
+ * not to the cut between scenes).
+ */
+export type RegistryTransitionSummary = {
+  name: string;
+  description?: string;
+  options: RegistryPropSummary[];
+};
+
+export type TransitionRegistrySummary = {
+  transitions: RegistryTransitionSummary[];
+};
+
+/**
+ * Minimal shape for the transitions registry consumed by
+ * {@link summarizeTransitionRegistry}. Each entry is a factory + the Zod
+ * schema that validates the factory's options.
+ *
+ * Kept separate from `ComponentRegistry` because transitions are
+ * factories (not React components) and the entry shape genuinely
+ * differs. Agents need to see them as a distinct category — Studio's
+ * dispatch table maps `kind: 'cross-fade'` to a transition factory,
+ * not a scene component.
+ */
+export type TransitionRegistry = Record<
+  string,
+  { schema: ZodTypeAny }
+>;
 
 // Render a JSON Schema fragment as a compact TS-flavored type string.
 // Covers the shapes that show up in Onda schemas (enums, unions, primitives,
@@ -72,6 +105,50 @@ export function summarizeRegistry(registry: ComponentRegistry): RegistrySummary 
   );
 
   return { components };
+}
+
+/**
+ * Walk a transition registry and produce the same kind of structured
+ * summary {@link summarizeRegistry} produces for components — names,
+ * descriptions, option props. Lives as a separate function (not a
+ * field on `RegistrySummary`) so consumers can opt in without paying
+ * the bundle cost for a category they don't use.
+ *
+ * Pair with {@link summarizeRegistry} when building an agent system
+ * prompt that needs both — typically:
+ *   `{ ...summarizeRegistry(componentRegistry), ...summarizeTransitionRegistry(transitionRegistry) }`
+ */
+export function summarizeTransitionRegistry(
+  registry: TransitionRegistry,
+): TransitionRegistrySummary {
+  const transitions: RegistryTransitionSummary[] = Object.entries(registry).map(
+    ([name, { schema }]) => {
+      const raw = zodToJsonSchema(schema, name) as Record<string, unknown>;
+      const def =
+        (raw.definitions as Record<string, Record<string, unknown>> | undefined)?.[name] ?? raw;
+      const properties =
+        (def.properties as Record<string, Record<string, unknown>>) ?? {};
+      const required = new Set((def.required as string[]) ?? []);
+
+      const options: RegistryPropSummary[] = Object.entries(properties).map(
+        ([propName, propSchema]) => ({
+          name: propName,
+          type: jsonSchemaToTypeString(propSchema),
+          required: required.has(propName),
+          default: propSchema.default,
+          description: propSchema.description as string | undefined,
+        }),
+      );
+
+      return {
+        name,
+        description: def.description as string | undefined,
+        options,
+      };
+    },
+  );
+
+  return { transitions };
 }
 
 /**

@@ -37,6 +37,7 @@ const ROOT = resolve(__dirname, '..');
 
 const MANIFEST_DIR = resolve(ROOT, 'registry/r');
 const COMPONENTS_DIR = resolve(ROOT, 'registry/components');
+const TRANSITIONS_DIR = resolve(ROOT, 'registry/transitions');
 
 function readJson(p) {
   return JSON.parse(readFileSync(p, 'utf8'));
@@ -65,9 +66,17 @@ for (const mf of manifestFiles) {
   let metaPath = null;
   let meta = null;
   if (!isLibManifest) {
-    metaPath = resolve(COMPONENTS_DIR, slug, `${slug}.meta.json`);
-    if (!existsSync(metaPath)) {
-      errors.push(`${slug}: missing meta.json at ${metaPath}`);
+    // Catalog entries live under either registry/components/ (default)
+    // or registry/transitions/ (per techspec 017). Check both — the
+    // first match wins.
+    const componentMetaPath = resolve(COMPONENTS_DIR, slug, `${slug}.meta.json`);
+    const transitionMetaPath = resolve(TRANSITIONS_DIR, slug, `${slug}.meta.json`);
+    if (existsSync(componentMetaPath)) {
+      metaPath = componentMetaPath;
+    } else if (existsSync(transitionMetaPath)) {
+      metaPath = transitionMetaPath;
+    } else {
+      errors.push(`${slug}: missing meta.json (looked in components/ and transitions/)`);
       continue;
     }
     meta = readJson(metaPath);
