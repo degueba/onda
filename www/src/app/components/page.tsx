@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
@@ -123,7 +124,11 @@ export default function ComponentsIndexPage() {
           </p>
         </header>
 
-        <ComponentsCatalog groups={groups} total={components.length} />
+        {/* useSearchParams() inside ComponentsCatalog needs a Suspense
+            boundary during static prerender on Next 15+. */}
+        <Suspense fallback={null}>
+          <ComponentsCatalog groups={groups} total={components.length} />
+        </Suspense>
       </main>
 
       <Footer />
