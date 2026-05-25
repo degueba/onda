@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { placementSchema, sizeRoleSchema } from '../../../lib/canvas';
+import { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';
 
 /** Zod schema for `LowerThird` props. */
 export const lowerThirdSchema = z.object({

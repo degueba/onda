@@ -1,16 +1,8 @@
 import { clockWipe as remotionClockWipe, type ClockWipeProps as RemotionClockWipeProps } from '@remotion/transitions/clock-wipe';
 import type { TransitionPresentation } from '@remotion/transitions';
-import { z } from 'zod';
+import { clockWipeSchema, type ClockWipeOptions } from './schema';
 
-/** Zod schema for {@link clockWipe} options. */
-export const clockWipeSchema = z.object({
-  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's clock wipe. */
-  width: z.number().int().positive(),
-  /** Canvas height in px — typically `useVideoConfig().height`. */
-  height: z.number().int().positive(),
-});
-
-export type ClockWipeOptions = z.input<typeof clockWipeSchema>;
+export { clockWipeSchema, type ClockWipeOptions };
 
 /**
  * A clock-hand wipe — the boundary between scenes rotates around the

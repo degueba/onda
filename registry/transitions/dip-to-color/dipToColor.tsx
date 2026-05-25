@@ -1,22 +1,9 @@
 import React from 'react';
-import type {
-  TransitionPresentation,
-  TransitionPresentationComponentProps,
-} from '@remotion/transitions';
+import type { TransitionPresentation, TransitionPresentationComponentProps } from '@remotion/transitions';
 import { AbsoluteFill } from 'remotion';
-import { z } from 'zod';
+import { dipToColorSchema, type DipToColorOptions } from './schema';
 
-/** Zod schema for {@link dipToColor} options. */
-export const dipToColorSchema = z.object({
-  /**
-   * Solid color to dip through. Default `#08080A` (Onda canvas bg) for
-   * brand consistency. Pass `'#000'` for the editing-room classic
-   * dip-to-black, or `'#fff'` for dip-to-white.
-   */
-  color: z.string().default('#08080A'),
-});
-
-export type DipToColorOptions = z.input<typeof dipToColorSchema>;
+export { dipToColorSchema, type DipToColorOptions };
 
 type DipToColorProps = { color: string };
 

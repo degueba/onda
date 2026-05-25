@@ -1,21 +1,9 @@
 import React from 'react';
-import type {
-  TransitionPresentation,
-  TransitionPresentationComponentProps,
-} from '@remotion/transitions';
+import type { TransitionPresentation, TransitionPresentationComponentProps } from '@remotion/transitions';
 import { AbsoluteFill } from 'remotion';
-import { z } from 'zod';
+import { pushSchema, type PushOptions } from './schema';
 
-/** Zod schema for {@link push} options. */
-export const pushSchema = z.object({
-  /**
-   * Which direction the entire frame translates. Both scenes move
-   * together as a unit — reads as a camera pan between them.
-   */
-  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),
-});
-
-export type PushOptions = z.input<typeof pushSchema>;
+export { pushSchema, type PushOptions };
 
 type PushProps = { direction: 'left' | 'right' | 'up' | 'down' };
 

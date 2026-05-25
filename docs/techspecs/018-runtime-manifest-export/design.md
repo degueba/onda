@@ -80,17 +80,23 @@ export const manifest: ReadonlyArray<ComponentManifestEntry>;
 
 - **Version field**: skipped in v1. Consumers wanting a version key can read it from `package.json`. Easy to add later if a real need surfaces.
 
-## Implementation v1 — known limitation
+## Implementation — schema-source-split refactor
 
-The schemas live inside their components' `<Component>.tsx` files today (with a `schema.ts` re-export per the existing convention). When esbuild bundles the manifest, it follows the re-export chain into the component files — and those files have top-level `import React from 'react'` and Remotion imports. esbuild tree-shakes the component bodies but cannot drop the top-level import statements (they may have side effects).
+Done as part of this spec, not deferred. Original concern: the schemas lived inside their components' `<Component>.tsx` files (with `schema.ts` as a re-export per the existing convention). When esbuild bundled the manifest, it followed the re-export chain into the component files and couldn't drop their top-level `import React from 'react'` and Remotion imports — the manifest bundle dragged React + Remotion through even though it only ever invoked Zod.
 
-Net effect: `dist/manifest.js` ships with `import` statements for `react`, `react-dom`, `remotion`, `@remotion/transitions`, `@remotion/media-utils`, and `@remotion/paths` at module-load time. Even though the manifest's runtime API only invokes Zod, those modules must be resolvable when the consumer imports `'ondajs'`.
+The fix moved schema definitions into pure `schema.ts` files (no React, no JSX) and split `lib/canvas.tsx` into a sibling `lib/canvas-schemas.ts`. Every component / transition `schema.ts` is now the canonical home of its Zod schema; the `.tsx` files import the schema from `./schema` and re-export it for back-compat — every existing consumer importing `{ blurRevealSchema }` from either path keeps working.
 
-Handled by declaring all six as `peerDependencies` (with `peerDependenciesMeta.optional = true`), and `zod` as a required peer dependency:
+Done mechanically via a one-time AST-based codemod (`scripts/refactor-schemas-ast.mjs`) that:
 
-- **CLI-only users** (`npx ondajs add <slug>`) — the CLI binary is built separately and does not import the manifest module, so missing react/remotion does not break the CLI flow.
-- **Manifest consumers** — almost always already have React + Remotion installed (they're building Onda compositions). Optional-peer declaration prevents nuisance install warnings while still surfacing the runtime expectation.
+1. Parses each `<Component>.tsx` with the TypeScript compiler API
+2. Locates the schema `VariableStatement` (init is a `CallExpression` on `z.*`) plus its inferred `Props` / `Options` type alias
+3. Pulls in any local helper consts the schema depends on (e.g. audio-clip's `const timeSpec = z.union(...)`)
+4. Re-routes `lib/canvas` imports needed by the schema to `lib/canvas-schemas`
+5. Emits a self-contained `schema.ts` and rewrites the implementation file with trimmed imports + a back-compat re-export
 
-The right structural fix is to extract every component's schema into its `schema.ts` file as the source of truth (today `schema.ts` re-exports from the `.tsx`), and split `lib/canvas.tsx`'s schemas into a sibling `lib/canvas-schemas.ts`. With that refactor the manifest bundle drops to ~30 KB of pure Zod with no React/Remotion imports. Tracked as follow-up techspec 019.
+Result:
 
-Bundle size today: **48 KB minified**, 104 KB raw. Acceptable for v1.
+- Manifest bundle: **41 KB minified** (was 48 KB pre-refactor) — 15% smaller.
+- Zero React, Remotion, or `@remotion/*` imports in `dist/manifest.js` — only `zod`.
+- Only one peer dependency now: `zod`. React + Remotion + `@remotion/*` are no longer declared as peers at all. Non-React consumers (training-data pipelines, validators, brief generators) can use the manifest with `zod` as their sole runtime dependency.
+- CLI binary unchanged; `npx ondajs add <slug>` flow identical to before.

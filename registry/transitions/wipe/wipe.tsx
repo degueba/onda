@@ -1,6 +1,8 @@
 import { wipe as remotionWipe, type WipeProps as RemotionWipeProps } from '@remotion/transitions/wipe';
 import type { TransitionPresentation } from '@remotion/transitions';
-import { z } from 'zod';
+import { wipeSchema, type WipeOptions } from './schema';
+
+export { wipeSchema, type WipeOptions };
 
 // Remotion's wipe supports 8 directions including diagonals. Onda caps
 // at 4 cardinals — diagonals tend to read as "PowerPoint slide
@@ -12,14 +14,6 @@ const DIRECTION_MAP = {
   up: 'from-bottom',
   down: 'from-top',
 } as const;
-
-/** Zod schema for {@link wipe} options. */
-export const wipeSchema = z.object({
-  /** Which direction the wipe travels across the screen. */
-  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),
-});
-
-export type WipeOptions = z.input<typeof wipeSchema>;
 
 /**
  * A hard-edged wipe between two scenes — incoming scene reveals from

@@ -1,6 +1,8 @@
 import { slide as remotionSlide, type SlideProps as RemotionSlideProps } from '@remotion/transitions/slide';
 import type { TransitionPresentation } from '@remotion/transitions';
-import { z } from 'zod';
+import { slideSchema, type SlideOptions } from './schema';
+
+export { slideSchema, type SlideOptions };
 
 // User-facing direction vocabulary maps to Remotion's. Going with motion
 // direction ("slide left" = scene moves left = enters from the right)
@@ -11,20 +13,6 @@ const DIRECTION_MAP = {
   up: 'from-bottom',
   down: 'from-top',
 } as const;
-
-/** Zod schema for {@link slide} options. */
-export const slideSchema = z.object({
-  /**
-   * Which direction the incoming scene slides toward.
-   * - `'left'` — both scenes appear to move leftward (new scene from the right)
-   * - `'right'` — both appear to move rightward (new from the left)
-   * - `'up'` — both move upward (new from below)
-   * - `'down'` — both move downward (new from above)
-   */
-  direction: z.enum(['left', 'right', 'up', 'down']).default('left'),
-});
-
-export type SlideOptions = z.input<typeof slideSchema>;
 
 /**
  * A directional slide between two scenes — only the incoming scene

@@ -1,48 +1,11 @@
 import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
-import { z } from 'zod';
-import { DURATION, SPRING_SMOOTH } from '../../../lib/motion';
+import { SPRING_SMOOTH } from '../../../lib/motion';
 import { entryFade } from '../../../lib/choreography';
-import { PlacementBox, placementSchema, sizeRoleSchema, resolveSize } from '../../../lib/canvas';
+import { PlacementBox, resolveSize } from '../../../lib/canvas';
+import { countUpSchema, type CountUpProps } from './schema';
 
-/** Zod schema for {@link CountUp} props. */
-export const countUpSchema = z.object({
-  /** Starting value. */
-  from: z.number().default(0),
-  /** Ending value. */
-  to: z.number().default(100),
-  /** Frames before the count starts. */
-  delay: z.number().int().min(0).default(0),
-  /** Frames to count from `from` to `to`. Numbers want more time than text. */
-  duration: z.number().int().min(1).default(DURATION.slow),
-  /** Fraction digits to render. */
-  decimals: z.number().int().min(0).default(0),
-  /** Prepended to the number (e.g. `'$'`). */
-  prefix: z.string().default(''),
-  /** Appended to the number (e.g. `'%'`). */
-  suffix: z.string().default(''),
-  /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
-  /** Pixels. Counters are usually large. Wins over `size` if both are passed. */
-  fontSize: z.number().default(120),
-  /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
-  size: sizeRoleSchema.optional(),
-  /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
-  /** Font weight. Display default `600`. */
-  fontWeight: z.number().optional(),
-  /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */
-  letterSpacing: z.string().optional(),
-  /** Unitless line height. Default `1.1`. */
-  lineHeight: z.number().optional(),
-  /** Text alignment. */
-  align: z.enum(['left', 'center', 'right']).optional(),
-  /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
-  placement: placementSchema.optional(),
-});
-
-/** Inferred props for {@link CountUp}. */
-export type CountUpProps = z.infer<typeof countUpSchema>;
+export { countUpSchema, type CountUpProps };
 
 /**
  * An animated number that counts from `from` to `to` on `SPRING_SMOOTH`.

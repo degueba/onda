@@ -64,21 +64,7 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "zod": "^3.23.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "remotion": "^4.0.0",
-    "@remotion/transitions": "^4.0.0",
-    "@remotion/media-utils": "^4.0.0",
-    "@remotion/paths": "^4.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-dom": { "optional": true },
-    "remotion": { "optional": true },
-    "@remotion/transitions": { "optional": true },
-    "@remotion/media-utils": { "optional": true },
-    "@remotion/paths": { "optional": true }
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

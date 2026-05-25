@@ -1,16 +1,8 @@
 import { iris as remotionIris, type IrisProps as RemotionIrisProps } from '@remotion/transitions/iris';
 import type { TransitionPresentation } from '@remotion/transitions';
-import { z } from 'zod';
+import { irisSchema, type IrisOptions } from './schema';
 
-/** Zod schema for {@link iris} options. */
-export const irisSchema = z.object({
-  /** Canvas width in px — typically `useVideoConfig().width`. Required by Remotion's iris. */
-  width: z.number().int().positive(),
-  /** Canvas height in px — typically `useVideoConfig().height`. */
-  height: z.number().int().positive(),
-});
-
-export type IrisOptions = z.input<typeof irisSchema>;
+export { irisSchema, type IrisOptions };
 
 /**
  * An iris transition — a circular reveal that grows from / collapses
