@@ -1,81 +1,46 @@
-# Onda catalog
+# What's in Onda
 
-> Single-pane view of what's in `registry/components/`. Updated as components land.
+> The breadth of the library at a glance. Browse and **try every component interactively** at [/components](/components); see them composed into full videos at [/showcase](/showcase). This page is the map.
 
-## Totals
+Onda is **70 components + 18 transitions**, built on a shared foundation. Everything is deterministic (a pure function of the current frame — no `Math.random()`/`Date` in render), Zod-typed, premium by default, and carries one motion identity.
 
-- **Built: 38 components** (Entrances 12 · Data 6 · Graphics 5 · Atmosphere 3 · Cinematic 5 · Scenes 7)
+## Components by category
 
-## What's built
+- **Entrances (15)** — reveal a single element as it enters. `blur-reveal` (the reference primitive), `fade-in`, `slide-in`, `scale-in`, `rotate-in`, `mask-reveal`, `word-stagger`, `word-rotate`, `typewriter`, `tracking-in`, `matrix-decode`, `slot-machine-roll`, `stagger-group`, `fade-out`, `slide-out`.
+- **Interface (15)** — developer & product UI surfaces. `code-block`, `terminal`, `browser-frame`, `device-frame`, `cursor`, `code-diff`, `progress-steps`, `pulsing-indicator`, `kanban-board`, `pricing-card`, `bento-grid`, `split-screen`, `input-field`, `skeleton-card`, `button`.
+- **Graphics (12)** — emphasis and treatment on content. `highlight`, `underline`, `shimmer-sweep`, `text-fade-replace`, `rgb-glitch-text`, `spotlight-card`, `draw-on`, `callout`, `icon-pop`, `node-graph`, `confetti`, `bounding-box`.
+- **Data (7)** — animated numbers & charts. `count-up`, `bar-chart`, `line-chart`, `pie-reveal`, `progress-bar`, `timeline`, `captions`.
+- **Scenes (7)** — composite scene blocks. `title-card`, `stat-card`, `quote-card`, `chapter-card`, `end-card`, `lower-third`, `logo-sting`.
+- **Atmosphere (5)** — full-canvas backgrounds & texture. `mesh-gradient`, `dynamic-grid`, `gradient-shift`, `grain-overlay`, `vignette`.
+- **Cinematic (5)** — camera-feel moves. `ken-burns`, `parallax`, `camera-shake`, `spotlight`, `marquee`.
+- **Media (4)** — audio & video. `video-clip`, `image-reveal`, `audio-clip`, `audio-visualizer`.
 
-### Entrances (12)
+→ The full, filterable list with live previews lives at [/components](/components).
 
-| Component | One-liner |
-| --- | --- |
-| `blur-reveal` | Blur + opacity + 16px rise. The reference primitive. |
-| `fade-in` | Pure opacity. The simplest reveal. |
-| `slide-in` | Direction-parameterized translate + fade (up / down / left / right). |
-| `scale-in` | Scale 0.9 → 1.0 + fade. |
-| `rotate-in` | Rotation `fromAngle` → 0° + fade. |
-| `mask-reveal` | Clip-path entrance, hard pixel-sharp moving edge. |
-| `word-stagger` | Multi-word reveal with the canonical 4-frame stagger. |
-| `typewriter` | Char-by-char (intentionally linear). |
-| `stagger-group` | Composition primitive — sequenced entrance for a list of items. |
-| `word-rotate` | Cycles through phrases in place with overlapping fade envelopes. |
-| `fade-out` | Pure opacity exit. Faster than entrances by design. |
-| `slide-out` | Direction-parameterized translate + fade exit (mirrors SlideIn). |
+## Transitions
 
-### Data (6)
+18 scene-to-scene cuts for `<TransitionSeries>`, all baking in the house timing so cuts feel like the scenes:
 
-| Component | One-liner |
-| --- | --- |
-| `count-up` | Animated number with tabular nums, en-US locale, optional prefix/suffix. |
-| `captions` | Word-by-word kinetic captions driven by a timed array. |
-| `bar-chart` | Horizontal bars grow on `SPRING_SMOOTH`; the largest earns the accent. |
-| `pie-reveal` | Single SVG arc fills 0 → value% with optional centered label. |
-| `progress-bar` | Track-and-fill bar with tabular-num label. |
-| `timeline` | Drawn line + staggered dots + labels; the last dot is the accent. |
+- **Calm:** `crossFade` · `morph` · `dipToColor` · `blur`
+- **Geometric:** `wipe` · `clockWipe` · `iris` · `flip` · `expandMorph`
+- **Spatial:** `slide` · `push` · `depthPush` · `devicePullback`
+- **Accent / high-energy:** `zoom` · `chromaticAberration` · `gridPixelate` · `glassWipe` · `typeMask`
 
-### Graphics (5)
+Usage and the full pattern: [Timeline & transitions](/docs/composing-timeline). See them in motion in the [dev-demo showcase](/showcase/dev-demo).
 
-| Component | One-liner |
-| --- | --- |
-| `draw-on` | SVG path strokes itself in via `@remotion/paths`. |
-| `callout` | Label + arrow annotation pointing at a canvas anchor. |
-| `underline` | Two-phase: text fades, then accent-rose line draws beneath. |
-| `highlight` | Marker bar slides in behind text — full text-height, accent rose. |
-| `icon-pop` | check / cross / dot / star pops in on `SPRING_SMOOTH`. |
+## Foundation
 
-### Atmosphere (3)
+Components are built on a small shared layer you also install (it comes along automatically via the CLI):
 
-| Component | One-liner |
-| --- | --- |
-| `grain-overlay` | Film-grain texture via SVG turbulence. No motion, deliberately. |
-| `marquee` | Seamless looping scroll (intentionally linear). |
-| `gradient-shift` | Slow-drifting two-color gradient background (intentionally linear). |
+- **Tokens** — `COLOR`, `FONT`, `SPACING`, plus surface polish (`RADIUS`, `SHADOW`, `GLOW`, `BLUR`). The locked design system.
+- **Motion** — `DURATION`, `STAGGER`, `SPRING_SMOOTH` / `SPRING_SNAPPY`, `HOUSE_EASE`, and `seededRandom` for deterministic randomness.
+- **Hooks** — `useEntrance`, `useStaggeredEntrance`, `useSpringValue`, `useSceneProgress`, `useTextReveal`.
+- **Primitives** — `Surface` (card / glass), `Glow`, `GridField` — the building blocks the surface-heavy components compose.
 
-### Cinematic (5)
+## Install
 
-| Component | One-liner |
-| --- | --- |
-| `ken-burns` | Slow zoom + pan over an image (intentionally linear). |
-| `camera-shake` | Deterministic decaying shake via seeded `random()`. |
-| `spotlight` | Apple-stage radial light reveal, alpha-aware. |
-| `parallax` | Slow horizontal/vertical drift over an image (intentionally linear). |
-| `vignette` | Static radial edge darkening — cinematic frame. |
+```bash
+npx ondajs add <name>
+```
 
-### Scenes (7)
-
-| Component | Composes |
-| --- | --- |
-| `title-card` | BlurReveal + WordStagger + Underline |
-| `lower-third` | SlideIn + FadeIn + Underline |
-| `stat-card` | CountUp + WordStagger + Underline |
-| `quote-card` | WordStagger + FadeIn + MaskReveal |
-| `end-card` | BlurReveal + StaggerGroup + Underline |
-| `logo-sting` | DrawOn + ScaleIn + Underline |
-| `chapter-card` | FadeIn + BlurReveal + Underline |
-
-## Update protocol
-
-This file is updated alongside any batch that ships components — the same step that updates `registry/registry.json`, `LivePreview.tsx`, and the `r/<slug>.json` manifests.
+Source is copied into your project (never a black-box dependency), and any foundation modules a component needs are pulled in automatically. Own it, edit it.
