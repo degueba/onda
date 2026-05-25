@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/degueba/onda/compare/ondajs-v0.4.0...ondajs-v0.4.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* **cli:** ship canvas-schemas.ts alongside canvas.tsx in lib-canvas ([3b315a0](https://github.com/degueba/onda/commit/3b315a0)) — the schema-source-split refactor in #23 made every component schema import from `lib/canvas-schemas`, but the lib-canvas manifest only shipped `canvas.tsx`, leaving consumers with unresolved `@/lib/onda/canvas-schemas` imports after `bunx ondajs add <slug>`.
+
 ## [0.4.0](https://github.com/degueba/onda/compare/ondajs-v0.3.0...ondajs-v0.4.0) (2026-05-25)
 
 
