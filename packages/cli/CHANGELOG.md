@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/degueba/onda/compare/ondajs-v0.3.0...ondajs-v0.4.0) (2026-05-25)
+
+
+### Features
+
+* **cli:** runtime manifest export — `import { manifest } from 'ondajs'` ([#23](https://github.com/degueba/onda/issues/23)) ([0ce1ae5](https://github.com/degueba/onda/commit/0ce1ae58ae2f250e297e3215540780cb6141a104)), closes [#21](https://github.com/degueba/onda/issues/21)
+
 ## [0.3.0](https://github.com/degueba/onda/compare/ondajs-v0.2.0...ondajs-v0.3.0) (2026-05-24)
 
 
