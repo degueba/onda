@@ -84,7 +84,7 @@ Full motion philosophy and rationale: [docs/motion-language.md](docs/motion-lang
 - Always pass `extrapolateLeft: 'clamp'` and `extrapolateRight: 'clamp'` to `interpolate` unless intentionally extending the range.
 - **Timing at 30fps:** entrances 18–28 frames, exits 12–18, stagger 3–5 frames between siblings. Travel 12–24px, not 80px.
 - **One focal element per moment.** If two things compete, stagger them with `<Sequence>`. Never hardcode frame offsets inside a component to fake sequencing.
-- **When in doubt, calmer and more minimal.** Bouncy, busy, or default-linear is wrong even if technically correct. Restraint IS the brand.
+- **Calm is the default, not the ceiling.** The house defaults above (spring, easing, timing) make the restrained signature the path of least resistance — and that signature is what makes Onda recognizable. But the catalog spans the full range, from calm to high-energy: video editors need punch as well as polish. The bar is **craft and intent, not low energy** — a bold effect built to these defaults' quality belongs; a cheap or sloppy one, at any energy, doesn't.
 
 -----
 
@@ -137,8 +137,8 @@ Every code block on the site is syntax-highlighted by Shiki using [www/src/lib/o
 
 1. Deterministic? (no random/date/state)
 2. Looks great with default props alone?
-3. Carries the Onda signature — calm, restrained, one clear move, no overshoot?
+3. Built to the Onda quality bar — premium, intentional, house defaults respected? (Calm by default; energetic is fine when it earns it.)
 4. Zod schema complete, premium token-based defaults?
 5. Self-contained, registered, README with usage snippet?
 
-**When in doubt, make it calmer and more minimal, not flashier.** A component that feels busy or bouncy is wrong even if technically correct. Onda's restraint IS the brand.
+**When in doubt, raise the craft, not lower the energy.** Calm is Onda's default and signature — but the catalog spans the full range, and editors reach for bold as well as restrained. A component is wrong when it's cheap or sloppy, not when it's bold.

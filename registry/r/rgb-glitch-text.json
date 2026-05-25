@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rgb-glitch-text",
+  "type": "registry:component",
+  "title": "RgbGlitchText",
+  "description": "RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-random"
+  ],
+  "files": [
+    {
+      "path": "registry/components/rgb-glitch-text/RgbGlitchText.tsx",
+      "type": "registry:component",
+      "target": "components/onda/rgb-glitch-text/RgbGlitchText.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame, useVideoConfig } from 'remotion';\nimport { PlacementBox, resolveSize } from '../../../lib/canvas';\nimport { seededRandom } from '../../../lib/random';\nimport { rgbGlitchTextSchema, type RgbGlitchTextProps } from './schema';\n\nexport { rgbGlitchTextSchema, type RgbGlitchTextProps };\n\n/**\n * RGB channel-split text — a red and a cyan copy ride just off the white\n * center, with periodic glitch bursts that kick the split wider. The burst\n * jitter is a pure function of a seeded PRNG keyed by the frame bucket, so it\n * renders identically every time (§1). High-energy by design; the baseline\n * split is restrained so the bursts read as punctuation.\n *\n * @example\n * <RgbGlitchText text=\"GLITCH\" />\n */\nexport const RgbGlitchText: React.FC<RgbGlitchTextProps> = ({\n  text, delay, baseSplit, intensity, glitchPeriod, glitchDuration, seed,\n  color, redColor, cyanColor, fontSize, size, fontFamily, fontWeight, letterSpacing, align, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const { width, height } = useVideoConfig();\n  const local = Math.max(0, frame - delay);\n  const resolvedFontSize = size ? resolveSize(size, { width, height }) : fontSize;\n\n  const inBurst = local % glitchPeriod < glitchDuration;\n  const bucket = Math.floor(local / 2);\n  const rand = seededRandom(seed + bucket * 7919);\n  const burst = inBurst ? rand() * 2 - 1 : 0;\n  const dx = baseSplit + burst * intensity;\n  const dy = inBurst ? (rand() * 2 - 1) * intensity * 0.4 : 0;\n\n  const layer = (tint: string, ox: number, oy: number): React.CSSProperties => ({\n    position: 'absolute',\n    inset: 0,\n    color: tint,\n    transform: `translate(${ox}px, ${oy}px)`,\n    mixBlendMode: 'screen',\n  });\n\n  const base: React.CSSProperties = {\n    fontFamily, fontSize: resolvedFontSize, fontWeight, letterSpacing, textAlign: align, whiteSpace: 'pre',\n  };\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ position: 'relative', ...base }}>\n        <div style={layer(redColor, -dx, -dy)}>{text}</div>\n        <div style={layer(cyanColor, dx, dy)}>{text}</div>\n        <div style={{ position: 'relative', color }}>{text}</div>\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/rgb-glitch-text/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/rgb-glitch-text/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema, sizeRoleSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link RgbGlitchText} props. */\nexport const rgbGlitchTextSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('rgb-glitch-text').default('rgb-glitch-text'),\n  /** The text to glitch. */\n  text: z.string().default('GLITCH'),\n  /** Frames before the effect starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Constant baseline channel split in px (the always-on chromatic edge). */\n  baseSplit: z.number().default(2),\n  /** Peak extra split in px during a glitch burst. */\n  intensity: z.number().default(10),\n  /** Frames between glitch bursts. */\n  glitchPeriod: z.number().int().min(1).default(48),\n  /** Frames a glitch burst lasts. */\n  glitchDuration: z.number().int().min(1).default(8),\n  /** Seed for the (deterministic) burst jitter. */\n  seed: z.number().int().default(7),\n  /** Base (center) text color. Defaults to `--onda-text`. */\n  color: z.string().default('#F2F2F4'),\n  /** Red-channel copy color. */\n  redColor: z.string().default('#FF4D6D'),\n  /** Cyan-channel copy color. */\n  cyanColor: z.string().default('#4DE2FF'),\n  /** Pixels. Wins over `size` if both are passed. */\n  fontSize: z.number().default(120),\n  /** Semantic typography role — canvas-aware pixels. */\n  size: sizeRoleSchema.optional(),\n  /** Font family. */\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n  /** Font weight. */\n  fontWeight: z.number().default(600),\n  /** CSS letter-spacing. */\n  letterSpacing: z.string().default('-0.02em'),\n  /** Text alignment. */\n  align: z.enum(['left', 'center', 'right']).default('center'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link RgbGlitchText}. */\nexport type RgbGlitchTextProps = z.infer<typeof rgbGlitchTextSchema>;\n"
+    },
+    {
+      "path": "registry/components/rgb-glitch-text/rgb-glitch-text.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/rgb-glitch-text/rgb-glitch-text.meta.json",
+      "content": "{\n  \"name\": \"rgb-glitch-text\",\n  \"title\": \"RgbGlitchText\",\n  \"description\": \"RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"glitch\",\n    \"rgb\",\n    \"chromatic\",\n    \"effect\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/rgb-glitch-text/README.md",
+      "type": "registry:file",
+      "target": "components/onda/rgb-glitch-text/README.md",
+      "content": "# RgbGlitchText\n\nRGB channel-split text — a red and a cyan copy ride just off the white center (composited with `mix-blend-mode: screen`), with periodic glitch bursts that kick the split wider and add vertical jitter. The burst jitter is a pure function of a seeded PRNG (`seededRandom`) keyed by the frame bucket, so it renders identically every time (§1). High-energy by design — the baseline split stays restrained so the bursts read as punctuation, not noise.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `text` | `string` | `\"GLITCH\"` | Text to glitch. |\n| `delay` | `number` | `0` | Frames before the effect. |\n| `baseSplit` | `number` | `2` | Always-on channel split (px). |\n| `intensity` | `number` | `10` | Peak extra split during a burst. |\n| `glitchPeriod` | `number` | `48` | Frames between bursts. |\n| `glitchDuration` | `number` | `8` | Frames a burst lasts. |\n| `seed` | `number` | `7` | Deterministic jitter seed. |\n| `color` / `redColor` / `cyanColor` | `string` | text / red / cyan | Center + channel colors. |\n| `fontSize` / `size` | `number` / role | `120` | Explicit px or canvas-aware role. |\n| `fontFamily`, `fontWeight`, `letterSpacing`, `align` | — | display defaults | Typography vocabulary. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n> Composited with `screen` blend — designed for the dark Onda canvas.\n\n## Usage\n\n```tsx\nimport { RgbGlitchText } from './components/onda/rgb-glitch-text/RgbGlitchText';\n\nexport const GlitchScene = () => (\n  <RgbGlitchText text=\"SIGNAL\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

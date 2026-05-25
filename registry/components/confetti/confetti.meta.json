@@ -1,0 +1,18 @@
+{
+  "name": "confetti",
+  "title": "Confetti",
+  "description": "A celebratory confetti burst — pieces launch from an origin, fan outward, arc under gravity, tumble, and fade. Every per-piece value is seeded, so the same seed renders identically every time. Full-canvas layer; energetic but tasteful.",
+  "category": "graphics",
+  "tags": [
+    "confetti",
+    "celebration",
+    "particles",
+    "burst",
+    "graphics"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

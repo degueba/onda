@@ -1,0 +1,18 @@
+{
+  "name": "button",
+  "title": "Button",
+  "description": "A CTA pill button — accent-filled (primary) or bordered (ghost). It fades and rises in on the house entrance, then plays an optional deterministic click-dip at pressFrame: a quick scale down to 0.94 and back that reads as a press.",
+  "category": "interface",
+  "tags": [
+    "button",
+    "cta",
+    "pill",
+    "press",
+    "ui"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

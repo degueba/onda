@@ -1,0 +1,19 @@
+{
+  "name": "device-pullback",
+  "title": "devicePullback",
+  "description": "The outgoing scene starts as full-bleed UI scaled up, then pulls back to 1x while a minimal device bezel (laptop or phone) draws in around it — so the cut lands on the content framed inside a device mockup. A pull-back-to-reveal-the-product beat for launch and feature reels. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "device",
+    "mockup",
+    "pullback",
+    "reveal",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

@@ -21,10 +21,10 @@ Components are written as **source you own** into your project — not imported 
 
 ## What you get
 
-- **40+ Remotion components** — entrances, scene blocks, data primitives, cinematic effects, media (`ImageReveal`, `VideoClip`), and more.
+- **70 Remotion components + 18 transitions** — entrances, scene blocks, data, graphics, cinematic, media, atmosphere, and an `interface` category covering developer / product UI surfaces (`code-block`, `terminal`, `browser-frame`, `device-frame`, `cursor`, `code-diff`, `kanban-board`, `pricing-card`, `bento-grid`, …).
 - **One placement vocabulary across the catalog** — every positionable component takes a `placement` prop (region shorthand or fractional coordinates) that works on any canvas dimension.
 - **Canvas-aware sizing** — semantic typography roles (`'hero' | 'heading' | 'body' …`) that read at the same visual weight on horizontal, vertical, and square compositions.
-- **Agent-friendly by design** — every component ships with a Zod schema. The library also ships `<CompositionRenderer>` + a `Composition` payload type, so an AI agent (or any brief-driven runtime) can emit `{ component, props }` payloads and render them with one prop.
+- **Agent-friendly by design** — every component ships with a Zod schema and a `kind` discriminator, so the whole surface is an exhaustively-typed union. The library also ships `<CompositionRenderer>` + a `Composition` payload type and publishes [`llms.txt`](https://onda.video/llms.txt) / [`llms-full.txt`](https://onda.video/llms-full.txt) for agent context.
 - **No black box, no lock-in** — `ondajs add` writes plain `.tsx` files into your `components/onda/` folder. The CLI also maintains an `index.ts` barrel exporting `ondaRegistry` so you can drop it straight into `<CompositionRenderer registry={ondaRegistry}>`.
 
 ---

@@ -1,0 +1,18 @@
+{
+  "name": "node-graph",
+  "title": "NodeGraph",
+  "description": "A hub-and-spoke constellation: a labeled central hub with satellite nodes that fly in from off-frame, then settle into elliptical orbits at varying radii and speeds. Connection lines hub→satellite periodically light up. All motion is a deterministic, frame-driven, seeded function (§1).",
+  "category": "graphics",
+  "tags": [
+    "graph",
+    "constellation",
+    "orbit",
+    "network",
+    "hub"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -66,6 +66,13 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   }, [Component]);
 
   const playerRef = useRef<PlayerRef>(null);
+  // Latest hover state for the gesture-primer listener (avoids a stale closure).
+  const hoveringRef = useRef(false);
+  // True once the user has produced a real activation gesture (click/key/touch).
+  // Muted previews may play without a gesture, but AUDIO may not — so we only
+  // unmute after the page has been activated (keeps showcases with sound silent
+  // on the very first cold hover, audible once the user has interacted).
+  const interactedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -146,6 +153,34 @@ export function ComponentPreview<T extends Record<string, unknown>>({
     else player.play();
   }, []);
 
+  // hoverToPlay can't start on the first hover after a fresh page load:
+  // `mouseenter` is NOT a user-activation gesture, so the browser blocks the
+  // Player's play() until a real gesture (click / keydown / touch). Before
+  // this, playback only "unlocked" after navigating (the nav click was the
+  // gesture). Prime it: on the first such gesture, if this preview is being
+  // hovered, start it — and the activation makes every later hover work too.
+  useEffect(() => {
+    if (!hoverToPlay) return;
+    const onGesture = () => {
+      interactedRef.current = true;
+      if (hoveringRef.current) {
+        const player = playerRef.current;
+        if (player) {
+          player.play();
+          player.unmute(); // page is now activated → audio allowed
+        }
+      }
+    };
+    window.addEventListener('pointerdown', onGesture);
+    window.addEventListener('keydown', onGesture);
+    window.addEventListener('touchstart', onGesture);
+    return () => {
+      window.removeEventListener('pointerdown', onGesture);
+      window.removeEventListener('keydown', onGesture);
+      window.removeEventListener('touchstart', onGesture);
+    };
+  }, [hoverToPlay]);
+
   const showOverlay = !isPlaying || isHovering;
 
   // Time readout — seconds with one decimal. All Onda previews are short
@@ -159,10 +194,26 @@ export function ComponentPreview<T extends Record<string, unknown>>({
       className={`relative w-full h-full ${className ?? ''}`}
       onMouseEnter={() => {
         setIsHovering(true);
-        if (hoverToPlay) playerRef.current?.play();
+        hoveringRef.current = true;
+        if (hoverToPlay) {
+          const player = playerRef.current;
+          if (player) {
+            player.play();
+            // Unmute once the page has been activated so showcases with audio
+            // are audible on hover; before activation they play muted (visual).
+            const activated =
+              interactedRef.current ||
+              Boolean(
+                (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } })
+                  .userActivation?.hasBeenActive,
+              );
+            if (activated) player.unmute();
+          }
+        }
       }}
       onMouseLeave={() => {
         setIsHovering(false);
+        hoveringRef.current = false;
         if (hoverToPlay) {
           const player = playerRef.current;
           if (player) {
@@ -184,6 +235,13 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         loop={loop}
         controls={false}
         clickToPlay={false}
+        // Gallery (hoverToPlay) tiles start MUTED so the browser allows
+        // playback without a prior user gesture — otherwise the first hover
+        // after a cold page load is blocked (mouseenter isn't user activation)
+        // and playback only "unlocks" after a navigation click. Onda previews
+        // carry no essential audio, so muting the grid thumbnails is harmless;
+        // the detail page / hero (autoPlay, not hoverToPlay) stay unmuted.
+        initiallyMuted={hoverToPlay}
         // Disable Remotion's preloaded shared audio elements. Browsers treat
         // those as autoplay-restricted media and block Player.play() on
         // mount, even though Onda compositions have no audio. Without this,

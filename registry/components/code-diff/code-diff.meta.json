@@ -1,0 +1,18 @@
+{
+  "name": "code-diff",
+  "title": "CodeDiff",
+  "description": "A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.",
+  "category": "interface",
+  "tags": [
+    "code",
+    "diff",
+    "changelog",
+    "developer",
+    "glass"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

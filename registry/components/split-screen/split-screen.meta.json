@@ -1,0 +1,18 @@
+{
+  "name": "split-screen",
+  "title": "SplitScreen",
+  "description": "A two-pane split layout — left and right content panes (any JSX) divided by a thin token line. A container that wraps arbitrary content; the two panes slide in from their outer edges on the house spring.",
+  "category": "interface",
+  "tags": [
+    "layout",
+    "split",
+    "container",
+    "comparison",
+    "two-pane"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "browser-frame",
+  "type": "registry:component",
+  "title": "BrowserFrame",
+  "description": "A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-primitives",
+    "lib-hooks"
+  ],
+  "files": [
+    {
+      "path": "registry/components/browser-frame/BrowserFrame.tsx",
+      "type": "registry:component",
+      "target": "components/onda/browser-frame/BrowserFrame.tsx",
+      "content": "import React from 'react';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { Surface } from '../../../lib/primitives';\nimport { useEntrance } from '../../../lib/hooks';\nimport { browserFrameSchema, type BrowserFrameProps } from './schema';\n\nexport { browserFrameSchema, type BrowserFrameProps };\n\n/**\n * A browser chrome that wraps arbitrary content — pass `children` (JSX), an\n * image `src`, or neither (a neutral placeholder). A container, not a leaf:\n * the documented exception to \"self-contained\" since wrapping is its whole\n * job. Scales-and-fades in on the house spring.\n *\n * @example\n * <BrowserFrame url=\"onda.video\"><MyScene /></BrowserFrame>\n */\nexport const BrowserFrame: React.FC<BrowserFrameProps & { children?: React.ReactNode }> = ({\n  url, src, delay, animate, width, height, placement, children,\n}) => {\n  const entrance = useEntrance({ type: 'scale', delay, from: 0.96 });\n  const style = animate ? entrance : { opacity: 1, transform: 'none' };\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ opacity: style.opacity, transform: style.transform }}>\n        <Surface variant=\"card\" width={width} padding={0}>\n          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 22px', borderBottom: '1px solid #1C1C22' }}>\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            <div\n              style={{\n                marginLeft: 16, flex: 1, height: 40, borderRadius: 999,\n                background: '#121217', border: '1px solid #1C1C22',\n                display: 'flex', alignItems: 'center', padding: '0 20px',\n                color: '#8E8E98', fontFamily: '\"Space Grotesk\", sans-serif', fontSize: 22, letterSpacing: '0.02em',\n              }}\n            >\n              {url}\n            </div>\n          </div>\n          <div style={{ width, height, overflow: 'hidden', background: '#08080A' }}>\n            {children ??\n              (src ? (\n                <img src={src} alt=\"\" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />\n              ) : (\n                <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: '#56565F', fontFamily: '\"Space Grotesk\", sans-serif', fontSize: 32 }}>\n                  {url}\n                </div>\n              ))}\n          </div>\n        </Surface>\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/browser-frame/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/browser-frame/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link BrowserFrame} props. */\nexport const browserFrameSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('browser-frame').default('browser-frame'),\n  /** URL shown in the address pill. */\n  url: z.string().default('onda.video'),\n  /** Optional screenshot/image URL to show inside the frame when no children are passed. */\n  src: z.string().optional(),\n  /** Frames before the entrance. */\n  delay: z.number().int().min(0).default(0),\n  /** Scale-and-fade the frame in on the house spring. */\n  animate: z.boolean().default(true),\n  /** Frame width in px. Sized to fill a good portion of a 1080p+ canvas. */\n  width: z.number().default(1280),\n  /** Content height in px (excludes the chrome bar). */\n  height: z.number().default(720),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link BrowserFrame}. */\nexport type BrowserFrameProps = z.infer<typeof browserFrameSchema>;\n"
+    },
+    {
+      "path": "registry/components/browser-frame/browser-frame.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/browser-frame/browser-frame.meta.json",
+      "content": "{\n  \"name\": \"browser-frame\",\n  \"title\": \"BrowserFrame\",\n  \"description\": \"A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"browser\",\n    \"frame\",\n    \"mockup\",\n    \"container\",\n    \"developer\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/browser-frame/README.md",
+      "type": "registry:file",
+      "target": "components/onda/browser-frame/README.md",
+      "content": "# BrowserFrame\n\nA browser chrome (three dots + an address pill) that wraps arbitrary content. Pass `children` (JSX), an image `src`, or neither (a neutral placeholder showing the URL). It is a **container** — the documented exception to the component contract's \"self-contained\" rule, since wrapping content is its entire purpose. It scales-and-fades in on the house spring.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `url` | `string` | `\"onda.video\"` | Address-pill text. |\n| `src` | `string?` | — | Image to show when no children. |\n| `children` | `ReactNode?` | — | Content to wrap (JSX only). |\n| `delay` | `number` | `0` | Frames before entrance. |\n| `animate` | `boolean` | `true` | Scale-and-fade in. |\n| `width` | `number` | `1280` | Frame width. |\n| `height` | `number` | `720` | Content height (excl. chrome). |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { BrowserFrame } from './components/onda/browser-frame/BrowserFrame';\n\nexport const SiteScene = () => (\n  <BrowserFrame url=\"onda.video\" src=\"/screenshot.png\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

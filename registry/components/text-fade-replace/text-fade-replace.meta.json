@@ -1,0 +1,18 @@
+{
+  "name": "text-fade-replace",
+  "title": "TextFadeReplace",
+  "description": "Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.",
+  "category": "graphics",
+  "tags": [
+    "text",
+    "rotate",
+    "swap",
+    "crossfade",
+    "tagline"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

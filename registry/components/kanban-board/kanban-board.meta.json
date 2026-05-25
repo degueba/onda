@@ -1,0 +1,19 @@
+{
+  "name": "kanban-board",
+  "title": "KanbanBoard",
+  "description": "A data-driven Kanban board — glass Surface columns with a header, status dot, ticket count, and a stack of small glass ticket cards. Cards rise + fade in on the house spring, staggered across the whole board so it assembles as one calm cascade.",
+  "category": "interface",
+  "tags": [
+    "kanban",
+    "board",
+    "columns",
+    "tickets",
+    "glass",
+    "ui"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

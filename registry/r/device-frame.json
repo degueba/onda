@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "device-frame",
+  "type": "registry:component",
+  "title": "DeviceFrame",
+  "description": "A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-hooks"
+  ],
+  "files": [
+    {
+      "path": "registry/components/device-frame/DeviceFrame.tsx",
+      "type": "registry:component",
+      "target": "components/onda/device-frame/DeviceFrame.tsx",
+      "content": "import React from 'react';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { useEntrance } from '../../../lib/hooks';\nimport { deviceFrameSchema, type DeviceFrameProps } from './schema';\n\nexport { deviceFrameSchema, type DeviceFrameProps };\n\nconst SHADOW = '0 50px 90px -40px rgba(0,0,0,0.95)';\nconst BEZEL = '#1C1C22';\nconst SCREEN_BG = '#08080A';\n\nfunction Screen({ src, children, radius }: { src?: string; children?: React.ReactNode; radius: number }) {\n  return (\n    <div style={{ position: 'relative', width: '100%', height: '100%', borderRadius: radius, overflow: 'hidden', background: SCREEN_BG }}>\n      {children ??\n        (src ? (\n          <img src={src} alt=\"\" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />\n        ) : null)}\n    </div>\n  );\n}\n\n/**\n * A phone or laptop bezel that wraps arbitrary content — pass `children` (JSX),\n * an image `src`, or neither. A container (the documented exception to\n * \"self-contained\"); scales-and-fades in on the house spring.\n *\n * @example\n * <DeviceFrame device=\"phone\"><MyScene /></DeviceFrame>\n */\nexport const DeviceFrame: React.FC<DeviceFrameProps & { children?: React.ReactNode }> = ({\n  device, src, delay, animate, width, placement, children,\n}) => {\n  const entrance = useEntrance({ type: 'scale', delay, from: 0.96 });\n  const style = animate ? entrance : { opacity: 1, transform: 'none' };\n\n  let body: React.ReactNode;\n  if (device === 'phone') {\n    const radius = width * 0.15;\n    const bezel = Math.max(12, width * 0.035);\n    body = (\n      <div style={{ width, height: width * 2.05, borderRadius: radius, background: BEZEL, padding: bezel, boxShadow: SHADOW, position: 'relative' }}>\n        {/* notch */}\n        <div style={{ position: 'absolute', top: bezel + 6, left: '50%', transform: 'translateX(-50%)', width: width * 0.32, height: 10, borderRadius: 999, background: '#000', zIndex: 2 }} />\n        <Screen src={src} radius={radius - bezel}>{children}</Screen>\n      </div>\n    );\n  } else {\n    const screenH = width * 0.62;\n    const bezel = Math.max(10, width * 0.02);\n    body = (\n      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>\n        <div style={{ width, height: screenH, borderRadius: 16, background: BEZEL, padding: bezel, boxShadow: SHADOW }}>\n          <Screen src={src} radius={16 - bezel}>{children}</Screen>\n        </div>\n        {/* base / hinge */}\n        <div style={{ width: width * 1.16, height: 14, background: '#26262E', borderRadius: '0 0 14px 14px' }} />\n        <div style={{ width: width * 0.16, height: 6, background: '#1C1C22', borderRadius: '0 0 8px 8px' }} />\n      </div>\n    );\n  }\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ opacity: style.opacity, transform: style.transform }}>{body}</div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/device-frame/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/device-frame/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link DeviceFrame} props. */\nexport const deviceFrameSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('device-frame').default('device-frame'),\n  /** Which device bezel to draw. */\n  device: z.enum(['phone', 'laptop']).default('phone'),\n  /** Optional screenshot/image URL shown inside when no children are passed. */\n  src: z.string().optional(),\n  /** Frames before the entrance. */\n  delay: z.number().int().min(0).default(0),\n  /** Scale-and-fade the device in on the house spring. */\n  animate: z.boolean().default(true),\n  /** Device width in px (height is derived from the device aspect). */\n  width: z.number().default(420),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link DeviceFrame}. */\nexport type DeviceFrameProps = z.infer<typeof deviceFrameSchema>;\n"
+    },
+    {
+      "path": "registry/components/device-frame/device-frame.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/device-frame/device-frame.meta.json",
+      "content": "{\n  \"name\": \"device-frame\",\n  \"title\": \"DeviceFrame\",\n  \"description\": \"A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"device\",\n    \"phone\",\n    \"laptop\",\n    \"mockup\",\n    \"container\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/device-frame/README.md",
+      "type": "registry:file",
+      "target": "components/onda/device-frame/README.md",
+      "content": "# DeviceFrame\n\nA phone or laptop bezel that wraps arbitrary content. Pass `children` (JSX), an image `src`, or neither. Like `browser-frame`, it's a **container** — the documented exception to the \"self-contained\" rule — and it scales-and-fades in on the house spring. Height is derived from the device aspect, so you only set `width`.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `device` | `'phone' \\| 'laptop'` | `'phone'` | Which bezel to draw. |\n| `src` | `string?` | — | Image shown when no children. |\n| `children` | `ReactNode?` | — | Content to wrap (JSX only). |\n| `delay` | `number` | `0` | Frames before entrance. |\n| `animate` | `boolean` | `true` | Scale-and-fade in. |\n| `width` | `number` | `420` | Device width (height derived). |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { DeviceFrame } from './components/onda/device-frame/DeviceFrame';\n\nexport const ProductScene = () => (\n  <DeviceFrame device=\"phone\" src=\"/app-screenshot.png\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

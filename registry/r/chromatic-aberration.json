@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chromatic-aberration",
+  "type": "registry:component",
+  "title": "chromaticAberration",
+  "description": "The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.",
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/transitions/chromatic-aberration/chromaticAberration.tsx",
+      "type": "registry:component",
+      "target": "components/onda/transitions/chromatic-aberration/chromaticAberration.tsx",
+      "content": "import React from 'react';\nimport type { TransitionPresentation, TransitionPresentationComponentProps } from '@remotion/transitions';\nimport { AbsoluteFill } from 'remotion';\nimport { chromaticAberrationSchema, type ChromaticAberrationOptions } from './schema';\n\nexport { chromaticAberrationSchema, type ChromaticAberrationOptions };\n\ntype ChromaticAberrationProps = { intensity: number; redColor: string; cyanColor: string };\n\nconst ChromaticAberrationPresentation: React.FC<\n  TransitionPresentationComponentProps<ChromaticAberrationProps>\n> = ({ presentationProgress, presentationDirection, children, passedProps }) => {\n  const { intensity, redColor, cyanColor } = passedProps;\n  const isEntering = presentationDirection === 'entering';\n  const opacity = isEntering ? presentationProgress : 1 - presentationProgress;\n  // Outgoing: 0 → intensity as it leaves. Incoming: intensity → 0 as it lands.\n  const split = isEntering ? intensity * (1 - presentationProgress) : intensity * presentationProgress;\n\n  return (\n    <AbsoluteFill\n      style={{\n        opacity,\n        filter: `drop-shadow(${split}px 0 0 ${redColor}) drop-shadow(${-split}px 0 0 ${cyanColor})`,\n      }}\n    >\n      {children}\n    </AbsoluteFill>\n  );\n};\n\n/**\n * The cut tears into red/cyan channels and snaps back. Outgoing scene splits\n * wider as it fades; incoming converges from a split as it fades in. The\n * catalog's most aggressive transition — a punctuation move, not a default.\n *\n * Pair with the recommended Onda timing for the house feel:\n * `linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })`\n *\n * Onda-original.\n */\nexport function chromaticAberration(\n  options?: ChromaticAberrationOptions,\n): TransitionPresentation<ChromaticAberrationProps> {\n  const opts = chromaticAberrationSchema.parse(options ?? {});\n  return {\n    component: ChromaticAberrationPresentation,\n    props: { intensity: opts.intensity, redColor: opts.redColor, cyanColor: opts.cyanColor },\n  };\n}\n\nexport default chromaticAberration;\n"
+    },
+    {
+      "path": "registry/transitions/chromatic-aberration/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/transitions/chromatic-aberration/schema.ts",
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link chromaticAberration} options. */\nexport const chromaticAberrationSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('chromatic-aberration').default('chromatic-aberration'),\n  /**\n   * Peak channel-split in px at the cut. Outgoing splits from 0 to this as it\n   * fades; incoming converges from this to 0 as it fades in.\n   */\n  intensity: z.number().min(0).max(60).default(24),\n  /** Red-channel ghost color. */\n  redColor: z.string().default('rgba(255,77,109,0.6)'),\n  /** Cyan-channel ghost color. */\n  cyanColor: z.string().default('rgba(77,226,255,0.6)'),\n});\n\nexport type ChromaticAberrationOptions = z.input<typeof chromaticAberrationSchema>;\n"
+    },
+    {
+      "path": "registry/transitions/chromatic-aberration/chromatic-aberration.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/transitions/chromatic-aberration/chromatic-aberration.meta.json",
+      "content": "{\n  \"name\": \"chromatic-aberration\",\n  \"title\": \"chromaticAberration\",\n  \"description\": \"The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"glitch\",\n    \"chromatic\",\n    \"rgb\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/transitions/chromatic-aberration/README.md",
+      "type": "registry:file",
+      "target": "components/onda/transitions/chromatic-aberration/README.md",
+      "content": "# chromaticAberration\n\nThe cut tears into red/cyan channels and snaps back. The outgoing scene splits wider as it fades; the incoming scene converges from a split as it fades in. Built with layered `drop-shadow` channel ghosts — the catalog's most aggressive transition, meant as a punctuation move, not a default cut.\n\nOnda-original. Use inside Remotion's `<TransitionSeries>`.\n\n## Options\n\n| Option | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `intensity` | `number` | `24` | Peak channel split (px) at the cut. |\n| `redColor` | `string` | `rgba(255,77,109,0.6)` | Red ghost color. |\n| `cyanColor` | `string` | `rgba(77,226,255,0.6)` | Cyan ghost color. |\n\n## Usage\n\n```tsx\nimport { Easing } from 'remotion';\nimport { TransitionSeries, linearTiming } from '@remotion/transitions';\nimport { chromaticAberration } from './components/onda/transitions/chromatic-aberration/chromaticAberration';\n\n<TransitionSeries>\n  <TransitionSeries.Sequence durationInFrames={150}><SceneA /></TransitionSeries.Sequence>\n  <TransitionSeries.Transition\n    presentation={chromaticAberration()}\n    timing={linearTiming({ durationInFrames: 18, easing: Easing.bezier(0.16, 1, 0.3, 1) })}\n  />\n  <TransitionSeries.Sequence durationInFrames={150}><SceneB /></TransitionSeries.Sequence>\n</TransitionSeries>\n```\n"
+    }
+  ]
+}

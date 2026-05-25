@@ -1,0 +1,127 @@
+# Onda
+
+> Onda is a Remotion-based motion-graphics library with a signature motion identity — a consistent, recognizable feel applied across ordinary components. Source is copied into your project via the CLI (`npx ondajs add <name>`), never imported as a black-box dependency, so you own and can edit every file.
+
+Every component is deterministic (a pure function of the current frame — no Math.random/Date in render), ships a Zod schema for its props, and looks complete with zero configuration. Compose them inside Remotion's `<Composition>` / `<Sequence>`; use transitions inside `<TransitionSeries>`.
+
+## Install
+```
+npx ondajs add <name>
+```
+
+## Catalog (88 items)
+
+### entrances
+_Reveal a single element — text or graphic — as it enters._
+- **BlurReveal** (`blur-reveal`): A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.
+- **FadeIn** (`fade-in`): A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.
+- **FadeOut** (`fade-out`): The inverse of FadeIn: a pure opacity exit. Opacity travels from 1 to 0 on HOUSE_EASE, with no transform or blur. Slightly faster than entrances so the moment ends without lingering.
+- **MaskReveal** (`mask-reveal`): Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.
+- **MatrixDecode** (`matrix-decode`): Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.
+- **RotateIn** (`rotate-in`): A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.
+- **ScaleIn** (`scale-in`): A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.
+- **SlideIn** (`slide-in`): A direction-parameterized translate-and-fade entrance — text slides into place from up, down, left, or right on the house spring. No overshoot, calm 16px travel.
+- **SlideOut** (`slide-out`): A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.
+- **SlotMachineRoll** (`slot-machine-roll`): Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.
+- **StaggerGroup** (`stagger-group`): A composition primitive that reveals a list of items in sequence using the canonical Onda stagger (4 frames between siblings). The foundation pattern for animated lists, bullet build-ons, feature reveals, and any sequenced text reveal. Demonstrates the signature stagger fingerprint in its purest form.
+- **TrackingIn** (`tracking-in`): Text begins spread wide and contracts to its resting letter-spacing on the house spring, fading and sharpening from a soft blur as it settles. A cinematic title entrance with no overshoot.
+- **Typewriter** (`typewriter`): Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.
+- **WordRotate** (`word-rotate`): Cycles through a list of phrases in place. Each phrase rises and fades in on SPRING_SMOOTH, holds, then fades out as the next arrives. One focal element per moment.
+- **WordStagger** (`word-stagger`): Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.
+
+### graphics
+_Emphasis and treatment effects applied to on-screen content._
+- **BoundingBox** (`bounding-box`): A UI annotation bounding box — a rectangle outline that strokes itself on like a selection marquee around a region, with optional corner ticks and an optional label tag pinned to the top-left corner. For highlighting a UI element in docs and tutorial videos; the accent is earned here.
+- **Callout** (`callout`): A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.
+- **Confetti** (`confetti`): A celebratory confetti burst — pieces launch from an origin, fan outward, arc under gravity, tumble, and fade. Every per-piece value is seeded, so the same seed renders identically every time. Full-canvas layer; energetic but tasteful.
+- **DrawOn** (`draw-on`): An SVG path that strokes itself in — the substrate for logos, icons, and signature flourishes. Powered by @remotion/paths's evolvePath, driven by SPRING_SMOOTH. No overshoot.
+- **Highlight** (`highlight`): Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.
+- **IconPop** (`icon-pop`): A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.
+- **NodeGraph** (`node-graph`): A hub-and-spoke constellation: a labeled central hub with satellite nodes that fly in from off-frame, then settle into elliptical orbits at varying radii and speeds. Connection lines hub→satellite periodically light up. All motion is a deterministic, frame-driven, seeded function (§1).
+- **RgbGlitchText** (`rgb-glitch-text`): RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.
+- **ShimmerSweep** (`shimmer-sweep`): A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.
+- **SpotlightCard** (`spotlight-card`): A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.
+- **TextFadeReplace** (`text-fade-replace`): Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.
+- **Underline** (`underline`): Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.
+
+### interface
+_Developer / product UI surfaces: code, terminals, frames, steppers._
+- **BentoGrid** (`bento-grid`): A data-driven bento layout — a CSS grid of glass Surface cards with varying column/row spans. Each cell rises and fades in on the house spring, staggered left-to-right so the grid assembles as one calm cascade. One earned-accent cell max.
+- **BrowserFrame** (`browser-frame`): A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.
+- **Button** (`button`): A CTA pill button — accent-filled (primary) or bordered (ghost). It fades and rises in on the house entrance, then plays an optional deterministic click-dip at pressFrame: a quick scale down to 0.94 and back that reads as a press.
+- **CodeBlock** (`code-block`): Syntax-highlighted code on the Onda glass surface, revealed line-by-line. Deterministic dependency-free tokenizer (no async at render). Keywords carry the one earned accent; everything else stays neutral. The reference for the interface category.
+- **CodeDiff** (`code-diff`): A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.
+- **Cursor** (`cursor`): An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.
+- **DeviceFrame** (`device-frame`): A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.
+- **InputField** (`input-field`): A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.
+- **KanbanBoard** (`kanban-board`): A data-driven Kanban board — glass Surface columns with a header, status dot, ticket count, and a stack of small glass ticket cards. Cards rise + fade in on the house spring, staggered across the whole board so it assembles as one calm cascade.
+- **PricingCard** (`pricing-card`): A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.
+- **ProgressSteps** (`progress-steps`): A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.
+- **PulsingIndicator** (`pulsing-indicator`): A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.
+- **SkeletonCard** (`skeleton-card`): A loading-placeholder card — a glass Surface with an optional thumbnail block and a stack of text bars, swept by a frame-driven shimmer band. The 'still generating / not loaded yet' state before content populates. Rises in on the house spring; the shimmer loops so the placeholder feels live.
+- **SplitScreen** (`split-screen`): A two-pane split layout — left and right content panes (any JSX) divided by a thin token line. A container that wraps arbitrary content; the two panes slide in from their outer edges on the house spring.
+- **Terminal** (`terminal`): A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.
+
+### data
+_Numbers and charts that animate into place._
+- **BarChart** (`bar-chart`): Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.
+- **Captions** (`captions`): Sequential word-by-word captions driven by a timed array. The active word lifts in --onda-text with a subtle SPRING_SMOOTH scale pulse; surrounding words sit dim in --onda-dim. The data primitive for kinetic transcripts and AI-generated voiceover.
+- **CountUp** (`count-up`): An animated number that counts from `from` to `to` on SPRING_SMOOTH while fading in. Tabular numerals keep digit widths fixed; locale-grouped (en-US) by default. Prefix and suffix support currency, units, and percentages.
+- **LineChart** (`line-chart`): A line chart whose path draws on left-to-right on the house easing, with an optional soft area fill and per-point dots that pop as the line reaches them. Deterministic via SVG pathLength normalization.
+- **PieReveal** (`pie-reveal`): A single-arc SVG ring that fills from 0 to a target percent on SPRING_SMOOTH, with the value rendered in the center. One muted accent stroke against a quiet track — the Onda data primitive.
+- **ProgressBar** (`progress-bar`): A pill-shaped bar that fills from 0 to `value`% on SPRING_SMOOTH. Solid dusty-rose accent on a neutral track, with an optional tabular `${value}%` label beside it. No overshoot.
+- **Timeline** (`timeline`): A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.
+
+### scenes
+_Full scene blocks — titles, stats, quotes, end cards._
+- **ChapterCard** (`chapter-card`): Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.
+- **EndCard** (`end-card`): Closing scene block: a hero CTA reveals with an optional accent underline, then a faint, staggered row of social handles or URLs fades in beneath it. Composes BlurReveal, Underline, and StaggerGroup so the motion fingerprint stays consistent with the rest of the catalog.
+- **LogoSting** (`logo-sting`): Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.
+- **LowerThird** (`lower-third`): Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.
+- **Quote Card** (`quote-card`): A centered pull-quote scene block with attribution. The quote reveals word-by-word with a slower-than-canonical stagger so the line reads rather than cascades; after a settled beat a small accent-rose rule draws in beneath it, then the author and role fade in together. Built for testimonials, documentary citations, and editorial-feeling section breaks.
+- **StatCard** (`stat-card`): Flagship Onda data scene — a big counted-up number above a word-staggered label above an accent rule. Composes CountUp, WordStagger, and Underline so the cascade (number → label → rule) reads as one calm motion. The signature 'Onda data look' for hero stats, KPIs, milestones, and announcement frames.
+- **TitleCard** (`title-card`): Hero title-card scene block: a large headline reveals with a calm blur-and-rise, a subtitle cascades word-by-word beneath it, and an optional accent underline arrives last as quiet punctuation. Composes BlurReveal / Underline and WordStagger — no new motion of its own.
+
+### cinematic
+_Camera-feel moves: pans, parallax, shake._
+- **CameraShake** (`camera-shake`): Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.
+- **KenBurns** (`ken-burns`): Slow zoom-and-pan over a photo — the iconic documentary motion (named after Ken Burns, the filmmaker). Restrained 1.0 → 1.1 scale over 5 seconds by default; intentionally linear for a constant cinematic drift. The first Onda cinematic primitive.
+- **Parallax** (`parallax`): Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.
+- **Spotlight** (`spotlight`): A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.
+- **Vignette** (`vignette`): A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.
+
+### media
+_Audio, video, and caption primitives._
+- **AudioClip** (`audio-clip`): The workhorse audio primitive — a single file with agent-friendly trim (`startAt` / `endAt` accept `"0:04"` / `"30s"`), opt-in fade envelope, optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>`. Use for music beds, voiceover, and SFX equally.
+- **AudioVisualizer** (`audio-visualizer`): Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).
+- **ImageReveal** (`image-reveal`): An image that enters with one of Onda's signature motion fingerprints — blur falloff, fade, or subtle scale. Wraps Remotion's `<Img>` with `SPRING_SMOOTH` motion, no overshoot. Fills the canvas by default; pass `placement` to position as a sub-canvas element.
+- **VideoClip** (`video-clip`): A video clip with agent-friendly trim (`startAt` / `endAt` accept `"0:04"` / `"30s"`), Onda's entrance and exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` for accurate seek and no audio drift. Fills the canvas by default; pass `placement` to position as a sub-canvas element.
+
+### atmosphere
+_Full-canvas background and texture layers._
+- **DynamicGrid** (`dynamic-grid`): A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.
+- **GradientShift** (`gradient-shift`): A quiet, drifting two-color linear gradient background. The angle rotates at a constant degrees-per-frame — linear-by-design, no spring. Low-saturation defaults (--onda-surface to --onda-border) keep it atmospheric, never focal.
+- **GrainOverlay** (`grain-overlay`): A subtle film-grain layer overlaid on the canvas — pure SVG fractal noise, no text, no motion. The first atmospheric Onda primitive: texture only, restrained at ~2-4% opacity per the design tokens. Deterministic and self-contained, no external assets.
+- **Marquee** (`marquee`): A seamless looping horizontal scroll — logo strips, ticker tape, 'as featured in' rows. Slow and restrained by design; atmospheric context, not a frantic ticker.
+- **MeshGradient** (`mesh-gradient`): A soft mesh-gradient backdrop — colored blobs drifting slowly over the near-black canvas. Sine drift keyed off a seeded phase, so it loops cleanly and renders deterministically. Atmosphere, not subject.
+
+### transitions
+_Scene-to-scene cuts for <TransitionSeries>._
+- **blur** (`blur`): Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.
+- **chromaticAberration** (`chromatic-aberration`): The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.
+- **clockWipe** (`clock-wipe`): A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.
+- **crossFade** (`cross-fade`): A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.
+- **depthPush** (`depth-push`): Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.
+- **devicePullback** (`device-pullback`): The outgoing scene starts as full-bleed UI scaled up, then pulls back to 1x while a minimal device bezel (laptop or phone) draws in around it — so the cut lands on the content framed inside a device mockup. A pull-back-to-reveal-the-product beat for launch and feature reels. Onda-original.
+- **dipToColor** (`dip-to-color`): The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.
+- **expandMorph** (`expand-morph`): A rounded card starts at a small origin rect — a region of the outgoing scene — and smoothly expands (position, size and corner radius interpolated together) to fill the screen, revealing the incoming scene as it grows. Onda's calm take on a morphing modal / image-expand-to-fullscreen reveal, with no overshoot. Onda-original.
+- **flip** (`flip`): A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.
+- **glassWipe** (`glass-wipe`): The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.
+- **gridPixelate** (`grid-pixelate`): The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.
+- **iris** (`iris`): A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.
+- **morph** (`morph`): Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.
+- **push** (`push`): A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).
+- **slide** (`slide`): A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.
+- **typeMask** (`type-mask`): A giant word holds, then scales up exponentially until the negative space inside its letters blows past the screen edges — revealing the incoming scene through the type. A kinetic typographic mask. Onda-original.
+- **wipe** (`wipe`): A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.
+- **zoom** (`zoom`): Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.

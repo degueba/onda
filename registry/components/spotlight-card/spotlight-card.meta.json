@@ -1,0 +1,18 @@
+{
+  "name": "spotlight-card",
+  "title": "SpotlightCard",
+  "description": "A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.",
+  "category": "graphics",
+  "tags": [
+    "card",
+    "spotlight",
+    "glow",
+    "feature",
+    "glass"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "expand-morph",
+  "title": "expandMorph",
+  "description": "A rounded card starts at a small origin rect — a region of the outgoing scene — and smoothly expands (position, size and corner radius interpolated together) to fill the screen, revealing the incoming scene as it grows. Onda's calm take on a morphing modal / image-expand-to-fullscreen reveal, with no overshoot. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "morph",
+    "expand",
+    "shared-element",
+    "modal",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

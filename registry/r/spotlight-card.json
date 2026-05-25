@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight-card",
+  "type": "registry:component",
+  "title": "SpotlightCard",
+  "description": "A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-primitives",
+    "lib-hooks"
+  ],
+  "files": [
+    {
+      "path": "registry/components/spotlight-card/SpotlightCard.tsx",
+      "type": "registry:component",
+      "target": "components/onda/spotlight-card/SpotlightCard.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame } from 'remotion';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { Surface, Glow } from '../../../lib/primitives';\nimport { useEntrance } from '../../../lib/hooks';\nimport { spotlightCardSchema, type SpotlightCardProps } from './schema';\n\nexport { spotlightCardSchema, type SpotlightCardProps };\n\n/**\n * A glass card with a spotlight that drifts slowly behind the content —\n * `Surface` + a frame-driven `Glow`. The card rises in on the house spring;\n * the spotlight keeps moving so the surface feels alive without anything\n * competing for attention.\n *\n * @example\n * <SpotlightCard title=\"Motion identity\" />\n */\nexport const SpotlightCard: React.FC<SpotlightCardProps> = ({\n  eyebrow, title, body, delay, glowColor, width, padding, align, fontFamily, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const entrance = useEntrance({ type: 'rise', delay });\n  const gx = 0.5 + Math.sin(frame * 0.02) * 0.22;\n  const gy = 0.4 + Math.cos(frame * 0.016) * 0.16;\n\n  return (\n    <PlacementBox placement={placement}>\n      <div style={{ opacity: entrance.opacity, transform: entrance.transform }}>\n        <Surface variant=\"glass\" width={width} padding={padding}>\n          <Glow color={glowColor} size={0.9} x={gx} y={gy} opacity={0.28} />\n          <div style={{ position: 'relative', textAlign: align }}>\n            {eyebrow && (\n              <div style={{ color: '#56565F', fontFamily: '\"Space Grotesk\", sans-serif', fontSize: 15, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>\n                {eyebrow}\n              </div>\n            )}\n            <div style={{ color: '#F2F2F4', fontFamily, fontSize: 44, fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.1 }}>\n              {title}\n            </div>\n            {body && (\n              <div style={{ color: '#8E8E98', fontFamily: '\"Space Grotesk\", sans-serif', fontSize: 20, lineHeight: 1.5, marginTop: 16 }}>\n                {body}\n              </div>\n            )}\n          </div>\n        </Surface>\n      </div>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/spotlight-card/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/spotlight-card/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link SpotlightCard} props. */\nexport const spotlightCardSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('spotlight-card').default('spotlight-card'),\n  /** Small uppercase kicker above the title. Empty hides it. */\n  eyebrow: z.string().default('FEATURE'),\n  /** Card headline (display font). */\n  title: z.string().default('Motion identity'),\n  /** Supporting body copy. Empty hides it. */\n  body: z.string().default('One consistent feel across every component.'),\n  /** Frames before the card enters. */\n  delay: z.number().int().min(0).default(0),\n  /** The drifting spotlight color — the earned accent. */\n  glowColor: z.string().default('#D96B82'),\n  /** Card width in px. */\n  width: z.number().default(560),\n  /** Inner padding in px. */\n  padding: z.number().default(48),\n  /** Text alignment. */\n  align: z.enum(['left', 'center']).default('left'),\n  /** Display font for the title. */\n  fontFamily: z.string().default('\"Clash Display\", sans-serif'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link SpotlightCard}. */\nexport type SpotlightCardProps = z.infer<typeof spotlightCardSchema>;\n"
+    },
+    {
+      "path": "registry/components/spotlight-card/spotlight-card.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/spotlight-card/spotlight-card.meta.json",
+      "content": "{\n  \"name\": \"spotlight-card\",\n  \"title\": \"SpotlightCard\",\n  \"description\": \"A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"card\",\n    \"spotlight\",\n    \"glow\",\n    \"feature\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/spotlight-card/README.md",
+      "type": "registry:file",
+      "target": "components/onda/spotlight-card/README.md",
+      "content": "# SpotlightCard\n\nA glass card (`Surface`) with a spotlight (`Glow`) that drifts slowly behind the content on a frame-driven path. The card rises in on the house spring; the spotlight keeps moving so the surface feels alive without anything competing for attention. Eyebrow + title + body, all token-styled.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `eyebrow` | `string` | `\"FEATURE\"` | Uppercase kicker; empty hides it. |\n| `title` | `string` | `\"Motion identity\"` | Headline (display font). |\n| `body` | `string` | sample | Supporting copy; empty hides it. |\n| `delay` | `number` | `0` | Frames before entrance. |\n| `glowColor` | `string` | `#D96B82` | Drifting spotlight color. |\n| `width` | `number` | `560` | Card width. |\n| `padding` | `number` | `48` | Inner padding. |\n| `align` | `'left' \\| 'center'` | `'left'` | Text alignment. |\n| `fontFamily` | `string` | Clash Display | Title font. |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { SpotlightCard } from './components/onda/spotlight-card/SpotlightCard';\n\nexport const FeatureScene = () => (\n  <SpotlightCard eyebrow=\"FEATURE\" title=\"Motion identity\" placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

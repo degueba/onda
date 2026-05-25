@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lib-tokens",
+  "type": "registry:lib",
+  "title": "Design tokens",
+  "description": "Onda color, type, and spacing tokens — COLOR, FONT, SPACING, SAFE_MARGIN_RATIO. The locked design system every component default draws from.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/tokens.ts",
+      "type": "registry:lib",
+      "target": "lib/onda/tokens.ts",
+      "content": "// Canonical design tokens for Onda.\n//\n// CLAUDE.md §2 mirrors these values for agent-context reference. Divergence\n// between this file and CLAUDE.md §2 is a bug — the values here are the\n// source of truth.\n\n/**\n * The Onda color palette. The accent is **earned**, never sprinkled — see\n * `CLAUDE.md §2` for the usage rule.\n *\n * - `bg`         — near-black canvas. Motion reads best on dark.\n * - `surface`    — cards, raised surfaces.\n * - `surface2`   — secondary surface.\n * - `border`     — default 1px border.\n * - `borderLit`  — hover / focus borders.\n * - `text`       — primary text.\n * - `dim`        — secondary text.\n * - `faint`      — labels, captions, code prompts.\n * - `accent`     — THE accent. Muted dusty rose. Used sparingly.\n * - `accentSoft` — lighter step, subtle depth only.\n */\nexport const COLOR = {\n  bg: '#08080A',\n  surface: '#0E0E12',\n  surface2: '#121217',\n  border: '#1C1C22',\n  borderLit: '#26262E',\n  text: '#F2F2F4',\n  dim: '#8E8E98',\n  faint: '#56565F',\n  accent: '#D96B82',\n  accentSoft: '#E89AAB',\n} as const;\n\n/**\n * The Onda type stack. Components default to `display` (Clash Display);\n * `body` (Space Grotesk) is reserved for UI / mono contexts.\n *\n * Never default to Inter, Roboto, Arial, or any system font — those read\n * as generic AI defaults and break the brand.\n */\nexport const FONT = {\n  display: '\"Clash Display\", sans-serif',\n  body: '\"Space Grotesk\", sans-serif',\n} as const;\n\n/** The 8px-base spacing scale. Use these values, not arbitrary pixels. */\nexport const SPACING = [8, 16, 24, 32, 48, 64, 80, 100] as const;\n\n/** Scene-block safe margin: ~10% of canvas per edge. */\nexport const SAFE_MARGIN_RATIO = 0.1;\n\n/** Keys of {@link COLOR} — for typed color-token props. */\nexport type ColorToken = keyof typeof COLOR;\n\n/** Keys of {@link FONT} — for typed font-token props. */\nexport type FontToken = keyof typeof FONT;\n"
+    }
+  ]
+}

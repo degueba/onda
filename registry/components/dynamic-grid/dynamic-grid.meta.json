@@ -1,0 +1,18 @@
+{
+  "name": "dynamic-grid",
+  "title": "DynamicGrid",
+  "description": "A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.",
+  "category": "atmosphere",
+  "tags": [
+    "background",
+    "grid",
+    "technical",
+    "atmosphere",
+    "dashboard"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "chromatic-aberration",
+  "title": "chromaticAberration",
+  "description": "The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.",
+  "category": "transitions",
+  "tags": [
+    "transition",
+    "glitch",
+    "chromatic",
+    "rgb",
+    "scene"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/transitions",
+    "zod"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "rgb-glitch-text",
+  "title": "RgbGlitchText",
+  "description": "RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.",
+  "category": "graphics",
+  "tags": [
+    "text",
+    "glitch",
+    "rgb",
+    "chromatic",
+    "effect"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

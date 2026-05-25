@@ -1,0 +1,19 @@
+{
+  "name": "pricing-card",
+  "title": "PricingCard",
+  "description": "A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.",
+  "category": "interface",
+  "tags": [
+    "card",
+    "pricing",
+    "tier",
+    "plan",
+    "cta",
+    "glass"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}

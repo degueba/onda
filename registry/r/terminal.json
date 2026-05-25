@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "terminal",
+  "type": "registry:component",
+  "title": "Terminal",
+  "description": "A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.",
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ],
+  "registryDependencies": [
+    "lib-canvas",
+    "lib-primitives",
+    "lib-hooks"
+  ],
+  "files": [
+    {
+      "path": "registry/components/terminal/Terminal.tsx",
+      "type": "registry:component",
+      "target": "components/onda/terminal/Terminal.tsx",
+      "content": "import React from 'react';\nimport { useCurrentFrame } from 'remotion';\nimport { PlacementBox } from '../../../lib/canvas';\nimport { Surface } from '../../../lib/primitives';\nimport { useTextReveal, useStaggeredEntrance } from '../../../lib/hooks';\nimport { terminalSchema, type TerminalProps } from './schema';\n\nexport { terminalSchema, type TerminalProps };\n\n/**\n * A terminal session: the command types itself after the prompt, a block\n * cursor blinks while typing, then the output lines appear staggered. Built\n * on the glass `Surface`. Calm, deterministic — the cursor blink is keyed off\n * the frame, not a timer.\n *\n * @example\n * <Terminal command=\"npm run render\" output={['done in 4.2s']} />\n */\nexport const Terminal: React.FC<TerminalProps> = ({\n  command, output, prompt, title, chrome, delay, typeSpeed, outputDelay,\n  fontFamily, fontSize, width, textColor, promptColor, outputColor, placement,\n}) => {\n  const frame = useCurrentFrame();\n  const shown = useTextReveal({ length: command.length, delay, durationInFrames: typeSpeed });\n  const typing = shown < command.length;\n  const blinkOn = Math.floor(frame / 15) % 2 === 0;\n  const outputAt = useStaggeredEntrance({\n    type: 'fade',\n    delay: delay + typeSpeed + outputDelay,\n    increment: 4,\n  });\n\n  return (\n    <PlacementBox placement={placement}>\n      <Surface variant=\"glass\" width={width} padding={0}>\n        {chrome && (\n          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '18px 24px', borderBottom: '1px solid #1C1C22' }}>\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />\n            {title && <span style={{ marginLeft: 10, color: '#56565F', fontFamily, fontSize: fontSize * 0.62, letterSpacing: '0.04em' }}>{title}</span>}\n          </div>\n        )}\n        <div style={{ padding: '28px 36px', fontFamily, fontSize, lineHeight: 1.6 }}>\n          <div style={{ whiteSpace: 'pre', color: textColor }}>\n            <span style={{ color: promptColor, marginRight: 10 }}>{prompt}</span>\n            {command.slice(0, shown)}\n            {typing && blinkOn && <span style={{ background: textColor, color: textColor }}>▍</span>}\n          </div>\n          {output.map((line, i) => (\n            <div key={i} style={{ whiteSpace: 'pre', color: outputColor, opacity: outputAt(i).opacity }}>\n              {line}\n            </div>\n          ))}\n        </div>\n      </Surface>\n    </PlacementBox>\n  );\n};\n"
+    },
+    {
+      "path": "registry/components/terminal/schema.ts",
+      "type": "registry:component",
+      "target": "components/onda/terminal/schema.ts",
+      "content": "import { z } from 'zod';\nimport { placementSchema } from '../../../lib/canvas-schemas';\n\n/** Zod schema for {@link Terminal} props. */\nexport const terminalSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */\n  kind: z.literal('terminal').default('terminal'),\n  /** The command that types itself out after the prompt. */\n  command: z.string().default('npx ondajs add code-block'),\n  /** Output lines that appear, staggered, once the command finishes typing. */\n  output: z.array(z.string()).default(['✓ added code-block', '✓ wrote 4 files']),\n  /** The shell prompt glyph. */\n  prompt: z.string().default('$'),\n  /** Title-bar label. Empty hides it (dots still show if chrome on). */\n  title: z.string().default('zsh'),\n  /** Show window chrome (dots + title bar). */\n  chrome: z.boolean().default(true),\n  /** Frames before typing starts. */\n  delay: z.number().int().min(0).default(0),\n  /** Frames to type the whole command. */\n  typeSpeed: z.number().int().min(1).default(30),\n  /** Frames after the command finishes before output begins. */\n  outputDelay: z.number().int().min(0).default(8),\n  /** Monospace font stack. */\n  fontFamily: z.string().default('ui-monospace, \"SF Mono\", Menlo, monospace'),\n  /** Font size in px. Sized for a 1080p+ video canvas, not a screen UI. */\n  fontSize: z.number().default(48),\n  /** Width in px. Fixed by default so the terminal frame is stable while the\n   * command types into it — a terminal has a defined size, it doesn't grow\n   * character by character. */\n  width: z.number().default(1100),\n  /** Command text color. */\n  textColor: z.string().default('#F2F2F4'),\n  /** Prompt glyph color — the earned accent. */\n  promptColor: z.string().default('#D96B82'),\n  /** Output line color. */\n  outputColor: z.string().default('#8E8E98'),\n  /** Where on the canvas this sits. */\n  placement: placementSchema.optional(),\n});\n\n/** Inferred props for {@link Terminal}. */\nexport type TerminalProps = z.infer<typeof terminalSchema>;\n"
+    },
+    {
+      "path": "registry/components/terminal/terminal.meta.json",
+      "type": "registry:file",
+      "target": "components/onda/terminal/terminal.meta.json",
+      "content": "{\n  \"name\": \"terminal\",\n  \"title\": \"Terminal\",\n  \"description\": \"A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"terminal\",\n    \"cli\",\n    \"shell\",\n    \"developer\",\n    \"typing\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+    },
+    {
+      "path": "registry/components/terminal/README.md",
+      "type": "registry:file",
+      "target": "components/onda/terminal/README.md",
+      "content": "# Terminal\n\nA terminal session on the Onda glass surface: the command types itself out after the prompt (via `useTextReveal`), a block cursor blinks while typing (keyed off the frame, not a timer — so it stays deterministic), then the output lines appear staggered once typing finishes. The prompt glyph carries the one earned accent.\n\n## Props\n\n| Prop | Type | Default | Notes |\n| --- | --- | --- | --- |\n| `command` | `string` | sample | The command that types itself. |\n| `output` | `string[]` | sample | Lines that appear after typing. |\n| `prompt` | `string` | `\"$\"` | Shell prompt glyph. |\n| `title` | `string` | `\"zsh\"` | Title-bar label. |\n| `chrome` | `boolean` | `true` | Window chrome. |\n| `delay` | `number` | `0` | Frames before typing. |\n| `typeSpeed` | `number` | `30` | Frames to type the command. |\n| `outputDelay` | `number` | `8` | Frames before output begins. |\n| `fontFamily` | `string` | monospace stack | — |\n| `fontSize` | `number` | `48` | Sized for video, not screen UI. |\n| `width` | `number` | `1100` | Fixed so the frame is stable while typing. |\n| `textColor` / `promptColor` / `outputColor` | `string` | token defaults | — |\n| `placement` | region or `{x,y,anchor}` | — | Canvas placement. |\n\n## Usage\n\n```tsx\nimport { Terminal } from './components/onda/terminal/Terminal';\n\nexport const InstallScene = () => (\n  <Terminal command=\"npx ondajs add code-block\" output={['✓ added code-block']} placement=\"center\" />\n);\n```\n"
+    }
+  ]
+}

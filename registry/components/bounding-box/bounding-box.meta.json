@@ -1,0 +1,19 @@
+{
+  "name": "bounding-box",
+  "title": "BoundingBox",
+  "description": "A UI annotation bounding box — a rectangle outline that strokes itself on like a selection marquee around a region, with optional corner ticks and an optional label tag pinned to the top-left corner. For highlighting a UI element in docs and tutorial videos; the accent is earned here.",
+  "category": "graphics",
+  "tags": [
+    "annotation",
+    "bounding-box",
+    "selection",
+    "highlight",
+    "tutorial"
+  ],
+  "dependencies": [
+    "remotion",
+    "@remotion/paths",
+    "zod",
+    "react"
+  ]
+}

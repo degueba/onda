@@ -434,6 +434,278 @@
       "description": "Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.",
       "categories": ["transitions"],
       "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "shimmer-sweep",
+      "type": "registry:component",
+      "title": "ShimmerSweep",
+      "description": "A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "tracking-in",
+      "type": "registry:component",
+      "title": "TrackingIn",
+      "description": "Text begins spread wide and contracts to its resting letter-spacing on the house spring, fading and sharpening from a soft blur as it settles. A cinematic title entrance with no overshoot.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "text-fade-replace",
+      "type": "registry:component",
+      "title": "TextFadeReplace",
+      "description": "Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:component",
+      "title": "CodeBlock",
+      "description": "Syntax-highlighted code on the Onda glass surface, revealed line-by-line. Deterministic dependency-free tokenizer (no async at render). Keywords carry the one earned accent; everything else stays neutral. The reference for the interface category.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "terminal",
+      "type": "registry:component",
+      "title": "Terminal",
+      "description": "A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "browser-frame",
+      "type": "registry:component",
+      "title": "BrowserFrame",
+      "description": "A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "progress-steps",
+      "type": "registry:component",
+      "title": "ProgressSteps",
+      "description": "A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "mesh-gradient",
+      "type": "registry:component",
+      "title": "MeshGradient",
+      "description": "A soft mesh-gradient backdrop — colored blobs drifting slowly over the near-black canvas. Sine drift keyed off a seeded phase, so it loops cleanly and renders deterministically. Atmosphere, not subject.",
+      "categories": ["atmosphere"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "dynamic-grid",
+      "type": "registry:component",
+      "title": "DynamicGrid",
+      "description": "A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.",
+      "categories": ["atmosphere"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "spotlight-card",
+      "type": "registry:component",
+      "title": "SpotlightCard",
+      "description": "A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "cursor",
+      "type": "registry:component",
+      "title": "Cursor",
+      "description": "An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "code-diff",
+      "type": "registry:component",
+      "title": "CodeDiff",
+      "description": "A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "device-frame",
+      "type": "registry:component",
+      "title": "DeviceFrame",
+      "description": "A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "line-chart",
+      "type": "registry:component",
+      "title": "LineChart",
+      "description": "A line chart whose path draws on left-to-right on the house easing, with an optional soft area fill and per-point dots that pop as the line reaches them. Deterministic via SVG pathLength normalization.",
+      "categories": ["data"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "pulsing-indicator",
+      "type": "registry:component",
+      "title": "PulsingIndicator",
+      "description": "A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "matrix-decode",
+      "type": "registry:component",
+      "title": "MatrixDecode",
+      "description": "Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "rgb-glitch-text",
+      "type": "registry:component",
+      "title": "RgbGlitchText",
+      "description": "RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "slot-machine-roll",
+      "type": "registry:component",
+      "title": "SlotMachineRoll",
+      "description": "Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.",
+      "categories": ["entrances"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "chromatic-aberration",
+      "type": "registry:component",
+      "title": "chromaticAberration",
+      "description": "The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "grid-pixelate",
+      "type": "registry:component",
+      "title": "gridPixelate",
+      "description": "The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "glass-wipe",
+      "type": "registry:component",
+      "title": "glassWipe",
+      "description": "The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:component",
+      "title": "BentoGrid",
+      "description": "A data-driven bento layout — a CSS grid of glass Surface cards with varying column/row spans. Each cell rises and fades in on the house spring, staggered left-to-right so the grid assembles as one calm cascade. One earned-accent cell max.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "confetti",
+      "type": "registry:component",
+      "title": "Confetti",
+      "description": "A celebratory confetti burst — pieces launch from an origin, fan outward, arc under gravity, tumble, and fade. Every per-piece value is seeded, so the same seed renders identically every time. Full-canvas layer; energetic but tasteful.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "bounding-box",
+      "type": "registry:component",
+      "title": "BoundingBox",
+      "description": "A UI annotation bounding box — a rectangle outline that strokes itself on like a selection marquee around a region, with optional corner ticks and an optional label tag pinned to the top-left corner. For highlighting a UI element in docs and tutorial videos; the accent is earned here.",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "@remotion/paths", "zod", "react"]
+    },
+    {
+      "name": "button",
+      "type": "registry:component",
+      "title": "Button",
+      "description": "A CTA pill button — accent-filled (primary) or bordered (ghost). It fades and rises in on the house entrance, then plays an optional deterministic click-dip at pressFrame: a quick scale down to 0.94 and back that reads as a press.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "device-pullback",
+      "type": "registry:component",
+      "title": "devicePullback",
+      "description": "The outgoing scene starts as full-bleed UI scaled up, then pulls back to 1x while a minimal device bezel (laptop or phone) draws in around it — so the cut lands on the content framed inside a device mockup. A pull-back-to-reveal-the-product beat for launch and feature reels. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "expand-morph",
+      "type": "registry:component",
+      "title": "expandMorph",
+      "description": "A rounded card starts at a small origin rect — a region of the outgoing scene — and smoothly expands (position, size and corner radius interpolated together) to fill the screen, revealing the incoming scene as it grows. Onda's calm take on a morphing modal / image-expand-to-fullscreen reveal, with no overshoot. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
+    },
+    {
+      "name": "input-field",
+      "type": "registry:component",
+      "title": "InputField",
+      "description": "A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "kanban-board",
+      "type": "registry:component",
+      "title": "KanbanBoard",
+      "description": "A data-driven Kanban board — glass Surface columns with a header, status dot, ticket count, and a stack of small glass ticket cards. Cards rise + fade in on the house spring, staggered across the whole board so it assembles as one calm cascade.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "node-graph",
+      "type": "registry:component",
+      "title": "NodeGraph",
+      "description": "A hub-and-spoke constellation: a labeled central hub with satellite nodes that fly in from off-frame, then settle into elliptical orbits at varying radii and speeds. Connection lines hub→satellite periodically light up. All motion is a deterministic, frame-driven, seeded function (§1).",
+      "categories": ["graphics"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "pricing-card",
+      "type": "registry:component",
+      "title": "PricingCard",
+      "description": "A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "skeleton-card",
+      "type": "registry:component",
+      "title": "SkeletonCard",
+      "description": "A loading-placeholder card — a glass Surface with an optional thumbnail block and a stack of text bars, swept by a frame-driven shimmer band. The 'still generating / not loaded yet' state before content populates. Rises in on the house spring; the shimmer loops so the placeholder feels live.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "split-screen",
+      "type": "registry:component",
+      "title": "SplitScreen",
+      "description": "A two-pane split layout — left and right content panes (any JSX) divided by a thin token line. A container that wraps arbitrary content; the two panes slide in from their outer edges on the house spring.",
+      "categories": ["interface"],
+      "dependencies": ["remotion", "zod", "react"]
+    },
+    {
+      "name": "type-mask",
+      "type": "registry:component",
+      "title": "typeMask",
+      "description": "A giant word holds, then scales up exponentially until the negative space inside its letters blows past the screen edges — revealing the incoming scene through the type. A kinetic typographic mask. Onda-original.",
+      "categories": ["transitions"],
+      "dependencies": ["remotion", "@remotion/transitions", "zod"]
     }
   ]
 }

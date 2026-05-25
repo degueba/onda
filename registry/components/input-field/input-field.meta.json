@@ -1,0 +1,19 @@
+{
+  "name": "input-field",
+  "title": "InputField",
+  "description": "A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.",
+  "category": "interface",
+  "tags": [
+    "input",
+    "field",
+    "form",
+    "typing",
+    "ui",
+    "glass"
+  ],
+  "dependencies": [
+    "remotion",
+    "zod",
+    "react"
+  ]
+}
