@@ -15,7 +15,8 @@ export { slideInSchema, type SlideInProps };
  */
 export const SlideIn: React.FC<SlideInProps> = ({
   text, delay, duration, direction, distance, color, fontSize, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -36,6 +37,7 @@ export const SlideIn: React.FC<SlideInProps> = ({
         transform,
         color, fontSize, fontFamily, fontWeight, letterSpacing, lineHeight,
         textAlign: align,
+        textTransform, textShadow, fontStyle, textWrap,
       }}>
         {text}
       </div>

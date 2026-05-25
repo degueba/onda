@@ -15,7 +15,8 @@ export { blurRevealSchema, type BlurRevealProps };
  */
 export const BlurReveal: React.FC<BlurRevealProps> = ({
   text, delay, duration, color, fontSize, size, fontFamily,
-  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left', placement,
+  fontWeight = 600, letterSpacing = 'normal', lineHeight = 1.1, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
@@ -48,6 +49,7 @@ export const BlurReveal: React.FC<BlurRevealProps> = ({
         color, fontSize: resolvedFontSize, fontFamily,
         fontWeight, letterSpacing, lineHeight,
         textAlign: align,
+        textTransform, textShadow, fontStyle, textWrap,
       }}>
         {text}
       </div>

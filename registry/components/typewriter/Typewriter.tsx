@@ -16,7 +16,8 @@ export { typewriterSchema, type TypewriterProps };
  */
 export const Typewriter: React.FC<TypewriterProps> = ({
   text, delay, duration, cursor, cursorColor, color, fontSize, size, fontFamily,
-  fontWeight = 500, letterSpacing = 'normal', lineHeight = 1.4, align = 'left', placement,
+  fontWeight = 500, letterSpacing = 'normal', lineHeight = 1.4, align = 'left',
+  textTransform, textShadow, fontStyle, textWrap, placement,
 }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
@@ -52,6 +53,10 @@ export const Typewriter: React.FC<TypewriterProps> = ({
         letterSpacing,
         lineHeight,
         textAlign: align,
+        textTransform,
+        textShadow,
+        fontStyle,
+        textWrap,
       }}>
         {revealed}
         <span style={{ color: cursorColor, opacity: cursorOpacity }}>|</span>
