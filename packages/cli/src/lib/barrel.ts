@@ -3,11 +3,18 @@ import { dirname, relative, resolve } from 'node:path';
 
 // Barrel-management for the install step.
 //
-// After `ondajs add` writes component files, this module updates a
-// barrel file at `<componentsOut>/index.ts` that re-exports every
-// installed component + its Zod schema as an `ondaRegistry` object —
-// the exact shape `<CompositionRenderer registry={...}>` from
-// `@ondajs/lib` expects.
+// After `ondajs add` writes component (and/or transition) files, this
+// module updates a barrel at `<componentsOut>/index.ts` that re-exports
+// installed entries as two parallel registries:
+//
+//   • `ondaRegistry`    — components keyed by PascalCase name. Shape
+//                         `{ component, schema }`. The exact shape
+//                         `<CompositionRenderer registry={...}>` expects.
+//   • `ondaTransitions` — transitions keyed by camelCase factory name.
+//                         Shape `{ factory, schema }`. Transitions are
+//                         factories (not React components) so they
+//                         can't share the component registry shape —
+//                         mirrors the split in `lib/registry-summary.ts`.
 //
 // Why a sidecar `.ondajs-installed.json` instead of parsing the barrel:
 // parsing TypeScript to extract existing entries is fragile and pulls
@@ -52,13 +59,33 @@ export type InstalledComponent = {
   importPath: string;
 };
 
+/**
+ * A single installed transition's barrel entry. Transitions are
+ * presentation factories (not React components), so the shape differs
+ * from {@link InstalledComponent}: the named export is camelCase
+ * (`crossFade`, not `CrossFade`) and the import path includes the
+ * `transitions/` sub-folder the CLI writes to.
+ */
+export type InstalledTransition = {
+  /** Slug (kebab-case, e.g. `"cross-fade"`). */
+  slug: string;
+  /** Factory name (camelCase, the function export — e.g. `"crossFade"`). */
+  factoryName: string;
+  /** Schema name (camelCase + `Schema`, e.g. `"crossFadeSchema"`). */
+  schemaName: string;
+  /** Import path relative to the barrel file (includes `transitions/`). */
+  importPath: string;
+};
+
 type Sidecar = {
   components: InstalledComponent[];
+  /** Optional for back-compat — older sidecars predate transition support. */
+  transitions?: InstalledTransition[];
 };
 
 export type BarrelOutcome =
-  | { kind: 'written'; path: string; count: number }
-  | { kind: 'unchanged'; path: string; count: number }
+  | { kind: 'written'; path: string; componentCount: number; transitionCount: number }
+  | { kind: 'unchanged'; path: string; componentCount: number; transitionCount: number }
   | { kind: 'skipped-foreign'; path: string }
   | { kind: 'disabled' };
 
@@ -82,12 +109,40 @@ export function namesFromSlug(slug: string): {
 }
 
 /**
+ * Like {@link namesFromSlug} but for transition factories — the named
+ * export is camelCase (`crossFade`), not PascalCase. Mirrors the
+ * registry convention (`registry/transitions/cross-fade/crossFade.tsx`).
+ */
+export function transitionNamesFromSlug(slug: string): {
+  factoryName: string;
+  schemaName: string;
+} {
+  const parts = slug.split('-').filter(Boolean);
+  const pascal = parts.map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+  const camel = pascal[0].toLowerCase() + pascal.slice(1);
+  return {
+    factoryName: camel,
+    schemaName: `${camel}Schema`,
+  };
+}
+
+/**
  * Compute the import path the barrel uses for a given component slug.
  * The barrel sits at `<componentsOut>/index.ts`; the component lives at
  * `<componentsOut>/<slug>/<ComponentName>.tsx`.
  */
 function importPathFromSlug(slug: string, componentName: string): string {
   return `./${slug}/${componentName}`;
+}
+
+/**
+ * Compute the import path the barrel uses for a given transition slug.
+ * The barrel sits at `<componentsOut>/index.ts`; the transition factory
+ * lives at `<componentsOut>/transitions/<slug>/<factoryName>.tsx` (the
+ * extra `transitions/` segment matches how `ondajs add` writes them).
+ */
+function transitionImportPathFromSlug(slug: string, factoryName: string): string {
+  return `./transitions/${slug}/${factoryName}`;
 }
 
 function sidecarPath(componentsOut: string): string {
@@ -125,62 +180,89 @@ function isBarrelManaged(componentsOut: string): boolean {
 }
 
 /**
- * Merge a list of newly-installed components into the existing sidecar
- * (deduped by slug — re-installing a component doesn't duplicate).
- * Returns the merged list in alphabetical order (predictable for diffs).
+ * Merge a list of newly-installed entries into the existing sidecar
+ * (deduped by slug — re-installing doesn't duplicate). Returns the
+ * merged list in alphabetical order (predictable for diffs).
  */
-function mergeComponents(
-  existing: InstalledComponent[],
-  added: InstalledComponent[],
-): InstalledComponent[] {
-  const map = new Map<string, InstalledComponent>();
+function mergeBySlug<T extends { slug: string }>(existing: T[], added: T[]): T[] {
+  const map = new Map<string, T>();
   for (const c of existing) map.set(c.slug, c);
   for (const c of added) map.set(c.slug, c); // Newly-installed wins on conflict.
   return [...map.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
 /**
- * Build the barrel file content from a list of installed components.
+ * Build the barrel file content from the installed components and
+ * transitions. Two registries side-by-side; omits the transitions
+ * registry entirely when no transitions are installed so existing
+ * component-only projects' barrels stay byte-identical (back-compat).
  */
-function renderBarrel(components: InstalledComponent[]): string {
-  if (components.length === 0) {
+function renderBarrel(
+  components: InstalledComponent[],
+  transitions: InstalledTransition[],
+): string {
+  if (components.length === 0 && transitions.length === 0) {
     return `${BARREL_HEADER}\nexport const ondaRegistry = {} as const;\n`;
   }
 
-  const imports = components
+  const componentImports = components
     .map(
       (c) =>
         `import { ${c.componentName}, ${c.schemaName} } from '${c.importPath}';`,
     )
     .join('\n');
 
-  const entries = components
+  const transitionImports = transitions
+    .map(
+      (t) =>
+        `import { ${t.factoryName}, ${t.schemaName} } from '${t.importPath}';`,
+    )
+    .join('\n');
+
+  const componentEntries = components
     .map(
       (c) =>
         `  ${c.componentName}: { component: ${c.componentName}, schema: ${c.schemaName} },`,
     )
     .join('\n');
 
-  return `${BARREL_HEADER}
-${imports}
+  const transitionEntries = transitions
+    .map(
+      (t) =>
+        `  ${t.factoryName}: { factory: ${t.factoryName}, schema: ${t.schemaName} },`,
+    )
+    .join('\n');
 
-export const ondaRegistry = {
-${entries}
-} as const;
-`;
+  const allImports = [componentImports, transitionImports].filter(Boolean).join('\n');
+
+  const componentBlock = `export const ondaRegistry = {${
+    componentEntries ? '\n' + componentEntries + '\n' : ''
+  }} as const;\n`;
+
+  const transitionBlock =
+    transitions.length > 0
+      ? `\nexport const ondaTransitions = {\n${transitionEntries}\n} as const;\n`
+      : '';
+
+  return `${BARREL_HEADER}
+${allImports}
+
+${componentBlock}${transitionBlock}`;
 }
 
 /**
  * Update (or create) the barrel + sidecar for a freshly-completed install.
  *
  * @param componentsOut Absolute path to the components directory the CLI just wrote to.
- * @param installedSlugs Slugs the install actually touched (manifest type === 'registry:component'). Lib helpers are excluded by the caller.
+ * @param installedComponentSlugs Component slugs the install touched (file targets at `components/onda/<slug>/…`). Lib helpers and transitions are excluded by the caller.
+ * @param installedTransitionSlugs Transition slugs the install touched (file targets at `components/onda/transitions/<slug>/…`).
  * @param options.dryRun  When true, computes the outcome but doesn't write files.
  * @param options.cwd     For pretty-printing relative paths in the outcome message.
  */
 export function updateBarrel(
   componentsOut: string,
-  installedSlugs: string[],
+  installedComponentSlugs: string[],
+  installedTransitionSlugs: string[],
   options: { dryRun: boolean; cwd: string },
 ): BarrelOutcome {
   // Refuse to clobber a user-written barrel (existing barrel without the
@@ -190,8 +272,8 @@ export function updateBarrel(
     return { kind: 'skipped-foreign', path: barrelPath(componentsOut) };
   }
 
-  // Build the InstalledComponent entries for the newly-installed slugs.
-  const added: InstalledComponent[] = installedSlugs.map((slug) => {
+  // Build entry rows for the newly-installed slugs.
+  const addedComponents: InstalledComponent[] = installedComponentSlugs.map((slug) => {
     const { componentName, schemaName } = namesFromSlug(slug);
     return {
       slug,
@@ -201,12 +283,29 @@ export function updateBarrel(
     };
   });
 
+  const addedTransitions: InstalledTransition[] = installedTransitionSlugs.map((slug) => {
+    const { factoryName, schemaName } = transitionNamesFromSlug(slug);
+    return {
+      slug,
+      factoryName,
+      schemaName,
+      importPath: transitionImportPathFromSlug(slug, factoryName),
+    };
+  });
+
   // Merge with whatever's already tracked in the sidecar.
   const existing = readSidecar(componentsOut);
-  const merged = mergeComponents(existing?.components ?? [], added);
+  const mergedComponents = mergeBySlug(existing?.components ?? [], addedComponents);
+  const mergedTransitions = mergeBySlug(existing?.transitions ?? [], addedTransitions);
 
-  const newBarrel = renderBarrel(merged);
-  const newSidecar = JSON.stringify({ components: merged }, null, 2) + '\n';
+  const newBarrel = renderBarrel(mergedComponents, mergedTransitions);
+  // Only emit the `transitions` sidecar field once we actually have any —
+  // keeps old component-only sidecars byte-identical (back-compat).
+  const sidecarPayload: Sidecar =
+    mergedTransitions.length > 0
+      ? { components: mergedComponents, transitions: mergedTransitions }
+      : { components: mergedComponents };
+  const newSidecar = JSON.stringify(sidecarPayload, null, 2) + '\n';
 
   const bPath = barrelPath(componentsOut);
   const sPath = sidecarPath(componentsOut);
@@ -218,18 +317,33 @@ export function updateBarrel(
     existsSync(sPath) && readFileSync(sPath, 'utf8') === newSidecar;
 
   if (barrelUnchanged && sidecarUnchanged) {
-    return { kind: 'unchanged', path: bPath, count: merged.length };
+    return {
+      kind: 'unchanged',
+      path: bPath,
+      componentCount: mergedComponents.length,
+      transitionCount: mergedTransitions.length,
+    };
   }
 
   if (options.dryRun) {
-    return { kind: 'written', path: bPath, count: merged.length };
+    return {
+      kind: 'written',
+      path: bPath,
+      componentCount: mergedComponents.length,
+      transitionCount: mergedTransitions.length,
+    };
   }
 
   mkdirSync(dirname(bPath), { recursive: true });
   writeFileSync(bPath, newBarrel, 'utf8');
   writeFileSync(sPath, newSidecar, 'utf8');
 
-  return { kind: 'written', path: bPath, count: merged.length };
+  return {
+    kind: 'written',
+    path: bPath,
+    componentCount: mergedComponents.length,
+    transitionCount: mergedTransitions.length,
+  };
 }
 
 /**
@@ -255,5 +369,9 @@ export function formatBarrelOutcome(
     : outcome.kind === 'written'
       ? 'wrote'
       : 'unchanged';
-  return `barrel: ${verb}  ${relative(cwd, outcome.path)}  (${outcome.count} component${outcome.count === 1 ? '' : 's'})`;
+  const cCount = outcome.componentCount;
+  const tCount = outcome.transitionCount;
+  const cLabel = `${cCount} component${cCount === 1 ? '' : 's'}`;
+  const tLabel = tCount > 0 ? `, ${tCount} transition${tCount === 1 ? '' : 's'}` : '';
+  return `barrel: ${verb}  ${relative(cwd, outcome.path)}  (${cLabel}${tLabel})`;
 }

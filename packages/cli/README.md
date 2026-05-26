@@ -25,7 +25,7 @@ Components are written as **source you own** into your project — not imported 
 - **One placement vocabulary across the catalog** — every positionable component takes a `placement` prop (region shorthand or fractional coordinates) that works on any canvas dimension.
 - **Canvas-aware sizing** — semantic typography roles (`'hero' | 'heading' | 'body' …`) that read at the same visual weight on horizontal, vertical, and square compositions.
 - **Agent-friendly by design** — every component ships with a Zod schema and a `kind` discriminator, so the whole surface is an exhaustively-typed union. The library also ships `<CompositionRenderer>` + a `Composition` payload type and publishes [`llms.txt`](https://onda.video/llms.txt) / [`llms-full.txt`](https://onda.video/llms-full.txt) for agent context.
-- **No black box, no lock-in** — `ondajs add` writes plain `.tsx` files into your `components/onda/` folder. The CLI also maintains an `index.ts` barrel exporting `ondaRegistry` so you can drop it straight into `<CompositionRenderer registry={ondaRegistry}>`.
+- **No black box, no lock-in** — `ondajs add` writes plain `.tsx` files into your `components/onda/` folder. The CLI also maintains an `index.ts` barrel exporting `ondaRegistry` (components — drop straight into `<CompositionRenderer registry={ondaRegistry}>`) and, when you install transitions, a parallel `ondaTransitions` registry keyed by factory name.
 
 ---
 
@@ -53,7 +53,7 @@ What it actually does:
 1. Resolves the full transitive set (a scene block like `TitleCard` pulls in its lib helpers + composed primitives in one pass).
 2. Detects conflicts before writing — never silently overwrites a file with different content.
 3. Rewrites import paths so the installed code points at your project's `lib/onda/` and `components/onda/`.
-4. Updates `components/onda/index.ts` with `ondaRegistry` — the lookup map `<CompositionRenderer>` consumes.
+4. Updates `components/onda/index.ts` with `ondaRegistry` — the lookup map `<CompositionRenderer>` consumes. When you install transitions, the barrel also exports `ondaTransitions` (keyed by factory name; shape `{ factory, schema }`) so agent runtimes can dispatch on slug.
 5. Prints the peer-dep install line for any new Remotion packages.
 
 ---
