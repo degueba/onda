@@ -137,4 +137,6 @@ export {
   type RegistrySummary,
   type RegistryComponentSummary,
   type RegistryPropSummary,
+  type CatalogMeta,
+  type CatalogMetaEntry,
 } from './registry-summary';

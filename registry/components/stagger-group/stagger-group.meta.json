@@ -2,6 +2,7 @@
   "name": "stagger-group",
   "title": "StaggerGroup",
   "description": "A composition primitive that reveals a list of items in sequence using the canonical Onda stagger (4 frames between siblings). The foundation pattern for animated lists, bullet build-ons, feature reveals, and any sequenced text reveal. Demonstrates the signature stagger fingerprint in its purest form.",
+  "pickWhen": "revealing a list of arbitrary children, not a sentence. Bullets, feature rows, badges — anything with siblings.",
   "category": "entrances",
   "tags": [
     "composition",

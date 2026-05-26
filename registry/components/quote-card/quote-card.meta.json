@@ -2,6 +2,11 @@
   "name": "quote-card",
   "title": "Quote Card",
   "description": "A centered pull-quote scene block with attribution. The quote reveals word-by-word with a slower-than-canonical stagger so the line reads rather than cascades; after a settled beat a small accent-rose rule draws in beneath it, then the author and role fade in together. Built for testimonials, documentary citations, and editorial-feeling section breaks.",
+  "pickWhen": "a held quotation — pull-quote, customer testimonial, founder line. The word-staggered cascade is the point.",
+  "composes": [
+    "word-stagger",
+    "underline"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

@@ -2,6 +2,7 @@
   "name": "slide-out",
   "title": "SlideOut",
   "description": "A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.",
+  "pickWhen": "the line should exit toward a direction. The mirror of SlideIn. Not for general \"this beat is done.\"",
   "category": "entrances",
   "tags": [
     "text",

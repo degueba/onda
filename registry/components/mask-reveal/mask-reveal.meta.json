@@ -2,6 +2,7 @@
   "name": "mask-reveal",
   "title": "MaskReveal",
   "description": "Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.",
+  "pickWhen": "the text needs to land with a hard edge, not a soft fade. Editorial / brutalist beats.",
   "category": "entrances",
   "tags": [
     "text",

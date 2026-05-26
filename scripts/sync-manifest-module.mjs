@@ -54,6 +54,10 @@ function scanRegistryDir(dir, kind) {
       title: meta.title,
       description: meta.description,
       category: meta.category,
+      // Techspec 027 — optional picking-enrichment fields. Both pass
+      // through unchanged from meta.json. Undefined when omitted.
+      pickWhen: typeof meta.pickWhen === 'string' ? meta.pickWhen : undefined,
+      composes: Array.isArray(meta.composes) ? meta.composes : undefined,
     });
   }
   return entries;
@@ -68,6 +72,29 @@ if (all.length === 0) {
   process.exit(1);
 }
 
+// Validate every `composes` slug resolves to a real manifest entry — a
+// dangling reference would silently rot the prefer-the-scene-block hint
+// downstream. Cheap to enforce here where every slug is in scope.
+const knownSlugs = new Set(all.map((e) => e.name));
+const composesErrors = [];
+for (const e of all) {
+  if (!e.composes) continue;
+  for (const target of e.composes) {
+    if (!knownSlugs.has(target)) {
+      composesErrors.push(
+        `  - ${e.kind}/${e.slug} composes "${target}" — no such manifest entry`,
+      );
+    }
+  }
+}
+if (composesErrors.length > 0) {
+  console.error(
+    'sync-manifest-module: invalid `composes` references:\n' +
+      composesErrors.join('\n'),
+  );
+  process.exit(1);
+}
+
 // Build the file content. Imports first, then the typed array. Entries
 // are emitted in scan order (components alphabetized, then transitions
 // alphabetized) — stable across runs.
@@ -79,17 +106,23 @@ const importLines = all
   .join('\n');
 
 const arrayLines = all
-  .map((e) =>
-    [
+  .map((e) => {
+    const lines = [
       '  {',
       `    name: ${JSON.stringify(e.name)},`,
       `    category: ${JSON.stringify(e.category)},`,
       `    title: ${JSON.stringify(e.title)},`,
       `    description: ${JSON.stringify(e.description)},`,
-      `    schema: ${e.identifier},`,
-      '  },',
-    ].join('\n'),
-  )
+    ];
+    if (e.pickWhen !== undefined) {
+      lines.push(`    pickWhen: ${JSON.stringify(e.pickWhen)},`);
+    }
+    if (e.composes !== undefined) {
+      lines.push(`    composes: ${JSON.stringify(e.composes)},`);
+    }
+    lines.push(`    schema: ${e.identifier},`, '  },');
+    return lines.join('\n');
+  })
   .join('\n');
 
 const fileBody = `// AUTO-GENERATED — DO NOT EDIT.
@@ -124,6 +157,17 @@ export type ComponentManifestEntry = {
    *  A real Zod object — \`.parse()\`, \`.extend()\`, or feed into a
    *  \`z.discriminatedUnion\` directly. */
   schema: z.ZodTypeAny;
+  /** One sentence — when to pick this over its near-neighbors. Written
+   *  for an LLM choosing between siblings in the same category. Authored
+   *  alongside \`description\` in <slug>.meta.json; kept under ~140 chars
+   *  by convention so it survives prompt truncation. Optional —
+   *  undefined when not yet backfilled (techspec 027). */
+  pickWhen?: string;
+  /** Component slugs this entry delegates motion to. Populated only for
+   *  scene blocks and other composing entries; \`undefined\` for
+   *  primitives. Build-time validated to resolve against real manifest
+   *  entries (techspec 027). */
+  composes?: ReadonlyArray<string>;
   /** Reserved for future. v1 ships without examples — populate in a
    *  later spec when per-component \`examples.ts\` files land. */
   examples?: ReadonlyArray<{

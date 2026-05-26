@@ -2,6 +2,12 @@
   "name": "stat-card",
   "title": "StatCard",
   "description": "Flagship Onda data scene — a big counted-up number above a word-staggered label above an accent rule. Composes CountUp, WordStagger, and Underline so the cascade (number → label → rule) reads as one calm motion. The signature 'Onda data look' for hero stats, KPIs, milestones, and announcement frames.",
+  "pickWhen": "the brief is \"show one big number\" — KPI, milestone, headline figure, announcement frame. Don't reassemble from the parts.",
+  "composes": [
+    "count-up",
+    "word-stagger",
+    "underline"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

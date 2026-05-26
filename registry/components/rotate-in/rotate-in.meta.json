@@ -2,6 +2,7 @@
   "name": "rotate-in",
   "title": "RotateIn",
   "description": "A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.",
+  "pickWhen": "a single accent moment — a quote attribution, an Easter egg. Stay inside [-12, +12] degrees.",
   "category": "entrances",
   "tags": [
     "text",
