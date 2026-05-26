@@ -20,6 +20,13 @@ updates:
       development:
         dependency-type: development
         update-types: ['minor', 'patch']
+    ignore:
+      # Zod 4 is a breaking peer-dep change for the public `ondajs` package
+      # (drops `zod-to-json-schema`, requires a 1.0.0 release, needs
+      # lock-step coordination with downstream consumers). Revisit as a
+      # deliberate techspec — see closed PR #37.
+      - dependency-name: zod
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
