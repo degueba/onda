@@ -161,11 +161,26 @@ export async function runAdd(args: string[]): Promise<void> {
   // and pass it directly to `<CompositionRenderer registry={...}>`. Skipped by
   // --no-barrel; refuses to clobber a foreign (non-CLI-managed) barrel.
   if (!opts.noBarrel) {
-    const componentSlugs = resolved
-      .filter(({ manifest }) => manifest.type === 'registry:component')
-      .map(({ manifest }) => manifest.name);
+    // Both components and transitions ship as `registry:component` in
+    // the registry JSON — the discriminator is the file target. A
+    // transition's first file lands at `components/onda/transitions/…`,
+    // a component's at `components/onda/<slug>/…`. We split here so
+    // the barrel can emit two registries with the right shapes.
+    const installable = resolved.filter(
+      ({ manifest }) => manifest.type === 'registry:component',
+    );
+    const componentSlugs: string[] = [];
+    const transitionSlugs: string[] = [];
+    for (const { manifest } of installable) {
+      const firstTarget = manifest.files?.[0]?.target ?? '';
+      if (firstTarget.includes('/transitions/')) {
+        transitionSlugs.push(manifest.name);
+      } else {
+        componentSlugs.push(manifest.name);
+      }
+    }
 
-    const barrelOutcome = updateBarrel(componentsOut, componentSlugs, {
+    const barrelOutcome = updateBarrel(componentsOut, componentSlugs, transitionSlugs, {
       dryRun: opts.dryRun,
       cwd,
     });
