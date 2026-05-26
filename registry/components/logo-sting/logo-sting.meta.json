@@ -2,6 +2,12 @@
   "name": "logo-sting",
   "title": "LogoSting",
   "description": "Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.",
+  "pickWhen": "a brand sting at the head or tail of the piece — restrained scale + underline, not a 3D flourish.",
+  "composes": [
+    "draw-on",
+    "scale-in",
+    "underline"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

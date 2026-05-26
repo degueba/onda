@@ -2,6 +2,7 @@
   "name": "tracking-in",
   "title": "TrackingIn",
   "description": "Text begins spread wide and contracts to its resting letter-spacing on the house spring, fading and sharpening from a soft blur as it settles. A cinematic title entrance with no overshoot.",
+  "pickWhen": "a cinematic title beat where the type itself is the moment. Do not combine with another entrance on the same line.",
   "category": "entrances",
   "tags": [
     "text",

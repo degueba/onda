@@ -2,6 +2,7 @@
   "name": "fade-in",
   "title": "FadeIn",
   "description": "A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.",
+  "pickWhen": "layout shift is unacceptable — captions over video, text inside a frame, anything where motion would jiggle neighbors.",
   "category": "entrances",
   "tags": [
     "text",

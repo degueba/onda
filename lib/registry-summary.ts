@@ -20,7 +20,39 @@ export type RegistryComponentSummary = {
   supportsPlacement: boolean;
   supportsSize: boolean;
   keyProps: RegistryPropSummary[];
+  /** One sentence on when to pick this over near-neighbors. Sourced
+   *  from the matching `CatalogMetaEntry.pickWhen` when a catalog is
+   *  passed alongside the registry. Techspec 027. */
+  pickWhen?: string;
+  /** Slugs this entry composes from — populated only for scene blocks
+   *  and other composing entries. Sourced from the matching
+   *  `CatalogMetaEntry.composes`. Techspec 027. */
+  composes?: readonly string[];
 };
+
+/**
+ * Structural slice of a manifest entry — just the fields needed to
+ * enrich a registry summary with picking signal. Keeping this as a
+ * narrow inline shape (rather than importing `ComponentManifestEntry`
+ * from the CLI package) avoids a cross-package dependency from `lib/`
+ * back into `packages/cli/` — `lib/` ships as registry-installable
+ * source via the CLI and stays standalone. Pass `manifest` from
+ * `ondajs` directly; the shapes are compatible.
+ */
+export type CatalogMetaEntry = {
+  name: string;
+  pickWhen?: string;
+  composes?: readonly string[];
+};
+
+export type CatalogMeta = readonly CatalogMetaEntry[];
+
+function indexCatalog(catalog: CatalogMeta | undefined): Map<string, CatalogMetaEntry> {
+  const map = new Map<string, CatalogMetaEntry>();
+  if (!catalog) return map;
+  for (const entry of catalog) map.set(entry.name, entry);
+  return map;
+}
 
 export type RegistrySummary = {
   components: RegistryComponentSummary[];
@@ -74,7 +106,20 @@ function jsonSchemaToTypeString(schema: unknown): string {
   return (s.type as string) ?? 'unknown';
 }
 
-export function summarizeRegistry(registry: ComponentRegistry): RegistrySummary {
+/**
+ * Walk a component registry and return a structured summary suitable
+ * for building agent system prompts.
+ *
+ * Pass `catalog` (e.g. `manifest` from `ondajs`) to enrich each summary
+ * with `pickWhen` and `composes` — the picking-signal fields the schema
+ * itself can't carry. Omitting `catalog` keeps the prior behavior:
+ * descriptions and capability flags only, no enrichment.
+ */
+export function summarizeRegistry(
+  registry: ComponentRegistry,
+  catalog?: CatalogMeta,
+): RegistrySummary {
+  const catalogIndex = indexCatalog(catalog);
   const components: RegistryComponentSummary[] = Object.entries(registry).map(
     ([name, { schema }]) => {
       const raw = zodToJsonSchema(schema, name) as Record<string, unknown>;
@@ -94,12 +139,15 @@ export function summarizeRegistry(registry: ComponentRegistry): RegistrySummary 
         }),
       );
 
+      const meta = catalogIndex.get(name);
       return {
         name,
         description: def.description as string | undefined,
         supportsPlacement: 'placement' in properties,
         supportsSize: 'size' in properties,
         keyProps,
+        pickWhen: meta?.pickWhen,
+        composes: meta?.composes,
       };
     },
   );
@@ -155,14 +203,28 @@ export function summarizeTransitionRegistry(
  * Markdown form, ready to paste into an LLM system prompt. One section
  * per component with a prop table. Use this if you don't need a custom
  * format; otherwise call {@link summarizeRegistry} and render your own.
+ *
+ * Pass `catalog` (e.g. `manifest` from `ondajs`) to surface `pickWhen`
+ * (italic line directly under the description, before the prop table)
+ * and `composes` (italic cross-link line). Both render only when present
+ * on the matching catalog entry; absent entries fall back to the prior
+ * description-only layout.
  */
-export function summarizeRegistryAsMarkdown(registry: ComponentRegistry): string {
-  const summary = summarizeRegistry(registry);
+export function summarizeRegistryAsMarkdown(
+  registry: ComponentRegistry,
+  catalog?: CatalogMeta,
+): string {
+  const summary = summarizeRegistry(registry, catalog);
   const lines: string[] = [];
 
   for (const c of summary.components) {
     lines.push(`### ${c.name}`);
     if (c.description) lines.push('', c.description);
+    if (c.pickWhen) lines.push('', `*pick when:* ${c.pickWhen}`);
+    if (c.composes && c.composes.length > 0) {
+      const links = c.composes.map((slug) => `[${slug}](#${slug})`).join(' + ');
+      lines.push('', `*composes:* ${links}`);
+    }
 
     const caps: string[] = [];
     if (c.supportsPlacement) caps.push('`placement`');

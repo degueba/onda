@@ -2,6 +2,12 @@
   "name": "end-card",
   "title": "EndCard",
   "description": "Closing scene block: a hero CTA reveals with an optional accent underline, then a faint, staggered row of social handles or URLs fades in beneath it. Composes BlurReveal, Underline, and StaggerGroup so the motion fingerprint stays consistent with the rest of the catalog.",
+  "pickWhen": "wrap a video on Onda's house outro — logo + tagline + CTA list, restraint over fanfare.",
+  "composes": [
+    "blur-reveal",
+    "underline",
+    "stagger-group"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

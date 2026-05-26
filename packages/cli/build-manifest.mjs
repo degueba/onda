@@ -62,6 +62,14 @@ export type ComponentManifestEntry = {
   /** Real Zod schema. Use \`.parse()\`, \`.extend()\`, or pipe directly
    *  into a \`z.discriminatedUnion\`. */
   schema: z.ZodTypeAny;
+  /** One sentence — when to pick this over its near-neighbors. Authored
+   *  alongside \`description\` in meta.json; ≤140 chars by convention
+   *  so it survives prompt truncation. Optional (techspec 027). */
+  pickWhen?: string;
+  /** Slugs this entry composes from — populated only for scene blocks
+   *  and other composing entries. Build-time validated against the
+   *  manifest (techspec 027). */
+  composes?: ReadonlyArray<string>;
   /** Reserved for future v1.1. Empty today. */
   examples?: ReadonlyArray<{
     name: string;

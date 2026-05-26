@@ -2,6 +2,12 @@
   "name": "lower-third",
   "title": "LowerThird",
   "description": "Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.",
+  "pickWhen": "a broadcast-style speaker / source label sliding in from the lower edge. Keep on screen the whole time the speaker is talking.",
+  "composes": [
+    "slide-in",
+    "fade-in",
+    "underline"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

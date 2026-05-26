@@ -2,6 +2,12 @@
   "name": "chapter-card",
   "title": "ChapterCard",
   "description": "Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.",
+  "pickWhen": "a calm chapter / section divider beat — \"Chapter 2: …\" — that should breathe before the next scene lands.",
+  "composes": [
+    "fade-in",
+    "blur-reveal",
+    "underline"
+  ],
   "category": "scenes",
   "tags": [
     "scene",

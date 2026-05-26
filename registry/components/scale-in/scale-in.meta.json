@@ -2,6 +2,7 @@
   "name": "scale-in",
   "title": "ScaleIn",
   "description": "A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.",
+  "pickWhen": "small UI affordances — icons, badges, chips. Restraint on the scale is the point; not for headlines.",
   "category": "entrances",
   "tags": [
     "text",

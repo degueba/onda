@@ -2,6 +2,7 @@
   "name": "word-stagger",
   "title": "WordStagger",
   "description": "Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.",
+  "pickWhen": "the line should read across like a sentence being spoken, not land all at once. The clearest stagger fingerprint.",
   "category": "entrances",
   "tags": [
     "text",

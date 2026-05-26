@@ -2,6 +2,7 @@
   "name": "blur-reveal",
   "title": "BlurReveal",
   "description": "A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.",
+  "pickWhen": "any text reveal where the brief doesn't ask for something specific — the house default. Reach for a sibling only with intent.",
   "category": "entrances",
   "tags": [
     "text",

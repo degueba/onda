@@ -2,6 +2,7 @@
   "name": "fade-out",
   "title": "FadeOut",
   "description": "The inverse of FadeIn: a pure opacity exit. Opacity travels from 1 to 0 on HOUSE_EASE, with no transform or blur. Slightly faster than entrances so the moment ends without lingering.",
+  "pickWhen": "the moment ends and you want it to end cleanly. Pair with whichever entrance opened the beat.",
   "category": "entrances",
   "tags": [
     "text",
