@@ -33,6 +33,12 @@ updates:
       # actively maintained, no urgency.
       - dependency-name: typescript
         update-types: ['version-update:semver-major']
+      # Next.js 16 is a major framework bump touching App Router conventions,
+      # image handling, route segments, and Vercel build target. Deserves a
+      # deliberate migration as its own techspec — see closed PR #43.
+      # Next 15 is actively maintained, no urgency.
+      - dependency-name: next
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
