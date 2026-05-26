@@ -38,7 +38,7 @@ jobs:
       # Check out the exact tag's commit, not whatever main currently points
       # at. Critical for `workflow_dispatch` — by the time we dispatch from
       # release-please.yml, main may already have moved past the release SHA.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.tag_name || inputs.tag }}
 
