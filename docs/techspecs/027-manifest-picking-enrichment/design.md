@@ -16,6 +16,52 @@ Three concrete failure modes:
 
 Track-placement / role concerns (atmosphere belongs on back tracks, scene blocks on focal tracks) are **not** part of this problem. They're a category-level convention (already documented in [`composing-with-onda.md`](../../composing-with-onda.md)), not a per-component datum.
 
+## What this looks like
+
+Concretely, a section of the agent's system prompt for the `entrances` and `scenes` categories reads like this after the change — same prose the manifest already exposes, plus one italic line that survives truncation:
+
+```markdown
+### blur-reveal
+
+A calm, spring-driven text reveal: blur and opacity fade in together
+while the text rises by 16px. No overshoot. The reference Onda primitive.
+
+*pick when:* any text reveal where the brief doesn't ask for something
+specific — this is the house default. Reach for a sibling only with intent.
+
+| prop | type | required | default | notes |
+| ---- | ---- | -------- | ------- | ----- |
+| …    |  …   |          |         |       |
+
+### fade-in
+
+A pure opacity fade for text — no movement, no scale, no blur.
+The simplest possible reveal.
+
+*pick when:* layout shift is unacceptable — captions over video, text
+inside a frame, anything where motion would jiggle neighboring content.
+
+### word-stagger
+
+Multi-word text where each word fades and rises in sequence — the
+clearest demonstration of the Onda stagger fingerprint.
+
+*pick when:* the line should read across like a sentence being spoken,
+not land all at once. Pair with a held-still subject above or below.
+
+### stat-card
+
+Flagship Onda data scene — a big counted-up number above a
+word-staggered label above an accent rule. Composes CountUp, WordStagger,
+and Underline so the cascade (number → label → rule) reads as one calm motion.
+
+*pick when:* the brief is "show one big number" — KPI, milestone,
+headline figure, announcement frame. Don't reassemble from the parts.
+*composes:* [count-up](#count-up) + [word-stagger](#word-stagger) + [underline](#underline)
+```
+
+The `*pick when:*` line lands in the first three lines of every section — agents that truncate per entry still see it. The `*composes:*` cross-links say *"the scene block exists, prefer it over the parts"* without needing prose. Voice is the same as the catalog: short, specific, no hedging.
+
 ## Decision
 
 Add two optional fields — and only two — to `ComponentManifestEntry` and to each component's `<slug>.meta.json`:
@@ -96,3 +142,39 @@ Three small, sequenceable changes:
 3. **Backfill (rolling PRs).** Author `pickWhen` per component, starting with `entrances` (15 entries) and `scenes` (7 entries). Each PR can carry multiple components — the work is editorial, not structural. `composes` is backfilled on the same PRs for scene blocks and any composing component. Atmospheric / cinematic / data / graphics / interface / media categories follow at whatever cadence the lib author chooses; nothing blocks anything.
 
 Total scope: ~50 lines of code (steps 1 and 2 combined) plus ongoing editorial work on meta.json files. No new dependencies, no schema bundle impact, no breaking changes to the 018 contract.
+
+## Appendix — drafted voice for the `entrances` category
+
+Reference draft for step 3's editorial backfill. Adopt as-is, refine, or replace — the point is to fix the *voice* now so the backfill PR isn't bikeshedding tone per component. Short, specific, no hedging, ~140 chars.
+
+| slug | `pickWhen` |
+| --- | --- |
+| `blur-reveal` | any text reveal where the brief doesn't ask for something specific — the house default. Reach for a sibling only with intent. |
+| `fade-in` | layout shift is unacceptable — captions over video, text inside a frame, anything where motion would jiggle neighbors. |
+| `fade-out` | the moment ends and you want it to end cleanly. Pair with whichever entrance opened the beat. |
+| `word-stagger` | the line should read across like a sentence being spoken, not land all at once. The clearest stagger fingerprint. |
+| `stagger-group` | revealing a list of arbitrary children, not a sentence. Bullets, feature rows, badges — anything with siblings. |
+| `tracking-in` | a cinematic title beat where the type itself is the moment. Don't combine with another entrance on the same line. |
+| `scale-in` | small UI affordances — icons, badges, chips. Restraint on the scale is the point; not for headlines. |
+| `slide-in` | the line *should* arrive from a direction (off-frame label, broadcast lower-third). Pass `direction` deliberately. |
+| `slide-out` | the line should exit toward a direction. The mirror of SlideIn. Not for general "this beat is done." |
+| `rotate-in` | a single accent moment — a quote attribution, an Easter egg. Stay inside [-12, +12] degrees. |
+| `mask-reveal` | the text needs to land with a hard edge, not a soft fade. Editorial / brutalist beats. |
+| `typewriter` | the brief reads as typed — terminal output, AI response, code snippet. Linear pacing is the point. |
+| `matrix-decode` | a one-shot reveal where the text *decoding* is the moment. Short strings only — long lines drown the effect. |
+| `slot-machine-roll` | a numeric reveal with weight — final score, jackpot, release number. Short numerics only. |
+| `word-rotate` | a held-in-place rotation across a phrase list — taglines, value props, "X for Y" cycles. |
+
+## Appendix — `composes` map for the `scenes` category
+
+Already implied by current descriptions; this is the structured form the spec ships.
+
+| slug | `composes` |
+| --- | --- |
+| `chapter-card` | `['fade-in', 'blur-reveal', 'underline']` |
+| `end-card` | `['blur-reveal', 'underline', 'stagger-group']` |
+| `logo-sting` | `['draw-on', 'scale-in', 'underline']` |
+| `lower-third` | `['slide-in', 'fade-in', 'underline']` |
+| `quote-card` | `['word-stagger', 'underline']` |
+| `stat-card` | `['count-up', 'word-stagger', 'underline']` |
+| `title-card` | `['blur-reveal', 'word-stagger', 'underline']` |
