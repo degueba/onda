@@ -5,11 +5,11 @@ export const explainer30sMeta = {
   slug: 'explainer-30s',
   title: 'Explainer · 30s',
   description:
-    "Classic 30-second product explainer — title beat, three feature beats with synchronized text + data, a stat punctuation, and a CTA close. Demonstrates how scene blocks, typography primitives, and the new transitions catalog compose into a complete short.",
+    "The 'why Onda matters' trailer — five acts in 30 seconds. A premise (\"video, in code\") asks the question, a brand reveal answers it, two proof beats show the signature (calm by default, bold when it earns it), a terminal demos the install, and an end-card closes. Eight component types stitched with seven transition flavors — glass-wipe, depth-push, morph, zoom, dip-to-color through the accent rose, blur, cross-fade — over one continuous atmosphere of gradient drift, dot grid, grain, and vignette.",
   duration: 30,
   fps: 30,
   width: 1920,
   height: 1080,
-  categoriesUsed: ['scene blocks', 'typography', 'data', 'transitions'],
+  categoriesUsed: ['typography', 'scene blocks', 'data', 'interface', 'graphics', 'atmosphere', 'transitions'],
   category: 'marketing' as const,
 } as const;
