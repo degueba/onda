@@ -177,7 +177,10 @@ export const ExplainerComposition: React.FC = () => {
 
         {/* 3b (13–17s) — Bold: ShimmerSweep proves range without re-using
             the earned-color register. Two different motion fingerprints
-            making the same point — "calm is default, not the ceiling." */}
+            making the same point — "calm is default, not the ceiling."
+            Items in this flex column omit `placement` so the wrapper
+            centers them as a stack instead of each one parking at canvas
+            center on its own layer (which would overlap). */}
         <TransitionSeries.Sequence durationInFrames={108}>
           <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 32 }}>
             <ShimmerSweep
@@ -185,7 +188,6 @@ export const ExplainerComposition: React.FC = () => {
                 text: 'bold when it earns it',
                 fontSize: 130,
                 align: 'center',
-                placement: 'center',
               })}
             />
             <WordStagger
