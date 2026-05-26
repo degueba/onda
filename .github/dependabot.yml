@@ -27,6 +27,12 @@ updates:
       # deliberate techspec — see closed PR #37.
       - dependency-name: zod
         update-types: ['version-update:semver-major']
+      # TypeScript 6 has breaking type changes that fail the existing
+      # typecheck (~50+ errors across the registry). Deserves a deliberate
+      # migration as its own techspec — see closed PR #36. TS 5.9 is
+      # actively maintained, no urgency.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
