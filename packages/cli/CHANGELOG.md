@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/degueba/onda/compare/ondajs-v0.5.0...ondajs-v0.5.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* **cli:** emit ondaTransitions registry in the barrel ([#45](https://github.com/degueba/onda/issues/45)) ([ea5d35a](https://github.com/degueba/onda/commit/ea5d35a071f54212e9305fc5c36e6f762f76569e))
+
 ## [0.5.0](https://github.com/degueba/onda/compare/ondajs-v0.4.1...ondajs-v0.5.0) (2026-05-25)
 
 
