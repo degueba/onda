@@ -125,6 +125,14 @@ const arrayLines = all
   })
   .join('\n');
 
+// The typed schemas map — same data as the array's `schema` field, but
+// keyed by slug with `as const` so each value's specific Zod type is
+// preserved through `typeof`. Issue #52: lets consumers build typed
+// `z.discriminatedUnion` variants without losing prop inference.
+const schemasMapLines = all
+  .map((e) => `  ${JSON.stringify(e.name)}: ${e.identifier},`)
+  .join('\n');
+
 const fileBody = `// AUTO-GENERATED — DO NOT EDIT.
 // Regenerate via \`pnpm sync-manifest\` (or it runs automatically
 // before publish via the CLI package's prepublishOnly hook).
@@ -180,6 +188,31 @@ export type ComponentManifestEntry = {
 export const manifest: ReadonlyArray<ComponentManifestEntry> = [
 ${arrayLines}
 ];
+
+/**
+ * Slug → schema map, keyed by the same slugs as the manifest array.
+ * Unlike \`manifest[i].schema\` (typed as \`z.ZodTypeAny\` because the
+ * array is homogeneously typed), each value here keeps its specific
+ * Zod type — so \`schemas['quote-card']\` resolves to
+ * \`typeof quoteCardSchema\`, not \`ZodTypeAny\`, and
+ * \`z.infer<typeof schemas['quote-card']>\` produces the real props
+ * shape. Use this when you need per-entry type inference
+ * (e.g. building a typed \`z.discriminatedUnion\` over onda entries);
+ * use the array \`manifest\` when you need to iterate, filter by
+ * category, or render to docs / prompts. Issue #52.
+ */
+export const schemas = {
+${schemasMapLines}
+} as const;
+
+/** Type of the {@link schemas} map. Use \`OndaSchemas[K]\` to recover
+ *  the specific Zod schema type for a given slug. */
+export type OndaSchemas = typeof schemas;
+
+/** Union of every onda entry slug — every component and transition
+ *  name in the catalog. Use as the discriminator literal when
+ *  building \`z.discriminatedUnion\` variants over onda entries. */
+export type OndaComponentName = keyof OndaSchemas;
 
 export default manifest;
 `;
