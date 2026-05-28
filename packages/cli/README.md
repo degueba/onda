@@ -123,6 +123,35 @@ const payload: Comp = {
 
 Time strings (`"0:02"`, `"30s"`, `"500ms"`) resolve to frames internally — agents never compute frame math. Unknown components and invalid props render visible error placeholders, not silent crashes.
 
+### Embed in a Remotion `<Player>` on your own page
+
+Onda compositions look great in a Remotion `<Player>` — until the Player runs in a small or flexible container (catalog cards, mobile previews, AI-editor thumbnails). The default behavior is to render at the composition's intrinsic resolution (e.g. 1920×1080) and CSS-scale down, which softens borders and sub-pixel anti-aliasing.
+
+`<AdaptivePlayer>` is a drop-in replacement that renders at the size it's actually displayed at (CSS size × DPR, floored at 720px on the long edge, capped at the intrinsic resolution):
+
+```bash
+npx ondajs add lib-adaptive-player
+```
+
+```tsx
+import { AdaptivePlayer } from './lib/onda/adaptive-player';
+import { QuoteCard } from './components/onda/quote-card/QuoteCard';
+
+<AdaptivePlayer
+  component={QuoteCard}
+  inputProps={{ quote: "Motion is craft.", author: "Saul Bass" }}
+  durationInFrames={180}
+  fps={30}
+  compositionWidth={1920}
+  compositionHeight={1080}
+  autoPlay
+  loop
+  style={{ width: '100%', aspectRatio: '16 / 9' }}
+/>
+```
+
+For advanced cases (you already manage your own Player ref / wrapper), the underlying `useAdaptiveCompositionSize(ref, intrinsicW, intrinsicH)` hook is exported alongside.
+
 ---
 
 ## Learn more

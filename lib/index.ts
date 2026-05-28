@@ -140,3 +140,10 @@ export {
   type CatalogMeta,
   type CatalogMetaEntry,
 } from './registry-summary';
+
+export {
+  AdaptivePlayer,
+  useAdaptiveCompositionSize,
+  DEFAULT_MIN_RENDER_LONG_EDGE,
+  type AdaptivePlayerProps,
+} from './adaptive-player';

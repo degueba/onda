@@ -2,7 +2,7 @@
 
 import { Player, type PlayerRef } from '@remotion/player';
 import { AbsoluteFill } from 'remotion';
-import { Pause, Play } from '@phosphor-icons/react';
+import { CornersIn, CornersOut, Pause, Play } from '@phosphor-icons/react';
 import {
   useCallback,
   useEffect,
@@ -11,6 +11,7 @@ import {
   useState,
   type ComponentType,
 } from 'react';
+import { useAdaptiveCompositionSize } from '@onda/lib/adaptive-player';
 
 type Props<T extends Record<string, unknown>> = {
   component: ComponentType<T>;
@@ -66,6 +67,16 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   }, [Component]);
 
   const playerRef = useRef<PlayerRef>(null);
+  // Container we measure for adaptive Player resolution. The Player itself
+  // can't be the measurement target — its size depends on what we pass in,
+  // which would create a feedback loop. Measure the outer wrapper, which is
+  // sized by the parent's CSS (aspect-ratio container).
+  const containerRef = useRef<HTMLDivElement>(null);
+  const adaptive = useAdaptiveCompositionSize(
+    containerRef,
+    compositionWidth,
+    compositionHeight,
+  );
   // Latest hover state for the gesture-primer listener (avoids a stale closure).
   const hoveringRef = useRef(false);
   // True once the user has produced a real activation gesture (click/key/touch).
@@ -76,6 +87,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Mirror Player's play/pause state and current frame into React so the
   // overlay and time readout can react.
@@ -98,6 +110,24 @@ export function ComponentPreview<T extends Record<string, unknown>>({
       player.removeEventListener('ended', onEnded);
       player.removeEventListener('frameupdate', onFrameUpdate);
     };
+  }, []);
+
+  // Fullscreen is tracked off `document.fullscreenElement` — NOT the
+  // Player's own `isFullscreen()`. Why: `playerRef.requestFullscreen()`
+  // puts the Player ELEMENT into fullscreen, but our play/pause / time-
+  // readout / fullscreen-toggle overlay are SIBLINGS of the Player
+  // inside our outer wrapper. If only the Player goes fullscreen, the
+  // controls disappear from the fullscreen surface and the viewer has
+  // no way out except esc-key. Instead we put the wrapper itself into
+  // fullscreen so the controls come along.
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const container = containerRef.current;
+      setIsFullscreen(!!container && document.fullscreenElement === container);
+    };
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () =>
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
   // Autoplay strategy: <Player autoPlay> + numberOfSharedAudioTags=0 is not
@@ -153,6 +183,23 @@ export function ComponentPreview<T extends Record<string, unknown>>({
     else player.play();
   }, []);
 
+  // Fullscreen the OUTER wrapper, not the Player itself — see the
+  // fullscreen-change effect for why. Falls back to webkitRequestFullscreen
+  // for older Safari that didn't ship the standard name.
+  const toggleFullscreen = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (document.fullscreenElement === el) {
+      document.exitFullscreen?.();
+    } else {
+      const req =
+        el.requestFullscreen ??
+        (el as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> })
+          .webkitRequestFullscreen;
+      req?.call(el);
+    }
+  }, []);
+
   // hoverToPlay can't start on the first hover after a fresh page load:
   // `mouseenter` is NOT a user-activation gesture, so the browser blocks the
   // Player's play() until a real gesture (click / keydown / touch). Before
@@ -181,7 +228,18 @@ export function ComponentPreview<T extends Record<string, unknown>>({
     };
   }, [hoverToPlay]);
 
-  const showOverlay = !isPlaying || isHovering;
+  // The center play/pause icon hides whenever playback is running so it
+  // never covers the video. The full Player area stays clickable (the
+  // wrapper button still receives taps for toggle) — only the VISUAL
+  // chip disappears. This way "tap video to pause" still works while
+  // playing.
+  const showCenterIcon = !isPlaying;
+
+  // Corner controls (fullscreen toggle, time readout) follow a different
+  // rule. While playing outside fullscreen, hover reveals them — keeps
+  // playback clean. In fullscreen we always show them: the user has no
+  // way to exit otherwise and "tap to exit" isn't discoverable.
+  const showCornerControls = !isPlaying || isHovering || isFullscreen;
 
   // Time readout — seconds with one decimal. All Onda previews are short
   // loops (< 60s), so MM:SS would be mostly leading zeroes. Tabular numerals
@@ -191,6 +249,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
 
   return (
     <div
+      ref={containerRef}
       className={`relative w-full h-full ${className ?? ''}`}
       onMouseEnter={() => {
         setIsHovering(true);
@@ -229,8 +288,8 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         inputProps={inputProps}
         durationInFrames={durationInFrames}
         fps={fps}
-        compositionWidth={compositionWidth}
-        compositionHeight={compositionHeight}
+        compositionWidth={adaptive.width}
+        compositionHeight={adaptive.height}
         autoPlay={effectiveAutoPlay}
         loop={loop}
         controls={false}
@@ -251,30 +310,30 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         style={{ width: '100%', height: '100%', display: 'block' }}
       />
 
+      {/* The button covers the whole Player so tapping anywhere toggles
+          play/pause. Only the inner visual chip fades — the click target
+          stays live regardless of `showCenterIcon`, so "tap video to pause"
+          works while playing even though the icon is hidden. */}
       {!hoverToPlay && (
         <button
           type="button"
           onClick={toggle}
           aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
-          className={`
-            absolute inset-0 grid place-items-center
-            transition-opacity duration-300 ease-out
-            focus:outline-none
-            ${showOverlay ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-          `}
+          className="absolute inset-0 grid place-items-center focus:outline-none"
         >
           <span
-            className="
+            className={`
               grid place-items-center
               h-9 w-9 rounded-full
               bg-onda-surface/70 backdrop-blur-md
               border border-onda-border-lit
               text-onda-text
               shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]
-              transition-all duration-200 ease-out
+              transition-all duration-300 ease-out
               hover:bg-onda-surface hover:scale-105 hover:border-onda-text/40
               active:scale-95
-            "
+              ${showCenterIcon ? 'opacity-100' : 'opacity-0'}
+            `}
           >
             {isPlaying ? (
               <Pause size={16} weight="fill" />
@@ -287,11 +346,45 @@ export function ComponentPreview<T extends Record<string, unknown>>({
         </button>
       )}
 
+      {/* Fullscreen toggle. Bottom-left corner — mirrors the time readout in
+          bottom-right and stays clear of the centered play/pause target.
+          Sized smaller than the centered play/pause so the eye reads it
+          as a secondary affordance, not a peer of the primary control. */}
+      {!hoverToPlay && (
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          className={`
+            absolute bottom-3 left-3
+            grid place-items-center
+            h-7 w-7 rounded-md
+            bg-onda-bg/60 backdrop-blur-md
+            border border-onda-border
+            text-onda-text/80
+            transition-all duration-200 ease-out
+            hover:bg-onda-surface hover:text-onda-text hover:border-onda-border-lit
+            active:scale-95
+            focus:outline-none
+            ${showCornerControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+          `}
+        >
+          {isFullscreen ? (
+            <CornersIn size={13} weight="bold" />
+          ) : (
+            <CornersOut size={13} weight="bold" />
+          )}
+        </button>
+      )}
+
       {/* Time readout. Sits in the bottom-right corner, restrained so it
           never competes with the content. Current frame in onda-text,
           slash in onda-faint (barely there), total in onda-dim — the eye
-          lands on the moving digit, treats the rest as scaffold. Fades
-          to 60% opacity while playing without hover, full otherwise. */}
+          lands on the moving digit, treats the rest as scaffold. Stays
+          visible at 60% during clean playback (the timer is informative,
+          not obstructive); full opacity when corner controls are shown
+          (paused, hovering, or in fullscreen where it's the user's
+          progress reference). */}
       {!hoverToPlay && (
         <div
           className={`
@@ -301,7 +394,7 @@ export function ComponentPreview<T extends Record<string, unknown>>({
             border border-onda-border
             font-mono text-[11px] tabular-nums leading-none
             transition-opacity duration-300 ease-out
-            ${isPlaying && !isHovering ? 'opacity-60' : 'opacity-100'}
+            ${showCornerControls ? 'opacity-100' : 'opacity-60'}
           `}
         >
           <span className="text-onda-text">{currentSec}</span>

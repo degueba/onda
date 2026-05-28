@@ -132,6 +132,7 @@ Every code block on the site is syntax-highlighted by Shiki using [www/src/lib/o
 - **Use the tokens (§2)** for all default colors, fonts, spacing.
 - **Add a `registry.json` entry** for every new component.
 - **Per-initiative work lives under [docs/techspecs/](docs/techspecs/).** Don't create one-off design docs at the repo root.
+- **Library change → docs update.** Whenever you touch the public lib surface (new export, renamed prop, new `lib/*` utility, new component, new registry entry, change to the `manifest`/`schemas` shape), update the docs in the same PR: at minimum [packages/cli/README.md](packages/cli/README.md) for anything `bunx ondajs add` can install, plus the relevant file under [docs/](docs/) (e.g. `composing-with-onda.md`, `component-reference.md`, `motion-language.md`). Mention in the PR description which docs changed. A library change with no doc update is incomplete.
 
 ### Self-check before finishing
 

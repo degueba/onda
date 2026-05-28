@@ -2,7 +2,9 @@
 
 import { useMemo } from 'react';
 import { ComponentPreview } from './ComponentPreview';
+import { ThumbnailPreview } from './ThumbnailPreview';
 import { COMPONENT_REGISTRY } from './componentRegistry';
+import { useIsMobile } from '@/lib/use-is-mobile';
 
 // Static placeholder for slugs that don't have a visual preview (e.g.
 // `audio-clip`) or aren't yet wired into the client registry. Keeps the
@@ -36,6 +38,12 @@ const NO_PREVIEW = new Set<string>(['audio-clip', 'video-clip']);
 // That keeps a grid of N tiles cheap — 62 paused Players don't tick.
 export function CatalogPreview({ slug, title }: { slug: string; title: string }) {
   const entry = COMPONENT_REGISTRY[slug];
+  // On mobile (<768px), the grid swaps each live Player for a static
+  // <Thumbnail>. A grid of ~88 ticking Players is wasteful on phones
+  // (battery + CPU) for a tap-through-to-detail flow; YouTube-style
+  // stills are the industry pattern. Desktop/tablet keep the existing
+  // hover-to-play preview.
+  const isMobile = useIsMobile();
 
   const defaults = useMemo(() => {
     if (!entry) return {} as Record<string, unknown>;
@@ -57,15 +65,26 @@ export function CatalogPreview({ slug, title }: { slug: string; title: string })
     >
       <div className="relative w-full h-full overflow-hidden rounded-xl bg-onda-bg border border-onda-border">
         {entry && !NO_PREVIEW.has(slug) ? (
-          <ComponentPreview
-            component={entry.component}
-            inputProps={defaults as never}
-            durationInFrames={120}
-            fps={30}
-            compositionWidth={1920}
-            compositionHeight={1080}
-            hoverToPlay
-          />
+          isMobile ? (
+            <ThumbnailPreview
+              component={entry.component}
+              inputProps={defaults as never}
+              durationInFrames={120}
+              fps={30}
+              compositionWidth={1920}
+              compositionHeight={1080}
+            />
+          ) : (
+            <ComponentPreview
+              component={entry.component}
+              inputProps={defaults as never}
+              durationInFrames={120}
+              fps={30}
+              compositionWidth={1920}
+              compositionHeight={1080}
+              hoverToPlay
+            />
+          )
         ) : (
           <Placeholder title={title} />
         )}

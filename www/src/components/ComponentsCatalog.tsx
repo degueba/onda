@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CaretUp, Funnel, MagnifyingGlass, X } from '@phosphor-icons/react';
+import { CaretDown, CaretUp, Check, Funnel, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { CatalogPreview } from './CatalogPreview';
+import { useIsMobile } from '@/lib/use-is-mobile';
 
 // Client island for the components catalog: a sticky filter bar (search
 // + category chips) over a thumbnail grid. The server page (an RSC) does
@@ -68,6 +69,12 @@ export function ComponentsCatalog({
   // collapsed state.
   const [collapsed, setCollapsed] = useState(false);
   const hasActiveFilter = catParam !== null || qParam !== '';
+
+  // On mobile we swap the horizontally-scrolling chip row for a single
+  // dropdown trigger — the chips were cramped on phones and didn't hint
+  // that they scrolled. Desktop keeps the chip row. Hook drives off
+  // `matchMedia('(max-width: 767px)')`.
+  const isMobile = useIsMobile();
 
   // `/` to focus search from anywhere on the page. Skip when typing in
   // another input so the shortcut never hijacks normal text entry.
@@ -257,26 +264,36 @@ export function ComponentsCatalog({
             </button>
           </div>
 
-          {/* Category chips — "All" first, then one per non-empty
-              category. Horizontal scroll on overflow keeps the bar a
-              single row at every viewport size. */}
-          <div className="flex items-center gap-2 overflow-x-auto -mx-1 px-1 pb-0.5 scrollbar-none">
-            <FilterPill
-              label="All"
-              count={total}
-              active={catParam === null}
-              onClick={() => setUrlParams({ cat: null })}
+          {/* Category filter. Mobile (<768px): a single dropdown
+              trigger that opens a vertical list — touch-friendly, no
+              hidden horizontal scroll. Desktop: the original chip row
+              with horizontal-scroll fallback for overflow. */}
+          {isMobile ? (
+            <CategoryDropdown
+              groups={groups}
+              total={total}
+              selected={catParam}
+              onSelect={(cat) => setUrlParams({ cat })}
             />
-            {groups.map((g) => (
+          ) : (
+            <div className="flex items-center gap-2 overflow-x-auto -mx-1 px-1 pb-0.5 scrollbar-none">
               <FilterPill
-                key={g.id}
-                label={g.label}
-                count={g.items.length}
-                active={catParam === g.id}
-                onClick={() => setUrlParams({ cat: g.id })}
+                label="All"
+                count={total}
+                active={catParam === null}
+                onClick={() => setUrlParams({ cat: null })}
               />
-            ))}
-          </div>
+              {groups.map((g) => (
+                <FilterPill
+                  key={g.id}
+                  label={g.label}
+                  count={g.items.length}
+                  active={catParam === g.id}
+                  onClick={() => setUrlParams({ cat: g.id })}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -367,6 +384,166 @@ function CardGrid({ items, showCategory = false }: { items: CatalogItem[]; showC
         </li>
       ))}
     </ul>
+  );
+}
+
+// Mobile filter dropdown: a trigger button showing the active category,
+// click to open a panel below with every option. The panel sits inside
+// the sticky filter bar so it stays positioned correctly while scrolling.
+// Closes on outside click, on Escape, and on selection. Single-select —
+// "All" is the unfiltered state.
+function CategoryDropdown({
+  groups,
+  total,
+  selected,
+  onSelect,
+}: {
+  groups: CatalogGroup[];
+  total: number;
+  selected: string | null;
+  onSelect: (cat: string | null) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeGroup = selected ? groups.find((g) => g.id === selected) : null;
+  const activeLabel = activeGroup ? activeGroup.label : 'All categories';
+  const activeCount = activeGroup ? activeGroup.items.length : total;
+
+  // Close on outside tap / escape so the dropdown doesn't trap the
+  // viewport — touch users have no other dismiss affordance.
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e: PointerEvent) => {
+      const root = containerRef.current;
+      if (!root) return;
+      if (!root.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  const select = (cat: string | null) => {
+    onSelect(cat);
+    setOpen(false);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className={`
+          w-full inline-flex items-center justify-between gap-2 h-9 px-3 rounded-full
+          bg-onda-surface border
+          font-mono text-xs uppercase tracking-[0.12em]
+          transition-colors
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-onda-accent/40
+          ${
+            selected
+              ? 'border-onda-accent/50 text-onda-accent'
+              : 'border-onda-border text-onda-text hover:border-onda-border-lit'
+          }
+        `}
+      >
+        <span className="inline-flex items-center gap-2 min-w-0">
+          <Funnel size={12} weight="regular" className="shrink-0" />
+          <span className="truncate">{activeLabel}</span>
+          <span
+            className={`text-[10px] tabular-nums shrink-0 ${selected ? 'text-onda-accent/80' : 'text-onda-faint'}`}
+          >
+            {String(activeCount).padStart(2, '0')}
+          </span>
+        </span>
+        <CaretDown
+          size={12}
+          weight="bold"
+          className={`shrink-0 transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          aria-label="Filter by category"
+          className="
+            absolute left-0 right-0 top-full mt-1.5 z-40
+            max-h-[70vh] overflow-y-auto
+            rounded-xl border border-onda-border bg-onda-surface
+            shadow-[0_30px_60px_-24px_rgba(0,0,0,0.9)]
+            py-1
+          "
+        >
+          <DropdownItem
+            label="All categories"
+            count={total}
+            active={selected === null}
+            onClick={() => select(null)}
+          />
+          {groups.map((g) => (
+            <DropdownItem
+              key={g.id}
+              label={g.label}
+              count={g.items.length}
+              active={selected === g.id}
+              onClick={() => select(g.id)}
+            />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function DropdownItem({
+  label,
+  count,
+  active,
+  onClick,
+}: {
+  label: string;
+  count: number;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <li>
+      <button
+        type="button"
+        role="option"
+        aria-selected={active}
+        onClick={onClick}
+        className={`
+          w-full inline-flex items-center justify-between gap-3 px-3 py-2.5
+          font-mono text-xs uppercase tracking-[0.12em] text-left
+          transition-colors
+          focus:outline-none focus-visible:bg-onda-surface-2
+          ${active ? 'text-onda-accent bg-onda-accent/6' : 'text-onda-dim hover:text-onda-text hover:bg-onda-surface-2'}
+        `}
+      >
+        <span className="inline-flex items-center gap-2 min-w-0">
+          {active ? (
+            <Check size={12} weight="bold" className="shrink-0" />
+          ) : (
+            <span className="inline-block w-3 shrink-0" aria-hidden />
+          )}
+          <span className="truncate">{label}</span>
+        </span>
+        <span
+          className={`text-[10px] tabular-nums shrink-0 ${active ? 'text-onda-accent/80' : 'text-onda-faint'}`}
+        >
+          {String(count).padStart(2, '0')}
+        </span>
+      </button>
+    </li>
   );
 }
 

@@ -21,6 +21,9 @@ importers:
       '@remotion/paths':
         specifier: ^4.0.466
         version: 4.0.466
+      '@remotion/player':
+        specifier: ^4.0.466
+        version: 4.0.466(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@remotion/transitions':
         specifier: ^4.0.466
         version: 4.0.466(react-dom@19.2.6(react@19.2.6))(react@19.2.6)

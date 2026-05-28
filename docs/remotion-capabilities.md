@@ -148,6 +148,12 @@ Slot APIs (`renderPlayPauseButton`, `renderFullscreenButton`, `renderMuteButton`
 
 Scrubber recipe: pointer-down → `pause()` + bind move/up to `document.body`; on move, `seekTo(interpolate(x, [0, width], [inFrame ?? 0, outFrame ?? duration-1]))`; on up, resume if playing-before-drag.
 
+### Display-resolution mismatch — **WRAP**
+
+The default Player pattern renders the composition at its intrinsic dims (e.g. `compositionWidth={1920}`) and CSS-scales the result to whatever container it's in. When the container is small (catalog cards on mobile, in-app previews), the heavy transform-scale softens thin borders and sub-pixel anti-aliasing — the source of the "kinda low quality / pixelated" look on small viewports.
+
+**Action item for Onda:** ship `<AdaptivePlayer>` (`lib/adaptive-player.tsx`, installable via `bunx ondajs add lib-adaptive-player`) — a drop-in `<Player>` replacement that measures its container with `ResizeObserver`, computes a target render resolution (CSS size × DPR, floored at `DEFAULT_MIN_RENDER_LONG_EDGE = 720`, capped at the intrinsic dims), and renders the Player at *that* size. Keeps the composition's coordinate space proportional to the source — `SizeRole`-driven typography stays correctly weighted; raw-pixel props read as "more legible thumbnail" on small cards. Companion hook `useAdaptiveCompositionSize(ref, intrinsicW, intrinsicH)` for callers managing their own Player ref/wrapper (e.g. `www/`'s `ComponentPreview`, which holds a `PlayerRef` for play/pause).
+
 Time format: `mm:ss.ff` (frames, not ms) — Remotion's own convention.
 
 Slot overrides (`renderPlayPauseButton` etc.) keep the native control bar and restyle individual pieces — an alternative path for partial customization.
