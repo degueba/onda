@@ -146,8 +146,29 @@ export default async function DocPage({
   const description = DESCRIPTIONS[s];
   const editUrl = `${SITE.github}/edit/main/docs/${slug}.md`;
 
+  // BreadcrumbList JSON-LD — gives search results the Home › Docs › <Title>
+  // trail above the URL. Cheap signal, free legibility win.
+  const breadcrumbsJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Docs',
+        item: absoluteUrl('/docs'),
+      },
+      { '@type': 'ListItem', position: 3, name: title, item: absoluteUrl(href) },
+    ],
+  };
+
   return (
     <div className="flex flex-col xl:flex-row xl:gap-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
       <div className="flex-1 min-w-0">
         <header className="mb-8 sm:mb-10">
           {group && (

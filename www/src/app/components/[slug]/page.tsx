@@ -115,6 +115,34 @@ export default async function ComponentPage({
     },
   };
 
+  // BreadcrumbList — gives Google the breadcrumb trail it shows above each
+  // search result instead of the raw URL. Anchors the page in the catalog
+  // hierarchy: Home › Components › <Title>.
+  const breadcrumbsJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: SITE.url,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Components',
+        item: absoluteUrl('/components'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: item.title,
+        item: url,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Nav />
@@ -122,6 +150,10 @@ export default async function ComponentPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
 
       <main className="flex-1 w-full max-w-125 mx-auto px-3 sm:px-4 py-8 sm:py-10">
