@@ -9,7 +9,11 @@ export const SITE = {
   tagline: 'Motion graphics for Remotion. Installed as source. Owned by you.',
   description:
     'Premium motion graphics components for Remotion — installed as source, owned by you. A signature motion identity baked in: calm springs, restrained stagger, one focal move per moment.',
-  twitter: '@onda_dev', // placeholder — update when the handle exists
+  // Twitter/X handle. Empty until we claim one — leaving it null keeps the
+  // `twitter:creator` / `twitter:site` tags off the page rather than
+  // pointing at a non-existent profile (which gates Twitter's card preview
+  // for some validators).
+  twitter: null as string | null,
   github: 'https://github.com/degueba/onda',
   keywords: [
     'remotion',
