@@ -1,6 +1,4 @@
-import type { ShowcaseMeta } from '@/lib/showcase';
-
-export const browserWalkthroughMeta: ShowcaseMeta = {
+export const browserWalkthroughMeta = {
   slug: 'browser-walkthrough',
   title: 'Browser walkthrough · 9s',
   description:
@@ -10,5 +8,5 @@ export const browserWalkthroughMeta: ShowcaseMeta = {
   width: 1280,
   height: 720,
   categoriesUsed: ['interface', 'entrances', 'scenes'],
-  category: 'developer',
-};
+  category: 'developer' as const,
+} as const;

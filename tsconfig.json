@@ -15,7 +15,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@onda/registry/*": ["./registry/*"],
+      "@onda/lib/*": ["./lib/*"],
+      "@onda/showcase/*": ["./www/src/showcase/*"]
+    }
   },
   "include": ["src/**/*", "lib/**/*", "registry/**/*"],
   "exclude": ["node_modules", "out", "dist"]

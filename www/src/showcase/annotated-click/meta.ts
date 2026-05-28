@@ -1,6 +1,4 @@
-import type { ShowcaseMeta } from '@/lib/showcase';
-
-export const annotatedClickMeta: ShowcaseMeta = {
+export const annotatedClickMeta = {
   slug: 'annotated-click',
   title: 'Annotated click · 7s',
   description:
@@ -10,5 +8,5 @@ export const annotatedClickMeta: ShowcaseMeta = {
   width: 1280,
   height: 720,
   categoriesUsed: ['interface', 'annotation', 'entrances'],
-  category: 'education',
-};
+  category: 'education' as const,
+} as const;
