@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, Caveat } from 'next/font/google';
-import { SITE, absoluteUrl } from '@/lib/seo';
+import { SITE } from '@/lib/seo';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -116,7 +116,12 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap"
         />
-        <link rel="canonical" href={absoluteUrl('/')} />
+        {/* No manual `<link rel="canonical">` here on purpose.
+            Next's metadata API already emits one from
+            `metadata.alternates.canonical` on every route — adding a
+            second one in the head produced duplicate canonical tags
+            on every page, which SEO checkers flag and search engines
+            ignore as ambiguous. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
