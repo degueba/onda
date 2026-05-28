@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0](https://github.com/degueba/onda/compare/ondajs-v0.5.1...ondajs-v0.6.0) (2026-05-28)
+
+
+### Features
+
+* **manifest:** pickWhen + composes for picking enrichment (027) ([#50](https://github.com/degueba/onda/issues/50)) ([1880411](https://github.com/degueba/onda/commit/1880411eaf30b5edfe33f3cd49f3a5b98871b827))
+* **manifest:** typed schemas map alongside the array (closes [#52](https://github.com/degueba/onda/issues/52)) ([#55](https://github.com/degueba/onda/issues/55)) ([86dc80b](https://github.com/degueba/onda/commit/86dc80b42cb351bd6f238d514dd59ea904a362ee))
+* **player:** adaptive player wrapper + mobile preview UX ([#53](https://github.com/degueba/onda/issues/53)) ([c4dfbdd](https://github.com/degueba/onda/commit/c4dfbdd2148abdd743f6074eb0bfcb6c9cd88b1d))
+
 ## [0.5.1](https://github.com/degueba/onda/compare/ondajs-v0.5.0...ondajs-v0.5.1) (2026-05-26)
 
 
