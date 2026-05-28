@@ -26,7 +26,7 @@
       "path": "registry/components/typewriter/typewriter.meta.json",
       "type": "registry:file",
       "target": "components/onda/typewriter/typewriter.meta.json",
-      "content": "{\n  \"name\": \"typewriter\",\n  \"title\": \"Typewriter\",\n  \"description\": \"Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"typewriter\",\n    \"cursor\",\n    \"linear\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"typewriter\",\n  \"title\": \"Typewriter\",\n  \"description\": \"Character-by-character text reveal with an optional blinking cursor in the Onda accent. Linear pacing by design — the one intentional exception to the house spring rule, because typing has its own constant rhythm.\",\n  \"pickWhen\": \"the brief reads as typed — terminal output, AI response, code snippet. Linear pacing is the point.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"typewriter\",\n    \"cursor\",\n    \"linear\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/typewriter/README.md",

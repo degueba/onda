@@ -2,6 +2,7 @@
   "name": "line-chart",
   "title": "LineChart",
   "description": "A line chart whose path draws on left-to-right on the house easing, with an optional soft area fill and per-point dots that pop as the line reaches them. Deterministic via SVG pathLength normalization.",
+  "pickWhen": "a trend over time — growth, drop, before/after curve. Use `bar-chart` for discrete comparisons, `count-up` for a single end value.",
   "category": "data",
   "tags": [
     "chart",

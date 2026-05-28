@@ -2,6 +2,7 @@
   "name": "rgb-glitch-text",
   "title": "RgbGlitchText",
   "description": "RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.",
+  "pickWhen": "the text itself should feel unsettled — cyberpunk, hacker reveal, gaming bumper. Pair with the `chromatic-aberration` transition.",
   "category": "graphics",
   "tags": [
     "text",

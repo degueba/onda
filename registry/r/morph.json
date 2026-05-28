@@ -27,7 +27,7 @@
       "path": "registry/transitions/morph/morph.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/morph/morph.meta.json",
-      "content": "{\n  \"name\": \"morph\",\n  \"title\": \"morph\",\n  \"description\": \"Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"morph\",\n    \"fade\",\n    \"scale\",\n    \"cinematic\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"morph\",\n  \"title\": \"morph\",\n  \"description\": \"Cross-fade plus a subtle synchronized scale (outgoing 1 → 1.04, incoming 0.96 → 1). Small enough to register as polish, not effect. The defining 'premium feel' transition in the Onda catalog. Onda-original.\",\n  \"pickWhen\": \"the cut should feel premium without announcing itself — Apple-keynote register, polished product film. The next step up from `cross-fade`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"morph\",\n    \"fade\",\n    \"scale\",\n    \"cinematic\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/morph/README.md",

@@ -2,6 +2,7 @@
   "name": "iris",
   "title": "iris",
   "description": "A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.",
+  "pickWhen": "cinematic cut focusing to/from a center point — silent-film homage, dream entry/exit. Use `clock-wipe` for the rotating cousin.",
   "category": "transitions",
   "tags": [
     "transition",

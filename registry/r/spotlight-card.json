@@ -31,7 +31,7 @@
       "path": "registry/components/spotlight-card/spotlight-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/spotlight-card/spotlight-card.meta.json",
-      "content": "{\n  \"name\": \"spotlight-card\",\n  \"title\": \"SpotlightCard\",\n  \"description\": \"A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"card\",\n    \"spotlight\",\n    \"glow\",\n    \"feature\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"spotlight-card\",\n  \"title\": \"SpotlightCard\",\n  \"description\": \"A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.\",\n  \"pickWhen\": \"a single feature card that should feel alive on hold — feature-of-the-week, hero callout. The glow gives presence without motion.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"card\",\n    \"spotlight\",\n    \"glow\",\n    \"feature\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/spotlight-card/README.md",

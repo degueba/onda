@@ -27,7 +27,7 @@
       "path": "registry/transitions/flip/flip.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/flip/flip.meta.json",
-      "content": "{\n  \"name\": \"flip\",\n  \"title\": \"flip\",\n  \"description\": \"A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"flip\",\n    \"3d\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"flip\",\n  \"title\": \"flip\",\n  \"description\": \"A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.\",\n  \"pickWhen\": \"two faces of the same thing — before/after, front/back of a card, A/B reveal. The 3D move is the point; sparingly so it stays a beat.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"flip\",\n    \"3d\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/flip/README.md",

@@ -2,6 +2,7 @@
   "name": "camera-shake",
   "title": "CameraShake",
   "description": "Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.",
+  "pickWhen": "an impact moment needs physical weight — explosion, drop, score reveal. A wrapper, not a layer; place around the thing that should feel hit.",
   "category": "cinematic",
   "tags": [
     "wrapper",

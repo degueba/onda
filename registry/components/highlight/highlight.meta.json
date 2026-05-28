@@ -2,6 +2,7 @@
   "name": "highlight",
   "title": "Highlight",
   "description": "Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.",
+  "pickWhen": "a key word deserves full marker treatment — landing hero, the one-word answer. Use `underline` for restrained emphasis.",
   "category": "graphics",
   "tags": [
     "highlight",

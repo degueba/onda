@@ -2,6 +2,7 @@
   "name": "image-reveal",
   "title": "ImageReveal",
   "description": "An image that enters with one of Onda's signature motion fingerprints — blur falloff, fade, or subtle scale. Wraps Remotion's `<Img>` with `SPRING_SMOOTH` motion, no overshoot. Fills the canvas by default; pass `placement` to position as a sub-canvas element.",
+  "pickWhen": "any still image with intent — photo, screenshot, logo lockup. Use `ken-burns` when the image should drift cinematically.",
   "category": "media",
   "tags": [
     "image",

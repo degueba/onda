@@ -26,7 +26,7 @@
       "path": "registry/components/scale-in/scale-in.meta.json",
       "type": "registry:file",
       "target": "components/onda/scale-in/scale-in.meta.json",
-      "content": "{\n  \"name\": \"scale-in\",\n  \"title\": \"ScaleIn\",\n  \"description\": \"A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"scale\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"scale-in\",\n  \"title\": \"ScaleIn\",\n  \"description\": \"A subtle scale-from-slightly-smaller-and-fade entrance. No overshoot, no scale jumps — restrained on purpose.\",\n  \"pickWhen\": \"small UI affordances — icons, badges, chips. Restraint on the scale is the point; not for headlines.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"scale\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/scale-in/README.md",

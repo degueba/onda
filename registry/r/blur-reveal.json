@@ -26,7 +26,7 @@
       "path": "registry/components/blur-reveal/blur-reveal.meta.json",
       "type": "registry:file",
       "target": "components/onda/blur-reveal/blur-reveal.meta.json",
-      "content": "{\n  \"name\": \"blur-reveal\",\n  \"title\": \"BlurReveal\",\n  \"description\": \"A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"blur\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"blur-reveal\",\n  \"title\": \"BlurReveal\",\n  \"description\": \"A calm, spring-driven text reveal: blur and opacity fade in together while the text rises by 16px. No overshoot. The reference Onda primitive.\",\n  \"pickWhen\": \"any text reveal where the brief doesn't ask for something specific — the house default. Reach for a sibling only with intent.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"blur\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/blur-reveal/README.md",

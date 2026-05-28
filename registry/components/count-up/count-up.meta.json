@@ -2,6 +2,7 @@
   "name": "count-up",
   "title": "CountUp",
   "description": "An animated number that counts from `from` to `to` on SPRING_SMOOTH while fading in. Tabular numerals keep digit widths fixed; locale-grouped (en-US) by default. Prefix and suffix support currency, units, and percentages.",
+  "pickWhen": "a single number needs to feel earned — revenue, signups, headline figure. Use `stat-card` for the full hero treatment.",
   "category": "data",
   "tags": [
     "number",

@@ -30,7 +30,7 @@
       "path": "registry/components/device-frame/device-frame.meta.json",
       "type": "registry:file",
       "target": "components/onda/device-frame/device-frame.meta.json",
-      "content": "{\n  \"name\": \"device-frame\",\n  \"title\": \"DeviceFrame\",\n  \"description\": \"A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"device\",\n    \"phone\",\n    \"laptop\",\n    \"mockup\",\n    \"container\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"device-frame\",\n  \"title\": \"DeviceFrame\",\n  \"description\": \"A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.\",\n  \"pickWhen\": \"content should read as \\\"on phone / on laptop\\\" — mobile demo, native UI. Use `browser-frame` for web; `device-pullback` for the reveal.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"device\",\n    \"phone\",\n    \"laptop\",\n    \"mockup\",\n    \"container\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/device-frame/README.md",

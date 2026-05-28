@@ -2,6 +2,7 @@
   "name": "pricing-card",
   "title": "PricingCard",
   "description": "A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.",
+  "pickWhen": "a pricing tier — solo or arranged as three across. Mark exactly one with `recommended` for the lift + glow signature.",
   "category": "interface",
   "tags": [
     "card",

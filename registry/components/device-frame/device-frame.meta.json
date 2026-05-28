@@ -2,6 +2,7 @@
   "name": "device-frame",
   "title": "DeviceFrame",
   "description": "A phone or laptop bezel that wraps arbitrary content — children, an image src, or empty. A container component; scales-and-fades in on the house spring.",
+  "pickWhen": "content should read as \"on phone / on laptop\" — mobile demo, native UI. Use `browser-frame` for web; `device-pullback` for the reveal.",
   "category": "interface",
   "tags": [
     "device",

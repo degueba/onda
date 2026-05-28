@@ -2,6 +2,7 @@
   "name": "marquee",
   "title": "Marquee",
   "description": "A seamless looping horizontal scroll — logo strips, ticker tape, 'as featured in' rows. Slow and restrained by design; atmospheric context, not a frantic ticker.",
+  "pickWhen": "a row of small items keeps moving in the background — logo strip, customer wall, social-proof band. Read-don't-stop the eye.",
   "category": "atmosphere",
   "tags": [
     "marquee",

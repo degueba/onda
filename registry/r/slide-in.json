@@ -26,7 +26,7 @@
       "path": "registry/components/slide-in/slide-in.meta.json",
       "type": "registry:file",
       "target": "components/onda/slide-in/slide-in.meta.json",
-      "content": "{\n  \"name\": \"slide-in\",\n  \"title\": \"SlideIn\",\n  \"description\": \"A direction-parameterized translate-and-fade entrance — text slides into place from up, down, left, or right on the house spring. No overshoot, calm 16px travel.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"slide\",\n    \"entrance\",\n    \"spring\",\n    \"direction\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"slide-in\",\n  \"title\": \"SlideIn\",\n  \"description\": \"A direction-parameterized translate-and-fade entrance — text slides into place from up, down, left, or right on the house spring. No overshoot, calm 16px travel.\",\n  \"pickWhen\": \"the line should arrive from a direction (off-frame label, broadcast lower-third). Pass `direction` deliberately.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"slide\",\n    \"entrance\",\n    \"spring\",\n    \"direction\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/slide-in/README.md",

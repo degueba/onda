@@ -2,6 +2,7 @@
   "name": "cursor",
   "title": "Cursor",
   "description": "An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.",
+  "pickWhen": "explaining a user interaction — click, menu open, button press. Pair with `button` `pressFrame` so the press lands on the click.",
   "category": "interface",
   "tags": [
     "cursor",

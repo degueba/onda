@@ -2,6 +2,7 @@
   "name": "callout",
   "title": "Callout",
   "description": "A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.",
+  "pickWhen": "naming a specific point — UI element, part of a diagram, feature in a screenshot. Use `bounding-box` to frame a whole region instead.",
   "category": "graphics",
   "tags": [
     "annotation",

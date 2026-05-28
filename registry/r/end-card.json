@@ -26,7 +26,7 @@
       "path": "registry/components/end-card/end-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/end-card/end-card.meta.json",
-      "content": "{\n  \"name\": \"end-card\",\n  \"title\": \"EndCard\",\n  \"description\": \"Closing scene block: a hero CTA reveals with an optional accent underline, then a faint, staggered row of social handles or URLs fades in beneath it. Composes BlurReveal, Underline, and StaggerGroup so the motion fingerprint stays consistent with the rest of the catalog.\",\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"end-card\",\n    \"cta\",\n    \"outro\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"end-card\",\n  \"title\": \"EndCard\",\n  \"description\": \"Closing scene block: a hero CTA reveals with an optional accent underline, then a faint, staggered row of social handles or URLs fades in beneath it. Composes BlurReveal, Underline, and StaggerGroup so the motion fingerprint stays consistent with the rest of the catalog.\",\n  \"pickWhen\": \"wrap a video on Onda's house outro — logo + tagline + CTA list, restraint over fanfare.\",\n  \"composes\": [\n    \"blur-reveal\",\n    \"underline\",\n    \"stagger-group\"\n  ],\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"end-card\",\n    \"cta\",\n    \"outro\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/end-card/README.md",

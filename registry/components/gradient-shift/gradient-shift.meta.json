@@ -2,6 +2,7 @@
   "name": "gradient-shift",
   "title": "GradientShift",
   "description": "A quiet, drifting two-color linear gradient background. The angle rotates at a constant degrees-per-frame — linear-by-design, no spring. Low-saturation defaults (--onda-surface to --onda-border) keep it atmospheric, never focal.",
+  "pickWhen": "the simplest moving backdrop — flat or near-flat scenes that need life. Use `mesh-gradient` for organic; `dynamic-grid` for technical.",
   "category": "atmosphere",
   "tags": [
     "background",

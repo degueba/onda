@@ -29,7 +29,7 @@
       "path": "registry/components/audio-clip/audio-clip.meta.json",
       "type": "registry:file",
       "target": "components/onda/audio-clip/audio-clip.meta.json",
-      "content": "{\n  \"name\": \"audio-clip\",\n  \"title\": \"AudioClip\",\n  \"description\": \"The workhorse audio primitive — a single file with agent-friendly trim (`startAt` / `endAt` accept `\\\"0:04\\\"` / `\\\"30s\\\"`), opt-in fade envelope, optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>`. Use for music beds, voiceover, and SFX equally.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"audio\",\n    \"media\",\n    \"clip\",\n    \"trim\",\n    \"voiceover\",\n    \"music\",\n    \"sfx\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"audio-clip\",\n  \"title\": \"AudioClip\",\n  \"description\": \"The workhorse audio primitive — a single file with agent-friendly trim (`startAt` / `endAt` accept `\\\"0:04\\\"` / `\\\"30s\\\"`), opt-in fade envelope, optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>`. Use for music beds, voiceover, and SFX equally.\",\n  \"pickWhen\": \"any audio in the composition — music, voiceover, SFX. The default; pair with `audio-visualizer` only when the audio should be seen.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"audio\",\n    \"media\",\n    \"clip\",\n    \"trim\",\n    \"voiceover\",\n    \"music\",\n    \"sfx\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/audio-clip/README.md",

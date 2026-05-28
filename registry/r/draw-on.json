@@ -27,7 +27,7 @@
       "path": "registry/components/draw-on/draw-on.meta.json",
       "type": "registry:file",
       "target": "components/onda/draw-on/draw-on.meta.json",
-      "content": "{\n  \"name\": \"draw-on\",\n  \"title\": \"DrawOn\",\n  \"description\": \"An SVG path that strokes itself in — the substrate for logos, icons, and signature flourishes. Powered by @remotion/paths's evolvePath, driven by SPRING_SMOOTH. No overshoot.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"svg\",\n    \"path\",\n    \"stroke\",\n    \"draw\",\n    \"reveal\",\n    \"spring\",\n    \"logo\",\n    \"icon\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"draw-on\",\n  \"title\": \"DrawOn\",\n  \"description\": \"An SVG path that strokes itself in — the substrate for logos, icons, and signature flourishes. Powered by @remotion/paths's evolvePath, driven by SPRING_SMOOTH. No overshoot.\",\n  \"pickWhen\": \"any SVG that should stroke itself on — logo lockup, signature, hand-drawn icon. For the full branded sting use `logo-sting`.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"svg\",\n    \"path\",\n    \"stroke\",\n    \"draw\",\n    \"reveal\",\n    \"spring\",\n    \"logo\",\n    \"icon\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/draw-on/README.md",

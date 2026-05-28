@@ -26,7 +26,7 @@
       "path": "registry/components/pie-reveal/pie-reveal.meta.json",
       "type": "registry:file",
       "target": "components/onda/pie-reveal/pie-reveal.meta.json",
-      "content": "{\n  \"name\": \"pie-reveal\",\n  \"title\": \"PieReveal\",\n  \"description\": \"A single-arc SVG ring that fills from 0 to a target percent on SPRING_SMOOTH, with the value rendered in the center. One muted accent stroke against a quiet track — the Onda data primitive.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"data\",\n    \"chart\",\n    \"pie\",\n    \"ring\",\n    \"percent\",\n    \"reveal\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"pie-reveal\",\n  \"title\": \"PieReveal\",\n  \"description\": \"A single-arc SVG ring that fills from 0 to a target percent on SPRING_SMOOTH, with the value rendered in the center. One muted accent stroke against a quiet track — the Onda data primitive.\",\n  \"pickWhen\": \"a single percentage where the share IS the message — completion, conversion, NPS. Use `progress-bar` horizontal; `bar-chart` for many.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"data\",\n    \"chart\",\n    \"pie\",\n    \"ring\",\n    \"percent\",\n    \"reveal\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/pie-reveal/README.md",

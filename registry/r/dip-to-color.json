@@ -27,7 +27,7 @@
       "path": "registry/transitions/dip-to-color/dip-to-color.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/dip-to-color/dip-to-color.meta.json",
-      "content": "{\n  \"name\": \"dip-to-color\",\n  \"title\": \"dipToColor\",\n  \"description\": \"The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"dip\",\n    \"fade\",\n    \"scene-break\",\n    \"editorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"dip-to-color\",\n  \"title\": \"dipToColor\",\n  \"description\": \"The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.\",\n  \"pickWhen\": \"hard break signaling a chapter shift — act-to-act, time jump, end of segment. More definitive than `cross-fade`; quieter than `wipe`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"dip\",\n    \"fade\",\n    \"scene-break\",\n    \"editorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/dip-to-color/README.md",

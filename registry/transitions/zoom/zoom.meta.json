@@ -2,6 +2,7 @@
   "name": "zoom",
   "title": "zoom",
   "description": "Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.",
+  "pickWhen": "an aggressive accent cut — beat drop, hype reveal, energetic bumper. Catalog's punch register; sparingly so it stays punctuation.",
   "category": "transitions",
   "tags": [
     "transition",

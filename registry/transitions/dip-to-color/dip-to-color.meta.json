@@ -2,6 +2,7 @@
   "name": "dip-to-color",
   "title": "dipToColor",
   "description": "The editing-room classic — outgoing scene fades to a solid color, incoming fades up from it. Default color is `--onda-bg` (`#08080A`) for brand consistency; pass `'#000'` for dip-to-black or `'#fff'` for dip-to-white. Onda-original.",
+  "pickWhen": "hard break signaling a chapter shift — act-to-act, time jump, end of segment. More definitive than `cross-fade`; quieter than `wipe`.",
   "category": "transitions",
   "tags": [
     "transition",

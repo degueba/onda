@@ -26,7 +26,7 @@
       "path": "registry/components/ken-burns/ken-burns.meta.json",
       "type": "registry:file",
       "target": "components/onda/ken-burns/ken-burns.meta.json",
-      "content": "{\n  \"name\": \"ken-burns\",\n  \"title\": \"KenBurns\",\n  \"description\": \"Slow zoom-and-pan over a photo — the iconic documentary motion (named after Ken Burns, the filmmaker). Restrained 1.0 → 1.1 scale over 5 seconds by default; intentionally linear for a constant cinematic drift. The first Onda cinematic primitive.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"image\",\n    \"zoom\",\n    \"pan\",\n    \"cinematic\",\n    \"ken-burns\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"ken-burns\",\n  \"title\": \"KenBurns\",\n  \"description\": \"Slow zoom-and-pan over a photo — the iconic documentary motion (named after Ken Burns, the filmmaker). Restrained 1.0 → 1.1 scale over 5 seconds by default; intentionally linear for a constant cinematic drift. The first Onda cinematic primitive.\",\n  \"pickWhen\": \"a held photo needs to feel alive — documentary, archive, portrait. Use `parallax` for drift only; `image-reveal` for one-shot.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"image\",\n    \"zoom\",\n    \"pan\",\n    \"cinematic\",\n    \"ken-burns\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/ken-burns/README.md",

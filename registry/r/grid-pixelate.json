@@ -29,7 +29,7 @@
       "path": "registry/transitions/grid-pixelate/grid-pixelate.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/grid-pixelate/grid-pixelate.meta.json",
-      "content": "{\n  \"name\": \"grid-pixelate\",\n  \"title\": \"gridPixelate\",\n  \"description\": \"The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"pixelate\",\n    \"grid\",\n    \"mosaic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"grid-pixelate\",\n  \"title\": \"gridPixelate\",\n  \"description\": \"The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.\",\n  \"pickWhen\": \"retro-tech or gaming aesthetic — 8-bit reveal, hacking sequence, arcade beat. High-energy; pair sparingly with neutral cuts.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"pixelate\",\n    \"grid\",\n    \"mosaic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/grid-pixelate/README.md",

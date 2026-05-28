@@ -2,6 +2,7 @@
   "name": "bento-grid",
   "title": "BentoGrid",
   "description": "A data-driven bento layout — a CSS grid of glass Surface cards with varying column/row spans. Each cell rises and fades in on the house spring, staggered left-to-right so the grid assembles as one calm cascade. One earned-accent cell max.",
+  "pickWhen": "a feature overview where the grid layout is the message — landing pages. Use `pricing-card` ×3 for plans, `kanban-board` for columns.",
   "category": "interface",
   "tags": [
     "bento",

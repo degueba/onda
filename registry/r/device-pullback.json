@@ -27,7 +27,7 @@
       "path": "registry/transitions/device-pullback/device-pullback.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/device-pullback/device-pullback.meta.json",
-      "content": "{\n  \"name\": \"device-pullback\",\n  \"title\": \"devicePullback\",\n  \"description\": \"The outgoing scene starts as full-bleed UI scaled up, then pulls back to 1x while a minimal device bezel (laptop or phone) draws in around it — so the cut lands on the content framed inside a device mockup. A pull-back-to-reveal-the-product beat for launch and feature reels. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"device\",\n    \"mockup\",\n    \"pullback\",\n    \"reveal\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"device-pullback\",\n  \"title\": \"devicePullback\",\n  \"description\": \"The outgoing scene starts as full-bleed UI scaled up, then pulls back to 1x while a minimal device bezel (laptop or phone) draws in around it — so the cut lands on the content framed inside a device mockup. A pull-back-to-reveal-the-product beat for launch and feature reels. Onda-original.\",\n  \"pickWhen\": \"the product is the reveal — feature launch, app demo finale. Lands the outgoing UI inside a `device-frame`; not a generic transition.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"device\",\n    \"mockup\",\n    \"pullback\",\n    \"reveal\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/device-pullback/README.md",

@@ -2,6 +2,7 @@
   "name": "push",
   "title": "push",
   "description": "A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).",
+  "pickWhen": "the cut should feel like a camera pan — sequential beats, story progression. Use `depth-push` for parallax; `slide` for one-pane.",
   "category": "transitions",
   "tags": [
     "transition",

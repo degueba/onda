@@ -26,7 +26,7 @@
       "path": "registry/components/gradient-shift/gradient-shift.meta.json",
       "type": "registry:file",
       "target": "components/onda/gradient-shift/gradient-shift.meta.json",
-      "content": "{\n  \"name\": \"gradient-shift\",\n  \"title\": \"GradientShift\",\n  \"description\": \"A quiet, drifting two-color linear gradient background. The angle rotates at a constant degrees-per-frame — linear-by-design, no spring. Low-saturation defaults (--onda-surface to --onda-border) keep it atmospheric, never focal.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"gradient\",\n    \"atmospheric\",\n    \"linear\",\n    \"drift\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"gradient-shift\",\n  \"title\": \"GradientShift\",\n  \"description\": \"A quiet, drifting two-color linear gradient background. The angle rotates at a constant degrees-per-frame — linear-by-design, no spring. Low-saturation defaults (--onda-surface to --onda-border) keep it atmospheric, never focal.\",\n  \"pickWhen\": \"the simplest moving backdrop — flat or near-flat scenes that need life. Use `mesh-gradient` for organic; `dynamic-grid` for technical.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"gradient\",\n    \"atmospheric\",\n    \"linear\",\n    \"drift\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/gradient-shift/README.md",

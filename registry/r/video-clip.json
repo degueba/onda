@@ -31,7 +31,7 @@
       "path": "registry/components/video-clip/video-clip.meta.json",
       "type": "registry:file",
       "target": "components/onda/video-clip/video-clip.meta.json",
-      "content": "{\n  \"name\": \"video-clip\",\n  \"title\": \"VideoClip\",\n  \"description\": \"A video clip with agent-friendly trim (`startAt` / `endAt` accept `\\\"0:04\\\"` / `\\\"30s\\\"`), Onda's entrance and exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` for accurate seek and no audio drift. Fills the canvas by default; pass `placement` to position as a sub-canvas element.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"video\",\n    \"media\",\n    \"clip\",\n    \"trim\",\n    \"playback\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"video-clip\",\n  \"title\": \"VideoClip\",\n  \"description\": \"A video clip with agent-friendly trim (`startAt` / `endAt` accept `\\\"0:04\\\"` / `\\\"30s\\\"`), Onda's entrance and exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` for accurate seek and no audio drift. Fills the canvas by default; pass `placement` to position as a sub-canvas element.\",\n  \"pickWhen\": \"any video footage — b-roll, recorded demo, talking head. The default. For a UI capture, wrap in `device-frame` or `browser-frame`.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"video\",\n    \"media\",\n    \"clip\",\n    \"trim\",\n    \"playback\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/video-clip/README.md",

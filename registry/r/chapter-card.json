@@ -26,7 +26,7 @@
       "path": "registry/components/chapter-card/chapter-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/chapter-card/chapter-card.meta.json",
-      "content": "{\n  \"name\": \"chapter-card\",\n  \"title\": \"ChapterCard\",\n  \"description\": \"Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.\",\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"chapter\",\n    \"title\",\n    \"explainer\",\n    \"documentary\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"chapter-card\",\n  \"title\": \"ChapterCard\",\n  \"description\": \"Chapter-title scene block with a numbered eyebrow ('01 The setup'). The number fades in first in accent rose, the chapter title rises with a calm blur-reveal, and an optional accent underline punctuates the title. Composes FadeIn, BlurReveal, and Underline.\",\n  \"pickWhen\": \"a calm chapter / section divider beat — \\\"Chapter 2: …\\\" — that should breathe before the next scene lands.\",\n  \"composes\": [\n    \"fade-in\",\n    \"blur-reveal\",\n    \"underline\"\n  ],\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"chapter\",\n    \"title\",\n    \"explainer\",\n    \"documentary\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/chapter-card/README.md",

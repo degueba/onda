@@ -2,6 +2,7 @@
   "name": "text-fade-replace",
   "title": "TextFadeReplace",
   "description": "Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.",
+  "pickWhen": "phrase rotation where the layout must not shift — fixed-height tagline, rotating hero copy. Use `word-rotate` for rise-and-fade motion.",
   "category": "graphics",
   "tags": [
     "text",

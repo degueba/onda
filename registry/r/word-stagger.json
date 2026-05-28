@@ -26,7 +26,7 @@
       "path": "registry/components/word-stagger/word-stagger.meta.json",
       "type": "registry:file",
       "target": "components/onda/word-stagger/word-stagger.meta.json",
-      "content": "{\n  \"name\": \"word-stagger\",\n  \"title\": \"WordStagger\",\n  \"description\": \"Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"stagger\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"words\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"word-stagger\",\n  \"title\": \"WordStagger\",\n  \"description\": \"Multi-word text where each word fades and rises in sequence — the clearest demonstration of the Onda stagger fingerprint.\",\n  \"pickWhen\": \"the line should read across like a sentence being spoken, not land all at once. The clearest stagger fingerprint.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"stagger\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"words\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/word-stagger/README.md",

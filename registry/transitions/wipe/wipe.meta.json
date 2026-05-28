@@ -2,6 +2,7 @@
   "name": "wipe",
   "title": "wipe",
   "description": "A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.",
+  "pickWhen": "the cut needs to read as deliberate — segment break, news/sports register. Use `glass-wipe` for textured; `dip-to-color` for editorial.",
   "category": "transitions",
   "tags": [
     "transition",

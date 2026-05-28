@@ -2,6 +2,7 @@
   "name": "spotlight",
   "title": "Spotlight",
   "description": "A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.",
+  "pickWhen": "a hero subject should be uncovered from black — product reveal, keynote moment. Use the `iris` transition for a scene cut instead.",
   "category": "cinematic",
   "tags": [
     "primitive",

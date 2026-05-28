@@ -26,7 +26,7 @@
       "path": "registry/components/count-up/count-up.meta.json",
       "type": "registry:file",
       "target": "components/onda/count-up/count-up.meta.json",
-      "content": "{\n  \"name\": \"count-up\",\n  \"title\": \"CountUp\",\n  \"description\": \"An animated number that counts from `from` to `to` on SPRING_SMOOTH while fading in. Tabular numerals keep digit widths fixed; locale-grouped (en-US) by default. Prefix and suffix support currency, units, and percentages.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"number\",\n    \"counter\",\n    \"stat\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"count-up\",\n  \"title\": \"CountUp\",\n  \"description\": \"An animated number that counts from `from` to `to` on SPRING_SMOOTH while fading in. Tabular numerals keep digit widths fixed; locale-grouped (en-US) by default. Prefix and suffix support currency, units, and percentages.\",\n  \"pickWhen\": \"a single number needs to feel earned — revenue, signups, headline figure. Use `stat-card` for the full hero treatment.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"number\",\n    \"counter\",\n    \"stat\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/count-up/README.md",

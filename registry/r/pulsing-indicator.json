@@ -29,7 +29,7 @@
       "path": "registry/components/pulsing-indicator/pulsing-indicator.meta.json",
       "type": "registry:file",
       "target": "components/onda/pulsing-indicator/pulsing-indicator.meta.json",
-      "content": "{\n  \"name\": \"pulsing-indicator\",\n  \"title\": \"PulsingIndicator\",\n  \"description\": \"A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"status\",\n    \"live\",\n    \"indicator\",\n    \"pulse\",\n    \"dot\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"pulsing-indicator\",\n  \"title\": \"PulsingIndicator\",\n  \"description\": \"A live status dot with a calm expanding-ring pulse and an optional label. The pulse is keyed off frame modulo so it loops seamlessly and renders deterministically — one steady ring, not a strobe.\",\n  \"pickWhen\": \"a quiet \\\"this is live\\\" badge that should keep breathing — recording dot, status pill, online tag. Use `icon-pop` for one-shot static states.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"status\",\n    \"live\",\n    \"indicator\",\n    \"pulse\",\n    \"dot\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/pulsing-indicator/README.md",

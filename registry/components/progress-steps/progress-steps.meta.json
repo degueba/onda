@@ -2,6 +2,7 @@
   "name": "progress-steps",
   "title": "ProgressSteps",
   "description": "A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.",
+  "pickWhen": "an ordered flow with an active position — onboarding, checkout, install. Use `timeline` for historical milestones (no active state).",
   "category": "interface",
   "tags": [
     "steps",

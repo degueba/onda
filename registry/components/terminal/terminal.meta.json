@@ -2,6 +2,7 @@
   "name": "terminal",
   "title": "Terminal",
   "description": "A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.",
+  "pickWhen": "a CLI demo with command + output — install, deploy, dev tool walkthrough. Use `code-block` for static code with no execution shown.",
   "category": "interface",
   "tags": [
     "terminal",

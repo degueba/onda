@@ -26,7 +26,7 @@
       "path": "registry/components/highlight/highlight.meta.json",
       "type": "registry:file",
       "target": "components/onda/highlight/highlight.meta.json",
-      "content": "{\n  \"name\": \"highlight\",\n  \"title\": \"Highlight\",\n  \"description\": \"Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"highlight\",\n    \"emphasis\",\n    \"accent\",\n    \"marker\",\n    \"text\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"highlight\",\n  \"title\": \"Highlight\",\n  \"description\": \"Text fades in, then an accent-rose highlight bar slides in behind it at full text-height — a marker-style reveal. One of the catalog's rare earned-color moments, reserved for emphasis.\",\n  \"pickWhen\": \"a key word deserves full marker treatment — landing hero, the one-word answer. Use `underline` for restrained emphasis.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"highlight\",\n    \"emphasis\",\n    \"accent\",\n    \"marker\",\n    \"text\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/highlight/README.md",

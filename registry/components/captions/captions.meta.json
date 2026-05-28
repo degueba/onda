@@ -2,6 +2,7 @@
   "name": "captions",
   "title": "Captions",
   "description": "Sequential word-by-word captions driven by a timed array. The active word lifts in --onda-text with a subtle SPRING_SMOOTH scale pulse; surrounding words sit dim in --onda-dim. The data primitive for kinetic transcripts and AI-generated voiceover.",
+  "pickWhen": "synced subtitles over voiceover or video — transcripts, AI voiceover, talking-head clips. Pass a timed array; not for static text.",
   "category": "data",
   "tags": [
     "text",

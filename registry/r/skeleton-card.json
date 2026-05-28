@@ -31,7 +31,7 @@
       "path": "registry/components/skeleton-card/skeleton-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/skeleton-card/skeleton-card.meta.json",
-      "content": "{\n  \"name\": \"skeleton-card\",\n  \"title\": \"SkeletonCard\",\n  \"description\": \"A loading-placeholder card — a glass Surface with an optional thumbnail block and a stack of text bars, swept by a frame-driven shimmer band. The 'still generating / not loaded yet' state before content populates. Rises in on the house spring; the shimmer loops so the placeholder feels live.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"skeleton\",\n    \"loading\",\n    \"placeholder\",\n    \"shimmer\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"skeleton-card\",\n  \"title\": \"SkeletonCard\",\n  \"description\": \"A loading-placeholder card — a glass Surface with an optional thumbnail block and a stack of text bars, swept by a frame-driven shimmer band. The 'still generating / not loaded yet' state before content populates. Rises in on the house spring; the shimmer loops so the placeholder feels live.\",\n  \"pickWhen\": \"the \\\"still generating\\\" beat before content lands — AI loading, dashboard pre-load. Cut to real content with `cross-fade` or `morph`.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"skeleton\",\n    \"loading\",\n    \"placeholder\",\n    \"shimmer\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/skeleton-card/README.md",

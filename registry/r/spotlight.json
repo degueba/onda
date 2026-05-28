@@ -26,7 +26,7 @@
       "path": "registry/components/spotlight/spotlight.meta.json",
       "type": "registry:file",
       "target": "components/onda/spotlight/spotlight.meta.json",
-      "content": "{\n  \"name\": \"spotlight\",\n  \"title\": \"Spotlight\",\n  \"description\": \"A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"primitive\",\n    \"cinematic\",\n    \"reveal\",\n    \"radial\",\n    \"light\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"spotlight\",\n  \"title\": \"Spotlight\",\n  \"description\": \"A soft radial light reveal that grows from 0 to a target radius on the Onda house spring. Alpha-aware so the spotlight uncovers content beneath. Apple-stage restraint, no overshoot.\",\n  \"pickWhen\": \"a hero subject should be uncovered from black — product reveal, keynote moment. Use the `iris` transition for a scene cut instead.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"primitive\",\n    \"cinematic\",\n    \"reveal\",\n    \"radial\",\n    \"light\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/spotlight/README.md",

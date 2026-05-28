@@ -26,7 +26,7 @@
       "path": "registry/components/slide-out/slide-out.meta.json",
       "type": "registry:file",
       "target": "components/onda/slide-out/slide-out.meta.json",
-      "content": "{\n  \"name\": \"slide-out\",\n  \"title\": \"SlideOut\",\n  \"description\": \"A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"slide\",\n    \"exit\",\n    \"spring\",\n    \"direction\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"slide-out\",\n  \"title\": \"SlideOut\",\n  \"description\": \"A direction-parameterized translate-and-fade exit — text drifts up, down, left, or right while opacity fades to 0 on the house spring. The mirror of SlideIn. No overshoot, calm 16px travel.\",\n  \"pickWhen\": \"the line should exit toward a direction. The mirror of SlideIn. Not for general \\\"this beat is done.\\\"\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"slide\",\n    \"exit\",\n    \"spring\",\n    \"direction\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/slide-out/README.md",

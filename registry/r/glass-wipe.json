@@ -27,7 +27,7 @@
       "path": "registry/transitions/glass-wipe/glass-wipe.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/glass-wipe/glass-wipe.meta.json",
-      "content": "{\n  \"name\": \"glass-wipe\",\n  \"title\": \"glassWipe\",\n  \"description\": \"The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"glass\",\n    \"frost\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"glass-wipe\",\n  \"title\": \"glassWipe\",\n  \"description\": \"The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.\",\n  \"pickWhen\": \"a directional wipe that should feel material — premium product, brand pieces. Use `wipe` for harder edge; `cross-fade` for no edge.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"glass\",\n    \"frost\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/glass-wipe/README.md",

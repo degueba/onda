@@ -2,6 +2,7 @@
   "name": "video-clip",
   "title": "VideoClip",
   "description": "A video clip with agent-friendly trim (`startAt` / `endAt` accept `\"0:04\"` / `\"30s\"`), Onda's entrance and exit fade fingerprint, and optional looping. Wraps Remotion's `<OffthreadVideo>` for accurate seek and no audio drift. Fills the canvas by default; pass `placement` to position as a sub-canvas element.",
+  "pickWhen": "any video footage — b-roll, recorded demo, talking head. The default. For a UI capture, wrap in `device-frame` or `browser-frame`.",
   "category": "media",
   "tags": [
     "video",

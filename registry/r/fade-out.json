@@ -26,7 +26,7 @@
       "path": "registry/components/fade-out/fade-out.meta.json",
       "type": "registry:file",
       "target": "components/onda/fade-out/fade-out.meta.json",
-      "content": "{\n  \"name\": \"fade-out\",\n  \"title\": \"FadeOut\",\n  \"description\": \"The inverse of FadeIn: a pure opacity exit. Opacity travels from 1 to 0 on HOUSE_EASE, with no transform or blur. Slightly faster than entrances so the moment ends without lingering.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"exit\",\n    \"fade\",\n    \"opacity\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"fade-out\",\n  \"title\": \"FadeOut\",\n  \"description\": \"The inverse of FadeIn: a pure opacity exit. Opacity travels from 1 to 0 on HOUSE_EASE, with no transform or blur. Slightly faster than entrances so the moment ends without lingering.\",\n  \"pickWhen\": \"the moment ends and you want it to end cleanly. Pair with whichever entrance opened the beat.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"exit\",\n    \"fade\",\n    \"opacity\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/fade-out/README.md",

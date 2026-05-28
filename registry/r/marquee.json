@@ -26,7 +26,7 @@
       "path": "registry/components/marquee/marquee.meta.json",
       "type": "registry:file",
       "target": "components/onda/marquee/marquee.meta.json",
-      "content": "{\n  \"name\": \"marquee\",\n  \"title\": \"Marquee\",\n  \"description\": \"A seamless looping horizontal scroll — logo strips, ticker tape, 'as featured in' rows. Slow and restrained by design; atmospheric context, not a frantic ticker.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"marquee\",\n    \"loop\",\n    \"scroll\",\n    \"ticker\",\n    \"atmospheric\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"marquee\",\n  \"title\": \"Marquee\",\n  \"description\": \"A seamless looping horizontal scroll — logo strips, ticker tape, 'as featured in' rows. Slow and restrained by design; atmospheric context, not a frantic ticker.\",\n  \"pickWhen\": \"a row of small items keeps moving in the background — logo strip, customer wall, social-proof band. Read-don't-stop the eye.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"marquee\",\n    \"loop\",\n    \"scroll\",\n    \"ticker\",\n    \"atmospheric\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/marquee/README.md",

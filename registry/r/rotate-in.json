@@ -26,7 +26,7 @@
       "path": "registry/components/rotate-in/rotate-in.meta.json",
       "type": "registry:file",
       "target": "components/onda/rotate-in/rotate-in.meta.json",
-      "content": "{\n  \"name\": \"rotate-in\",\n  \"title\": \"RotateIn\",\n  \"description\": \"A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"rotate\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"rotate-in\",\n  \"title\": \"RotateIn\",\n  \"description\": \"A calm, spring-driven text rotation: the text settles from a slight starting angle (default -8 degrees) to 0 while fading in. No overshoot. Restraint applies to angle — the safe zone is [-12, +12] degrees.\",\n  \"pickWhen\": \"a single accent moment — a quote attribution, an Easter egg. Stay inside [-12, +12] degrees.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"rotate\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/rotate-in/README.md",

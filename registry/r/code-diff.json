@@ -31,7 +31,7 @@
       "path": "registry/components/code-diff/code-diff.meta.json",
       "type": "registry:file",
       "target": "components/onda/code-diff/code-diff.meta.json",
-      "content": "{\n  \"name\": \"code-diff\",\n  \"title\": \"CodeDiff\",\n  \"description\": \"A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"code\",\n    \"diff\",\n    \"changelog\",\n    \"developer\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"code-diff\",\n  \"title\": \"CodeDiff\",\n  \"description\": \"A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.\",\n  \"pickWhen\": \"showing a code change — before/after, PR walkthrough, changelog highlight. Use `code-block` for static code, not a comparison.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"code\",\n    \"diff\",\n    \"changelog\",\n    \"developer\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/code-diff/README.md",

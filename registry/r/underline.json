@@ -26,7 +26,7 @@
       "path": "registry/components/underline/underline.meta.json",
       "type": "registry:file",
       "target": "components/onda/underline/underline.meta.json",
-      "content": "{\n  \"name\": \"underline\",\n  \"title\": \"Underline\",\n  \"description\": \"Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"underline\",\n    \"emphasis\",\n    \"accent\",\n    \"draw\",\n    \"text\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"underline\",\n  \"title\": \"Underline\",\n  \"description\": \"Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.\",\n  \"pickWhen\": \"the house punctuation under a line — title beat, key term, CTA support. The restrained sibling of `highlight`; inside most scene blocks.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"underline\",\n    \"emphasis\",\n    \"accent\",\n    \"draw\",\n    \"text\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/underline/README.md",

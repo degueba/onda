@@ -27,7 +27,7 @@
       "path": "registry/transitions/slide/slide.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/slide/slide.meta.json",
-      "content": "{\n  \"name\": \"slide\",\n  \"title\": \"slide\",\n  \"description\": \"A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"slide\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"slide\",\n  \"title\": \"slide\",\n  \"description\": \"A directional slide between two scenes — only the incoming scene translates, the outgoing stays in place. Wraps Remotion's `slide()` with Onda's directional vocabulary (`left` / `right` / `up` / `down`). Pair with the recommended Onda timing for the house feel.\",\n  \"pickWhen\": \"incoming scene arrives from a direction while outgoing stays put — modal overlay, list item entering. Use `push` for both panes.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"slide\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/slide/README.md",

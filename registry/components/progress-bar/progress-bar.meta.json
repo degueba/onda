@@ -2,6 +2,7 @@
   "name": "progress-bar",
   "title": "ProgressBar",
   "description": "A pill-shaped bar that fills from 0 to `value`% on SPRING_SMOOTH. Solid dusty-rose accent on a neutral track, with an optional tabular `${value}%` label beside it. No overshoot.",
+  "pickWhen": "a percentage in a horizontal layout — loading, capacity, share. Use `pie-reveal` for the ring; `progress-steps` for ordered milestones.",
   "category": "data",
   "tags": [
     "data",

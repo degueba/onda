@@ -26,7 +26,7 @@
       "path": "registry/components/vignette/vignette.meta.json",
       "type": "registry:file",
       "target": "components/onda/vignette/vignette.meta.json",
-      "content": "{\n  \"name\": \"vignette\",\n  \"title\": \"Vignette\",\n  \"description\": \"A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"overlay\",\n    \"vignette\",\n    \"cinematic\",\n    \"atmospheric\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"vignette\",\n  \"title\": \"Vignette\",\n  \"description\": \"A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.\",\n  \"pickWhen\": \"the eye should drift toward center of frame — film hero, focused interview. Pair with `grain-overlay` for full filmic dressing.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"overlay\",\n    \"vignette\",\n    \"cinematic\",\n    \"atmospheric\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/vignette/README.md",

@@ -31,7 +31,7 @@
       "path": "registry/components/bento-grid/bento-grid.meta.json",
       "type": "registry:file",
       "target": "components/onda/bento-grid/bento-grid.meta.json",
-      "content": "{\n  \"name\": \"bento-grid\",\n  \"title\": \"BentoGrid\",\n  \"description\": \"A data-driven bento layout — a CSS grid of glass Surface cards with varying column/row spans. Each cell rises and fades in on the house spring, staggered left-to-right so the grid assembles as one calm cascade. One earned-accent cell max.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"bento\",\n    \"grid\",\n    \"layout\",\n    \"cards\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"bento-grid\",\n  \"title\": \"BentoGrid\",\n  \"description\": \"A data-driven bento layout — a CSS grid of glass Surface cards with varying column/row spans. Each cell rises and fades in on the house spring, staggered left-to-right so the grid assembles as one calm cascade. One earned-accent cell max.\",\n  \"pickWhen\": \"a feature overview where the grid layout is the message — landing pages. Use `pricing-card` ×3 for plans, `kanban-board` for columns.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"bento\",\n    \"grid\",\n    \"layout\",\n    \"cards\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/bento-grid/README.md",

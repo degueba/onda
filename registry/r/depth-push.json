@@ -27,7 +27,7 @@
       "path": "registry/transitions/depth-push/depth-push.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/depth-push/depth-push.meta.json",
-      "content": "{\n  \"name\": \"depth-push\",\n  \"title\": \"depthPush\",\n  \"description\": \"Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"depth\",\n    \"parallax\",\n    \"camera-dolly\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"depth-push\",\n  \"title\": \"depthPush\",\n  \"description\": \"Push with parallax depth scale — outgoing scene scales down as it pushes off, incoming scales from slightly larger. The catalog's signature multi-scene move; reads as a camera dolly between scenes. Onda-original.\",\n  \"pickWhen\": \"stringing multiple scenes as one camera move — explainer chapters, product tour. Use `push` for flat pan; `morph` for in-place.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"depth\",\n    \"parallax\",\n    \"camera-dolly\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/depth-push/README.md",

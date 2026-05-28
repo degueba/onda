@@ -2,6 +2,7 @@
   "name": "blur",
   "title": "blur",
   "description": "Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.",
+  "pickWhen": "the scene change should feel soft and dreamlike — memory, montage, flashback. The cut between scenes that use `blur-reveal` for entrances.",
   "category": "transitions",
   "tags": [
     "transition",

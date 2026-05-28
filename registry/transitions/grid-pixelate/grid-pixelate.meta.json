@@ -2,6 +2,7 @@
   "name": "grid-pixelate",
   "title": "gridPixelate",
   "description": "The scene breaks into a grid of cells that flip in a seeded scatter — outgoing pixelates away to canvas while incoming assembles from it. Deterministic cell order. A retro, high-energy cut. Onda-original.",
+  "pickWhen": "retro-tech or gaming aesthetic — 8-bit reveal, hacking sequence, arcade beat. High-energy; pair sparingly with neutral cuts.",
   "category": "transitions",
   "tags": [
     "transition",
