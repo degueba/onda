@@ -31,7 +31,7 @@
       "path": "registry/components/code-block/code-block.meta.json",
       "type": "registry:file",
       "target": "components/onda/code-block/code-block.meta.json",
-      "content": "{\n  \"name\": \"code-block\",\n  \"title\": \"CodeBlock\",\n  \"description\": \"Syntax-highlighted code on the Onda glass surface, revealed line-by-line. Deterministic dependency-free tokenizer (no async at render). Keywords carry the one earned accent; everything else stays neutral. The reference for the interface category.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"code\",\n    \"syntax\",\n    \"developer\",\n    \"glass\",\n    \"surface\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"code-block\",\n  \"title\": \"CodeBlock\",\n  \"description\": \"Syntax-highlighted code on the Onda glass surface, revealed line-by-line. Deterministic dependency-free tokenizer (no async at render). Keywords carry the one earned accent; everything else stays neutral. The reference for the interface category.\",\n  \"pickWhen\": \"a static code snippet — install commands, examples, config. Use `code-diff` to show changes, `terminal` for interactive output.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"code\",\n    \"syntax\",\n    \"developer\",\n    \"glass\",\n    \"surface\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/code-block/README.md",

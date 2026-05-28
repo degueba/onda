@@ -26,7 +26,7 @@
       "path": "registry/components/mask-reveal/mask-reveal.meta.json",
       "type": "registry:file",
       "target": "components/onda/mask-reveal/mask-reveal.meta.json",
-      "content": "{\n  \"name\": \"mask-reveal\",\n  \"title\": \"MaskReveal\",\n  \"description\": \"Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"mask\",\n    \"clip-path\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"mask-reveal\",\n  \"title\": \"MaskReveal\",\n  \"description\": \"Reveals text from behind a retreating mask. The text is rendered fully from frame 0 — only a clip-path inset shrinks, uncovering the text edge-by-edge with a crisp hard edge. Direction names the side the text comes in from.\",\n  \"pickWhen\": \"the text needs to land with a hard edge, not a soft fade. Editorial / brutalist beats.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"spring\",\n    \"mask\",\n    \"clip-path\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/mask-reveal/README.md",

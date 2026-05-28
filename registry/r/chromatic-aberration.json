@@ -27,7 +27,7 @@
       "path": "registry/transitions/chromatic-aberration/chromatic-aberration.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/chromatic-aberration/chromatic-aberration.meta.json",
-      "content": "{\n  \"name\": \"chromatic-aberration\",\n  \"title\": \"chromaticAberration\",\n  \"description\": \"The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"glitch\",\n    \"chromatic\",\n    \"rgb\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"chromatic-aberration\",\n  \"title\": \"chromaticAberration\",\n  \"description\": \"The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.\",\n  \"pickWhen\": \"the most aggressive cut in the catalog — cyberpunk, glitch, hacker reveal. Once per piece, never as a default. Pair with `rgb-glitch-text`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"glitch\",\n    \"chromatic\",\n    \"rgb\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/chromatic-aberration/README.md",

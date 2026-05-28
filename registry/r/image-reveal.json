@@ -31,7 +31,7 @@
       "path": "registry/components/image-reveal/image-reveal.meta.json",
       "type": "registry:file",
       "target": "components/onda/image-reveal/image-reveal.meta.json",
-      "content": "{\n  \"name\": \"image-reveal\",\n  \"title\": \"ImageReveal\",\n  \"description\": \"An image that enters with one of Onda's signature motion fingerprints — blur falloff, fade, or subtle scale. Wraps Remotion's `<Img>` with `SPRING_SMOOTH` motion, no overshoot. Fills the canvas by default; pass `placement` to position as a sub-canvas element.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"image\",\n    \"media\",\n    \"reveal\",\n    \"entrance\",\n    \"photo\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"image-reveal\",\n  \"title\": \"ImageReveal\",\n  \"description\": \"An image that enters with one of Onda's signature motion fingerprints — blur falloff, fade, or subtle scale. Wraps Remotion's `<Img>` with `SPRING_SMOOTH` motion, no overshoot. Fills the canvas by default; pass `placement` to position as a sub-canvas element.\",\n  \"pickWhen\": \"any still image with intent — photo, screenshot, logo lockup. Use `ken-burns` when the image should drift cinematically.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"image\",\n    \"media\",\n    \"reveal\",\n    \"entrance\",\n    \"photo\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/image-reveal/README.md",

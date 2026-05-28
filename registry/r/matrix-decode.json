@@ -30,7 +30,7 @@
       "path": "registry/components/matrix-decode/matrix-decode.meta.json",
       "type": "registry:file",
       "target": "components/onda/matrix-decode/matrix-decode.meta.json",
-      "content": "{\n  \"name\": \"matrix-decode\",\n  \"title\": \"MatrixDecode\",\n  \"description\": \"Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"decode\",\n    \"glitch\",\n    \"scramble\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"matrix-decode\",\n  \"title\": \"MatrixDecode\",\n  \"description\": \"Each character flickers through random glyphs, then settles to its target left-to-right — a decode reveal. The flicker is deterministic (seeded PRNG keyed by char index + frame), so it renders identically every time.\",\n  \"pickWhen\": \"a one-shot reveal where the text decoding is the moment. Short strings only — long lines drown the effect.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"decode\",\n    \"glitch\",\n    \"scramble\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/matrix-decode/README.md",

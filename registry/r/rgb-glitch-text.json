@@ -30,7 +30,7 @@
       "path": "registry/components/rgb-glitch-text/rgb-glitch-text.meta.json",
       "type": "registry:file",
       "target": "components/onda/rgb-glitch-text/rgb-glitch-text.meta.json",
-      "content": "{\n  \"name\": \"rgb-glitch-text\",\n  \"title\": \"RgbGlitchText\",\n  \"description\": \"RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"glitch\",\n    \"rgb\",\n    \"chromatic\",\n    \"effect\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"rgb-glitch-text\",\n  \"title\": \"RgbGlitchText\",\n  \"description\": \"RGB channel-split text — red and cyan copies ride just off the white center, with periodic glitch bursts that kick the split wider. The burst jitter is deterministic (seeded PRNG keyed by frame). High-energy, with a restrained baseline so bursts read as punctuation.\",\n  \"pickWhen\": \"the text itself should feel unsettled — cyberpunk, hacker reveal, gaming bumper. Pair with the `chromatic-aberration` transition.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"glitch\",\n    \"rgb\",\n    \"chromatic\",\n    \"effect\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/rgb-glitch-text/README.md",

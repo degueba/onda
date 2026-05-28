@@ -31,7 +31,7 @@
       "path": "registry/components/pricing-card/pricing-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/pricing-card/pricing-card.meta.json",
-      "content": "{\n  \"name\": \"pricing-card\",\n  \"title\": \"PricingCard\",\n  \"description\": \"A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"card\",\n    \"pricing\",\n    \"tier\",\n    \"plan\",\n    \"cta\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"pricing-card\",\n  \"title\": \"PricingCard\",\n  \"description\": \"A single pricing tier on the Onda glass Surface — tier name, a large price, billing period, an accent-checkmark feature list, and a CTA button. Rises in on the house spring; set recommended to lift + scale it and add an accent badge + glow. One card; the consumer arranges three.\",\n  \"pickWhen\": \"a pricing tier — solo or arranged as three across. Mark exactly one with `recommended` for the lift + glow signature.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"card\",\n    \"pricing\",\n    \"tier\",\n    \"plan\",\n    \"cta\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/pricing-card/README.md",

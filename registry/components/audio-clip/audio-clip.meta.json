@@ -2,6 +2,7 @@
   "name": "audio-clip",
   "title": "AudioClip",
   "description": "The workhorse audio primitive — a single file with agent-friendly trim (`startAt` / `endAt` accept `\"0:04\"` / `\"30s\"`), opt-in fade envelope, optional looping, and a dB-or-amplitude volume contract. Wraps Remotion's `<Html5Audio>`. Use for music beds, voiceover, and SFX equally.",
+  "pickWhen": "any audio in the composition — music, voiceover, SFX. The default; pair with `audio-visualizer` only when the audio should be seen.",
   "category": "media",
   "tags": [
     "audio",

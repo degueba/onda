@@ -26,7 +26,7 @@
       "path": "registry/components/fade-in/fade-in.meta.json",
       "type": "registry:file",
       "target": "components/onda/fade-in/fade-in.meta.json",
-      "content": "{\n  \"name\": \"fade-in\",\n  \"title\": \"FadeIn\",\n  \"description\": \"A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"fade\",\n    \"opacity\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"fade-in\",\n  \"title\": \"FadeIn\",\n  \"description\": \"A pure opacity fade for text — no movement, no scale, no blur. The simplest possible reveal.\",\n  \"pickWhen\": \"layout shift is unacceptable — captions over video, text inside a frame, anything where motion would jiggle neighbors.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"reveal\",\n    \"entrance\",\n    \"fade\",\n    \"opacity\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/fade-in/README.md",

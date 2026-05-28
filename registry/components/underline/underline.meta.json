@@ -2,6 +2,7 @@
   "name": "underline",
   "title": "Underline",
   "description": "Text fades in, then an accent-rose underline draws beneath it after a small beat. A two-phase reveal for emphasis — one of the catalog's rare earned-color moments.",
+  "pickWhen": "the house punctuation under a line — title beat, key term, CTA support. The restrained sibling of `highlight`; inside most scene blocks.",
   "category": "graphics",
   "tags": [
     "underline",

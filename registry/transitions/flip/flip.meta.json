@@ -2,6 +2,7 @@
   "name": "flip",
   "title": "flip",
   "description": "A 3D card-flip between two scenes — outgoing rotates away, incoming rotates into view. Onda's directional vocabulary (`left` / `right` / `up` / `down`) with adjustable `perspective`. Wraps Remotion's `flip()`.",
+  "pickWhen": "two faces of the same thing — before/after, front/back of a card, A/B reveal. The 3D move is the point; sparingly so it stays a beat.",
   "category": "transitions",
   "tags": [
     "transition",

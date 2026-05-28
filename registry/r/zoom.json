@@ -27,7 +27,7 @@
       "path": "registry/transitions/zoom/zoom.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/zoom/zoom.meta.json",
-      "content": "{\n  \"name\": \"zoom\",\n  \"title\": \"zoom\",\n  \"description\": \"Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"zoom\",\n    \"scale\",\n    \"punch\",\n    \"accent\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"zoom\",\n  \"title\": \"zoom\",\n  \"description\": \"Scale-driven punch transition — incoming scene approaches (`'in'`) or pulls back (`'out'`) from the viewer. The catalog's lone 'accent' register; use sparingly so it stays a punctuation moment. Onda-original.\",\n  \"pickWhen\": \"an aggressive accent cut — beat drop, hype reveal, energetic bumper. Catalog's punch register; sparingly so it stays punctuation.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"zoom\",\n    \"scale\",\n    \"punch\",\n    \"accent\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/zoom/README.md",

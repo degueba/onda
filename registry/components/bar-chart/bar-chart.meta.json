@@ -2,6 +2,7 @@
   "name": "bar-chart",
   "title": "BarChart",
   "description": "Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.",
+  "pickWhen": "comparing 3–8 discrete values where the winner is the story. Use `line-chart` for trends, `pie-reveal` for a single share.",
   "category": "data",
   "tags": [
     "data",

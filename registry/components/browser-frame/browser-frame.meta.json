@@ -2,6 +2,7 @@
   "name": "browser-frame",
   "title": "BrowserFrame",
   "description": "A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.",
+  "pickWhen": "a web app should read as \"in a browser\" — product demo, landing screenshot. Use `device-frame` for phone/laptop bezels.",
   "category": "interface",
   "tags": [
     "browser",

@@ -26,7 +26,7 @@
       "path": "registry/components/word-rotate/word-rotate.meta.json",
       "type": "registry:file",
       "target": "components/onda/word-rotate/word-rotate.meta.json",
-      "content": "{\n  \"name\": \"word-rotate\",\n  \"title\": \"WordRotate\",\n  \"description\": \"Cycles through a list of phrases in place. Each phrase rises and fades in on SPRING_SMOOTH, holds, then fades out as the next arrives. One focal element per moment.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"rotate\",\n    \"cycle\",\n    \"entrance\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"word-rotate\",\n  \"title\": \"WordRotate\",\n  \"description\": \"Cycles through a list of phrases in place. Each phrase rises and fades in on SPRING_SMOOTH, holds, then fades out as the next arrives. One focal element per moment.\",\n  \"pickWhen\": \"a held-in-place rotation across a phrase list — taglines, value props, \\\"X for Y\\\" cycles.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"rotate\",\n    \"cycle\",\n    \"entrance\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/word-rotate/README.md",

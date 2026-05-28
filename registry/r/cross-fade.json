@@ -27,7 +27,7 @@
       "path": "registry/transitions/cross-fade/cross-fade.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/cross-fade/cross-fade.meta.json",
-      "content": "{\n  \"name\": \"cross-fade\",\n  \"title\": \"crossFade\",\n  \"description\": \"A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"fade\",\n    \"cross-fade\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"cross-fade\",\n  \"title\": \"crossFade\",\n  \"description\": \"A calm opacity cross-fade between two scenes — Onda's house easing (cubic-bezier(0.16, 1, 0.3, 1)) and 18-frame duration baked into the recommended timing call. Reads as deliberate, not generic. Wraps Remotion's `fade()` presentation.\",\n  \"pickWhen\": \"the house default when no transition is asked for. Use `morph` for premium feel; `dip-to-color` for the editing-room classic.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"fade\",\n    \"cross-fade\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/cross-fade/README.md",

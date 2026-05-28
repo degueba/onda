@@ -27,7 +27,7 @@
       "path": "registry/transitions/push/push.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/push/push.meta.json",
-      "content": "{\n  \"name\": \"push\",\n  \"title\": \"push\",\n  \"description\": \"A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"directional\",\n    \"camera-pan\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"push\",\n  \"title\": \"push\",\n  \"description\": \"A directional push between two scenes — both translate together in the same direction, like a camera pan. Onda-original; different from `slide` (only incoming moves) and `depthPush` (adds parallax scale).\",\n  \"pickWhen\": \"the cut should feel like a camera pan — sequential beats, story progression. Use `depth-push` for parallax; `slide` for one-pane.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"push\",\n    \"directional\",\n    \"camera-pan\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/push/README.md",

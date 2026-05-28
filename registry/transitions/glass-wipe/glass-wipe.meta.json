@@ -2,6 +2,7 @@
   "name": "glass-wipe",
   "title": "glassWipe",
   "description": "The incoming scene wipes in from a direction behind a frosted-glass edge that sharpens as it settles, while the outgoing scene frosts over beneath it. Calmer than a hard wipe, more textured than a cross-fade. Onda-original.",
+  "pickWhen": "a directional wipe that should feel material — premium product, brand pieces. Use `wipe` for harder edge; `cross-fade` for no edge.",
   "category": "transitions",
   "tags": [
     "transition",

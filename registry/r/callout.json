@@ -27,7 +27,7 @@
       "path": "registry/components/callout/callout.meta.json",
       "type": "registry:file",
       "target": "components/onda/callout/callout.meta.json",
-      "content": "{\n  \"name\": \"callout\",\n  \"title\": \"Callout\",\n  \"description\": \"A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"annotation\",\n    \"callout\",\n    \"label\",\n    \"arrow\",\n    \"tutorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"callout\",\n  \"title\": \"Callout\",\n  \"description\": \"A label-and-arrow annotation pointing at a specific spot on the canvas. The bubble appears first with a calm scale-and-fade; after a small beat the arrow draws on from the bubble to the anchor. For highlighting UI in tutorials, naming parts in explainers, or drawing attention without obscuring content.\",\n  \"pickWhen\": \"naming a specific point — UI element, part of a diagram, feature in a screenshot. Use `bounding-box` to frame a whole region instead.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"annotation\",\n    \"callout\",\n    \"label\",\n    \"arrow\",\n    \"tutorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/callout/README.md",

@@ -30,7 +30,7 @@
       "path": "registry/components/line-chart/line-chart.meta.json",
       "type": "registry:file",
       "target": "components/onda/line-chart/line-chart.meta.json",
-      "content": "{\n  \"name\": \"line-chart\",\n  \"title\": \"LineChart\",\n  \"description\": \"A line chart whose path draws on left-to-right on the house easing, with an optional soft area fill and per-point dots that pop as the line reaches them. Deterministic via SVG pathLength normalization.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"chart\",\n    \"line\",\n    \"data\",\n    \"graph\",\n    \"trend\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"line-chart\",\n  \"title\": \"LineChart\",\n  \"description\": \"A line chart whose path draws on left-to-right on the house easing, with an optional soft area fill and per-point dots that pop as the line reaches them. Deterministic via SVG pathLength normalization.\",\n  \"pickWhen\": \"a trend over time — growth, drop, before/after curve. Use `bar-chart` for discrete comparisons, `count-up` for a single end value.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"chart\",\n    \"line\",\n    \"data\",\n    \"graph\",\n    \"trend\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/line-chart/README.md",

@@ -2,6 +2,7 @@
   "name": "shimmer-sweep",
   "title": "ShimmerSweep",
   "description": "A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.",
+  "pickWhen": "subtle emphasis on already-revealed text — premium / luxe feel, no color. Use `highlight` for marker; `underline` for a rule.",
   "category": "graphics",
   "tags": [
     "text",

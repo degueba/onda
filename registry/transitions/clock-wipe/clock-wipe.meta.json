@@ -2,6 +2,7 @@
   "name": "clock-wipe",
   "title": "clockWipe",
   "description": "A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.",
+  "pickWhen": "a deliberately cinematic cut that signals time passing — chapter break, montage divider. Use `iris` for the camera-shutter feel instead.",
   "category": "transitions",
   "tags": [
     "transition",

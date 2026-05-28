@@ -2,6 +2,7 @@
   "name": "type-mask",
   "title": "typeMask",
   "description": "A giant word holds, then scales up exponentially until the negative space inside its letters blows past the screen edges — revealing the incoming scene through the type. A kinetic typographic mask. Onda-original.",
+  "pickWhen": "the title word IS the cut — kinetic title sequences, branded openers. Once per piece; the typography is doing the work.",
   "category": "transitions",
   "tags": [
     "transition",

@@ -2,6 +2,7 @@
   "name": "parallax",
   "title": "Parallax",
   "description": "Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.",
+  "pickWhen": "an image-backed scene needs ambient motion without zoom — backgrounds, b-roll behind text. Calmer than `ken-burns`.",
   "category": "cinematic",
   "tags": [
     "image",

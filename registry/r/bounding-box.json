@@ -32,7 +32,7 @@
       "path": "registry/components/bounding-box/bounding-box.meta.json",
       "type": "registry:file",
       "target": "components/onda/bounding-box/bounding-box.meta.json",
-      "content": "{\n  \"name\": \"bounding-box\",\n  \"title\": \"BoundingBox\",\n  \"description\": \"A UI annotation bounding box — a rectangle outline that strokes itself on like a selection marquee around a region, with optional corner ticks and an optional label tag pinned to the top-left corner. For highlighting a UI element in docs and tutorial videos; the accent is earned here.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"annotation\",\n    \"bounding-box\",\n    \"selection\",\n    \"highlight\",\n    \"tutorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"bounding-box\",\n  \"title\": \"BoundingBox\",\n  \"description\": \"A UI annotation bounding box — a rectangle outline that strokes itself on like a selection marquee around a region, with optional corner ticks and an optional label tag pinned to the top-left corner. For highlighting a UI element in docs and tutorial videos; the accent is earned here.\",\n  \"pickWhen\": \"framing a region in a UI demo — \\\"this is the area we're talking about.\\\" Use `callout` to point at a single spot instead.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"annotation\",\n    \"bounding-box\",\n    \"selection\",\n    \"highlight\",\n    \"tutorial\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/bounding-box/README.md",

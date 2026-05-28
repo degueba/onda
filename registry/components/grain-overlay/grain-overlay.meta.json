@@ -2,6 +2,7 @@
   "name": "grain-overlay",
   "title": "GrainOverlay",
   "description": "A subtle film-grain layer overlaid on the canvas — pure SVG fractal noise, no text, no motion. The first atmospheric Onda primitive: texture only, restrained at ~2-4% opacity per the design tokens. Deterministic and self-contained, no external assets.",
+  "pickWhen": "the whole piece should feel filmic — a top-of-stack overlay that quietly warms everything beneath it. Pair freely; never the focal element.",
   "category": "atmosphere",
   "tags": [
     "overlay",

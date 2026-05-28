@@ -31,7 +31,7 @@
       "path": "registry/components/slot-machine-roll/slot-machine-roll.meta.json",
       "type": "registry:file",
       "target": "components/onda/slot-machine-roll/slot-machine-roll.meta.json",
-      "content": "{\n  \"name\": \"slot-machine-roll\",\n  \"title\": \"SlotMachineRoll\",\n  \"description\": \"Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"number\",\n    \"roll\",\n    \"reel\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"slot-machine-roll\",\n  \"title\": \"SlotMachineRoll\",\n  \"description\": \"Each character spins down a reel of glyphs and lands on its target, settling on the house spring, staggered left-to-right. Filler glyphs are seeded (deterministic). Best on short numeric strings.\",\n  \"pickWhen\": \"a numeric reveal with weight — final score, jackpot, release number. Short numerics only.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"number\",\n    \"roll\",\n    \"reel\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/slot-machine-roll/README.md",

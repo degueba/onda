@@ -2,6 +2,7 @@
   "name": "timeline",
   "title": "Timeline",
   "description": "A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.",
+  "pickWhen": "an ordered sequence with milestones — roadmap, company history, release cadence. Use `progress-steps` for active state through a flow.",
   "category": "data",
   "tags": [
     "timeline",

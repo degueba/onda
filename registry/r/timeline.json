@@ -27,7 +27,7 @@
       "path": "registry/components/timeline/timeline.meta.json",
       "type": "registry:file",
       "target": "components/onda/timeline/timeline.meta.json",
-      "content": "{\n  \"name\": \"timeline\",\n  \"title\": \"Timeline\",\n  \"description\": \"A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"timeline\",\n    \"data\",\n    \"stagger\",\n    \"dots\",\n    \"draw\",\n    \"spring\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"timeline\",\n  \"title\": \"Timeline\",\n  \"description\": \"A horizontal timeline: a thin line strokes itself on, then dots cascade in at each anchor with the canonical Onda stagger, then labels fade in beneath. The final dot earns the dusty-rose accent — one focal moment, the rest neutral.\",\n  \"pickWhen\": \"an ordered sequence with milestones — roadmap, company history, release cadence. Use `progress-steps` for active state through a flow.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"timeline\",\n    \"data\",\n    \"stagger\",\n    \"dots\",\n    \"draw\",\n    \"spring\",\n    \"primitive\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/timeline/README.md",

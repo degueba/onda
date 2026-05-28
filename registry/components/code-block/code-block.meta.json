@@ -2,6 +2,7 @@
   "name": "code-block",
   "title": "CodeBlock",
   "description": "Syntax-highlighted code on the Onda glass surface, revealed line-by-line. Deterministic dependency-free tokenizer (no async at render). Keywords carry the one earned accent; everything else stays neutral. The reference for the interface category.",
+  "pickWhen": "a static code snippet — install commands, examples, config. Use `code-diff` to show changes, `terminal` for interactive output.",
   "category": "interface",
   "tags": [
     "code",

@@ -27,7 +27,7 @@
       "path": "registry/transitions/wipe/wipe.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/wipe/wipe.meta.json",
-      "content": "{\n  \"name\": \"wipe\",\n  \"title\": \"wipe\",\n  \"description\": \"A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"wipe\",\n  \"title\": \"wipe\",\n  \"description\": \"A hard-edged wipe between two scenes — incoming scene reveals from one edge to the opposite as a moving boundary. Onda's directional vocabulary (`left` / `right` / `up` / `down`); diagonals deliberately excluded. Wraps Remotion's `wipe()`.\",\n  \"pickWhen\": \"the cut needs to read as deliberate — segment break, news/sports register. Use `glass-wipe` for textured; `dip-to-color` for editorial.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"directional\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/wipe/README.md",

@@ -31,7 +31,7 @@
       "path": "registry/components/shimmer-sweep/shimmer-sweep.meta.json",
       "type": "registry:file",
       "target": "components/onda/shimmer-sweep/shimmer-sweep.meta.json",
-      "content": "{\n  \"name\": \"shimmer-sweep\",\n  \"title\": \"ShimmerSweep\",\n  \"description\": \"A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"shimmer\",\n    \"sweep\",\n    \"highlight\",\n    \"emphasis\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"shimmer-sweep\",\n  \"title\": \"ShimmerSweep\",\n  \"description\": \"A single band of light sweeps across text once (or on a loop), drawing the eye without moving the layout. Restrained highlight emphasis built on the house easing.\",\n  \"pickWhen\": \"subtle emphasis on already-revealed text — premium / luxe feel, no color. Use `highlight` for marker; `underline` for a rule.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"shimmer\",\n    \"sweep\",\n    \"highlight\",\n    \"emphasis\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/shimmer-sweep/README.md",

@@ -26,7 +26,7 @@
       "path": "registry/components/parallax/parallax.meta.json",
       "type": "registry:file",
       "target": "components/onda/parallax/parallax.meta.json",
-      "content": "{\n  \"name\": \"parallax\",\n  \"title\": \"Parallax\",\n  \"description\": \"Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"image\",\n    \"drift\",\n    \"parallax\",\n    \"cinematic\",\n    \"background\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"parallax\",\n  \"title\": \"Parallax\",\n  \"description\": \"Slow horizontal or vertical drift over an image — a lighter, no-zoom complement to KenBurns. Intentionally linear for a constant, calm passage. Built for backgrounds and b-roll.\",\n  \"pickWhen\": \"an image-backed scene needs ambient motion without zoom — backgrounds, b-roll behind text. Calmer than `ken-burns`.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"image\",\n    \"drift\",\n    \"parallax\",\n    \"cinematic\",\n    \"background\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/parallax/README.md",

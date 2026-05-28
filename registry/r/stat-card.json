@@ -26,7 +26,7 @@
       "path": "registry/components/stat-card/stat-card.meta.json",
       "type": "registry:file",
       "target": "components/onda/stat-card/stat-card.meta.json",
-      "content": "{\n  \"name\": \"stat-card\",\n  \"title\": \"StatCard\",\n  \"description\": \"Flagship Onda data scene — a big counted-up number above a word-staggered label above an accent rule. Composes CountUp, WordStagger, and Underline so the cascade (number → label → rule) reads as one calm motion. The signature 'Onda data look' for hero stats, KPIs, milestones, and announcement frames.\",\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"stat\",\n    \"kpi\",\n    \"number\",\n    \"headline\",\n    \"data\",\n    \"card\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"stat-card\",\n  \"title\": \"StatCard\",\n  \"description\": \"Flagship Onda data scene — a big counted-up number above a word-staggered label above an accent rule. Composes CountUp, WordStagger, and Underline so the cascade (number → label → rule) reads as one calm motion. The signature 'Onda data look' for hero stats, KPIs, milestones, and announcement frames.\",\n  \"pickWhen\": \"the brief is \\\"show one big number\\\" — KPI, milestone, headline figure, announcement frame. Don't reassemble from the parts.\",\n  \"composes\": [\n    \"count-up\",\n    \"word-stagger\",\n    \"underline\"\n  ],\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"stat\",\n    \"kpi\",\n    \"number\",\n    \"headline\",\n    \"data\",\n    \"card\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/stat-card/README.md",

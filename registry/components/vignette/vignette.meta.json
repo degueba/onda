@@ -2,6 +2,7 @@
   "name": "vignette",
   "title": "Vignette",
   "description": "A static cinematic vignette: a radial darkening at the canvas edges that frames the center. Atmospheric overlay with no motion — like GrainOverlay, it is set dressing, not a performer. Deterministic, self-contained, pointer-transparent.",
+  "pickWhen": "the eye should drift toward center of frame — film hero, focused interview. Pair with `grain-overlay` for full filmic dressing.",
   "category": "cinematic",
   "tags": [
     "overlay",

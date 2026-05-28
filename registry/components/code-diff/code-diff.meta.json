@@ -2,6 +2,7 @@
   "name": "code-diff",
   "title": "CodeDiff",
   "description": "A unified code diff on the Onda glass surface, revealed line-by-line. Added/removed lines carry a colored left border + gutter symbol; context lines stay neutral. Deterministic, no async highlighting.",
+  "pickWhen": "showing a code change — before/after, PR walkthrough, changelog highlight. Use `code-block` for static code, not a comparison.",
   "category": "interface",
   "tags": [
     "code",

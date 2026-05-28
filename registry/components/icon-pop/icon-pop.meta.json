@@ -2,6 +2,7 @@
   "name": "icon-pop",
   "title": "IconPop",
   "description": "A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.",
+  "pickWhen": "a tiny status mark needs to land — checkmark on a feature row, error cross, live dot. Stay small; for arbitrary SVG use `draw-on`.",
   "category": "graphics",
   "tags": [
     "icon",

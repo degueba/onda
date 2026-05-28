@@ -30,7 +30,7 @@
       "path": "registry/components/split-screen/split-screen.meta.json",
       "type": "registry:file",
       "target": "components/onda/split-screen/split-screen.meta.json",
-      "content": "{\n  \"name\": \"split-screen\",\n  \"title\": \"SplitScreen\",\n  \"description\": \"A two-pane split layout — left and right content panes (any JSX) divided by a thin token line. A container that wraps arbitrary content; the two panes slide in from their outer edges on the house spring.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"layout\",\n    \"split\",\n    \"container\",\n    \"comparison\",\n    \"two-pane\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"split-screen\",\n  \"title\": \"SplitScreen\",\n  \"description\": \"A two-pane split layout — left and right content panes (any JSX) divided by a thin token line. A container that wraps arbitrary content; the two panes slide in from their outer edges on the house spring.\",\n  \"pickWhen\": \"two things shown side-by-side as equals — before/after, comparison, code-and-result. Use `code-diff` for inline before/after of code itself.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"layout\",\n    \"split\",\n    \"container\",\n    \"comparison\",\n    \"two-pane\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/split-screen/README.md",

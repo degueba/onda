@@ -27,7 +27,7 @@
       "path": "registry/transitions/type-mask/type-mask.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/type-mask/type-mask.meta.json",
-      "content": "{\n  \"name\": \"type-mask\",\n  \"title\": \"typeMask\",\n  \"description\": \"A giant word holds, then scales up exponentially until the negative space inside its letters blows past the screen edges — revealing the incoming scene through the type. A kinetic typographic mask. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"type\",\n    \"mask\",\n    \"kinetic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"type-mask\",\n  \"title\": \"typeMask\",\n  \"description\": \"A giant word holds, then scales up exponentially until the negative space inside its letters blows past the screen edges — revealing the incoming scene through the type. A kinetic typographic mask. Onda-original.\",\n  \"pickWhen\": \"the title word IS the cut — kinetic title sequences, branded openers. Once per piece; the typography is doing the work.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"type\",\n    \"mask\",\n    \"kinetic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/type-mask/README.md",

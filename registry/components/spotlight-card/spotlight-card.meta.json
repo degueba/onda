@@ -2,6 +2,7 @@
   "name": "spotlight-card",
   "title": "SpotlightCard",
   "description": "A glass card with a spotlight that drifts slowly behind the content (Surface + a frame-driven Glow). The card rises in on the house spring while the spotlight keeps moving — alive, not busy.",
+  "pickWhen": "a single feature card that should feel alive on hold — feature-of-the-week, hero callout. The glow gives presence without motion.",
   "category": "graphics",
   "tags": [
     "card",

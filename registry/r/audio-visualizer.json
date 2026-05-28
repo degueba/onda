@@ -30,7 +30,7 @@
       "path": "registry/components/audio-visualizer/audio-visualizer.meta.json",
       "type": "registry:file",
       "target": "components/onda/audio-visualizer/audio-visualizer.meta.json",
-      "content": "{\n  \"name\": \"audio-visualizer\",\n  \"title\": \"AudioVisualizer\",\n  \"description\": \"Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"audio\",\n    \"visualization\",\n    \"waveform\",\n    \"bars\",\n    \"fft\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/media-utils\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"audio-visualizer\",\n  \"title\": \"AudioVisualizer\",\n  \"description\": \"Renders animated bars (frequency-domain) or a waveform (time-domain) for an audio file. Does **not** play audio — pair with a parallel `AudioClip` for playback. Uses `useAudioData` from `@remotion/media-utils` (cached per `src`).\",\n  \"pickWhen\": \"the audio needs to be visible on screen — podcast clip, music drop, voiceover hero shot. Always pair with `audio-clip` for actual playback.\",\n  \"category\": \"media\",\n  \"tags\": [\n    \"audio\",\n    \"visualization\",\n    \"waveform\",\n    \"bars\",\n    \"fft\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/media-utils\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/audio-visualizer/README.md",

@@ -26,7 +26,7 @@
       "path": "registry/components/camera-shake/camera-shake.meta.json",
       "type": "registry:file",
       "target": "components/onda/camera-shake/camera-shake.meta.json",
-      "content": "{\n  \"name\": \"camera-shake\",\n  \"title\": \"CameraShake\",\n  \"description\": \"Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"wrapper\",\n    \"shake\",\n    \"cinematic\",\n    \"deterministic\",\n    \"seeded\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"camera-shake\",\n  \"title\": \"CameraShake\",\n  \"description\": \"Wraps children with a subtle, deterministic camera shake that decays to rest. Driven by Remotion's seeded random() so the same seed always produces the same shake — no Math.random in the render path.\",\n  \"pickWhen\": \"an impact moment needs physical weight — explosion, drop, score reveal. A wrapper, not a layer; place around the thing that should feel hit.\",\n  \"category\": \"cinematic\",\n  \"tags\": [\n    \"wrapper\",\n    \"shake\",\n    \"cinematic\",\n    \"deterministic\",\n    \"seeded\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/camera-shake/README.md",

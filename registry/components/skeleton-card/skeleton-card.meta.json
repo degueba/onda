@@ -2,6 +2,7 @@
   "name": "skeleton-card",
   "title": "SkeletonCard",
   "description": "A loading-placeholder card — a glass Surface with an optional thumbnail block and a stack of text bars, swept by a frame-driven shimmer band. The 'still generating / not loaded yet' state before content populates. Rises in on the house spring; the shimmer loops so the placeholder feels live.",
+  "pickWhen": "the \"still generating\" beat before content lands — AI loading, dashboard pre-load. Cut to real content with `cross-fade` or `morph`.",
   "category": "interface",
   "tags": [
     "skeleton",

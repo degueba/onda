@@ -2,6 +2,7 @@
   "name": "chromatic-aberration",
   "title": "chromaticAberration",
   "description": "The cut tears into red/cyan channels and snaps back — outgoing scene splits wider as it fades, incoming converges from a split. The catalog's most aggressive transition; a punctuation move, not a default. Onda-original.",
+  "pickWhen": "the most aggressive cut in the catalog — cyberpunk, glitch, hacker reveal. Once per piece, never as a default. Pair with `rgb-glitch-text`.",
   "category": "transitions",
   "tags": [
     "transition",

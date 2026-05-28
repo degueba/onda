@@ -2,6 +2,7 @@
   "name": "draw-on",
   "title": "DrawOn",
   "description": "An SVG path that strokes itself in — the substrate for logos, icons, and signature flourishes. Powered by @remotion/paths's evolvePath, driven by SPRING_SMOOTH. No overshoot.",
+  "pickWhen": "any SVG that should stroke itself on — logo lockup, signature, hand-drawn icon. For the full branded sting use `logo-sting`.",
   "category": "graphics",
   "tags": [
     "svg",

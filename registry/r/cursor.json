@@ -30,7 +30,7 @@
       "path": "registry/components/cursor/cursor.meta.json",
       "type": "registry:file",
       "target": "components/onda/cursor/cursor.meta.json",
-      "content": "{\n  \"name\": \"cursor\",\n  \"title\": \"Cursor\",\n  \"description\": \"An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"cursor\",\n    \"pointer\",\n    \"click\",\n    \"demo\",\n    \"interface\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"cursor\",\n  \"title\": \"Cursor\",\n  \"description\": \"An animated pointer that travels between two canvas points on the house spring and emits a single restrained click ripple on arrival. A full-canvas layer for product and dev demos.\",\n  \"pickWhen\": \"explaining a user interaction — click, menu open, button press. Pair with `button` `pressFrame` so the press lands on the click.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"cursor\",\n    \"pointer\",\n    \"click\",\n    \"demo\",\n    \"interface\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/cursor/README.md",

@@ -30,7 +30,7 @@
       "path": "registry/components/tracking-in/tracking-in.meta.json",
       "type": "registry:file",
       "target": "components/onda/tracking-in/tracking-in.meta.json",
-      "content": "{\n  \"name\": \"tracking-in\",\n  \"title\": \"TrackingIn\",\n  \"description\": \"Text begins spread wide and contracts to its resting letter-spacing on the house spring, fading and sharpening from a soft blur as it settles. A cinematic title entrance with no overshoot.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"entrance\",\n    \"tracking\",\n    \"letter-spacing\",\n    \"title\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"tracking-in\",\n  \"title\": \"TrackingIn\",\n  \"description\": \"Text begins spread wide and contracts to its resting letter-spacing on the house spring, fading and sharpening from a soft blur as it settles. A cinematic title entrance with no overshoot.\",\n  \"pickWhen\": \"a cinematic title beat where the type itself is the moment. Do not combine with another entrance on the same line.\",\n  \"category\": \"entrances\",\n  \"tags\": [\n    \"text\",\n    \"entrance\",\n    \"tracking\",\n    \"letter-spacing\",\n    \"title\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/tracking-in/README.md",

@@ -29,7 +29,7 @@
       "path": "registry/components/dynamic-grid/dynamic-grid.meta.json",
       "type": "registry:file",
       "target": "components/onda/dynamic-grid/dynamic-grid.meta.json",
-      "content": "{\n  \"name\": \"dynamic-grid\",\n  \"title\": \"DynamicGrid\",\n  \"description\": \"A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"grid\",\n    \"technical\",\n    \"atmosphere\",\n    \"dashboard\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"dynamic-grid\",\n  \"title\": \"DynamicGrid\",\n  \"description\": \"A technical grid that drifts diagonally — the GridField primitive on a frame-driven translate that loops by one cell, so it's seamless and deterministic. Optional centered accent glow. Full-canvas atmosphere for data / dev scenes.\",\n  \"pickWhen\": \"the scene reads as dashboard / data / dev — a grid signals \\\"technical\\\" without competing. Use `mesh-gradient` for warmer atmosphere.\",\n  \"category\": \"atmosphere\",\n  \"tags\": [\n    \"background\",\n    \"grid\",\n    \"technical\",\n    \"atmosphere\",\n    \"dashboard\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/dynamic-grid/README.md",

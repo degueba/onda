@@ -30,7 +30,7 @@
       "path": "registry/components/progress-steps/progress-steps.meta.json",
       "type": "registry:file",
       "target": "components/onda/progress-steps/progress-steps.meta.json",
-      "content": "{\n  \"name\": \"progress-steps\",\n  \"title\": \"ProgressSteps\",\n  \"description\": \"A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"steps\",\n    \"stepper\",\n    \"progress\",\n    \"onboarding\",\n    \"ui\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"progress-steps\",\n  \"title\": \"ProgressSteps\",\n  \"description\": \"A horizontal stepper whose fill animates to the current step on the house spring. Completed dots and the connecting track carry the earned accent; the active step gets a soft glow ring; pending steps stay neutral.\",\n  \"pickWhen\": \"an ordered flow with an active position — onboarding, checkout, install. Use `timeline` for historical milestones (no active state).\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"steps\",\n    \"stepper\",\n    \"progress\",\n    \"onboarding\",\n    \"ui\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/progress-steps/README.md",

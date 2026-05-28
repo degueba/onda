@@ -2,6 +2,7 @@
   "name": "button",
   "title": "Button",
   "description": "A CTA pill button — accent-filled (primary) or bordered (ghost). It fades and rises in on the house entrance, then plays an optional deterministic click-dip at pressFrame: a quick scale down to 0.94 and back that reads as a press.",
+  "pickWhen": "a CTA needs to read as clickable — landing button, end-card action. Pair `pressFrame` with `cursor` for product demos.",
   "category": "interface",
   "tags": [
     "button",

@@ -27,7 +27,7 @@
       "path": "registry/transitions/iris/iris.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/iris/iris.meta.json",
-      "content": "{\n  \"name\": \"iris\",\n  \"title\": \"iris\",\n  \"description\": \"A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"iris\",\n    \"circular\",\n    \"cinematic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"iris\",\n  \"title\": \"iris\",\n  \"description\": \"A circular reveal that grows from / collapses toward the canvas center, like a camera shutter opening. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `iris()`.\",\n  \"pickWhen\": \"cinematic cut focusing to/from a center point — silent-film homage, dream entry/exit. Use `clock-wipe` for the rotating cousin.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"iris\",\n    \"circular\",\n    \"cinematic\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/iris/README.md",

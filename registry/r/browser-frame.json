@@ -31,7 +31,7 @@
       "path": "registry/components/browser-frame/browser-frame.meta.json",
       "type": "registry:file",
       "target": "components/onda/browser-frame/browser-frame.meta.json",
-      "content": "{\n  \"name\": \"browser-frame\",\n  \"title\": \"BrowserFrame\",\n  \"description\": \"A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"browser\",\n    \"frame\",\n    \"mockup\",\n    \"container\",\n    \"developer\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"browser-frame\",\n  \"title\": \"BrowserFrame\",\n  \"description\": \"A browser chrome that wraps arbitrary content — children, an image src, or a neutral placeholder. A container component (the documented exception to self-contained). Scales-and-fades in on the house spring.\",\n  \"pickWhen\": \"a web app should read as \\\"in a browser\\\" — product demo, landing screenshot. Use `device-frame` for phone/laptop bezels.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"browser\",\n    \"frame\",\n    \"mockup\",\n    \"container\",\n    \"developer\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/browser-frame/README.md",

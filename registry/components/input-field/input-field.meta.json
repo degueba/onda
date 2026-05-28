@@ -2,6 +2,7 @@
   "name": "input-field",
   "title": "InputField",
   "description": "A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.",
+  "pickWhen": "a form field in a UI demo — login, signup, AI prompt box. Set `typed` to show the user filling it in.",
   "category": "interface",
   "tags": [
     "input",

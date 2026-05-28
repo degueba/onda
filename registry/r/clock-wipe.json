@@ -27,7 +27,7 @@
       "path": "registry/transitions/clock-wipe/clock-wipe.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/clock-wipe/clock-wipe.meta.json",
-      "content": "{\n  \"name\": \"clock-wipe\",\n  \"title\": \"clockWipe\",\n  \"description\": \"A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"clock\",\n    \"rotational\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"clock-wipe\",\n  \"title\": \"clockWipe\",\n  \"description\": \"A clock-hand wipe — the boundary between scenes rotates around the canvas center like a sweeping clock hand. Requires `width` + `height` (pass from `useVideoConfig()`). Wraps Remotion's `clockWipe()`.\",\n  \"pickWhen\": \"a deliberately cinematic cut that signals time passing — chapter break, montage divider. Use `iris` for the camera-shutter feel instead.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"wipe\",\n    \"clock\",\n    \"rotational\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/clock-wipe/README.md",

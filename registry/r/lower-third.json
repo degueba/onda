@@ -26,7 +26,7 @@
       "path": "registry/components/lower-third/lower-third.meta.json",
       "type": "registry:file",
       "target": "components/onda/lower-third/lower-third.meta.json",
-      "content": "{\n  \"name\": \"lower-third\",\n  \"title\": \"LowerThird\",\n  \"description\": \"Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.\",\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"lower-third\",\n    \"broadcast\",\n    \"name\",\n    \"role\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"lower-third\",\n  \"title\": \"LowerThird\",\n  \"description\": \"Broadcast-style name + role bar that slides in from the corner with a single accent underline. A restrained scene block composed from SlideIn, FadeIn, and Underline — no chrome, no glow, one earned accent.\",\n  \"pickWhen\": \"a broadcast-style speaker / source label sliding in from the lower edge. Keep on screen the whole time the speaker is talking.\",\n  \"composes\": [\n    \"slide-in\",\n    \"fade-in\",\n    \"underline\"\n  ],\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"lower-third\",\n    \"broadcast\",\n    \"name\",\n    \"role\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/lower-third/README.md",

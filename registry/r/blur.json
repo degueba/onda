@@ -27,7 +27,7 @@
       "path": "registry/transitions/blur/blur.meta.json",
       "type": "registry:file",
       "target": "components/onda/transitions/blur/blur.meta.json",
-      "content": "{\n  \"name\": \"blur\",\n  \"title\": \"blur\",\n  \"description\": \"Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"blur\",\n    \"fade\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"blur\",\n  \"title\": \"blur\",\n  \"description\": \"Outgoing scene blurs out as it fades; incoming scene blurs in as it fades up. Extends the BlurReveal entrance fingerprint across a cut. Onda-original.\",\n  \"pickWhen\": \"the scene change should feel soft and dreamlike — memory, montage, flashback. The cut between scenes that use `blur-reveal` for entrances.\",\n  \"category\": \"transitions\",\n  \"tags\": [\n    \"transition\",\n    \"blur\",\n    \"fade\",\n    \"scene\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/transitions\",\n    \"zod\"\n  ]\n}\n"
     },
     {
       "path": "registry/transitions/blur/README.md",

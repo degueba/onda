@@ -31,7 +31,7 @@
       "path": "registry/components/terminal/terminal.meta.json",
       "type": "registry:file",
       "target": "components/onda/terminal/terminal.meta.json",
-      "content": "{\n  \"name\": \"terminal\",\n  \"title\": \"Terminal\",\n  \"description\": \"A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"terminal\",\n    \"cli\",\n    \"shell\",\n    \"developer\",\n    \"typing\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"terminal\",\n  \"title\": \"Terminal\",\n  \"description\": \"A terminal session: the command types itself after the prompt with a frame-keyed blinking cursor, then output lines appear staggered. Built on the glass surface. Deterministic — no timers.\",\n  \"pickWhen\": \"a CLI demo with command + output — install, deploy, dev tool walkthrough. Use `code-block` for static code with no execution shown.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"terminal\",\n    \"cli\",\n    \"shell\",\n    \"developer\",\n    \"typing\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/terminal/README.md",

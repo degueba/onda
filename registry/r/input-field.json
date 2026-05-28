@@ -31,7 +31,7 @@
       "path": "registry/components/input-field/input-field.meta.json",
       "type": "registry:file",
       "target": "components/onda/input-field/input-field.meta.json",
-      "content": "{\n  \"name\": \"input-field\",\n  \"title\": \"InputField\",\n  \"description\": \"A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"input\",\n    \"field\",\n    \"form\",\n    \"typing\",\n    \"ui\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"input-field\",\n  \"title\": \"InputField\",\n  \"description\": \"A rounded glass text input on the Onda Surface, with an optional label above and a placeholder. With `typed` on, the value types itself in (via useTextReveal) behind a blinking caret, with an accent focus ring — all frame-driven and deterministic.\",\n  \"pickWhen\": \"a form field in a UI demo — login, signup, AI prompt box. Set `typed` to show the user filling it in.\",\n  \"category\": \"interface\",\n  \"tags\": [\n    \"input\",\n    \"field\",\n    \"form\",\n    \"typing\",\n    \"ui\",\n    \"glass\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/input-field/README.md",

@@ -26,7 +26,7 @@
       "path": "registry/components/bar-chart/bar-chart.meta.json",
       "type": "registry:file",
       "target": "components/onda/bar-chart/bar-chart.meta.json",
-      "content": "{\n  \"name\": \"bar-chart\",\n  \"title\": \"BarChart\",\n  \"description\": \"Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"data\",\n    \"chart\",\n    \"bars\",\n    \"stagger\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"bar-chart\",\n  \"title\": \"BarChart\",\n  \"description\": \"Horizontal bars that grow from 0 to their value on SPRING_SMOOTH, staggered. Single-accent palette: the largest bar earns the dusty-rose accent, every other bar sits in --onda-dim. Calm, no overshoot, one focal moment.\",\n  \"pickWhen\": \"comparing 3–8 discrete values where the winner is the story. Use `line-chart` for trends, `pie-reveal` for a single share.\",\n  \"category\": \"data\",\n  \"tags\": [\n    \"data\",\n    \"chart\",\n    \"bars\",\n    \"stagger\",\n    \"spring\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/bar-chart/README.md",

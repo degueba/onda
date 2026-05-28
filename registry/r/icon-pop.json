@@ -26,7 +26,7 @@
       "path": "registry/components/icon-pop/icon-pop.meta.json",
       "type": "registry:file",
       "target": "components/onda/icon-pop/icon-pop.meta.json",
-      "content": "{\n  \"name\": \"icon-pop\",\n  \"title\": \"IconPop\",\n  \"description\": \"A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"icon\",\n    \"primitive\",\n    \"state\",\n    \"spring\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"icon-pop\",\n  \"title\": \"IconPop\",\n  \"description\": \"A small state icon — check, cross, dot, or star — that pops into place on SPRING_SMOOTH via entryScale (scale 0 → 1 plus opacity fade). Universal state primitive; the accent is earned.\",\n  \"pickWhen\": \"a tiny status mark needs to land — checkmark on a feature row, error cross, live dot. Stay small; for arbitrary SVG use `draw-on`.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"icon\",\n    \"primitive\",\n    \"state\",\n    \"spring\",\n    \"entrance\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/icon-pop/README.md",

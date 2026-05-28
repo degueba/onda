@@ -30,7 +30,7 @@
       "path": "registry/components/text-fade-replace/text-fade-replace.meta.json",
       "type": "registry:file",
       "target": "components/onda/text-fade-replace/text-fade-replace.meta.json",
-      "content": "{\n  \"name\": \"text-fade-replace\",\n  \"title\": \"TextFadeReplace\",\n  \"description\": \"Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"rotate\",\n    \"swap\",\n    \"crossfade\",\n    \"tagline\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"text-fade-replace\",\n  \"title\": \"TextFadeReplace\",\n  \"description\": \"Cycles through a list of phrases, crossfading one into the next in place so the swap never shifts the layout. Calm house-eased crossfade for rotating taglines and value props.\",\n  \"pickWhen\": \"phrase rotation where the layout must not shift — fixed-height tagline, rotating hero copy. Use `word-rotate` for rise-and-fade motion.\",\n  \"category\": \"graphics\",\n  \"tags\": [\n    \"text\",\n    \"rotate\",\n    \"swap\",\n    \"crossfade\",\n    \"tagline\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/text-fade-replace/README.md",

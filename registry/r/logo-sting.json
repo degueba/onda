@@ -27,7 +27,7 @@
       "path": "registry/components/logo-sting/logo-sting.meta.json",
       "type": "registry:file",
       "target": "components/onda/logo-sting/logo-sting.meta.json",
-      "content": "{\n  \"name\": \"logo-sting\",\n  \"title\": \"LogoSting\",\n  \"description\": \"Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.\",\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"logo\",\n    \"sting\",\n    \"branded\",\n    \"reveal\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
+      "content": "{\n  \"name\": \"logo-sting\",\n  \"title\": \"LogoSting\",\n  \"description\": \"Silent, restrained branded reveal: an SVG logo stroke draws in, a title settles beneath it, and a single accent underline lands last. A scene block composed strictly from DrawOn, ScaleIn, and Underline — no particles, no streaks, no flourish.\",\n  \"pickWhen\": \"a brand sting at the head or tail of the piece — restrained scale + underline, not a 3D flourish.\",\n  \"composes\": [\n    \"draw-on\",\n    \"scale-in\",\n    \"underline\"\n  ],\n  \"category\": \"scenes\",\n  \"tags\": [\n    \"scene\",\n    \"logo\",\n    \"sting\",\n    \"branded\",\n    \"reveal\",\n    \"composition\"\n  ],\n  \"dependencies\": [\n    \"remotion\",\n    \"@remotion/paths\",\n    \"zod\",\n    \"react\"\n  ]\n}\n"
     },
     {
       "path": "registry/components/logo-sting/README.md",
