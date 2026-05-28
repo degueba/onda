@@ -36,25 +36,15 @@ export default async function OpengraphImage() {
           position: 'relative',
         }}
       >
-        {/* One restrained accent glow, anchored behind the wave. Radial
-            gradient keeps the rose contained to the upper third so the
-            wordmark below stays on neutral canvas. */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background:
-              'radial-gradient(ellipse 700px 320px at 50% 36%, rgba(217,107,130,0.22), rgba(217,107,130,0) 70%)',
-            display: 'flex',
-          }}
-        />
-
         {/* Subtle border-lit frame. 1px feels invisible at 1200px, so we use
             an inset shadow on a slightly inset rect to suggest the same
-            premium card edge the site uses. */}
+            premium card edge the site uses.
+            No radial accent glow here on purpose — Facebook's OG-image
+            pipeline JPEG-compresses uploads aggressively and any soft
+            dark-on-dark gradient bands into visible pixelation. A clean
+            solid canvas survives compression intact across every share
+            target (FB/iMessage/Slack/LinkedIn); the wave + wordmark carry
+            the brand presence without help from a glow. */}
         <div
           style={{
             position: 'absolute',
@@ -66,7 +56,11 @@ export default async function OpengraphImage() {
         />
 
         {/* The wave — same path the favicon uses, scaled large. Five-stop
-            horizontal gradient matches BrandMark exactly. */}
+            horizontal gradient matches BrandMark exactly. Stroke is wider
+            than the site's brand mark on purpose: at 1200×630 served PNG
+            this renders at ~48px in the final image, which holds its shape
+            cleanly through the social-platform JPEG resize at thumbnail
+            sizes (down to ~300px wide on mobile previews). */}
         <svg
           width="720"
           height="180"
@@ -87,7 +81,7 @@ export default async function OpengraphImage() {
           <path
             d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
             stroke="url(#g)"
-            strokeWidth={2.2}
+            strokeWidth={3.2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
