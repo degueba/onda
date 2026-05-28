@@ -48,23 +48,11 @@ export default async function ComponentOpengraphImage({
           position: 'relative',
         }}
       >
-        {/* Accent glow — anchored behind everything via DOM order.
-            Pulled to the right of the frame so the component title
-            (left-aligned) stays on neutral canvas. */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '70%',
-            height: '100%',
-            background:
-              'radial-gradient(ellipse 520px 360px at 75% 50%, rgba(217,107,130,0.20), rgba(217,107,130,0) 70%)',
-            display: 'flex',
-          }}
-        />
-
-        {/* Inset border — same premium card edge the site uses. */}
+        {/* Inset border — same premium card edge the site uses.
+            No radial accent glow here on purpose — see opengraph-image.tsx
+            for the rationale: subtle dark-on-dark gradients band into
+            visible pixelation under Facebook/LinkedIn JPEG compression.
+            A clean solid canvas survives the resize intact. */}
         <div
           style={{
             position: 'absolute',
@@ -107,7 +95,7 @@ export default async function ComponentOpengraphImage({
             <path
               d="M 2 6 C 7 1, 13 1, 17 6 C 21 11, 27 11, 31 6 C 35 1, 41 1, 46 6"
               stroke="url(#g)"
-              strokeWidth={2.4}
+              strokeWidth={3.2}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
