@@ -22,7 +22,7 @@ export const cursorSchema = z.object({
   /** Frames after arrival before the click fires. */
   clickDelay: z.number().int().min(0).default(6),
   /** Pointer + ripple color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pointer height in px. */
   size: z.number().default(56),
 });

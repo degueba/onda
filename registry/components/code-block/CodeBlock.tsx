@@ -75,11 +75,11 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               padding: '18px 24px', borderBottom: '1px solid #1C1C22',
             }}
           >
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
             {title && (
-              <span style={{ marginLeft: 10, color: '#56565F', fontFamily, fontSize: fontSize * 0.6, letterSpacing: '0.04em' }}>
+              <span style={{ marginLeft: 10, color: 'var(--onda-faint, #56565F)', fontFamily, fontSize: fontSize * 0.6, letterSpacing: '0.04em' }}>
                 {title}
               </span>
             )}

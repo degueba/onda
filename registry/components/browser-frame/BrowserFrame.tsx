@@ -26,26 +26,26 @@ export const BrowserFrame: React.FC<BrowserFrameProps & { children?: React.React
       <div style={{ opacity: style.opacity, transform: style.transform }}>
         <Surface variant="card" width={width} padding={0}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 22px', borderBottom: '1px solid #1C1C22' }}>
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
             <div
               style={{
                 marginLeft: 16, flex: 1, height: 40, borderRadius: 999,
-                background: '#121217', border: '1px solid #1C1C22',
+                background: 'var(--onda-surface-2, #121217)', border: '1px solid #1C1C22',
                 display: 'flex', alignItems: 'center', padding: '0 20px',
-                color: '#8E8E98', fontFamily: '"Space Grotesk", sans-serif', fontSize: 22, letterSpacing: '0.02em',
+                color: 'var(--onda-dim, #8E8E98)', fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)', fontSize: 22, letterSpacing: '0.02em',
               }}
             >
               {url}
             </div>
           </div>
-          <div style={{ width, height, overflow: 'hidden', background: '#08080A' }}>
+          <div style={{ width, height, overflow: 'hidden', background: 'var(--onda-bg, #08080A)' }}>
             {children ??
               (src ? (
                 <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: '#56565F', fontFamily: '"Space Grotesk", sans-serif', fontSize: 32 }}>
+                <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: 'var(--onda-faint, #56565F)', fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)', fontSize: 32 }}>
                   {url}
                 </div>
               ))}

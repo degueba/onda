@@ -12,9 +12,9 @@ export const skeletonCardSchema = z.object({
   /** Frames for one shimmer pass across the card. Lower = faster sweep. */
   shimmerSpeed: z.number().int().min(1).default(48),
   /** The travelling highlight color — a soft sheen over the bars. Defaults to `--onda-border-lit`. */
-  shimmerColor: z.string().default('#26262E'),
+  shimmerColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Resting fill of the placeholder bars / thumbnail. Defaults to `--onda-surface-2`. */
-  barColor: z.string().default('#121217'),
+  barColor: z.string().default('var(--onda-surface-2, #121217)'),
   /** Frames before the card enters. */
   delay: z.number().int().min(0).default(0),
   /** Card width in px. */

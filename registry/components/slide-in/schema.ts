@@ -17,11 +17,11 @@ export const slideInSchema = z.object({
   /** Travel distance in px. Keep within the Onda envelope of 12–24. */
   distance: z.number().default(16),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. */
   fontSize: z.number().default(96),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. Display default `600`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */

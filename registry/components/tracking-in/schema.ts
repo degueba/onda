@@ -13,7 +13,7 @@ export const trackingInSchema = z.object({
   /** Frames until the text settles. */
   duration: z.number().int().min(1).default(DURATION.slow),
   /** Text color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Starting letter-spacing in em — the text begins spread wide and contracts. */
   fromTracking: z.number().default(0.5),
   /** Resting letter-spacing in em. */
@@ -25,7 +25,7 @@ export const trackingInSchema = z.object({
   /** Semantic typography role — canvas-aware pixels. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. */
   fontWeight: z.number().default(600),
   /** Unitless line height. */

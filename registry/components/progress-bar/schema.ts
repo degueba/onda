@@ -17,17 +17,17 @@ export const progressBarSchema = z.object({
   /** Border-radius in px. Defaults to a full pill. */
   radius: z.number().default(999),
   /** Track color — the unfilled portion. Defaults to `--onda-border-lit`. */
-  trackColor: z.string().default('#26262E'),
+  trackColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Fill color — the earned accent. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Whether to render the `${value}%` label beside the bar. */
   showValue: z.boolean().default(true),
   /** Label color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Label font size in px. */
   fontSize: z.number().default(28),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

@@ -11,9 +11,9 @@ export const typeMaskSchema = z.object({
   /** How large the type scales by the end — large enough to push every letterform past the edges. */
   maxScale: z.number().min(2).max(60).default(22),
   /** Fill of the masking type. Match your canvas so the held word reads as solid. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Type family for the mask word. Default Clash Display — boldest weight for the widest interior space. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
 });
 
 export type TypeMaskOptions = z.input<typeof typeMaskSchema>;

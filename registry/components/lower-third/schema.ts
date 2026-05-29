@@ -16,11 +16,11 @@ export const lowerThirdSchema = z.object({
   /** Show the accent underline beneath the name. */
   accent: z.boolean().default(true),
   /** Name color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Role color. Defaults to `--onda-dim`. */
-  roleColor: z.string().default('#8E8E98'),
+  roleColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Underline color. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Name font size in px. Wins over `nameSize` if both are passed. */
   fontSize: z.number().default(48),
   /** Semantic role for the name — resolves to canvas-aware pixels. `fontSize` wins when both are passed. */
@@ -42,7 +42,7 @@ export const lowerThirdSchema = z.object({
   /** Unitless line height for the role. */
   roleLineHeight: z.number().optional(),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
 });
 
 /** Inferred props for `LowerThird`. */

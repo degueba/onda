@@ -66,7 +66,7 @@ export const audioVisualizerPresets = {
     barWidth: 12,
     barGap: 8,
     barAlign: 'middle',
-    color: '#D96B82',
+    color: 'var(--onda-accent, #D96B82)',
   },
   /** SoundCloud-style: dense thin bars, rose → cyan complement. */
   soundcloud: {
@@ -74,7 +74,7 @@ export const audioVisualizerPresets = {
     barWidth: 2,
     barGap: 1,
     barAlign: 'middle',
-    color: ['#D96B82', '#4DD4D8'],
+    color: ['var(--onda-accent, #D96B82)', '#4DD4D8'],
   },
   /** Bottom-anchored equalizer bars — classic DJ look, two-tone rose. */
   equalizer: {
@@ -82,14 +82,14 @@ export const audioVisualizerPresets = {
     barWidth: 6,
     barGap: 4,
     barAlign: 'bottom',
-    color: ['#D96B82', '#E89AAB'],
+    color: ['var(--onda-accent, #D96B82)', 'var(--onda-accent-soft, #E89AAB)'],
   },
   /** Aurora hills — three-tone layered fills, rose / violet / soft rose. */
   aurora: {
     variant: 'hills',
     hillsCopies: 3,
     hillsFillOpacity: 0.5,
-    color: ['#D96B82', '#7C5CE5', '#E89AAB'],
+    color: ['var(--onda-accent, #D96B82)', '#7C5CE5', 'var(--onda-accent-soft, #E89AAB)'],
   },
   /** Voice ribbon — four stacked wave lines, rose ↔ cyan, slow drift. */
   voice: {
@@ -97,7 +97,7 @@ export const audioVisualizerPresets = {
     waveLines: 4,
     waveLineGap: 18,
     waveScrollSpeed: -100,
-    color: ['#D96B82', '#4DD4D8'],
+    color: ['var(--onda-accent, #D96B82)', '#4DD4D8'],
   },
   /** Sunburst — radial bars outward, amber ↔ rose (warm). */
   sunburst: {
@@ -105,7 +105,7 @@ export const audioVisualizerPresets = {
     radialBarOrigin: 'outer',
     radialBarWidth: 6,
     radialBarGap: 4,
-    color: ['#FFB547', '#D96B82'],
+    color: ['#FFB547', 'var(--onda-accent, #D96B82)'],
   },
   /** Neon ring — radial bars inward, rose ↔ violet (synthwave). */
   neon: {
@@ -113,7 +113,7 @@ export const audioVisualizerPresets = {
     radialBarOrigin: 'inner',
     radialInnerRadius: 120,
     radialBarWidth: 4,
-    color: ['#D96B82', '#7C5CE5'],
+    color: ['var(--onda-accent, #D96B82)', '#7C5CE5'],
   },
 } as const satisfies Record<string, Partial<AudioVisualizerProps>>;
 
@@ -124,7 +124,7 @@ const GLOW_FILTER = 'drop-shadow(0 0 6px currentColor)';
 
 /** Normalize a `string | string[]` color prop to a non-empty array. */
 const toColorArray = (c: string | string[]): string[] =>
-  Array.isArray(c) ? (c.length > 0 ? c : ['#D96B82']) : [c];
+  Array.isArray(c) ? (c.length > 0 ? c : ['var(--onda-accent, #D96B82)']) : [c];
 
 /** Pick a color by index, wrapping. */
 const colorAt = (colors: string[], i: number) => colors[i % colors.length];

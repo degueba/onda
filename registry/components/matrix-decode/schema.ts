@@ -20,9 +20,9 @@ export const matrixDecodeSchema = z.object({
   /** Glyph pool drawn from while scrambling. */
   charset: z.string().default('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=<>/'),
   /** Settled text color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Color of still-scrambling glyphs — the earned accent. */
-  scrambleColor: z.string().default('#D96B82'),
+  scrambleColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(120),
   /** Semantic typography role — canvas-aware pixels. */

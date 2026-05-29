@@ -30,10 +30,10 @@ export const CodeDiff: React.FC<CodeDiffProps> = ({
       <Surface variant="glass" width={width} padding={0}>
         {chrome && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '18px 24px', borderBottom: '1px solid #1C1C22' }}>
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            <span style={{ width: 18, height: 18, borderRadius: 999, background: '#26262E' }} />
-            {title && <span style={{ marginLeft: 10, color: '#56565F', fontFamily, fontSize: fontSize * 0.6, letterSpacing: '0.04em' }}>{title}</span>}
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            <span style={{ width: 18, height: 18, borderRadius: 999, background: 'var(--onda-border-lit, #26262E)' }} />
+            {title && <span style={{ marginLeft: 10, color: 'var(--onda-faint, #56565F)', fontFamily, fontSize: fontSize * 0.6, letterSpacing: '0.04em' }}>{title}</span>}
           </div>
         )}
         <div style={{ padding: '24px 0', fontFamily, fontSize, lineHeight: 1.6 }}>

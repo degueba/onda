@@ -17,9 +17,9 @@ export type SplitScreenProps = SplitScreenSchemaProps & {
   right?: React.ReactNode;
 };
 
-const DIVIDER = '#1C1C22';
-const PANE_BG = '#0E0E12';
-const PLACEHOLDER = '#56565F';
+const DIVIDER = 'var(--onda-border, #1C1C22)';
+const PANE_BG = 'var(--onda-surface, #0E0E12)';
+const PLACEHOLDER = 'var(--onda-faint, #56565F)';
 
 function Pane({
   content,
@@ -53,7 +53,7 @@ function Pane({
             display: 'grid',
             placeItems: 'center',
             color: PLACEHOLDER,
-            fontFamily: '"Space Grotesk", sans-serif',
+            fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)',
             fontSize: 28,
             letterSpacing: '0.04em',
           }}
@@ -120,7 +120,7 @@ export const SplitScreen: React.FC<SplitScreenProps> = ({
           gap,
           overflow: 'hidden',
           borderRadius: 20,
-          background: '#08080A',
+          background: 'var(--onda-bg, #08080A)',
         }}
       >
         <Pane content={left} style={leftStyle} flex={ratio} label={horizontal ? 'Left' : 'Top'} />

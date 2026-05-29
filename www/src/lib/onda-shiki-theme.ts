@@ -13,7 +13,7 @@ import type { ThemeRegistrationRaw } from 'shiki';
 // `settings` when `settings` doesn't already exist, which means an empty
 // stub silently disables the whole theme.
 
-const ONDA = {
+export const ONDA = {
   bg: '#000000',          // pure black — more contrast than onda-surface
   fg: '#F2F2F4',          // onda-text
   dim: '#8E8E98',         // onda-dim — punctuation, attributes

@@ -27,19 +27,19 @@ export const barChartSchema = z.object({
   /** Pixel gap between rows. */
   gap: z.number().default(16),
   /** Color of the **largest** bar — the earned accent. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Color of non-largest bars. Defaults to `--onda-dim`. */
-  barColor: z.string().default('#8E8E98'),
+  barColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Bar track color. Defaults to `--onda-border`. */
-  trackColor: z.string().default('#1C1C22'),
+  trackColor: z.string().default('var(--onda-border, #1C1C22)'),
   /** Label color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels reserved for the label column. */
   labelWidth: z.number().default(220),
   /** Pixels. */
   fontSize: z.number().default(24),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

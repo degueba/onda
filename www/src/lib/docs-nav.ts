@@ -31,6 +31,7 @@ export const DOCS_NAV: DocsGroup[] = [
     items: [
       { href: '/docs/motion-language', label: 'Motion language' },
       { href: '/docs/design-philosophy', label: 'Design philosophy' },
+      { href: '/docs/theming', label: 'Theming' },
     ],
   },
   {
@@ -62,6 +63,7 @@ export const DOCS_PAGE_SLUGS = [
   'catalog',
   'motion-language',
   'design-philosophy',
+  'theming',
   'composing-with-onda',
   'composing-placement',
   'composing-timeline',

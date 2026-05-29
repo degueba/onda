@@ -25,13 +25,13 @@ export const captionsSchema = z.object({
   /** Frames before the timeline starts (shifts every `startMs` by this). */
   delay: z.number().int().min(0).default(0),
   /** Inactive word color. Defaults to `--onda-dim`. */
-  color: z.string().default('#8E8E98'),
+  color: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Active word color. Defaults to `--onda-text`. */
-  accentColor: z.string().default('#F2F2F4'),
+  accentColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. */
   fontSize: z.number().default(96),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight (e.g. 500, 600). */
   fontWeight: z.number().default(600),
   /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */

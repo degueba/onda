@@ -21,13 +21,13 @@ export const countUpSchema = z.object({
   /** Appended to the number (e.g. `'%'`). */
   suffix: z.string().default(''),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. Counters are usually large. Wins over `size` if both are passed. */
   fontSize: z.number().default(120),
   /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. Display default `600`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */

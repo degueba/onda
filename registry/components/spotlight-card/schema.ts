@@ -14,7 +14,7 @@ export const spotlightCardSchema = z.object({
   /** Frames before the card enters. */
   delay: z.number().int().min(0).default(0),
   /** The drifting spotlight color — the earned accent. */
-  glowColor: z.string().default('#D96B82'),
+  glowColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Card width in px. */
   width: z.number().default(560),
   /** Inner padding in px. */
@@ -22,7 +22,7 @@ export const spotlightCardSchema = z.object({
   /** Text alignment. */
   align: z.enum(['left', 'center']).default('left'),
   /** Display font for the title. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. */
   placement: placementSchema.optional(),
 });

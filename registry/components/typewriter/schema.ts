@@ -15,15 +15,15 @@ export const typewriterSchema = z.object({
   /** Show a blinking cursor at the leading edge. */
   cursor: z.boolean().default(true),
   /** Cursor color. Defaults to `--onda-accent` (`#D96B82`). */
-  cursorColor: z.string().default('#D96B82'),
+  cursorColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(64),
   /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Body / technical font — Space Grotesk reads more "terminal" than Clash. */
-  fontFamily: z.string().default('"Space Grotesk", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-body, "Space Grotesk", sans-serif)'),
   /** Font weight. Body / technical default `500`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'0.04em'`). Default `'normal'`. */

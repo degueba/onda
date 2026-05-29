@@ -30,11 +30,11 @@ export const terminalSchema = z.object({
    * character by character. */
   width: z.number().default(1100),
   /** Command text color. */
-  textColor: z.string().default('#F2F2F4'),
+  textColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Prompt glyph color — the earned accent. */
-  promptColor: z.string().default('#D96B82'),
+  promptColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Output line color. */
-  outputColor: z.string().default('#8E8E98'),
+  outputColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Where on the canvas this sits. */
   placement: placementSchema.optional(),
 });

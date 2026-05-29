@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLOR } from '../tokens';
+import { THEME } from '../tokens';
 
 /**
  * A deterministic background grid — lines or dots — for technical / dashboard
@@ -22,7 +22,7 @@ export type GridFieldProps = {
 export const GridField: React.FC<GridFieldProps> = ({
   cell = 48,
   variant = 'lines',
-  color = COLOR.border,
+  color = THEME.border,
   thickness = 1,
   opacity = 0.6,
 }) => {

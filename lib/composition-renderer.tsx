@@ -28,6 +28,7 @@ import { AbsoluteFill, Sequence, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { compositionSchema, type Composition, type Entry } from './composition';
 import { toFrames } from './timing';
+import { brandToCssVars, type Brand } from './theme';
 
 /**
  * Component registry — maps `Entry.component` strings to the React
@@ -56,6 +57,12 @@ export type CompositionRendererProps = {
   composition: Composition;
   /** Map of component-name → React component + props schema. Consumer-supplied. */
   registry: ComponentRegistry;
+  /**
+   * Optional brand overrides, applied as CSS variables at the composition root
+   * so every component re-skins. Unset → the default Onda look. Only surface
+   * slots (color + type) are themeable; motion stays Onda's.
+   */
+  brand?: Brand | null;
 };
 
 /**
@@ -77,6 +84,7 @@ export type CompositionRendererProps = {
 export const CompositionRenderer: React.FC<CompositionRendererProps> = ({
   composition,
   registry,
+  brand,
 }) => {
   // Top-level validation. A malformed composition is a renderer-level
   // error — show a single placeholder filling the canvas rather than
@@ -93,7 +101,7 @@ export const CompositionRenderer: React.FC<CompositionRendererProps> = ({
   const validated = result.data;
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={brandToCssVars(brand)}>
       {validated.tracks.map((track, trackIndex) => (
         <AbsoluteFill key={track.id ?? trackIndex}>
           {track.entries.map((entry, entryIndex) => (

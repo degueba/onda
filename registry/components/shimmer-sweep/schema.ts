@@ -17,9 +17,9 @@ export const shimmerSweepSchema = z.object({
   /** Frames between sweeps when looping. */
   interval: z.number().int().min(1).default(60),
   /** Base text color. Defaults to `--onda-dim` so the bright band reads as a highlight. */
-  color: z.string().default('#8E8E98'),
+  color: z.string().default('var(--onda-dim, #8E8E98)'),
   /** The sweeping highlight color. Defaults to `--onda-text`. */
-  shimmerColor: z.string().default('#F2F2F4'),
+  shimmerColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Sweep angle in degrees. */
   angle: z.number().default(110),
   /** Pixels. Wins over `size` if both are passed. */
@@ -27,7 +27,7 @@ export const shimmerSweepSchema = z.object({
   /** Semantic typography role — canvas-aware pixels. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. */
   fontWeight: z.number().default(600),
   /** CSS letter-spacing. */

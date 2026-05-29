@@ -17,17 +17,17 @@ export const pieRevealSchema = z.object({
   /** Stroke width of both the track and the arc, in pixels. */
   strokeWidth: z.number().default(12),
   /** Arc color. Defaults to `--onda-accent` (`#D96B82`). */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Track (background ring) color. Defaults to `--onda-border-lit` (`#26262E`). */
-  trackColor: z.string().default('#26262E'),
+  trackColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Render the `value%` label in the center of the ring. */
   showValue: z.boolean().default(true),
   /** Color of the center `%` label. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Center label font size in pixels. */
   fontSize: z.number().default(56),
   /** Center label font family. The Onda display font by default. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

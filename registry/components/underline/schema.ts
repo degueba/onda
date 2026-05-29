@@ -17,9 +17,9 @@ export const underlineSchema = z.object({
   /** Line draw duration. Fast on purpose — emphatic. */
   lineDuration: z.number().int().min(1).default(DURATION.fast),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Line color. Defaults to `--onda-accent` (`#D96B82`) — the earned rose. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Line thickness in px. */
   lineThickness: z.number().default(3),
   /** Pixel gap between text baseline and the line. */
@@ -29,7 +29,7 @@ export const underlineSchema = z.object({
   /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. Display default `600`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'-0.02em'`). Default `'normal'`. */

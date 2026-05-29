@@ -34,13 +34,13 @@ export const titleCardSchema = z.object({
   /** Unitless line height for the subtitle. */
   subtitleLineHeight: z.number().optional(),
   /** Title color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Subtitle color. Defaults to `--onda-dim`. */
-  subtitleColor: z.string().default('#8E8E98'),
+  subtitleColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Accent rule color. Defaults to `--onda-accent` — the earned-color moment. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Defaults to centered. */
   placement: placementSchema.optional(),
 });

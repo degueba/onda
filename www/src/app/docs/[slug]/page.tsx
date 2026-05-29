@@ -38,6 +38,7 @@ const TITLES: Record<DocsPageSlug, string> = {
   catalog: "What's in Onda",
   'motion-language': 'Motion language',
   'design-philosophy': 'Design philosophy',
+  theming: 'Theming',
   'composing-with-onda': 'Composing with Onda',
   'composing-placement': 'Placement & size',
   'composing-timeline': 'Timeline & transitions',
@@ -53,6 +54,8 @@ const DESCRIPTIONS: Record<DocsPageSlug, string> = {
     'The motion fingerprints that make every Onda animation recognizable — house spring, easing, timing, restraint.',
   'design-philosophy':
     'Apple discipline applied to Onda — reduction, deference, clarity, purposeful motion.',
+  theming:
+    'Re-skin Onda with your own brand — palette and fonts via the CSS-variable contract, with motion staying Onda. Your colors, your type.',
   'composing-with-onda':
     'The payload shape and determinism rules for assembling Onda scenes — and the entry point to the composing reference.',
   'composing-placement':

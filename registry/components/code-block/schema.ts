@@ -30,7 +30,7 @@ export const codeBlockSchema = z.object({
   /** String literal color — dusty sage. */
   stringColor: z.string().default('#9DBE9A'),
   /** Comment color. */
-  commentColor: z.string().default('#56565F'),
+  commentColor: z.string().default('var(--onda-faint, #56565F)'),
   /** Numeric literal color — dusty amber. */
   numberColor: z.string().default('#D6A87C'),
   /** JSX / HTML tag-name color — dusty cyan. Gives markup the variety a real editor theme has. */

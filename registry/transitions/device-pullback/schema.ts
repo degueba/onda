@@ -7,11 +7,11 @@ export const devicePullbackSchema = z.object({
   /** Which device bezel draws in around the content as it settles. */
   device: z.enum(['laptop', 'phone']).default('laptop'),
   /** Bezel / frame color — defaults to the Onda border tone. */
-  frameColor: z.string().default('#1C1C22'),
+  frameColor: z.string().default('var(--onda-border, #1C1C22)'),
   /** How far the content is scaled up before it pulls back to 1x. */
   startScale: z.number().min(1).max(4).default(2),
   /** Fill behind the device once it has pulled back into frame. */
-  background: z.string().default('#08080A'),
+  background: z.string().default('var(--onda-bg, #08080A)'),
 });
 
 export type DevicePullbackOptions = z.input<typeof devicePullbackSchema>;

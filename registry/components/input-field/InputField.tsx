@@ -64,7 +64,7 @@ export const InputField: React.FC<InputFieldProps> = ({
           variant="glass"
           width={width}
           padding={0}
-          borderColor={focused ? accentColor : '#1C1C22'}
+          borderColor={focused ? accentColor : 'var(--onda-border, #1C1C22)'}
         >
           <div
             style={{

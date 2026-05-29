@@ -28,7 +28,7 @@ export const kanbanBoardSchema = z.object({
       },
       {
         title: 'In Progress',
-        accent: '#D96B82',
+        accent: 'var(--onda-accent, #D96B82)',
         cards: ['Animate the title card', 'Color-grade scene 2'],
       },
       {
@@ -49,7 +49,7 @@ export const kanbanBoardSchema = z.object({
   /** Semantic typography role for the column header — resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Onda display font for headers and ticket labels. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

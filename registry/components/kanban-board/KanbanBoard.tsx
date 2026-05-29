@@ -34,8 +34,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const { width: canvasW, height: canvasH } = useVideoConfig();
   const headerSize = size ? resolveSize(size, { width: canvasW, height: canvasH }) : fontSize;
   const cardSize = Math.round(headerSize * 0.82);
-  const dim = '#8E8E98';
-  const faint = '#56565F';
+  const dim = 'var(--onda-dim, #8E8E98)';
+  const faint = 'var(--onda-faint, #56565F)';
   // One hook call, then a per-index entrance — never a hook in a loop. A flat
   // running index across all cards keeps the cascade reading left-to-right,
   // top-to-bottom across the whole board.
@@ -73,7 +73,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                     />
                     <div
                       style={{
-                        color: '#F2F2F4',
+                        color: 'var(--onda-text, #F2F2F4)',
                         fontFamily,
                         fontSize: headerSize,
                         fontWeight: 600,
@@ -90,7 +90,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                     <div
                       style={{
                         color: column.accent ? accent : faint,
-                        fontFamily: '"Space Grotesk", sans-serif',
+                        fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)',
                         fontSize: Math.round(cardSize * 0.78),
                         fontWeight: 500,
                         letterSpacing: '0.04em',
@@ -134,7 +134,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                               <div
                                 style={{
                                   color: dim,
-                                  fontFamily: '"Space Grotesk", sans-serif',
+                                  fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)',
                                   fontSize: cardSize,
                                   fontWeight: 400,
                                   lineHeight: 1.35,

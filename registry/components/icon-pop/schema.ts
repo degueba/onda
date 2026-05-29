@@ -17,7 +17,7 @@ export const iconPopSchema = z.object({
   /** Semantic size role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `iconSize`'s default when passed alone; `iconSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Icon color. Defaults to `--onda-accent` (`#D96B82`) — accent earned. */
-  color: z.string().default('#D96B82'),
+  color: z.string().default('var(--onda-accent, #D96B82)'),
   /** Stroke width for outline icons (check, cross). Ignored by filled icons. */
   strokeWidth: z.number().default(3),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */

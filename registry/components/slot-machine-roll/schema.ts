@@ -21,7 +21,7 @@ export const slotMachineRollSchema = z.object({
   /** Glyph pool the reel spins through. */
   charset: z.string().default('0123456789'),
   /** Text color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(140),
   /** Semantic typography role — canvas-aware pixels. */

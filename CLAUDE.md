@@ -54,7 +54,7 @@ Body / UI / mono:    "Space Grotesk"  (clean, technical; weights 400–600)
 
 - Headlines: tight letter-spacing (-0.02 to -0.04em), weight 600.
 - Labels / code / captions: Space Grotesk, uppercase for eyebrows, letter-spacing ~0.06–0.16em.
-- Components accept `fontFamily` as a prop; default to Clash Display. **Never** default to Inter/Roboto/Arial/system fonts (those read as generic AI defaults).
+- Components accept `fontFamily` as a prop; default to the display font via `THEME.fontDisplay` (which falls back to Clash Display). **Never** hardcode Inter/Roboto/Arial/system fonts as a default (those read as generic AI defaults).
 
 ### Spacing
 
@@ -66,6 +66,15 @@ Body / UI / mono:    "Space Grotesk"  (clean, technical; weights 400–600)
 - Cards: subtle top sheen (1px white-alpha gradient), soft deep shadow (`0 30px 60px -34px rgba(0,0,0,0.9)`), 1px border, ~20px radius.
 - One restrained accent glow per major section max — depth, not decoration.
 - Optional ~2% grain overlay for texture. Never busy.
+
+### Theming — brand overrides (CSS variables)
+
+The token values above are the **default** look, not an enforced one. Tokens are exposed as CSS custom properties so any consumer can re-skin components with their own brand. Full guide: [docs/theming.md](docs/theming.md).
+
+- [lib/tokens.ts](lib/tokens.ts) defines `CSS_VAR` (the property names, e.g. `--onda-accent`) and `THEME` — `var()` strings with the Onda token as fallback (`THEME.accent === 'var(--onda-accent, #D96B82)'`).
+- **Components default their color / font props to the `THEME` tokens, never a raw hex / font string.** So an unset brand renders identically to the values above, and setting the matching variable re-skins everything with zero per-component work. When authoring a component, use `THEME.*` for every color/font default (this is what §4.3 "premium defaults using the tokens" means).
+- Apply a brand with `brandToCssVars(brand)` (spread onto a root element), `<ThemeProvider brand={…}>`, or `CompositionRenderer`'s `brand` prop. Consumers can also just set the `--onda-*` variables in their own CSS — including pointing `--onda-font-display` / `--onda-font-body` at any font they've loaded in their project.
+- Only **surface** slots are themeable — the colors above + the two fonts. **Motion is NOT themeable** (springs, easing, timing, stagger stay locked). Brand owns the surface; Onda owns the motion.
 
 -----
 
@@ -104,7 +113,7 @@ registry/components/<component-name>/
 
 1. Export a default React component, PascalCase name.
 2. Export a **Zod schema** for its props (also our future training-data schema — treat it as first-class). Derive the TS type with `z.infer`.
-3. Provide **premium defaults for every prop** using the tokens in §2, so it looks stunning with zero configuration.
+3. Provide **premium defaults for every prop**, so it looks stunning with zero configuration. **All color / font defaults MUST be the `THEME.*` var tokens from §2 — never a raw hex or font-family string** (a hardcoded value silently breaks brand theming; see §2 "Theming"). Spacing comes from `SPACING`.
 4. Be **self-contained** — no imports from other Onda components except documented shared primitives/utilities.
 5. Include a realistic usage snippet in its README, shown inside a `<Composition>` or `<Sequence>`.
 6. Obey §1 (hard rules) and §3 (motion essentials) without exception.
@@ -129,7 +138,7 @@ Every code block on the site is syntax-highlighted by Shiki using [www/src/lib/o
 - **One component per task/branch.** Never edit two components in one pass.
 - **Pattern-match the reference component** ([docs/component-reference.md](docs/component-reference.md)) exactly — same file structure, same export shape, Zod-first.
 - **Obey §1 and §3 without exception.** Unsure about a timing/easing value? Default to the house values rather than inventing new ones — coherence beats novelty.
-- **Use the tokens (§2)** for all default colors, fonts, spacing.
+- **Use the `THEME.*` var tokens (§2)** for all default colors + fonts — never raw hex / font strings (raw values break brand theming). Spacing from `SPACING`.
 - **Add a `registry.json` entry** for every new component.
 - **Per-initiative work lives under [docs/techspecs/](docs/techspecs/).** Don't create one-off design docs at the repo root.
 - **Library change → docs update.** Whenever you touch the public lib surface (new export, renamed prop, new `lib/*` utility, new component, new registry entry, change to the `manifest`/`schemas` shape), update the docs in the same PR: at minimum [packages/cli/README.md](packages/cli/README.md) for anything `bunx ondajs add` can install, plus the relevant file under [docs/](docs/) (e.g. `composing-with-onda.md`, `component-reference.md`, `motion-language.md`). Mention in the PR description which docs changed. A library change with no doc update is incomplete.
@@ -139,7 +148,7 @@ Every code block on the site is syntax-highlighted by Shiki using [www/src/lib/o
 1. Deterministic? (no random/date/state)
 2. Looks great with default props alone?
 3. Built to the Onda quality bar — premium, intentional, house defaults respected? (Calm by default; energetic is fine when it earns it.)
-4. Zod schema complete, premium token-based defaults?
+4. Zod schema complete; color / font defaults are `THEME.*` var tokens (not raw hex / font), so brand overrides work?
 5. Self-contained, registered, README with usage snippet?
 
 **When in doubt, raise the craft, not lower the energy.** Calm is Onda's default and signature — but the catalog spans the full range, and editors reach for bold as well as restrained. A component is wrong when it's cheap or sloppy, not when it's bold.

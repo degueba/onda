@@ -12,7 +12,7 @@ export const lineChartSchema = z.object({
   /** Frames for the line to fully draw on. */
   duration: z.number().int().min(1).default(40),
   /** Line + dot color. The earned accent. */
-  color: z.string().default('#D96B82'),
+  color: z.string().default('var(--onda-accent, #D96B82)'),
   /** Stroke width in px. */
   strokeWidth: z.number().default(4),
   /** Chart width in px. */

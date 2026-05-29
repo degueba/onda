@@ -9,7 +9,7 @@ export const dynamicGridSchema = z.object({
   /** Ruled lines or a dot lattice. */
   variant: z.enum(['lines', 'dots']).default('lines'),
   /** Grid color. Defaults to `--onda-border`. */
-  color: z.string().default('#1C1C22'),
+  color: z.string().default('var(--onda-border, #1C1C22)'),
   /** Scroll speed in px/frame (diagonal drift). */
   speed: z.number().default(0.4),
   /** Grid opacity. */
@@ -17,9 +17,9 @@ export const dynamicGridSchema = z.object({
   /** Add a centered accent glow over the grid. */
   glow: z.boolean().default(true),
   /** Glow color. Defaults to `--onda-accent`. */
-  glowColor: z.string().default('#D96B82'),
+  glowColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Canvas color behind the grid. */
-  background: z.string().default('#08080A'),
+  background: z.string().default('var(--onda-bg, #08080A)'),
 });
 
 /** Inferred props for {@link DynamicGrid}. */

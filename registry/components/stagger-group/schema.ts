@@ -23,11 +23,11 @@ export const staggerGroupSchema = z.object({
   /** Cross-axis alignment. */
   align: z.enum(['start', 'center', 'end']).default('center'),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. */
   fontSize: z.number().default(48),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. Display default `600`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */
