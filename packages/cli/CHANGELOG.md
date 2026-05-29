@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/degueba/onda/compare/ondajs-v0.8.0...ondajs-v0.9.0) (2026-05-29)
+
+
+### Features
+
+* **theme:** brand overrides via CSS-variable token contract ([#63](https://github.com/degueba/onda/issues/63)) ([b809e4c](https://github.com/degueba/onda/commit/b809e4c124a06feaad5204aae96cac8c7e331954))
+
 ## [0.8.0](https://github.com/degueba/onda/compare/ondajs-v0.7.1...ondajs-v0.8.0) (2026-05-29)
 
 
