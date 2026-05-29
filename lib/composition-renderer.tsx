@@ -59,8 +59,9 @@ export type CompositionRendererProps = {
   registry: ComponentRegistry;
   /**
    * Optional brand overrides, applied as CSS variables at the composition root
-   * so every component re-skins. Unset → the default Onda look. Only surface
-   * slots (color + type) are themeable; motion stays Onda's.
+   * so every component re-skins. Unset → the default Onda look. Brand drives
+   * surface slots (color + type) at runtime; motion ships as Onda's default and
+   * isn't brand-wired, but you own the copied source and can tune it.
    */
   brand?: Brand | null;
 };

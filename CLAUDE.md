@@ -74,7 +74,7 @@ The token values above are the **default** look, not an enforced one. Tokens are
 - [lib/tokens.ts](lib/tokens.ts) defines `CSS_VAR` (the property names, e.g. `--onda-accent`) and `THEME` — `var()` strings with the Onda token as fallback (`THEME.accent === 'var(--onda-accent, #D96B82)'`).
 - **Components default their color / font props to the `THEME` tokens, never a raw hex / font string.** So an unset brand renders identically to the values above, and setting the matching variable re-skins everything with zero per-component work. When authoring a component, use `THEME.*` for every color/font default (this is what §4.3 "premium defaults using the tokens" means).
 - Apply a brand with `brandToCssVars(brand)` (spread onto a root element), `<ThemeProvider brand={…}>`, or `CompositionRenderer`'s `brand` prop. Consumers can also just set the `--onda-*` variables in their own CSS — including pointing `--onda-font-display` / `--onda-font-body` at any font they've loaded in their project.
-- Only **surface** slots are themeable — the colors above + the two fonts. **Motion is NOT themeable** (springs, easing, timing, stagger stay locked). Brand owns the surface; Onda owns the motion.
+- Only **surface** slots are wired to brand CSS variables — the colors above + the two fonts — so they re-skin at runtime. **Motion is a default, not a lock:** springs, easing, timing, and stagger ship as Onda's signature default, but they're not enforced — components are copied source, so the consumer owns and can tune motion directly (`lib/motion.ts`). A runtime brand-wired motion-override seam is its own techspec, not built yet.
 
 -----
 

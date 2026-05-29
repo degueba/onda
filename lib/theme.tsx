@@ -3,9 +3,11 @@
 // `THEME` var() tokens (see `./tokens`); this module turns a `Brand` into the
 // CSS custom properties those vars read, applied at a root element.
 //
-// Brand owns the *surface* (color + type). Motion (springs, easing, timing,
-// stagger) is Onda's signature and is NOT themeable — there are no motion
-// slots here by design.
+// Brand drives the *surface* (color + type) at runtime via CSS variables.
+// Motion (springs, easing, timing, stagger) is Onda's signature default, not a
+// lock — there are no runtime motion slots here yet, but components ship as
+// copied source, so consumers own and can tune motion directly (see
+// `lib/motion.ts`).
 
 import React from 'react';
 import { z } from 'zod';

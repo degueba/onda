@@ -198,7 +198,7 @@ Onda's palette and fonts are the **default**, not a lock-in. Every component rea
 }
 ```
 
-Only surface slots (colors + the two fonts) are themeable; motion stays Onda's. Full slot list, typed helpers (`brandToCssVars`, `ThemeProvider`), and the composition `brand` prop are in the [theming guide](https://github.com/degueba/onda/blob/main/docs/theming.md). See it live at [onda.video/brand](https://onda.video/brand).
+Brand drives the surface slots (colors + the two fonts) at runtime; motion ships as Onda's signature default — not a lock, since you own the copied source and can tune it. Full slot list, typed helpers (`brandToCssVars`, `ThemeProvider`), and the composition `brand` prop are in the [theming guide](https://github.com/degueba/onda/blob/main/docs/theming.md). See it live at [onda.video/brand](https://onda.video/brand).
 
 ---
 

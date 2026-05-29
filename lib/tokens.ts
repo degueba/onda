@@ -61,9 +61,11 @@ export type FontToken = keyof typeof FONT;
  * (or Onda Studio's brand kit) sets these on a root element to re-skin every
  * component; unset, components fall back to the canonical Onda value above.
  *
- * Only **surface** slots are themeable — color and type. Motion tokens
- * (springs, easing, timing, stagger) are intentionally absent: motion is
- * Onda's signature and stays locked. Brand owns the surface; Onda owns motion.
+ * Only **surface** slots get CSS-variable wiring — color and type — so they
+ * re-skin at runtime. Motion tokens (springs, easing, timing, stagger) are
+ * intentionally not wired here: motion is Onda's signature default, not a lock.
+ * Because components ship as copied source, consumers own and can tune motion
+ * directly (see `lib/motion.ts`); a runtime motion-override seam is future work.
  */
 export const CSS_VAR = {
   bg: '--onda-bg',
