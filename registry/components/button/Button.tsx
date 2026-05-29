@@ -89,7 +89,7 @@ export const Button: React.FC<ButtonProps> = ({
         >
           <span
             style={{
-              color: isPrimary ? '#08080A' : accent,
+              color: isPrimary ? 'var(--onda-bg, #08080A)' : accent,
               fontFamily,
               fontSize: resolvedFontSize,
               fontWeight: 600,

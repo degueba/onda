@@ -60,9 +60,9 @@ export const CameraShake: React.FC<CameraShakeProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#F2F2F4',
+              color: 'var(--onda-text, #F2F2F4)',
               fontSize: 96,
-              fontFamily: '"Clash Display", sans-serif',
+              fontFamily: 'var(--onda-font-display, "Clash Display", sans-serif)',
               fontWeight: 600,
             }}
           >

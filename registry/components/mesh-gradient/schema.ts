@@ -5,9 +5,9 @@ export const meshGradientSchema = z.object({
   /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */
   kind: z.literal('mesh-gradient').default('mesh-gradient'),
   /** Blob colors. 2–4 reads best; they drift over the `--onda-bg` canvas. */
-  colors: z.array(z.string()).default(['#D96B82', '#E89AAB', '#26262E']),
+  colors: z.array(z.string()).default(['var(--onda-accent, #D96B82)', 'var(--onda-accent-soft, #E89AAB)', 'var(--onda-border-lit, #26262E)']),
   /** Base canvas color behind the blobs. */
-  background: z.string().default('#08080A'),
+  background: z.string().default('var(--onda-bg, #08080A)'),
   /** Drift speed multiplier. Keep low — this is atmosphere, not motion. */
   speed: z.number().default(1),
   /** Seed for the blob phase offsets (deterministic). */

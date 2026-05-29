@@ -50,13 +50,13 @@ export const bentoGridSchema = z.object({
   /** Semantic typography role for the title — resolves to canvas-aware pixels via the smaller canvas dimension. `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Title color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Caption color. Defaults to `--onda-dim`. */
-  captionColor: z.string().default('#8E8E98'),
+  captionColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Accent color for the earned `accent` cell. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Onda display font for titles and values. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

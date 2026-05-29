@@ -7,7 +7,7 @@ import { pricingCardSchema, type PricingCardProps } from './schema';
 
 export { pricingCardSchema, type PricingCardProps };
 
-const BODY_FONT = '"Space Grotesk", sans-serif';
+const BODY_FONT = 'var(--onda-font-body, "Space Grotesk", sans-serif)';
 
 /**
  * A single pricing tier on the Onda glass `Surface` — tier name, a large
@@ -57,7 +57,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
               <div
                 style={{
-                  color: '#8E8E98',
+                  color: 'var(--onda-dim, #8E8E98)',
                   fontFamily: BODY_FONT,
                   fontSize: 15,
                   fontWeight: 600,
@@ -91,7 +91,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               <span
                 style={{
-                  color: '#F2F2F4',
+                  color: 'var(--onda-text, #F2F2F4)',
                   fontFamily,
                   fontSize: priceFontSize,
                   fontWeight: 600,
@@ -104,7 +104,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
               {period && (
                 <span
                   style={{
-                    color: '#56565F',
+                    color: 'var(--onda-faint, #56565F)',
                     fontFamily: BODY_FONT,
                     fontSize: 18,
                     fontWeight: 500,
@@ -137,7 +137,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
                   </svg>
                   <span
                     style={{
-                      color: '#F2F2F4',
+                      color: 'var(--onda-text, #F2F2F4)',
                       fontFamily: BODY_FONT,
                       fontSize: 18,
                       fontWeight: 400,
@@ -163,8 +163,8 @@ export const PricingCard: React.FC<PricingCardProps> = ({
                 padding: '14px 24px',
                 borderRadius: 12,
                 background: recommended ? accent : 'transparent',
-                color: recommended ? '#08080A' : '#F2F2F4',
-                border: `1px solid ${recommended ? accent : '#26262E'}`,
+                color: recommended ? 'var(--onda-bg, #08080A)' : 'var(--onda-text, #F2F2F4)',
+                border: `1px solid ${recommended ? accent : 'var(--onda-border-lit, #26262E)'}`,
               }}
             >
               {cta}

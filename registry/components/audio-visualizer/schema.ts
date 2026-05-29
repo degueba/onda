@@ -30,7 +30,7 @@ export const audioVisualizerSchema = z.object({
    */
   color: z
     .union([z.string(), z.array(z.string()).min(1)])
-    .default(['#D96B82', '#E89AAB']),
+    .default(['var(--onda-accent, #D96B82)', 'var(--onda-accent-soft, #E89AAB)']),
   /** Add a soft accent glow via `drop-shadow`. */
   glow: z.boolean().default(true),
 

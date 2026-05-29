@@ -26,19 +26,19 @@ export const calloutSchema = z.object({
   /** Arrow draw-on duration in frames. */
   lineDuration: z.number().int().min(1).default(DURATION.base),
   /** Label color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Bubble background. Defaults to `--onda-surface` (`#0E0E12`). */
-  bgColor: z.string().default('#0E0E12'),
+  bgColor: z.string().default('var(--onda-surface, #0E0E12)'),
   /** Bubble border. Defaults to `--onda-border-lit` (`#26262E`). */
-  borderColor: z.string().default('#26262E'),
+  borderColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Arrow stroke color. */
-  arrowColor: z.string().default('#F2F2F4'),
+  arrowColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Arrow stroke width in px. */
   arrowWidth: z.number().default(2),
   /** Label font size in px. */
   fontSize: z.number().default(20),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
 });
 
 /** Inferred props for {@link Callout}. */

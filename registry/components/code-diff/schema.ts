@@ -36,7 +36,7 @@ export const codeDiffSchema = z.object({
   /** Width in px. Auto if omitted. */
   width: z.number().optional(),
   /** Default (context) text color. */
-  textColor: z.string().default('#8E8E98'),
+  textColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Added-line color. */
   addColor: z.string().default('#7FB58C'),
   /** Removed-line color. */

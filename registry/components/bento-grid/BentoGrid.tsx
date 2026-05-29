@@ -108,7 +108,7 @@ export const BentoGrid: React.FC<BentoGridProps> = ({
                     <div
                       style={{
                         color: captionColor,
-                        fontFamily: '"Space Grotesk", sans-serif',
+                        fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)',
                         fontSize: Math.round(resolvedFontSize * 0.56),
                         lineHeight: 1.45,
                       }}

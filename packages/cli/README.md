@@ -184,6 +184,22 @@ Each pattern is a pure function of `frame` / `fps` (plus optional `delay`, `dura
 
 `react` and `remotion` are **optional** peer dependencies — only required if you import `ondajs/motion` (or the React renderer). The `ondajs add` / `ondajs/manifest` paths stay dependency-free.
 
+### Theme it with your own brand
+
+Onda's palette and fonts are the **default**, not a lock-in. Every component reads its colors and fonts from CSS variables, with the Onda value as the fallback (e.g. the accent default is `var(--onda-accent, #D96B82)`). So a component you `ondajs add` re-skins with **zero imports** — just set the variables on a root (or a wrapper to scope it), pointing the font variables at any font you've loaded in your project:
+
+```css
+:root {
+  --onda-accent: #6366f1;
+  --onda-text: #f4f4f8;
+  --onda-bg: #0b0b12;
+  --onda-font-display: "Inter", sans-serif;
+  --onda-font-body: "Inter", sans-serif;
+}
+```
+
+Only surface slots (colors + the two fonts) are themeable; motion stays Onda's. Full slot list, typed helpers (`brandToCssVars`, `ThemeProvider`), and the composition `brand` prop are in the [theming guide](https://github.com/degueba/onda/blob/main/docs/theming.md). See it live at [onda.video/brand](https://onda.video/brand).
+
 ---
 
 ## Learn more

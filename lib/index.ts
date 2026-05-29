@@ -84,9 +84,20 @@ export {
   FONT,
   SPACING,
   SAFE_MARGIN_RATIO,
+  CSS_VAR,
+  THEME,
   type ColorToken,
   type FontToken,
+  type ThemeSlot,
 } from './tokens';
+
+export {
+  brandSchema,
+  brandToCssVars,
+  ThemeProvider,
+  type Brand,
+  type ThemeProviderProps,
+} from './theme';
 
 export {
   ANCHORS,

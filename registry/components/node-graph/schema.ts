@@ -31,7 +31,7 @@ export const nodeGraphSchema = z.object({
     { label: 'scene',  radius: 300, speed:  0.009, startAngle: 5.3 },
   ]),
   /** The earned accent — hub fill tint, satellite ring, and the lighting-up connection lines. */
-  accent: z.string().default('#D96B82'),
+  accent: z.string().default('var(--onda-accent, #D96B82)'),
   /** Vertical squash of every orbit (1 = circular, <1 = elliptical) — a slight ellipse reads as perspective. */
   ellipse: z.number().min(0.2).max(1).default(0.62),
   /** Seed for the deterministic fly-in directions and the connection-pulse phases. */
@@ -47,9 +47,9 @@ export const nodeGraphSchema = z.object({
   /** Hub label size in px. Wins over `hubSize` if both are passed. */
   hubFontSize: z.number().positive().default(34),
   /** Background canvas color behind the constellation. */
-  background: z.string().default('#08080A'),
+  background: z.string().default('var(--onda-bg, #08080A)'),
   /** Onda display font for every label. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas the hub (and its orbits) is centered. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Defaults to centered. */
   placement: placementSchema.optional(),
 });

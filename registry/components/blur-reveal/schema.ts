@@ -13,13 +13,13 @@ export const blurRevealSchema = z.object({
   /** Frames until blur reaches 0 and the text is fully readable. */
   duration: z.number().int().min(1).default(DURATION.base),
   /** Text color. Defaults to `--onda-text` (`#F2F2F4`). */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(96),
   /** Semantic typography role — resolves to canvas-aware pixels via the smaller canvas dimension. Overrides `fontSize`'s default when passed alone; `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. Display default `600`. */
   fontWeight: z.number().optional(),
   /** CSS letter-spacing (e.g. `'-0.02em'`, `'0.06em'`). Default `'normal'`. */

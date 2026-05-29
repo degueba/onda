@@ -11,7 +11,7 @@ export const gridPixelateSchema = z.object({
   /** Seed for the (deterministic) cell reveal order. */
   seed: z.number().int().default(7),
   /** Cell fill while covering — match your canvas color. */
-  color: z.string().default('#08080A'),
+  color: z.string().default('var(--onda-bg, #08080A)'),
 });
 
 export type GridPixelateOptions = z.input<typeof gridPixelateSchema>;

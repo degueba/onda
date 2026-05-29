@@ -22,15 +22,15 @@ export const logoStingSchema = z.object({
   /** Stroke width in path coordinate units. */
   strokeWidth: z.number().default(3),
   /** Logo stroke color. Defaults to `--onda-text`. */
-  stroke: z.string().default('#F2F2F4'),
+  stroke: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Underline accent color. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Title font size in px. */
   titleFontSize: z.number().default(96),
   /** Title color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

@@ -5,9 +5,9 @@ export const gradientShiftSchema = z.object({
   /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */
   kind: z.literal('gradient-shift').default('gradient-shift'),
   /** Starting gradient color. Defaults to `--onda-surface`. */
-  from: z.string().default('#0E0E12'),
+  from: z.string().default('var(--onda-surface, #0E0E12)'),
   /** Ending gradient color. Defaults to `--onda-border`. */
-  to: z.string().default('#1C1C22'),
+  to: z.string().default('var(--onda-border, #1C1C22)'),
   /** Starting angle in degrees. */
   angle: z.number().default(135),
   /** Rotation rate in degrees per frame. Keep low — atmospheric, not focal. */

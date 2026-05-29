@@ -13,7 +13,7 @@ export const drawOnSchema = z.object({
   /** Frames to fully stroke the path in. */
   duration: z.number().int().min(1).default(DURATION.slow),
   /** Stroke color. Defaults to `--onda-text` (`#F2F2F4`). */
-  stroke: z.string().default('#F2F2F4'),
+  stroke: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Stroke width in path coordinate units. */
   strokeWidth: z.number().default(3),
   /** SVG viewBox — must match the coordinate space of `d`. */

@@ -16,7 +16,7 @@ export const boundingBoxSchema = z.object({
   /** Optional label tag pinned to the box's top-left corner. Empty string hides it. */
   label: z.string().default(''),
   /** Outline / tick / tag color. Defaults to the Onda accent (`--onda-accent`, `#D96B82`) — the highlight is earned here. */
-  color: z.string().default('#D96B82'),
+  color: z.string().default('var(--onda-accent, #D96B82)'),
   /** Frames before the outline starts drawing. */
   delay: z.number().int().min(0).default(0),
   /** Frames to draw the full rectangle outline. */
@@ -26,11 +26,11 @@ export const boundingBoxSchema = z.object({
   /** Draw small L-shaped tick marks at each corner after the outline lands. */
   corners: z.boolean().default(true),
   /** Label text color. Defaults to `--onda-bg` (`#08080A`) for contrast on the accent tag. */
-  labelColor: z.string().default('#08080A'),
+  labelColor: z.string().default('var(--onda-bg, #08080A)'),
   /** Label font size in px. */
   fontSize: z.number().default(16),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
 });
 
 /** Inferred props for {@link BoundingBox}. */

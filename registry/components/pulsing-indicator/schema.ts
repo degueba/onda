@@ -6,15 +6,15 @@ export const pulsingIndicatorSchema = z.object({
   /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted. */
   kind: z.literal('pulsing-indicator').default('pulsing-indicator'),
   /** Dot + ring color. The earned accent by default. */
-  color: z.string().default('#D96B82'),
+  color: z.string().default('var(--onda-accent, #D96B82)'),
   /** Dot diameter in px. */
   size: z.number().default(20),
   /** Optional label to the right of the dot. Empty hides it. */
   label: z.string().default('LIVE'),
   /** Label color. */
-  labelColor: z.string().default('#8E8E98'),
+  labelColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Label font family. */
-  fontFamily: z.string().default('"Space Grotesk", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-body, "Space Grotesk", sans-serif)'),
   /** Label font size in px. */
   fontSize: z.number().default(28),
   /** Frames per pulse cycle. */

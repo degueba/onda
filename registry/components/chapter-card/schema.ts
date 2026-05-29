@@ -14,11 +14,11 @@ export const chapterCardSchema = z.object({
   /** When `true`, the number renders in `numberColor` (the rose) and a quiet underline punctuates the title. */
   accent: z.boolean().default(true),
   /** Number color when `accent` is `true`. Defaults to `--onda-accent`. */
-  numberColor: z.string().default('#D96B82'),
+  numberColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Chapter title color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Number color when `accent` is `false`. Defaults to `--onda-dim` so the number reads as quiet metadata. */
-  subtitleColor: z.string().default('#8E8E98'),
+  subtitleColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Number font size in px — smaller than the title, sitting above it. Wins over `numberSize` if both are passed. */
   numberFontSize: z.number().default(32),
   /** Semantic role for the number — resolves to canvas-aware pixels. `numberFontSize` wins when both are passed. */
@@ -40,7 +40,7 @@ export const chapterCardSchema = z.object({
   /** Unitless line height for the title. */
   titleLineHeight: z.number().optional(),
   /** Onda display font. Applied to both number and title for tonal consistency. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

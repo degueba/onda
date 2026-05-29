@@ -21,7 +21,7 @@
       "path": "registry/transitions/dip-to-color/schema.ts",
       "type": "registry:component",
       "target": "components/onda/transitions/dip-to-color/schema.ts",
-      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link dipToColor} options. */\nexport const dipToColorSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('dip-to-color').default('dip-to-color'),\n  /**\n   * Solid color to dip through. Default `#08080A` (Onda canvas bg) for\n   * brand consistency. Pass `'#000'` for the editing-room classic\n   * dip-to-black, or `'#fff'` for dip-to-white.\n   */\n  color: z.string().default('#08080A'),\n});\n\nexport type DipToColorOptions = z.input<typeof dipToColorSchema>;\n"
+      "content": "import { z } from 'zod';\n\n/** Zod schema for {@link dipToColor} options. */\nexport const dipToColorSchema = z.object({\n  /** Discriminator literal — matches this entry's registry slug. Auto-populated when omitted (`schema.parse({})` works as before). Lets consumers build `z.discriminatedUnion('kind', [...])` directly over onda schemas. */\n  kind: z.literal('dip-to-color').default('dip-to-color'),\n  /**\n   * Solid color to dip through. Default `#08080A` (Onda canvas bg) for\n   * brand consistency. Pass `'#000'` for the editing-room classic\n   * dip-to-black, or `'#fff'` for dip-to-white.\n   */\n  color: z.string().default('var(--onda-bg, #08080A)'),\n});\n\nexport type DipToColorOptions = z.input<typeof dipToColorSchema>;\n"
     },
     {
       "path": "registry/transitions/dip-to-color/dip-to-color.meta.json",

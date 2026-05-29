@@ -17,7 +17,7 @@ export const expandMorphSchema = z.object({
   /** Border radius (px) of the card once it fills the screen. */
   borderRadiusTo: z.number().min(0).max(200).default(0),
   /** Fill behind the morphing card while it expands. */
-  background: z.string().default('#08080A'),
+  background: z.string().default('var(--onda-bg, #08080A)'),
 });
 
 export type ExpandMorphOptions = z.input<typeof expandMorphSchema>;

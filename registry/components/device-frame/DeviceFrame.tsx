@@ -6,8 +6,8 @@ import { deviceFrameSchema, type DeviceFrameProps } from './schema';
 export { deviceFrameSchema, type DeviceFrameProps };
 
 const SHADOW = '0 50px 90px -40px rgba(0,0,0,0.95)';
-const BEZEL = '#1C1C22';
-const SCREEN_BG = '#08080A';
+const BEZEL = 'var(--onda-border, #1C1C22)';
+const SCREEN_BG = 'var(--onda-bg, #08080A)';
 
 function Screen({ src, children, radius }: { src?: string; children?: React.ReactNode; radius: number }) {
   return (
@@ -54,8 +54,8 @@ export const DeviceFrame: React.FC<DeviceFrameProps & { children?: React.ReactNo
           <Screen src={src} radius={16 - bezel}>{children}</Screen>
         </div>
         {/* base / hinge */}
-        <div style={{ width: width * 1.16, height: 14, background: '#26262E', borderRadius: '0 0 14px 14px' }} />
-        <div style={{ width: width * 0.16, height: 6, background: '#1C1C22', borderRadius: '0 0 8px 8px' }} />
+        <div style={{ width: width * 1.16, height: 14, background: 'var(--onda-border-lit, #26262E)', borderRadius: '0 0 14px 14px' }} />
+        <div style={{ width: width * 0.16, height: 6, background: 'var(--onda-border, #1C1C22)', borderRadius: '0 0 8px 8px' }} />
       </div>
     );
   }

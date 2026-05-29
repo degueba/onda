@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLOR } from '../tokens';
+import { THEME } from '../tokens';
 
 /**
  * A soft radial glow layer — the single restrained accent glow a section is
@@ -22,7 +22,7 @@ export type GlowProps = {
 };
 
 export const Glow: React.FC<GlowProps> = ({
-  color = COLOR.accent,
+  color = THEME.accent,
   size = 0.8,
   x = 0.5,
   y = 0.5,

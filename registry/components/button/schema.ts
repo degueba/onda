@@ -10,7 +10,7 @@ export const buttonSchema = z.object({
   /** `'primary'` = accent fill, `'ghost'` = transparent with a bordered outline. */
   variant: z.enum(['primary', 'ghost']).default('primary'),
   /** The earned accent — drives the primary fill and the ghost border/text tint. */
-  accent: z.string().default('#D96B82'),
+  accent: z.string().default('var(--onda-accent, #D96B82)'),
   /** Play the click-dip press animation. */
   press: z.boolean().default(true),
   /** Frame the press dip lands on (relative to the component's local timeline). */
@@ -24,7 +24,7 @@ export const buttonSchema = z.object({
   /** Semantic role for the label — resolves to canvas-aware pixels. `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'lower-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Defaults to centered. */
   placement: placementSchema.optional(),
 });

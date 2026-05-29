@@ -31,15 +31,15 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
           <Glow color={glowColor} size={0.9} x={gx} y={gy} opacity={0.28} />
           <div style={{ position: 'relative', textAlign: align }}>
             {eyebrow && (
-              <div style={{ color: '#56565F', fontFamily: '"Space Grotesk", sans-serif', fontSize: 15, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>
+              <div style={{ color: 'var(--onda-faint, #56565F)', fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)', fontSize: 15, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>
                 {eyebrow}
               </div>
             )}
-            <div style={{ color: '#F2F2F4', fontFamily, fontSize: 44, fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            <div style={{ color: 'var(--onda-text, #F2F2F4)', fontFamily, fontSize: 44, fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               {title}
             </div>
             {body && (
-              <div style={{ color: '#8E8E98', fontFamily: '"Space Grotesk", sans-serif', fontSize: 20, lineHeight: 1.5, marginTop: 16 }}>
+              <div style={{ color: 'var(--onda-dim, #8E8E98)', fontFamily: 'var(--onda-font-body, "Space Grotesk", sans-serif)', fontSize: 20, lineHeight: 1.5, marginTop: 16 }}>
                 {body}
               </div>
             )}

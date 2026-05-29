@@ -9,7 +9,7 @@ export const dipToColorSchema = z.object({
    * brand consistency. Pass `'#000'` for the editing-room classic
    * dip-to-black, or `'#fff'` for dip-to-white.
    */
-  color: z.string().default('#08080A'),
+  color: z.string().default('var(--onda-bg, #08080A)'),
 });
 
 export type DipToColorOptions = z.input<typeof dipToColorSchema>;

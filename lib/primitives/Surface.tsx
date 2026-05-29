@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLOR } from '../tokens';
+import { THEME } from '../tokens';
 import { RADIUS, SHADOW, SHEEN, BLUR, type ShadowToken } from '../elevation';
 
 /**
@@ -37,7 +37,7 @@ export const Surface: React.FC<SurfaceProps> = ({
   radius = RADIUS.lg,
   padding,
   background,
-  borderColor = COLOR.border,
+  borderColor = THEME.border,
   shadow = variant === 'plain' ? 'none' : 'card',
   blur = BLUR.glass,
   sheen,
@@ -45,7 +45,7 @@ export const Surface: React.FC<SurfaceProps> = ({
   const isGlass = variant === 'glass';
   const showSheen = sheen ?? variant !== 'plain';
   const fill =
-    background ?? (isGlass ? 'rgba(14,14,18,0.55)' : variant === 'plain' ? 'transparent' : COLOR.surface);
+    background ?? (isGlass ? 'rgba(14,14,18,0.55)' : variant === 'plain' ? 'transparent' : THEME.surface);
 
   return (
     <div

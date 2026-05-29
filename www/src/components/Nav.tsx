@@ -33,6 +33,7 @@ export function Nav() {
   const links = [
     { href: '/components', label: 'Components' },
     { href: '/showcase', label: 'Showcase' },
+    { href: '/brand', label: 'Brand' },
     { href: '/docs', label: 'Docs' },
     { href: '/compare', label: 'Compare' },
   ];

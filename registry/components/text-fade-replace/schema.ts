@@ -16,13 +16,13 @@ export const textFadeReplaceSchema = z.object({
   /** Loop back to the first phrase after the last. */
   loop: z.boolean().default(true),
   /** Text color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Pixels. Wins over `size` if both are passed. */
   fontSize: z.number().default(96),
   /** Semantic typography role — canvas-aware pixels. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. Never default to Inter / Arial / system. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. */
   fontWeight: z.number().default(600),
   /** CSS letter-spacing. */

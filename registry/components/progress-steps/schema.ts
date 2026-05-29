@@ -15,13 +15,13 @@ export const progressStepsSchema = z.object({
   /** Frames for the fill to travel to `current`. */
   duration: z.number().int().min(1).default(DURATION.slower),
   /** Completed / active color — the earned accent. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Pending color. */
-  dimColor: z.string().default('#26262E'),
+  dimColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Label color. */
-  labelColor: z.string().default('#8E8E98'),
+  labelColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Font family for labels. */
-  fontFamily: z.string().default('"Space Grotesk", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-body, "Space Grotesk", sans-serif)'),
   /** Label font size in px. Sized for a 1080p+ video canvas. */
   fontSize: z.number().default(34),
   /** Overall width in px. */

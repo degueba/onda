@@ -26,15 +26,15 @@ export const inputFieldSchema = z.object({
   /** Semantic role for the text — resolves to canvas-aware pixels. `fontSize` wins when both are passed. */
   size: sizeRoleSchema.optional(),
   /** UI font stack. */
-  fontFamily: z.string().default('"Space Grotesk", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-body, "Space Grotesk", sans-serif)'),
   /** Value text color. */
-  textColor: z.string().default('#F2F2F4'),
+  textColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Placeholder text color. */
-  placeholderColor: z.string().default('#56565F'),
+  placeholderColor: z.string().default('var(--onda-faint, #56565F)'),
   /** Label text color. */
-  labelColor: z.string().default('#8E8E98'),
+  labelColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Caret + focus-ring color — the earned accent. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. */
   placement: placementSchema.optional(),
 });

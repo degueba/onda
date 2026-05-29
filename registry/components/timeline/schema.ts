@@ -28,17 +28,17 @@ export const timelineSchema = z.object({
   /** Dot diameter in px. */
   dotSize: z.number().default(14),
   /** Line color. Defaults to `--onda-border`. */
-  lineColor: z.string().default('#26262E'),
+  lineColor: z.string().default('var(--onda-border-lit, #26262E)'),
   /** Non-final dot color. Defaults to `--onda-text`. */
-  dotColor: z.string().default('#F2F2F4'),
+  dotColor: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Final dot color — the earned accent. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Label color. Defaults to `--onda-dim`. */
-  labelColor: z.string().default('#8E8E98'),
+  labelColor: z.string().default('var(--onda-dim, #8E8E98)'),
   /** Label font size in px. */
   fontSize: z.number().default(22),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

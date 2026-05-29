@@ -34,13 +34,13 @@ export const endCardSchema = z.object({
   /** Unitless line height for the handles row. */
   handlesLineHeight: z.number().optional(),
   /** CTA color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Handles color. Defaults to `--onda-faint`. */
-  handlesColor: z.string().default('#56565F'),
+  handlesColor: z.string().default('var(--onda-faint, #56565F)'),
   /** Underline color. Defaults to `--onda-accent`. */
-  accentColor: z.string().default('#D96B82'),
+  accentColor: z.string().default('var(--onda-accent, #D96B82)'),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

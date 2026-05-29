@@ -23,7 +23,7 @@ export const pricingCardSchema = z.object({
   /** Lifts + scales the card and shows an accent badge — the highlighted tier. */
   recommended: z.boolean().default(false),
   /** The earned accent — checkmarks, badge, CTA, recommended glow. Defaults to `--onda-accent`. */
-  accent: z.string().default('#D96B82'),
+  accent: z.string().default('var(--onda-accent, #D96B82)'),
   /** Frames before the card enters. */
   delay: z.number().int().min(0).default(0),
   /** Card width in px. Wins over `size` if both are passed. */
@@ -31,7 +31,7 @@ export const pricingCardSchema = z.object({
   /** Semantic role for the price type — resolves to canvas-aware pixels. Overrides the price font size when set. */
   size: sizeRoleSchema.optional(),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

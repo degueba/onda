@@ -16,7 +16,7 @@ export const spotlightSchema = z.object({
   /** Frames until the spotlight reaches its full radius. */
   duration: z.number().int().min(1).default(DURATION.slow),
   /** Light colour. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Gradient softness — % of the radius given over to the fade-to-transparent tail. */
   softness: z.number().min(0).max(100).default(60),
 });

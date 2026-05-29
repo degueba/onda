@@ -8,6 +8,7 @@ This page covers the **payload shape** and the **determinism rules**. The rest o
 - **[Timeline & transitions](/docs/composing-timeline)** — sequencing beats, cutting between scenes, and turning a payload into JSX with `<CompositionRenderer>`.
 - **[Media & audio](/docs/composing-media)** — rendering user photos, video, and audio with the Onda contract.
 - **[Agent helpers](/docs/composing-agent-helpers)** — JSON Schema, canvas presets, and registry summarization for agent runtimes.
+- **[Theming](/docs/theming)** — re-skin components with your own brand (colors + fonts) via the CSS-variable contract.
 
 For the full catalog of what's available, see [What's in Onda](/docs/catalog) and the live [components catalog](/components).
 

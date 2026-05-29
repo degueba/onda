@@ -18,11 +18,11 @@ export const marqueeSchema = z.object({
   /** Pixels between items. */
   gap: z.number().int().min(0).default(64),
   /** Text color. Defaults to `--onda-faint` — atmospheric, not headline. */
-  color: z.string().default('#56565F'),
+  color: z.string().default('var(--onda-faint, #56565F)'),
   /** Pixels. */
   fontSize: z.number().default(32),
   /** Onda display font. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Where on the canvas this sits. Region (`'center'`, `'upper-third'`, ...) or `{ x, y, anchor }` in 0..1 canvas fractions. When omitted, the component fills the entire canvas (default behavior). Coordinates may be negative or >1 for off-canvas. */
   placement: placementSchema.optional(),
 });

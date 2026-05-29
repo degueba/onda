@@ -20,7 +20,7 @@ export const rgbGlitchTextSchema = z.object({
   /** Seed for the (deterministic) burst jitter. */
   seed: z.number().int().default(7),
   /** Base (center) text color. Defaults to `--onda-text`. */
-  color: z.string().default('#F2F2F4'),
+  color: z.string().default('var(--onda-text, #F2F2F4)'),
   /** Red-channel copy color. */
   redColor: z.string().default('#FF4D6D'),
   /** Cyan-channel copy color. */
@@ -30,7 +30,7 @@ export const rgbGlitchTextSchema = z.object({
   /** Semantic typography role — canvas-aware pixels. */
   size: sizeRoleSchema.optional(),
   /** Font family. */
-  fontFamily: z.string().default('"Clash Display", sans-serif'),
+  fontFamily: z.string().default('var(--onda-font-display, "Clash Display", sans-serif)'),
   /** Font weight. */
   fontWeight: z.number().default(600),
   /** CSS letter-spacing. */

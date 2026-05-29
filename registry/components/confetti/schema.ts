@@ -9,7 +9,7 @@ export const confettiSchema = z.object({
   /** Number of confetti pieces. ~80 reads full without thrashing the render. */
   count: z.number().int().min(1).default(80),
   /** Palette pieces are picked from. Defaults to the Onda accent plus tasteful neutrals. */
-  colors: z.array(z.string()).default(['#D96B82', '#E89AAB', '#F2F2F4', '#8E8E98', '#26262E']),
+  colors: z.array(z.string()).default(['var(--onda-accent, #D96B82)', 'var(--onda-accent-soft, #E89AAB)', 'var(--onda-text, #F2F2F4)', 'var(--onda-dim, #8E8E98)', 'var(--onda-border-lit, #26262E)']),
   /** Burst origin X, as a fraction of canvas width (0 = left, 1 = right). */
   originX: z.number().min(0).max(1).default(0.5),
   /** Burst origin Y, as a fraction of canvas height (0 = top, 1 = bottom). */
