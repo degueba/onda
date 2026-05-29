@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/degueba/onda/compare/ondajs-v0.6.0...ondajs-v0.7.0) (2026-05-29)
+
+
+### Features
+
+* **cli:** add ./motion export for consumers ([5c8d487](https://github.com/degueba/onda/commit/5c8d4870f2060e8d72ceaecc40c796e03817d046))
+
 ## [0.6.0](https://github.com/degueba/onda/compare/ondajs-v0.5.1...ondajs-v0.6.0) (2026-05-28)
 
 

@@ -74,8 +74,12 @@
     "remotion": "^4.0.466"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "remotion": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "remotion": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
