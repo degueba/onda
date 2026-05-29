@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/degueba/onda/compare/ondajs-v0.9.0...ondajs-v0.9.1) (2026-05-29)
+
+
+### Docs
+
+* **theme:** reframe motion as a tunable default, not a lock ([#65](https://github.com/degueba/onda/issues/65)) ([cf8f864](https://github.com/degueba/onda/commit/cf8f8645b7bda9a03b9fa83e89017ed9ea0ec74b))
+
 ## [0.9.0](https://github.com/degueba/onda/compare/ondajs-v0.8.0...ondajs-v0.9.0) (2026-05-29)
 
 
