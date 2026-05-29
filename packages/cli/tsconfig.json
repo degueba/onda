@@ -22,6 +22,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/manifest.ts"
+    "src/manifest.ts",
+    "src/motion.ts"
   ]
 }
