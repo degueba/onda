@@ -7,3 +7,4 @@ export { Surface, type SurfaceProps } from './Surface';
 export { Glow, type GlowProps } from './Glow';
 export { GridField, type GridFieldProps } from './GridField';
 export { Camera, type CameraProps } from './Camera';
+export { MotionBlur, MotionTrail, type MotionBlurProps, type MotionTrailProps } from './MotionBlur';

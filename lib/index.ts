@@ -11,6 +11,7 @@ export {
   OVERSHOOT,
   SPRING_SMOOTH,
   SPRING_SNAPPY,
+  SHUTTER,
   staggerFrames,
   type DurationToken,
 } from './motion';
@@ -50,10 +51,14 @@ export {
   Glow,
   GridField,
   Camera,
+  MotionBlur,
+  MotionTrail,
   type SurfaceProps,
   type GlowProps,
   type GridFieldProps,
   type CameraProps,
+  type MotionBlurProps,
+  type MotionTrailProps,
 } from './primitives';
 
 export {

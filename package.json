@@ -15,6 +15,7 @@
   "dependencies": {
     "@remotion/cli": "^4.0.466",
     "@remotion/media-utils": "^4.0.466",
+    "@remotion/motion-blur": "^4.0.466",
     "@remotion/paths": "^4.0.466",
     "@remotion/player": "^4.0.466",
     "@remotion/transitions": "^4.0.466",

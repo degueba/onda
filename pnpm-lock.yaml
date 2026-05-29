@@ -18,6 +18,9 @@ importers:
       '@remotion/media-utils':
         specifier: ^4.0.466
         version: 4.0.466(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@remotion/motion-blur':
+        specifier: ^4.0.466
+        version: 4.0.469(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@remotion/paths':
         specifier: ^4.0.466
         version: 4.0.466
@@ -895,6 +898,12 @@ packages:
 
   '@remotion/media-utils@4.0.466':
     resolution: {integrity: sha512-WZTl5ritS6p8ijeksEs2mQhgXFybrDwlamJObRBcM/1Yh9/4mgRJebg9RQwDSvOjNwMqZuJQke/MGmcKyhXCXA==}
+    peerDependencies:
+      react: ^19.0.0
+      react-dom: ^19.0.0
+
+  '@remotion/motion-blur@4.0.469':
+    resolution: {integrity: sha512-sVynx7I1QMZzdEc0X2mDgvCz9XbmkJ8lvmcGop3t7C5/3DgohO23BKljivFg0SF9isJuHfC+3MDiDHJMC6c36g==}
     peerDependencies:
       react: ^19.0.0
       react-dom: ^19.0.0
@@ -2084,6 +2093,12 @@ packages:
       react: ^19.0.0
       react-dom: ^19.0.0
 
+  remotion@4.0.469:
+    resolution: {integrity: sha512-wD8LK3bFfcv44gnj8KLS1R1iGI+n0XGtPvdIiIaGfE+CTX3p2FJYKw2Vc5OfyfdVSACLn3r654XW9VteA9cTIQ==}
+    peerDependencies:
+      react: ^19.0.0
+      react-dom: ^19.0.0
+
   require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
@@ -3047,6 +3062,12 @@ snapshots:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
       remotion: 4.0.466(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+
+  '@remotion/motion-blur@4.0.469(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      remotion: 4.0.469(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
 
   '@remotion/paths@4.0.466': {}
 
@@ -4642,6 +4663,11 @@ snapshots:
       unified: 11.0.5
 
   remotion@4.0.466(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+    dependencies:
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+
+  remotion@4.0.469(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
