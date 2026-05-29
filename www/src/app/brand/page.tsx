@@ -3,8 +3,9 @@
 // Brand playground — see how your own palette + fonts look across the Onda
 // theme. Every preview element reads the `--onda-*` CSS variables (the theme
 // contract from `lib/tokens.ts`); the controls set those variables, so the
-// whole preview re-skins live. Brand owns the surface (color + type); motion
-// stays Onda's, so it isn't exposed here.
+// whole preview re-skins live. The playground covers the surface (color + type),
+// which is what re-skins at runtime; motion ships as Onda's default and is tuned
+// in the copied source, so it isn't a control here.
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';

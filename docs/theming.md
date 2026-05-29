@@ -2,7 +2,8 @@
 
 Onda's palette and fonts are the **default** look, not an enforced one. Every
 component reads its colors and fonts from CSS variables, so you can re-skin the
-whole catalog with your own brand — your palette, your type, Onda's motion.
+whole catalog with your own brand — your palette, your type, with Onda's motion
+as a tasteful default you can tune.
 
 Try it live on the [Brand playground](/brand).
 
@@ -18,10 +19,22 @@ Onda value as the fallback — for example the accent default is
 Because the variable is read at render time, there's no per-component wiring:
 set the variable once at a root and every Onda component inside follows.
 
-## The overridable slots
+## What you can override
 
-Only **surface** slots are themeable — color and type. Motion (springs, easing,
-timing, stagger) is Onda's signature and is **not** overridable.
+**Surface — color and type — re-skins at runtime.** Every component reads its
+colors and fonts from the `--onda-*` CSS variables, so setting them on any
+ancestor (or via the `brand` prop) re-skins the whole catalog with zero
+per-component work. The full slot list is below.
+
+**Motion is a default, not a lock.** Onda's motion grammar — springs, easing,
+timing, stagger — ships as a tasteful, opinionated default, so the silent case is
+"quality by construction." But it isn't enforced on you: components are copied
+into your project as source (`ondajs add`), so you own the motion and can tune it
+— a punchier spring, a faster stagger for a hype reel, or edit the house
+constants in `lib/motion.ts` to shift the whole catalog at once. Unlike surface
+slots, motion isn't wired to brand CSS variables today, so there's no runtime
+brand-level switch for it yet (a motion-override seam is its own techspec); you
+change it by editing the source you own.
 
 | Variable | Token | Default |
 |----------|-------|---------|

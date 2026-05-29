@@ -32,7 +32,7 @@ Usage and the full pattern: [Timeline & transitions](/docs/composing-timeline). 
 
 Components are built on a small shared layer you also install (it comes along automatically via the CLI):
 
-- **Tokens** — `COLOR`, `FONT`, `SPACING`, plus surface polish (`RADIUS`, `SHADOW`, `GLOW`, `BLUR`). The locked design system.
+- **Tokens** — `COLOR`, `FONT`, `SPACING`, plus surface polish (`RADIUS`, `SHADOW`, `GLOW`, `BLUR`). The default design system — surface is brand-overridable.
 - **Motion** — `DURATION`, `STAGGER`, `SPRING_SMOOTH` / `SPRING_SNAPPY`, `HOUSE_EASE`, and `seededRandom` for deterministic randomness.
 - **Hooks** — `useEntrance`, `useStaggeredEntrance`, `useSpringValue`, `useSceneProgress`, `useTextReveal`.
 - **Primitives** — `Surface` (card / glass), `Glow`, `GridField` — the building blocks the surface-heavy components compose.
