@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/degueba/onda/compare/ondajs-v0.7.0...ondajs-v0.7.1) (2026-05-29)
+
+
+### Docs
+
+* document the ondajs/motion export ([f175a83](https://github.com/degueba/onda/commit/f175a833bfb652975d83344575bb54907d97ab07))
+
 ## [0.7.0](https://github.com/degueba/onda/compare/ondajs-v0.6.0...ondajs-v0.7.0) (2026-05-29)
 
 
