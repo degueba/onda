@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/degueba/onda/compare/ondajs-v0.7.1...ondajs-v0.8.0) (2026-05-29)
+
+
+### Features
+
+* **cli:** add exit choreography family ([2083b26](https://github.com/degueba/onda/commit/2083b26a33007d099c03458fb90b2f2a7a040751))
+
 ## [0.7.1](https://github.com/degueba/onda/compare/ondajs-v0.7.0...ondajs-v0.7.1) (2026-05-29)
 
 
