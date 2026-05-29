@@ -15,8 +15,13 @@
 //   entryFadeRise  — opacity + translateY up — the most common entrance
 //                    (equivalent to entrySlide({direction:'up', distance:12}))
 //
-// Exits and special patterns:
-//   exitFadeFall   — default exit (faster, downward, fade out)
+// Exits (mirror the entrances; faster, on HOUSE_EASE — an exit doesn't settle):
+//   exitFade       — opacity 1→0 only, no transform                 (counterpart of entryFade)
+//   exitSlide      — fade + direction-parameterized translate OUT    (counterpart of entrySlide)
+//   exitScale      — fade + scale 1→N                                (counterpart of entryScale)
+//   exitFadeFall   — default exit (downward fade out)
+//
+// Special patterns:
 //   heroReveal     — two-phase landing for hero moments (signature pattern)
 //   stateSwap      — in-place crossfade for value/text changes
 //
@@ -238,6 +243,95 @@ export const exitFadeFall = ({
   return {
     opacity: 1 - progress,
     transform: `translateY(${progress * travelPx}px)`,
+  };
+};
+
+/**
+ * Plain fade OUT — opacity 1 → 0 on {@link HOUSE_EASE}, no transform. The exit
+ * counterpart to {@link entryFade}; use when the element should simply leave.
+ */
+export const exitFade = ({
+  frame,
+  delay = 0,
+  durationInFrames = DURATION.fast,
+}: Omit<PatternInput, 'travelPx'>): { opacity: number } => {
+  const local = frame - delay;
+  const progress = interpolate(local, [0, durationInFrames], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing: HOUSE_EASE,
+  });
+  return { opacity: 1 - progress };
+};
+
+/**
+ * Directional fade + translate OUT — the exit counterpart to {@link entrySlide}.
+ * `direction` names where the element LEAVES toward: `'right'` slides it out to
+ * the right, `'down'` drops it. Travel is the 12px Onda envelope by default; on
+ * {@link HOUSE_EASE} (no spring — an exit doesn't settle).
+ *
+ * @example
+ * const { opacity, transform } = exitSlide({ frame, direction: 'left' });
+ */
+export const exitSlide = ({
+  frame,
+  delay = 0,
+  durationInFrames = DURATION.fast,
+  direction,
+  distance = 12,
+}: Omit<PatternInput, 'travelPx'> & {
+  direction: 'up' | 'down' | 'left' | 'right';
+  distance?: number;
+}): MotionStyle => {
+  const local = frame - delay;
+  const progress = interpolate(local, [0, durationInFrames], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing: HOUSE_EASE,
+  });
+  const opacity = 1 - progress;
+  // Travels FROM rest (0) TO an offset in `direction`; down/right are positive.
+  const isVertical = direction === 'up' || direction === 'down';
+  const endSign = direction === 'down' || direction === 'right' ? 1 : -1;
+  const offset = interpolate(progress, [0, 1], [0, endSign * distance], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const tx = isVertical ? 0 : offset;
+  const ty = isVertical ? offset : 0;
+  return {
+    opacity,
+    transform: `translateX(${tx}px) translateY(${ty}px)`,
+  };
+};
+
+/**
+ * Fade + scale OUT — the exit counterpart to {@link entryScale}. Scales from 1
+ * to `to` (default 0.9, a restrained shrink) while fading, on {@link HOUSE_EASE}.
+ *
+ * @example
+ * const { opacity, transform } = exitScale({ frame, to: 0.9 });
+ */
+export const exitScale = ({
+  frame,
+  delay = 0,
+  durationInFrames = DURATION.fast,
+  to = 0.9,
+}: Omit<PatternInput, 'travelPx'> & { to?: number }): MotionStyle => {
+  const local = frame - delay;
+  const progress = interpolate(local, [0, durationInFrames], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+    easing: HOUSE_EASE,
+  });
+  const opacity = 1 - progress;
+  const scale = interpolate(progress, [0, 1], [1, to], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  return {
+    opacity,
+    transform: `scale(${scale})`,
   };
 };
 
