@@ -98,3 +98,17 @@ export const SPRING_SNAPPY = {
 export const staggerFrames = (index: number, increment: number = STAGGER): number => {
   return Math.max(0, index) * increment;
 };
+
+/**
+ * Shutter constants for motion blur — the house default for the `MotionBlur`
+ * primitive so blur reads filmic and consistent, never per-call magic numbers.
+ *
+ * - `angle` (180°) — the cinematic 180° shutter (blur spans half a frame's
+ *   travel). The classic "looks shot, not strobed" default.
+ * - `samples` (10) — sub-frame samples accumulated per frame. More = smoother
+ *   blur at higher render cost; 10 is a good motion-graphics balance.
+ */
+export const SHUTTER = {
+  angle: 180,
+  samples: 10,
+} as const;
