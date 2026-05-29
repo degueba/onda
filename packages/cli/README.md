@@ -152,6 +152,38 @@ import { QuoteCard } from './components/onda/quote-card/QuoteCard';
 
 For advanced cases (you already manage your own Player ref / wrapper), the underlying `useAdaptiveCompositionSize(ref, intrinsicW, intrinsicH)` hook is exported alongside.
 
+### Drive your own animation — `ondajs/motion`
+
+The choreography vocabulary, motion tokens, and easing the components use are also published as a direct import — no `ondajs add`, no source files. Reach for it when you're animating your *own* elements (a custom component, an AI editor, an overlay) and want the Onda motion fingerprint instead of hand-rolled springs:
+
+```tsx
+import { useCurrentFrame, useVideoConfig } from 'remotion';
+import { entryFadeRise, DURATION } from 'ondajs/motion';
+
+function Headline({ text }: { text: string }) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  // Pure (frame, fps) → { opacity, transform } — spread onto the element.
+  const { opacity, transform } = entryFadeRise({ frame, fps, durationInFrames: DURATION.base });
+  return <h1 style={{ opacity, transform }}>{text}</h1>;
+}
+```
+
+Each pattern is a pure function of `frame` / `fps` (plus optional `delay`, `durationInFrames`, and pattern-specific params) returning `{ opacity, transform }` — so it works inside any Remotion `<Sequence>` (where `useCurrentFrame()` is sequence-relative).
+
+| Export | Kind | Use for |
+|---|---|---|
+| `entryFade` | entrance | opacity-only reveal (no movement) |
+| `entryFadeRise` | entrance | the workhorse — fade + small rise (~80% of entries) |
+| `entrySlide` | entrance | directional fade + translate (`direction`, `distance`) |
+| `entryScale` | entrance | fade + scale from `from` → 1 |
+| `heroReveal` | entrance | two-phase landing with a 3% overshoot — one hero per scene |
+| `exitFadeFall` | exit | faster downward fade-out |
+| `stateSwap` | swap | in-place crossfade for a changing value/label (`{ outOpacity, inOpacity }`) |
+| `DURATION`, `STAGGER`, `OVERSHOOT`, `SPRING_SMOOTH`, `SPRING_SNAPPY`, `staggerFrames`, `HOUSE_EASE` | tokens | the house timing / spring / easing constants |
+
+`react` and `remotion` are **optional** peer dependencies — only required if you import `ondajs/motion` (or the React renderer). The `ondajs add` / `ondajs/manifest` paths stay dependency-free.
+
 ---
 
 ## Learn more

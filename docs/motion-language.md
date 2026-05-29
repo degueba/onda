@@ -31,6 +31,24 @@ This is the heart of Onda. The motion fingerprints below — applied consistentl
 - One focal element per moment. If two things compete, stagger them.
 - Compose timing with `<Sequence>`; never hardcode frame offsets inside a component to fake sequencing.
 
+## Use the library, don't re-derive it
+
+These fingerprints aren't just guidelines — they ship as a small, importable motion library so you never reimplement translate-fade for the tenth time. Every Onda component composes these helpers, and you can import the same ones to animate your *own* elements:
+
+```ts
+import { useCurrentFrame, useVideoConfig } from 'remotion';
+import { entryFadeRise, DURATION } from 'ondajs/motion';
+
+const frame = useCurrentFrame();
+const { fps } = useVideoConfig();
+const { opacity, transform } = entryFadeRise({ frame, fps, durationInFrames: DURATION.base });
+// spread { opacity, transform } onto the element's style
+```
+
+The choreography vocabulary — `entryFade`, `entryFadeRise` (the workhorse), `entrySlide`, `entryScale`, `heroReveal` (one hero per scene), `exitFadeFall`, `stateSwap` — are pure functions of `frame` / `fps` returning `{ opacity, transform }`, all tuned to the house spring, easing, and timing above. The tokens (`DURATION`, `SPRING_SMOOTH` / `SPRING_SNAPPY`, `STAGGER`, `staggerFrames`, `HOUSE_EASE`) are exported too — reach for them rather than inventing new values.
+
+> `ondajs/motion` is a direct package import (no `ondajs add`), with `react` + `remotion` as optional peer dependencies. See the [package README](https://www.npmjs.com/package/ondajs) for the full export table.
+
 ## When in doubt
 
 Make it **calmer and more minimal, not flashier.** A component that feels busy or bouncy is wrong even if technically correct. Onda's restraint IS the brand.
