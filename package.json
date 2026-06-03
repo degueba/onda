@@ -13,22 +13,22 @@
     "sync-manifests": "node scripts/sync-manifests.mjs"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.466",
-    "@remotion/media-utils": "^4.0.466",
-    "@remotion/motion-blur": "^4.0.466",
-    "@remotion/paths": "^4.0.466",
-    "@remotion/player": "^4.0.466",
-    "@remotion/transitions": "^4.0.466",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "remotion": "^4.0.466",
+    "@remotion/cli": "^4.0.471",
+    "@remotion/media-utils": "^4.0.471",
+    "@remotion/motion-blur": "^4.0.471",
+    "@remotion/paths": "^4.0.471",
+    "@remotion/player": "^4.0.471",
+    "@remotion/transitions": "^4.0.471",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.471",
     "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.2.16",
     "@types/react-dom": "^19.0.0",
-    "next": "^15.0.0",
+    "next": "^15.5.19",
     "typescript": "^5.4.0",
     "zod-to-json-schema": "^3.25.2"
   },
@@ -38,8 +38,8 @@
   },
   "pnpm": {
     "overrides": {
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0"
+      "react": "^19.2.7",
+      "react-dom": "^19.2.7"
     }
   }
 }
