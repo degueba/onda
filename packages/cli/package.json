@@ -82,8 +82,8 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "esbuild": "^0.28.0",
+    "@types/node": "^25.9.3",
+    "esbuild": "^0.28.1",
     "typescript": "^5.4.0"
   }
 }
