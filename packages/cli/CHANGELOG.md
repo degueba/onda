@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/degueba/onda/compare/ondajs-v0.9.1...ondajs-v0.9.2) (2026-06-17)
+
+
+### Bug Fixes
+
+* point site, registry, and homepage at remotion.onda.video ([#72](https://github.com/degueba/onda/issues/72)) ([8618c47](https://github.com/degueba/onda/commit/8618c47b56b85e5e94a704a71d55e39be88d81fd))
+
 ## [0.9.1](https://github.com/degueba/onda/compare/ondajs-v0.9.0...ondajs-v0.9.1) (2026-05-29)
 
 
