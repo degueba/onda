@@ -171,7 +171,7 @@ export default async function ComponentOpengraphImage({
             display: 'flex',
           }}
         >
-          onda.video/components/{item.name}
+          remotion.onda.video/components/{item.name}
         </div>
       </div>
     ),

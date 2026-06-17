@@ -5,7 +5,7 @@
 
 export const SITE = {
   name: 'Onda',
-  url: 'https://onda.video',
+  url: 'https://remotion.onda.video',
   // Tagline used in title tags and OG images. Kept short on purpose:
   // combined with the brand name (`Onda — <tagline>`) it has to stay
   // under ~60 characters or Google truncates the search-result title

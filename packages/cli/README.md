@@ -2,7 +2,7 @@
 
 # `ondajs`
 
-**The official CLI for [Onda](https://onda.video) — premium motion-graphics components for [Remotion](https://remotion.dev).**
+**The official CLI for [Onda](https://remotion.onda.video) — premium motion-graphics components for [Remotion](https://remotion.dev).**
 
 [![npm version](https://img.shields.io/npm/v/ondajs.svg?style=flat-square&color=D96B82)](https://www.npmjs.com/package/ondajs)
 [![npm downloads](https://img.shields.io/npm/dm/ondajs.svg?style=flat-square&color=D96B82)](https://www.npmjs.com/package/ondajs)
@@ -24,7 +24,7 @@ Components are written as **source you own** into your project — not imported 
 - **70 Remotion components + 18 transitions** — entrances, scene blocks, data, graphics, cinematic, media, atmosphere, and an `interface` category covering developer / product UI surfaces (`code-block`, `terminal`, `browser-frame`, `device-frame`, `cursor`, `code-diff`, `kanban-board`, `pricing-card`, `bento-grid`, …).
 - **One placement vocabulary across the catalog** — every positionable component takes a `placement` prop (region shorthand or fractional coordinates) that works on any canvas dimension.
 - **Canvas-aware sizing** — semantic typography roles (`'hero' | 'heading' | 'body' …`) that read at the same visual weight on horizontal, vertical, and square compositions.
-- **Agent-friendly by design** — every component ships with a Zod schema and a `kind` discriminator, so the whole surface is an exhaustively-typed union. The library also ships `<CompositionRenderer>` + a `Composition` payload type and publishes [`llms.txt`](https://onda.video/llms.txt) / [`llms-full.txt`](https://onda.video/llms-full.txt) for agent context.
+- **Agent-friendly by design** — every component ships with a Zod schema and a `kind` discriminator, so the whole surface is an exhaustively-typed union. The library also ships `<CompositionRenderer>` + a `Composition` payload type and publishes [`llms.txt`](https://remotion.onda.video/llms.txt) / [`llms-full.txt`](https://remotion.onda.video/llms-full.txt) for agent context.
 - **No black box, no lock-in** — `ondajs add` writes plain `.tsx` files into your `components/onda/` folder. The CLI also maintains an `index.ts` barrel exporting `ondaRegistry` (components — drop straight into `<CompositionRenderer registry={ondaRegistry}>`) and, when you install transitions, a parallel `ondaTransitions` registry keyed by factory name.
 
 ---
@@ -66,7 +66,7 @@ npx ondajs list --category scenes     # filter
 npx ondajs list --json                # machine-readable
 ```
 
-Or visit [onda.video/components](https://onda.video/components) for the live previews.
+Or visit [remotion.onda.video/components](https://remotion.onda.video/components) for the live previews.
 
 ---
 
@@ -198,14 +198,14 @@ Onda's palette and fonts are the **default**, not a lock-in. Every component rea
 }
 ```
 
-Brand drives the surface slots (colors + the two fonts) at runtime; motion ships as Onda's signature default — not a lock, since you own the copied source and can tune it. Full slot list, typed helpers (`brandToCssVars`, `ThemeProvider`), and the composition `brand` prop are in the [theming guide](https://github.com/degueba/onda/blob/main/docs/theming.md). See it live at [onda.video/brand](https://onda.video/brand).
+Brand drives the surface slots (colors + the two fonts) at runtime; motion ships as Onda's signature default — not a lock, since you own the copied source and can tune it. Full slot list, typed helpers (`brandToCssVars`, `ThemeProvider`), and the composition `brand` prop are in the [theming guide](https://github.com/degueba/onda/blob/main/docs/theming.md). See it live at [remotion.onda.video/brand](https://remotion.onda.video/brand).
 
 ---
 
 ## Learn more
 
-- **[onda.video](https://onda.video)** — landing, catalog, docs
-- **[onda.video/docs](https://onda.video/docs)** — getting started
+- **[remotion.onda.video](https://remotion.onda.video)** — landing, catalog, docs
+- **[remotion.onda.video/docs](https://remotion.onda.video/docs)** — getting started
 - **[Composing with Onda](https://github.com/degueba/onda/blob/main/docs/composing-with-onda.md)** — agent-facing reference: payload shape, placement / size vocabulary, full component index
 - **[GitHub](https://github.com/degueba/onda)** — source, issues, techspecs
 

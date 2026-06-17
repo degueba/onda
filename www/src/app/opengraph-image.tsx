@@ -140,7 +140,7 @@ export default async function OpengraphImage() {
           }}
         >
           <span>Built on Remotion</span>
-          <span>onda.video</span>
+          <span>remotion.onda.video</span>
         </div>
       </div>
     ),

@@ -9,7 +9,7 @@ import { parseArgs, stringFlag, boolFlag } from '../lib/argv.js';
 // payload is what we use everywhere else, so reusing the same shape for
 // the catalog keeps the on-the-wire surface uniform.
 
-const DEFAULT_REGISTRY = 'https://onda.video/r';
+const DEFAULT_REGISTRY = 'https://remotion.onda.video/r';
 
 // Category display order. Mirrors the site's `CATEGORY_ORDER` so a user
 // switching between the docs and the CLI sees the same shape.

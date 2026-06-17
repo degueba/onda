@@ -298,7 +298,7 @@ const BEATS: Beat[] = [
       <EndCard
         {...endCardSchema.parse({
           cta: 'Made with Onda',
-          handles: ['onda.video'],
+          handles: ['remotion.onda.video'],
           placement: 'center',
         })}
       />

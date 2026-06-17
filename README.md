@@ -12,12 +12,12 @@
 **Installed as source. Owned by you.**
 
 [![License](https://img.shields.io/badge/License-MIT-D96B82?style=flat-square)](LICENSE)
-[![Components](https://img.shields.io/badge/Components-70-D96B82?style=flat-square)](https://onda.video/components)
-[![Transitions](https://img.shields.io/badge/Transitions-18-D96B82?style=flat-square)](https://onda.video/components)
+[![Components](https://img.shields.io/badge/Components-70-D96B82?style=flat-square)](https://remotion.onda.video/components)
+[![Transitions](https://img.shields.io/badge/Transitions-18-D96B82?style=flat-square)](https://remotion.onda.video/components)
 [![Remotion](https://img.shields.io/badge/Remotion-4.x-D96B82?style=flat-square)](https://remotion.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-D96B82?style=flat-square)](https://www.typescriptlang.org/)
 
-[**Browse the catalog →**](https://onda.video/components) &nbsp;·&nbsp; [**Getting started →**](https://onda.video/docs)
+[**Browse the catalog →**](https://remotion.onda.video/components) &nbsp;·&nbsp; [**Getting started →**](https://remotion.onda.video/docs)
 
 </div>
 
@@ -43,7 +43,7 @@ Every primitive shares:
 
 ## Quick start
 
-Three steps to a rendering Onda composition. Full walkthrough in the [getting started guide](https://onda.video/docs).
+Three steps to a rendering Onda composition. Full walkthrough in the [getting started guide](https://remotion.onda.video/docs).
 
 **1.** Have a Remotion project — or scaffold one:
 
@@ -78,7 +78,7 @@ export const Root: React.FC = () => (
 ```
 
 > [!TIP]
-> Components depend on **Clash Display** and **Space Grotesk** — load them once at the project root and every Onda primitive looks right by default. Setup details in [/docs](https://onda.video/docs).
+> Components depend on **Clash Display** and **Space Grotesk** — load them once at the project root and every Onda primitive looks right by default. Setup details in [/docs](https://remotion.onda.video/docs).
 
 ## The catalog
 
@@ -97,7 +97,7 @@ export const Root: React.FC = () => (
 
 Plus **18 transitions** for `<TransitionSeries>` — `crossFade`, `morph`, `wipe`, `clockWipe`, `iris`, `flip`, `slide`, `push`, `depthPush`, `zoom`, `chromaticAberration`, `gridPixelate`, `glassWipe`, `typeMask`, `devicePullback`, `expandMorph`, `blur`, `dipToColor`.
 
-Browse the full catalog at **[onda.video/components](https://onda.video/components)** — every component has a live preview, a "Try it" props panel, and the exact install command. Showcases at **[onda.video/showcase](https://onda.video/showcase)** assemble them into full videos.
+Browse the full catalog at **[remotion.onda.video/components](https://remotion.onda.video/components)** — every component has a live preview, a "Try it" props panel, and the exact install command. Showcases at **[remotion.onda.video/showcase](https://remotion.onda.video/showcase)** assemble them into full videos.
 
 ## The motion language
 
@@ -113,8 +113,8 @@ When you compose your own components, reach for these instead of hardcoding valu
 
 ## Documentation
 
-- [Getting started](https://onda.video/docs) — install → fonts → first composition
-- [Components catalog](https://onda.video/components) — every primitive, live previews, props
+- [Getting started](https://remotion.onda.video/docs) — install → fonts → first composition
+- [Components catalog](https://remotion.onda.video/components) — every primitive, live previews, props
 - [Vision](docs/vision.md) — what Onda is, what it's not
 - [Design philosophy](docs/design-philosophy.md) — Apple discipline, Onda surface
 - [Motion language](docs/motion-language.md) — the moat
@@ -136,7 +136,7 @@ When you compose your own components, reach for these instead of hardcoding valu
 │   └── r/                Per-component shadcn-cli payload files
 ├── packages/cli/         The `ondajs` npm package — the `npx ondajs add` CLI + runtime manifest
 ├── src/                  Remotion Studio preview entry
-├── www/                  Next.js docs + catalog site (onda.video), incl. /showcase corpus
+├── www/                  Next.js docs + catalog site (remotion.onda.video), incl. /showcase corpus
 ├── scripts/              Dev tooling (sync-registry, sync-manifests, generate-llms)
 └── docs/                 Design philosophy, motion language, techspecs
 ```

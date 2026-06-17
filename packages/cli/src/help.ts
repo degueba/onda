@@ -25,7 +25,7 @@ GLOBAL OPTIONS
                             else ./components/onda/<slug>/.
   --lib-out <path>          Where shared lib helpers are written.
                             Default: ./src/lib/onda/ if src/ exists, else ./lib/onda/.
-  --registry <url>          Registry base URL. Default: https://onda.video/r.
+  --registry <url>          Registry base URL. Default: https://remotion.onda.video/r.
   --force                   Overwrite existing files. Without this, conflicts abort.
   --dry-run                 Print the plan; write nothing.
   --no-barrel               Skip generating the components/onda/index.ts barrel
@@ -38,7 +38,7 @@ GLOBAL OPTIONS
   --category <name>         Filter to one category. Valid values:
                             entrances, scenes, data, graphics, cinematic,
                             atmosphere, interface, media, transitions.
-  --registry <url>          Registry base URL. Default: https://onda.video/r.
+  --registry <url>          Registry base URL. Default: https://remotion.onda.video/r.
   --json                    Emit JSON instead of human-readable text.
 
 EXAMPLES
@@ -56,6 +56,6 @@ LIBRARY EXPORTS
                             their own layer vocabularies. See techspec 018.
 
 DOCS
-  https://onda.video/docs
+  https://remotion.onda.video/docs
   https://github.com/degueba/onda
 `;
