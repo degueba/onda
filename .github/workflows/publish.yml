@@ -45,7 +45,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         # `version:` omitted — defers to `packageManager` in root package.json.
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           # Configures ~/.npmrc with `registry=https://registry.npmjs.org/`
